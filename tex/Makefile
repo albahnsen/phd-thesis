@@ -9,6 +9,6 @@ partial:
 	pdflatex -shell-escape thesis
 
 clean:
-	rm -f *.lot *.lof *.lol *.toc *.log *.out *.aux *.blg *.bbl thesis.pdf chapters/*.aux frontback/*.aux 
+	rm -f *.lot *.lof *.lol *.toc *.log *.out *.aux *.blg *.bbl thesis.pdf thesis.brf chapters/*.aux frontback/*.aux 
 
 rebuild: clean thesis.pdf
