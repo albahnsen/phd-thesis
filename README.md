@@ -1,7 +1,6 @@
-## Example-Dependent Cost-Sensitive Machine Learning
-# Theory, Methods and Applications
+Example-Dependent Cost-Sensitive Machine Learning
 ============================
-
+### Theory, Methods and Applications
 
 
 PhD dissertation, Alejandro Correa Bahnsen, July 2015.

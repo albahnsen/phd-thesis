@@ -98,7 +98,73 @@
 \include{chapters/chapter01}\cleardoublepage
 
 % %\ctparttex{}
-% \part{Growing Decision Trees}\label{part:1}
+\part{Cost-Sensitive evaluation measures}
+\chapter{Background}
+	\section{Binary classification}
+	\section{Performance measures}
+	\section{Families of classifiers}
+
+\chapter{Cost-sensitive evaluation measures}                                              
+	\section{Cost-matrix}
+		\subsection{Class-dependent versus example-dependent}
+		\subsection{Binary classification cost characteristic}
+	\section{Savings}
+
+\part{Real-world cost-sensitive problems}
+\chapter{Credit card fraud detection}
+	\section{Introduction}
+	\section{Feature engineering}
+	\section{Financial evaluation}
+	
+\chapter{Churn modeling}
+	\section{Churn campaign}
+	\section{Customer lifetime value}
+	\section{Offer calculation}
+	\section{Evaluation}
+	
+\chapter{Credit scoring}
+	\section{Background}
+	\section{Scorecard performance evaluation}
+	
+\chapter{Direct marketing}
+	\section{Introduction}
+	\section{Economic evaluation}
+
+\part{Cost-Sensitive Classification Methods}
+\chapter{Cost-proportionate sampling}
+
+\chapter{Bayes minimum risk}
+	\section{Probability calibration}
+		\subsection{ROCCH}
+		\subsection{Base rates}
+		\subsection{Isotonic regression}
+		\subsection{Platt regression}
+	\section{BMR}
+	\section{Experiments}
+	
+\chapter{Cost-sensitive logistic regression}
+	\section{Logistic regression}
+	\section{Cost-sensitive cost function}
+	\section{Genetic algorithms}
+	\section{Experiments}
+
+\chapter{Cost-sensitive decision trees}
+	\section{Decision trees}
+		\subsection{Construction}
+		\subsection{Pruning}
+	\section{Cost-sensitive decision trees}
+	\section{Experiments}
+	
+\chapter{Ensembles of cost-sensitive decision trees}
+	\section{Ensemble methods}
+	\section{Random inducers}
+	\section{Combination methods}
+		\subsection{Majority voting}
+		\subsection{Cost-sensitive weighted voting}
+		\subsection{Cost-section stacking}
+	\section{ECSDT}
+	\section{Experiments}
+		
 % \include{chapters/chapter02}\cleardoublepage
 % \include{chapters/chapter03}\cleardoublepage
 % \include{chapters/chapter04}\cleardoublepage
@@ -112,22 +178,23 @@
 % %\ctparttex{}
 % \part{Subsampling data}\label{part:3}
 % \include{chapters/chapter08}
-% 
-% \addtocontents{toc}{\protect\vspace*{\baselineskip}\protect}
-% \cleardoublepage
-% \makeatletter
-% \def\toclevel@chapter{-1}
-% \makeatother
-% \include{chapters/chapter09}
-% 
-% 
+ 
+\addtocontents{toc}{\protect\vspace*{\baselineskip}\protect}
+\cleardoublepage
+\makeatletter
+\def\toclevel@chapter{-1}
+\makeatother
+\chapter{Conclusions}
+
 % % Back pages ==================================================================
-% \appendix
-% \cleardoublepage
-% \part{Appendix}
-
+\appendix
+\cleardoublepage
+ \part{Appendix}
+ \chapter{Costcla - Python package}
+ \section{Introduction}
+ \section{API}
+ \section{Examples}
 \cleardoublepage\include{frontback/notations}
+
 \cleardoublepage\include{frontback/bibliography}
-
-
 \end{document}
