@@ -42,3 +42,5 @@ benchmarks/figs/*
 benchmarks/resources/*
 scripts/.ipynb_checkpoints/*
 tex/arxiv/*
+*.backup
+*.pyg

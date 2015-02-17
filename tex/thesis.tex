@@ -82,10 +82,10 @@
 
 % Front pages =================================================================
 \include{frontback/titlepage}
-%\cleardoublepage\include{frontback/disclaimer}
-\cleardoublepage\include{frontback/jury}
+\cleardoublepage\include{frontback/dedication}
 \cleardoublepage\include{frontback/abstract}
-%\cleardoublepage\include{frontback/publications}
+\cleardoublepage\include{frontback/jury}
+\cleardoublepage\include{frontback/publications}
 \cleardoublepage\include{frontback/acknowledgments}
 \pagestyle{scrheadings}
 \cleardoublepage\include{frontback/toc}
@@ -97,34 +97,34 @@
 \cleardoublepage
 \include{chapters/chapter01}\cleardoublepage
 
-%\ctparttex{}
-\part{Growing Decision Trees}\label{part:1}
-\include{chapters/chapter02}\cleardoublepage
-\include{chapters/chapter03}\cleardoublepage
-\include{chapters/chapter04}\cleardoublepage
-\include{chapters/chapter05}\cleardoublepage
-
-%\ctparttex{}
-\part{Interpreting Random Forests}\label{part:2}
-\include{chapters/chapter06}\cleardoublepage
-\include{chapters/chapter07}\cleardoublepage
-
-%\ctparttex{}
-\part{Subsampling data}\label{part:3}
-\include{chapters/chapter08}
-
-\addtocontents{toc}{\protect\vspace*{\baselineskip}\protect}
-\cleardoublepage
-\makeatletter
-\def\toclevel@chapter{-1}
-\makeatother
-\include{chapters/chapter09}
-
-
-% Back pages ==================================================================
-\appendix
-\cleardoublepage
-\part{Appendix}
+% %\ctparttex{}
+% \part{Growing Decision Trees}\label{part:1}
+% \include{chapters/chapter02}\cleardoublepage
+% \include{chapters/chapter03}\cleardoublepage
+% \include{chapters/chapter04}\cleardoublepage
+% \include{chapters/chapter05}\cleardoublepage
+% 
+% %\ctparttex{}
+% \part{Interpreting Random Forests}\label{part:2}
+% \include{chapters/chapter06}\cleardoublepage
+% \include{chapters/chapter07}\cleardoublepage
+% 
+% %\ctparttex{}
+% \part{Subsampling data}\label{part:3}
+% \include{chapters/chapter08}
+% 
+% \addtocontents{toc}{\protect\vspace*{\baselineskip}\protect}
+% \cleardoublepage
+% \makeatletter
+% \def\toclevel@chapter{-1}
+% \makeatother
+% \include{chapters/chapter09}
+% 
+% 
+% % Back pages ==================================================================
+% \appendix
+% \cleardoublepage
+% \part{Appendix}
 
 \cleardoublepage\include{frontback/notations}
 \cleardoublepage\include{frontback/bibliography}
