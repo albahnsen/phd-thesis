@@ -99,72 +99,120 @@
 
 % %\ctparttex{}
 \part{Cost-Sensitive evaluation measures}
-\chapter{Background}
-	\section{Binary classification}
-	\section{Performance measures}
-	\section{Families of classifiers}
 
-\chapter{Cost-sensitive evaluation measures}                                              
-	\section{Cost-matrix}
-		\subsection{Class-dependent versus example-dependent}
-		\subsection{Binary classification cost characteristic}
-	\section{Savings}
+	\chapter{Background}
+		\section{Classification models}
+			\subsection{Binary classification}
+		\section{Performance measures}
+		\section{Families of binary classifiers}
+			\subsection{Linear models}
+			\subsection{Decision tree models}
+			\subsection{Neural networks}
+			\subsection{Suport vector machines}
+			\subsection{Ensemble based classifiers}
+		\section{Sampling}
+			\subsection{Under/over sampling}
+			\subsection{SMOTE}
+		
+	\chapter{Cost-sensitive classification}
+		\section{Introduction}
+		\section{Cost-matrix}
+			\subsection{Class-dependent versus example-dependent}
+			\subsection{Binary classification cost characteristic}
+		\section{Cost-based evaluation masures}
+			\subsection{Normalized costs}
+			\subsection{Savings}		
 
 \part{Real-world cost-sensitive problems}
-\chapter{Credit card fraud detection}
-	\section{Introduction}
-	\section{Feature engineering}
-	\section{Financial evaluation}
-	
-\chapter{Churn modeling}
-	\section{Churn campaign}
-	\section{Customer lifetime value}
-	\section{Offer calculation}
-	\section{Evaluation}
-	
-\chapter{Credit scoring}
-	\section{Background}
-	\section{Scorecard performance evaluation}
-	
-\chapter{Direct marketing}
-	\section{Introduction}
-	\section{Economic evaluation}
+
+	\chapter{Credit card fraud detection}
+		\section{Introduction}
+		\section{Feature engineering}
+			\subsection{Feature aggreagation}
+			\subsection{Periodic features}
+		\section{Financial evaluation}
+		
+	\chapter{Churn modeling}
+		\section{Introduction}
+		\section{Churn campaign}
+		\section{Customer lifetime value}
+		\section{Offer calculation}
+		\section{Evaluation measures}
+		
+	\chapter{Credit scoring}
+		\section{Background}
+		\section{Constructing a credit risk scorecard}
+		\section{Scorecard performance evaluation}
+			\subsection{Expected profit of a loan}
+			\subsection{Credit scoring cost matrix}
+		
+	\chapter{Direct marketing}
+		\section{Introduction}
+			\subsection{Uses of direct marketing}
+		\section{Economic evaluation}
 
 \part{Cost-Sensitive Classification Methods}
-\chapter{Cost-proportionate sampling}
 
-\chapter{Bayes minimum risk}
-	\section{Probability calibration}
-		\subsection{ROCCH}
-		\subsection{Base rates}
-		\subsection{Isotonic regression}
-		\subsection{Platt regression}
-	\section{BMR}
-	\section{Experiments}
-	
-\chapter{Cost-sensitive logistic regression}
-	\section{Logistic regression}
-	\section{Cost-sensitive cost function}
-	\section{Genetic algorithms}
-	\section{Experiments}
+	\chapter{Cost-proportionate sampling}
+		\section{Rejection sampling}
+		\section{Over sampling}
 
-\chapter{Cost-sensitive decision trees}
-	\section{Decision trees}
-		\subsection{Construction}
-		\subsection{Pruning}
-	\section{Cost-sensitive decision trees}
-	\section{Experiments}
-	
-\chapter{Ensembles of cost-sensitive decision trees}
-	\section{Ensemble methods}
-	\section{Random inducers}
-	\section{Combination methods}
-		\subsection{Majority voting}
-		\subsection{Cost-sensitive weighted voting}
-		\subsection{Cost-section stacking}
-	\section{ECSDT}
-	\section{Experiments}
+	\chapter{Bayes minimum risk}
+		\section{Introduction}
+		\section{Probability calibration}
+			\subsection{Brier score and reliability diagrams}
+			\subsection{ROCCH}
+			\subsection{Base rates}
+			\subsection{Isotonic regression}
+			\subsection{Platt regression}
+		\section{Calibrated Bayes minimum risk}
+		\section{Experiments}
 		
+	\chapter{Cost-sensitive logistic regression}
+		\section{Logistic regression}
+			\subsection{Cost function}
+				\subsection{Convexity analysis}
+			\subsection{Training a logistic regression}
+				\subsubsection{Maximum likelihood}
+				\subsubsection{Gradient decent}
+		\section{Cost-sensitive cost function}
+			\subsection{Convexity of the cost function}
+		\section{Training}	
+			\subsection{Genetic algorithms}
+		\section{Experiments}
+
+	\chapter{Cost-sensitive decision trees}
+		\section{Decision trees}
+			\subsection{Construction}
+				\subsubsection{Splitting criteria}
+				\subsubsection{Gain calculation}
+				\subsubsection{Stopping criteria}
+			\subsection{Pruning}
+				\subsubsection{Evaluation criteria}
+		\section{Cost-sensitive decision trees}
+			\subsection{Cost-sensitive splitting criteria}
+			\subsection{Cost-sensitive pruning}
+		\section{Experiments}
+			\subsection{Comparison of decision trees}
+		
+	\chapter{Ensembles of cost-sensitive decision trees}
+		\section{Ensemble methods}
+			\section{Random inducers}
+				\subsection{Bagging}
+				\subsection{Pasting}
+				\subsection{Random forest}
+				\subsection{Random patches}
+			\section{Combination methods}
+				\subsection{Majority voting}
+				\subsection{Weighted voting}
+				\subsection{Staking}
+		\section{Cost-sensitive combination methods}
+			\subsection{Cost-sensitive weighted voting}
+			\subsection{Cost-section stacking}
+		\section{ECSDT}
+		\section{Theoretical analysis of the ECSDT}
+		\section{Experiments}
+			
 % \include{chapters/chapter02}\cleardoublepage
 % \include{chapters/chapter03}\cleardoublepage
 % \include{chapters/chapter04}\cleardoublepage
@@ -189,12 +237,14 @@
 % % Back pages ==================================================================
 \appendix
 \cleardoublepage
- \part{Appendix}
- \chapter{Costcla - Python package}
- \section{Introduction}
- \section{API}
- \section{Examples}
-\cleardoublepage\include{frontback/notations}
+\part{Appendix}
+	\chapter{Costcla - Python package}
+		\section{Introduction}
+			\subsection{PyEA}
+		\section{API}
+		\section{Examples}
+
+	\cleardoublepage\include{frontback/notations}
 
 \cleardoublepage\include{frontback/bibliography}
 \end{document}
