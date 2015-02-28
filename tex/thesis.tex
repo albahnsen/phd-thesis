@@ -69,6 +69,8 @@
 % Wide tables
 \usepackage{ltablex}
 
+% others
+\usepackage{multirow}
 
 % -----------------------------------------------------------------------------
 
@@ -94,13 +96,16 @@
 % Content =====================================================================
 \pagenumbering{arabic}
 
-\cleardoublepage
-\include{chapters/chapter01}\cleardoublepage
+%\cleardoublepage
+%\include{chapters/chapter01}\cleardoublepage
 
 % %\ctparttex{}
-\part{Cost-Sensitive evaluation measures}
 
-	\chapter{Background}
+\part{Cost-Sensitive classification}
+
+	\chapter{Introduction}
+
+	\chapter{Basics on classification}
 		\section{Classification models}
 			\subsection{Binary classification}
 		\section{Performance measures}
@@ -122,40 +127,27 @@
 		\section{Cost-based evaluation masures}
 			\subsection{Normalized costs}
 			\subsection{Savings}		
+		\section{Cost-proportionate sampling}
+			\subsection{Rejection sampling}
+			\subsection{Over sampling}
 
-\part{Real-world cost-sensitive problems}
+\part{Real-world applications}
 
-	\chapter{Credit card fraud detection}
-		\section{Introduction}
-		\section{Feature engineering}
-			\subsection{Feature aggreagation}
-			\subsection{Periodic features}
-		\section{Financial evaluation}
-		
-	\chapter{Churn modeling}
-		\section{Introduction}
-		\section{Churn campaign}
-		\section{Customer lifetime value}
-		\section{Offer calculation}
-		\section{Evaluation measures}
-		
-	\chapter{Credit scoring}
-		\section{Background}
-		\section{Constructing a credit risk scorecard}
-		\section{Scorecard performance evaluation}
-			\subsection{Expected profit of a loan}
-			\subsection{Credit scoring cost matrix}
-		
-	\chapter{Direct marketing}
-		\section{Introduction}
+	\include{chapters/chapter04}\cleardoublepage
+
+	\chapter{Marketing Analytics}
+		\section{Churn modeling}
+			\subsection{Introduction}
+			\subsection{Churn campaign}
+			\subsection{Customer lifetime value}
+			\subsection{Offer calculation}
+			\subsection{Evaluation measures}
+		\section{Direct marketing}
+			\subsection{Introduction}
 			\subsection{Uses of direct marketing}
-		\section{Economic evaluation}
+			\subsection{Economic evaluation}
 
-\part{Cost-Sensitive Classification Methods}
-
-	\chapter{Cost-proportionate sampling}
-		\section{Rejection sampling}
-		\section{Over sampling}
+\part{Proposed Cost-Sensitive Classification Methods}
 
 	\chapter{Bayes minimum risk}
 		\section{Introduction}
