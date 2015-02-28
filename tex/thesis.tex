@@ -1,6 +1,6 @@
 \documentclass[twoside,openright,titlepage,numbers=noenddot,headinclude,%
                footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,%
-               paper=a4,fontsize=11pt,ngerman,american]{scrreprt}
+               paper=a4,fontsize=11pt,ngerman,american,doublespace]{scrreprt}
 
 % Custom config ===============================================================
 
@@ -72,6 +72,9 @@
 % others
 \usepackage{multirow}
 
+\graphicspath{{figures/}}
+\DeclareGraphicsExtensions{.pdf,.jpg,.png, .eps}
+
 % -----------------------------------------------------------------------------
 
 \begin{document}
@@ -127,9 +130,11 @@
 		\section{Cost-based evaluation masures}
 			\subsection{Normalized costs}
 			\subsection{Savings}		
-		\section{Cost-proportionate sampling}
-			\subsection{Rejection sampling}
-			\subsection{Over sampling}
+		\section{State-of-the-art methods}
+		\subsection{Cost-proportionate sampling}
+			\subsubsection{Rejection sampling}
+			\subsubsection{Over sampling}
+		\subsection{Thresholding optimization}
 
 \part{Real-world applications}
 
