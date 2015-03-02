@@ -45,3 +45,4 @@ tex/arxiv/*
 *.backup
 *.pyg
 phd-thesis-gloupe/
+*-eps-converted-to.pdf
