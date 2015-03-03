@@ -1,6 +1,6 @@
 \documentclass[twoside,openright,titlepage,numbers=noenddot,headinclude,%
                footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,%
-               paper=a4,fontsize=11pt,ngerman,american,doublespace]{scrreprt}
+               paper=a4,fontsize=12pt,ngerman,american]{scrreprt}
 
 % Custom config ===============================================================
 
@@ -77,6 +77,8 @@
 \graphicspath{{figures/}}
 \DeclareGraphicsExtensions{.pdf,.jpg,.png, .eps}
 
+\usepackage{setspace} 
+\setstretch{1.4} 
 % -----------------------------------------------------------------------------
 
 \begin{document}
@@ -123,20 +125,8 @@
 		\section{Sampling}
 			\subsection{Under/over sampling}
 			\subsection{SMOTE}
-		
-	\chapter{Cost-sensitive classification}
-		\section{Introduction}
-		\section{Cost-matrix}
-			\subsection{Class-dependent versus example-dependent}
-			\subsection{Binary classification cost characteristic}
-		\section{Cost-based evaluation masures}
-			\subsection{Normalized costs}
-			\subsection{Savings}		
-		\section{State-of-the-art methods}
-		\subsection{Cost-proportionate sampling}
-			\subsubsection{Rejection sampling}
-			\subsubsection{Over sampling}
-		\subsection{Thresholding optimization}
+			
+	\include{chapters/chapter03}\cleardoublepage
 
 \ctparttext{You can put some informational part preamble text here. 
 Illo principalmente su nos. Non message \emph{occidental} angloromanic
