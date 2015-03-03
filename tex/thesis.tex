@@ -33,6 +33,7 @@
 % Maths
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\partialb}[2]{\frac{\partial^2 J(\theta)}{\partial\theta_{#1}\partial\theta_{#2}}}
 
 \numberwithin{equation}{chapter}
 \allowdisplaybreaks
@@ -151,19 +152,7 @@ da. Le usate medical addresses pro, europa origine sanctificate nos se.}
 \part{Proposed Cost-Sensitive Classification Methods}
 
 	\include{chapters/chapter06}\cleardoublepage
-		
-	\chapter{Cost-sensitive logistic regression}
-		\section{Logistic regression}
-			\subsection{Cost function}
-				\subsection{Convexity analysis}
-			\subsection{Training a logistic regression}
-				\subsubsection{Maximum likelihood}
-				\subsubsection{Gradient decent}
-		\section{Cost-sensitive cost function}
-			\subsection{Convexity of the cost function}
-		\section{Training}	
-			\subsection{Genetic algorithms}
-		\section{Experiments}
+	\include{chapters/chapter07}\cleardoublepage
 
 	\chapter{Cost-sensitive decision trees}
 		\section{Decision trees}
