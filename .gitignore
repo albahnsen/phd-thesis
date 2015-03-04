@@ -46,3 +46,4 @@ tex/arxiv/*
 *.pyg
 phd-thesis-gloupe/
 *-eps-converted-to.pdf
+*.idea
