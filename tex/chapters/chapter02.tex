@@ -41,26 +41,27 @@ classes. However, it is expected that in not all cases a perfect separation is o
 
 Formally, a classification algorithm is a function that map ... \todo{add definitions, sets}
 
-
-
-\begin{figure}[t!]
-	\centering
-	\includegraphics{ch2_fig1}
-	\caption{Example of a classification algorithm. Using a set of examples from two classes, a 
+\begin{figure}[!t]
+\centering
+\subfloat[]{\includegraphics{ch2_fig1a}\label{fig:ch2:1a}}
+\\
+\subfloat[]{\includegraphics{ch2_fig1b}\label{fig:ch2:1b}}
+\caption{Example of a classification algorithm. Using a set of examples from two classes, a 
 	classification algorithm is learn in order to separate between the positives and the negatives. }
-	\label{fig:ch2:1}
-\end{figure}
+\label{fig:ch2:1}
+\end{figure} 
+
 	
 \begin{remark}{Classification examples}
 Classification algorithms are widely used across a variety of domains. For example in the 
-medical field, models have been used for making predictions about tumors, predicting the probability 
+medical field, models have been used for making predictions about tumors, probability 
 of a disease, selecting the right drug for a particular patient, and estimating the probability of 
-relapsing, among others \citep{Herland2014}. In the financial section, models have been successfully 
-used for fraud detection, credit scoring and algorithmic trading. In marketing, several models are 
-being currently used for churn modeling, customer targeting, behavior prediction and direct 
-marketing \citep{Baesens2014}. Not to mention other emerging applications such as terrorism 
-prevention, malware detection, spam classification, and others \citep{Kriegel2007}.
-\todo{More examples}
+relapsing, among others \citep{Herland2014}. In the financial sector, classification models have 
+been successfully applied for fraud detection, credit scoring, portfolio management and algorithmic 
+trading. Also, in marketing, several models are being currently used for churn modeling, customer 
+targeting, behavior prediction and direct marketing \citep{Baesens2014}. Additionally, in many 
+other emerging applications such as terrorism prevention, malware detection, computer security, 
+energy consumption prediction, spam classification, and others \citep{Kriegel2007}.
 \end{remark}
 
 \section{Performance measures}
