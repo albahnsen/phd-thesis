@@ -20,7 +20,7 @@ is finally explored in Section~\ref{sec:4:consistency}.
 In machine learning, classification refers to attempt to identify to which of a set of classes a 
 new example belongs, based on learning from examples whose class membership is known. The most 
 important point about classification is that for each example only one know class is possible, 
-making this a discrete problem.
+making this a discrete problem. 
 
 A classification, task begins with a training set in which the class of a set of examples is know. 
 For example, a classification model that predicts credit card fraud, is developed by analyzing 
@@ -32,6 +32,12 @@ Then, during the training process, a classification algorithm finds the patterns
 between the values of the features and the values of the target class, Different algorithms use 
 different methods and techniques to estimate the relationships. Afterwards, these relationships are 
 summarized in a model that is able to make predictions on new sets of data.
+
+Formally, a classification algorithm deals with the problem	of predicting the class $y_i$ of a 
+set $\cal S$ of examples or instances, given their $k$ features \mbox{$\bf{X}_i \in 
+\mathbb{R}^k$}. The objective is to construct a function $f(\cal{S})$ that makes a prediction 
+$c_i$ of the class of each of the $N$ examples using its feature vector $\bf{X}_i$.
+\label{ntn:ch2:1}
 
 In \figurename{ \ref{fig:ch2:1}}, a set of examples from two different classes is shown. The an 
 algorithm is learn in order to separate between the two classes, positive and negative. In this 
@@ -86,6 +92,7 @@ As shown in \tablename{ \ref{tab:ch2:1}},
 
 	\begin{table}[!t]
 		\centering
+		\footnotesize
     \begin{tabular}{c|c|c}
       \multicolumn{3}{c}{}\\
 			\multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
@@ -114,6 +121,7 @@ As shown in \tablename{ \ref{tab:ch2:1}},
   
   	\begin{table}[!t]
 		\centering
+		\footnotesize
     \begin{tabular}{c|c|c}
       \multicolumn{3}{c}{}\\
 			\multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
@@ -152,6 +160,7 @@ time the algorithm made the correct prediction more often as shown in \figurenam
 
     	\begin{table}[!t]
 		\centering
+		\footnotesize
     \begin{tabular}{c|c|c}
       \multicolumn{3}{c}{}\\
 			\multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
