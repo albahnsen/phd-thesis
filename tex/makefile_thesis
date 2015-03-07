@@ -1,3 +1,5 @@
 #!/bin/bash
 make -C /home/al/DriveAl/Publications/2015/phd-thesis/tex/ ${1-rebuild}
-# if modify copy to bin: sudo cp shellexample /usr/local/bin
+# todos
+python /home/al/DriveAl/Publications/2015/phd-thesis/tex/get_todos.py > /home/al/DriveAl/Publications/2015/phd-thesis/tex/TODO.txt
+# if modify copy to bin: sudo cp makefile_thesis /usr/local/bin
