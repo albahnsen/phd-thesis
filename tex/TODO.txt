@@ -1,32 +1,34 @@
          file                               section                                               todo
 0   chapter02                             chapter02                                            outline
-1   chapter02                  Performance measures                                           eq error
-2   chapter02                  Performance measures                                             eq acc
-3   chapter02                  Performance measures                         how to calculate TP, FP...
-4   chapter03                             chapter03                                        fix outline
-5   chapter03                          Introduction                                    Change notation
-6   chapter03              State-of-the-art methods                  Extend description of each method
-7   chapter04                             chapter04                                        fix outline
-8   chapter04           Credit card fraud detection                        erase percentage of savings
-9   chapter04                            Evaluation                                      Add svsS plot
-10  chapter04                               app_cli                          Plot of inputs vs results
-11  chapter04                             Databases                                    table databases
-12  chapter05                             chapter05                                        fix outline
-13  chapter05                        Churn modeling                                   take out savings
-14  chapter05                      Direct marketing                                             extend
-15  chapter06                             chapter06                                    change notation
-16  chapter06                             chapter06                                            outline
-17  chapter06                             chapter06                                          INTRO BMR
-18  chapter06  Brier score and reliability diagrams  Figure of the reliabily diaframs or calibratio...
-19  chapter07                             chapter07                                            outline
-20  chapter07                   Logistic regression                                plot logit function
-21  chapter07                   Logistic regression                                 extend description
-22  chapter07          Cost-sensitive cost function               intro how to estimate the parameters
-23  chapter08                             chapter08                                            outline
-24  chapter08                        Decision trees                                       extend intro
-25  chapter08                          Tree growing     figure with steps to construct a decision tree
-26  chapter08                    Pruning techniques                  figure with the steps for pruning
-27  chapter08                    Pruning techniques                              compare with paper DT
-28  chapter08                           Experiments                                         complexity
-29  notations                             notations                take notations from the ECSDT paper
-30     thesis                                thesis                                       intro part 2
+1   chapter02                 Classification models                                 Change training eq
+2   chapter02                 Classification models                                  introduce errors}
+3   chapter02                  Performance measures                                           eq error
+4   chapter02                  Performance measures                                             eq acc
+5   chapter02                  Performance measures                         how to calculate TP, FP...
+6   chapter03                             chapter03                                        fix outline
+7   chapter03                          Introduction                                    Change notation
+8   chapter03              State-of-the-art methods                  Extend description of each method
+9   chapter04                             chapter04                                        fix outline
+10  chapter04           Credit card fraud detection                        erase percentage of savings
+11  chapter04                            Evaluation                                      Add svsS plot
+12  chapter04                               app_cli                          Plot of inputs vs results
+13  chapter04                             Databases                                    table databases
+14  chapter05                             chapter05                                        fix outline
+15  chapter05                        Churn modeling                                   take out savings
+16  chapter05                      Direct marketing                                             extend
+17  chapter06                             chapter06                                    change notation
+18  chapter06                             chapter06                                            outline
+19  chapter06                             chapter06                                          INTRO BMR
+20  chapter06  Brier score and reliability diagrams  Figure of the reliabily diaframs or calibratio...
+21  chapter07                             chapter07                                            outline
+22  chapter07                   Logistic regression                                plot logit function
+23  chapter07                   Logistic regression                                 extend description
+24  chapter07          Cost-sensitive cost function               intro how to estimate the parameters
+25  chapter08                             chapter08                                            outline
+26  chapter08                        Decision trees                                       extend intro
+27  chapter08                          Tree growing     figure with steps to construct a decision tree
+28  chapter08                    Pruning techniques                  figure with the steps for pruning
+29  chapter08                    Pruning techniques                              compare with paper DT
+30  chapter08                           Experiments                                         complexity
+31  notations                             notations                take notations from the ECSDT paper
+32     thesis                                thesis                                       intro part 2

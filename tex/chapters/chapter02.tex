@@ -17,19 +17,19 @@ is finally explored in Section~\ref{sec:4:consistency}.
 
 
 \section{Classification models}
-In machine learning, classification refers to attempt to identify to which of a set of classes a 
-new example belongs, based on learning from examples whose class membership is known. The most 
-important point about classification is that for each example only one know class is possible, 
-making this a discrete problem. 
+In machine learning, classification refers to the attempt of identifying to which of a set of 
+classes a new example belongs, based on learning from examples whose class membership is known. 
+The most important point about classification is that for each example only one know class is 
+possible, making this a discrete problem. 
 
 A classification, task begins with a training set in which the class of a set of examples is know. 
 For example, a classification model that predicts credit card fraud, is developed by analyzing 
 many observed credit transactions over a period of time. The class in this case is a variable which 
 indicates for each example whether or not the transaction was o not a fraud. Also, the predictors 
-or features, are the transaction attributes like place, amount and time.
+or features, are the transaction attributes like place, amount and time of the transaction.
 
 Then, during the training process, a classification algorithm finds the patterns and relationships 
-between the values of the features and the values of the target class, Different algorithms use 
+between the values of the features and the values of the target class. Different algorithms use 
 different methods and techniques to estimate the relationships. Afterwards, these relationships are 
 summarized in a model that is able to make predictions on new sets of data.
 
@@ -39,13 +39,31 @@ set $\cal S$ of examples or instances, given their $k$ features \mbox{$\bf{X}_i 
 $c_i$ of the class of each of the $N$ examples using its feature vector $\bf{X}_i$.
 \label{ntn:ch2:1}
 
-In \figurename{ \ref{fig:ch2:1}}, a set of examples from two different classes is shown. The an 
-algorithm is learn in order to separate between the two classes, positive and negative. In this 
-example, the algorithm attempts to make a classification that separates the better between the 
-classes. However, it is expected that in not all cases a perfect separation is obtain. 
-\todo{expand}
+\begin{figure}
+	\centering
+	\input{figures/src/ch2_fig_classification_process}
+  \caption{Classification process}
+  \label{fig:ch2:0}
+\end{figure}
 
-Formally, a classification algorithm is a function that map ... \todo{add definitions, sets}
+\todo{Change training eq}
+
+In \figurename{ \ref{fig:ch2:0}}, the process of a training and using a classification algorithm is 
+summarized. First, during the training phase, using a training set $\mathcal{S}_{train}$, a 
+algorithm is train to predict $\bf y$. Then the algorithm is used to make estimate the class $\bf 
+c$ of a set of testing examples $\mathcal{S}_{test}$.
+
+There exists several algorithms that can be used for classification tasks. In general a 
+classification algorithm is learn with the objective of finding patterns that separate between the 
+different classes. In \figurename{ \ref{fig:ch2:1}} an example of a classification algorithm is 
+shown. Lets suppose a set of examples as shown in \figurename{ \ref{fig:ch2:1a}}.  Where the red 
+points represents the positive examples and the blue the negative examples. The objective of a 
+classifier is to find the best way to separate between the positive and negatives examples. In 
+\figurename{ \ref{fig:ch2:1b}}, the output of a classifier learned using the set of examples is 
+shown. It is observed that this classifier is able to separate almost all the examples using a 
+linear classifier. However, not all examples are correctly classified. In particular there are 4 
+negative examples that were predicted as positive, and 5 positive examples that were predicted as 
+negative. \todo{introduce errors}.
 
 \begin{figure}[!t]
 \centering
@@ -71,6 +89,12 @@ energy consumption prediction, spam classification, and others \citep{Kriegel200
 \end{remark}
 
 \section{Performance measures}
+
+In \figurename{ \ref{fig:ch2:1}}, a set of examples from two different classes is shown. The an 
+algorithm is learn in order to separate between the two classes, positive and negative. In this 
+example, the algorithm attempts to make a classification that separates the better between the 
+classes. However, it is expected that in not all cases a perfect separation is obtain. 
+
 
 When constructing a classification algorithm, the true class of the training examples is known. 
 Therefore, evaluating the error of a model is as simply as counting the number of times an example 
