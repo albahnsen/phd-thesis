@@ -2,6 +2,10 @@
                footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,%
                paper=a4,fontsize=12pt,ngerman,american]{scrreprt}
 
+% Solve too many packages
+\usepackage{etex}
+\reserveinserts{28}
+
 % Custom config ===============================================================
 
 % Classic thesis
@@ -61,7 +65,7 @@
 \usepackage{epstopdf}
 
 % Landscape tables
-\usepackage{rotating}
+% \usepackage{rotating}
 
 % Checkmarks
 \usepackage{pifont}% http://ctan.org/pkg/pifont
@@ -69,7 +73,7 @@
 \newcommand{\xmark}{\ding{55}}%
 
 % Wide tables
-\usepackage{ltablex}
+% \usepackage{ltablex}
 
 % others
 \usepackage{multirow}
@@ -79,6 +83,11 @@
 
 \usepackage{setspace} 
 \setstretch{1.4} 
+
+% TIKZ flowcharts
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+
 % -----------------------------------------------------------------------------
 
 \begin{document}
