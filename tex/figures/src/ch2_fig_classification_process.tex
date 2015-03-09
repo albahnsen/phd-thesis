@@ -1,0 +1,41 @@
+  \begin{tikzpicture}[node distance=2cm]
+  \tikzstyle{every node}=[font=\footnotesize]
+  
+  % Main boxes
+  \node (step1) [rectangle, rounded corners, anchor=north west, fill=black!20, text width=10cm,
+								minimum height=2.5cm] {};
+	\node [anchor=north west] at (step1.north west){Step 1: Training};
+	\node (step2) [rectangle, rounded corners, anchor=west, fill=black!20, text width=10cm, 
+								minimum height=2cm, below of = step1, yshift=-0.5cm] {};
+	\node [anchor=north west] at (step2.north west){Step 2: Prediction};
+	
+	% Training
+	\node (label) [rectangle, anchor=north west, fill=black!5,
+								yshift=-0.5cm, xshift=0.5cm] {Class label $\bf y $};
+	\node (train) [rectangle, anchor=north west, fill=black!5, minimum height=1cm, minimum width=3cm,
+								yshift=-1.25cm, xshift=0.5cm] {Training Set $\mathcal{S}_{train} $};
+	\node (algo) [rectangle, anchor=north west, fill=black!5, minimum height=1.5cm,
+							 minimum width=2.8cm, yshift=-.50cm, xshift=4.5cm] 
+							 {\tabular{c} Classification \\ Algorithm  \\	$f(\mathcal{S}_{train}) $
+								\endtabular}; 
+
+	%Classification
+	\node (test) [rectangle, anchor=north west, fill=black!5, minimum height=1cm, minimum width=3cm,
+								yshift=-3.4cm, xshift=0.5cm] {Testing Set $\mathcal{S}_{test} $};
+	\node (algo2)[rectangle, anchor=north west, fill=black!5, minimum height=1cm, minimum width=2.8cm,
+							 yshift=-3.25cm, xshift=4.5cm] 
+							 {\tabular{c} Prediction \\	$f(\mathcal{S}_{test}) $\endtabular};
+	\node (pred) [rectangle, anchor=north west, fill=black!5, minimum height=1cm,
+							yshift=-3.25cm, xshift=7.75cm] {\tabular{c} Prediction \\ class $\bf c$	\endtabular};
+	
+	% Arrows
+	\node (label_temp) [rectangle, anchor=north west, yshift=-0.65cm, xshift=4.5cm] {};
+	\draw[thick,->,>=stealth] (label) to (label_temp);
+	\node (train_temp) [rectangle, anchor=north west,minimum height=1cm, minimum width=3cm,
+								yshift=-1.25cm, xshift=4.5cm] {};
+	\draw[thick,->,>=stealth] (train) to (train_temp);
+	\draw[thick,->,>=stealth] (algo) to (algo2);
+	\draw[thick,->,>=stealth] (test) to (algo2);
+	\draw[thick,->,>=stealth] (algo2) to (pred);
+  \end{tikzpicture}
+ 

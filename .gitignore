@@ -47,3 +47,4 @@ tex/arxiv/*
 phd-thesis-gloupe/
 *-eps-converted-to.pdf
 *.idea
+tex/figures/src/test_tikz*
