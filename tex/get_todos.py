@@ -31,4 +31,4 @@ for file_ in files_:
             todos.loc[i] = file_name, section, line.translate(None, '\t\t\n').split("{")[-1][:-1]
             i += 1
 
-print todos.to_string()
+print todos.to_string(index=False)
