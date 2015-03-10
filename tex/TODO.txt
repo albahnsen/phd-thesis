@@ -1,7 +1,6 @@
       file                               section                                               todo
  chapter02                             chapter02                                            outline
  chapter02                 Classification models                                 Change training eq
- chapter02                 Classification models                                  introduce errors}
  chapter02                  Performance measures                                           eq error
  chapter02                  Performance measures                                             eq acc
  chapter02                  Performance measures                         how to calculate TP, FP...
