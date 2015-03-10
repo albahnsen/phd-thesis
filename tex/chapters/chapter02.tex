@@ -92,22 +92,20 @@ energy consumption prediction, spam classification, and others \citep{Kriegel200
 
 \section{Performance measures}
 
-In \figurename{ \ref{fig:ch2:1}}, a set of examples from two different classes is shown. The an 
-algorithm is learn in order to separate between the two classes, positive and negative. In this 
-example, the algorithm attempts to make a classification that separates the better between the 
-classes. However, it is expected that in not all cases a perfect separation is obtain. 
+When evaluating the performance of a classification algorithm, the first thing to do is to check 
+the number of examples that were misclassified. Since the the true class of the training examples 
+is known. Therefore, evaluating the error of a model is as simply as counting the number of times 
+an example is misclassified and divide it by the number of examples.
 
-
-When constructing a classification algorithm, the true class of the training examples is known. 
-Therefore, evaluating the error of a model is as simply as counting the number of times an example 
-is misclassified and divide it by the number of examples.
-
-\todo{eq error}
-
-Moreover the accuracy is defined as the percentage of times the algorithm made the correct 
-prediction
-
-\todo{eq acc}
+\begin{equation}\label{eqn:ch2:error}
+Err(f({\cal S})) = \frac{1}{N}  \sum_{i=1}^N {\bf 1} _{y_i}(c_i),
+\end{equation}
+where $\mathbf{1}_c(z)$ is an indicator function that takes the value of one if $z \in c$ and 
+zero if $z \notin c$. Moreover the accuracy is defined as the percentage of times the algorithm 
+made the correct prediction
+\begin{equation}\label{eqn:ch2:accuracy}
+Acc(f({\cal S})) = 1- Err(f({\cal S})).
+\end{equation}
 
 However, just knowing these statistics is not enough to make decisions, as in many applications is 
 important to know where the errors are coming from. In particular, the misclassified examples may 
