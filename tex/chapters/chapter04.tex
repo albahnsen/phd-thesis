@@ -645,34 +645,29 @@ of
   different cost, given by the different credit limits and conditions of each loan. Consequently, 
   there is a need for an example-dependent cost matrix that takes into account the cost of 
   misclassifying each example.
-
-	\subsection{Example-dependent credit scoring cost-matrix}
-	\begin{table}
-  \caption{Credit scoring example-dependent cost matrix}\label{table_costmat2}
-    \centering
-    \begin{tabular}{c|c|c}
-    %\cline{2-3}
-      \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
-      \multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
-      \hline
-      Predicted Positive& \multirow{ 2}{*}{$C_{TP_i}=0$} & \multirow{2}{*}{$C_{FP_i}=r_i+C^a_{FP}$} 
-      \\
-      $c_i=1$ & &\\
-      \hline
-      Predicted Negative& \multirow{ 2}{*}{$C_{FN_i}=Cl_i \cdot L_{gd}$} & \multirow{
-      2}{*}{$C_{TN_i}=0$} \\
-      $c_i=0$ & &\\
-    \end{tabular}
-  \end{table}
-    
+   
   In order to take into account the varying costs that each example carries, we propose a cost 
   matrix with example-dependent misclassification costs as given in \tablename{ 
   \ref{table_costmat2}}. First, we assume that the costs of a correct classification, $C_{TP_i}$ 
   and $C_{TN_i}$, are zero for every customer $i$. We define $C_{FN_i}$ to be the losses if the 
   customer $i$ defaults to be proportional to his credit line $Cl_i$. We define the cost of a false 
   positive per customer $C_{FP_i}$ as the sum of two real financial costs $r_i$ and $C^a_{FP}$,
-  where $r_i$ is the loss in profit by rejecting what would have been a good customer. The 
-  calculation of $r_i$ depends on the loan parameters as detailed in Appendix~\ref{app_profit}.
+  where $r_i$ is the loss in profit by rejecting what would have been a good customer. 
+  
+  The profit per customer $r_i$ is calculated as the present value of the difference between the 
+  financial institution gains and expenses, given the credit line $Cl_i$, the term $l_i$ and the 
+  financial institution lending rate $int_{r_i}$ for customer $i$, and the financial institution 
+  of cost funds $int_{cf}$.
+  \begin{equation}
+    r_i= PV(A(Cl_i,int_{r_i},l_i),int_{cf},l_i)-Cl_i,
+  \end{equation}
+  with $A$ being the customer monthly payment and $PV$ the present value of the monthly payments,
+  which are calculated using the time value of money equations \citep{Lawrence2012},
+  \begin{eqnarray}
+    A(Cl_i,int_{r_i},l_i) &=&  Cl_i \frac{int_{r_i}(1+int_{r_i})^{l_i}}{(1+int_{r_i})^{l_i}-1}, \\
+    PV(A,int_{cf},l_i) &=& \frac{A}{int_{cf}} \left(1-\frac{1}{(1+int_{cf})^{l_i}} \right).
+  \end{eqnarray}
+    
   The second term $C^a_{FP}$, is related to the assumption that the financial institution will not 
   keep the money of the declined customer idle. It will instead give a loan to an alternative 
   customer \citep{Nayak1997}. Since no further information is known about the alternative customer, 
@@ -682,23 +677,10 @@ of
   into account that the alternative customer will pay his debt with a probability equal to the 
   prior negative rate, and similarly will default with probability equal to the prior positive rate.
 
-  \subsection{Calculation of a loan profit}\label{app_profit}
-    The profit per customer $r_i$ is calculated as the present value of the difference between the 
-    financial institution gains and expenses, given the credit line $Cl_i$, the term $l_i$ and the 
-    financial institution lending rate $int_{r_i}$ for customer $i$, and the financial institution 
-    of cost funds $int_{cf}$.
-    \begin{equation}
-      r_i= PV(A(Cl_i,int_{r_i},l_i),int_{cf},l_i)-Cl_i,
-    \end{equation}
-    with $A$ being the customer monthly payment and $PV$ the present value of the monthly payments,
-    which are calculated using the time value of money equations \citep{Lawrence2012},
-    \begin{eqnarray}
-      A(Cl_i,int_{r_i},l_i) &=&  Cl_i \frac{int_{r_i}(1+int_{r_i})^{l_i}}{(1+int_{r_i})^{l_i}-1}, \\
-      PV(A,int_{cf},l_i) &=& \frac{A}{int_{cf}} \left(1-\frac{1}{(1+int_{cf})^{l_i}} \right).
-    \end{eqnarray}
-
-  \subsection{Calculation of the credit limit}\label{app_cli}
-    There exists several strategies to calculate the $Cl_i$ depending on the type of loans, the 
+      
+      
+     \todo{ Move before} There exists several strategies to calculate the $Cl_i$ depending on the 
+type of loans, the 
     state of the economy, the current portfolio, among others \citep{Anderson2007,Lawrence2012}.
     Nevertheless, given the lack of information regarding the specific business environments of the 
     considered datasets, we simply define $Cl_i$ as
@@ -718,7 +700,27 @@ of
       P_{m}(debt_i)=\min \left\{ \frac{A(k \cdot Inc_i,int_{r_i},l_i)}{Inc_i},\left(1-debt_i 
       \right) \right\}.
     \end{equation}
-    
+  
+  
+  \subsection{Example-dependent credit scoring cost-matrix}
+  \begin{table}
+  \caption{Credit scoring example-dependent cost matrix}\label{table_costmat2}
+    \centering
+    \begin{tabular}{c|c|c}
+    %\cline{2-3}
+      \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
+      \multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
+      \hline
+      Predicted Positive& \multirow{ 2}{*}{$C_{TP_i}=0$} & \multirow{2}{*}{$C_{FP_i}=r_i+C^a_{FP}$} 
+      \\
+      $c_i=1$ & &\\
+      \hline
+      Predicted Negative& \multirow{ 2}{*}{$C_{FN_i}=Cl_i \cdot L_{gd}$} & \multirow{
+      2}{*}{$C_{TN_i}=0$} \\
+      $c_i=0$ & &\\
+    \end{tabular}
+  \end{table}
+   
     \todo{ Plot of inputs vs results}
 
   \subsection{Databases}
