@@ -1,22 +1,22 @@
-\chapter{Cost-sensitive classification}
+% \chapter{Cost-sensitive classification}
+% 
+% \begin{remark}{Outline}
+% \todo{fix outline}
+% In this chapter, we present the well-known family of \textit{random forests}
+% methods. In Section~\ref{sec:4:bias-variance}, we first describe the bias-variance
+% decomposition of the prediction error and then present, in
+% Section~\ref{sec:4:ensemble}, how aggregating randomized models through
+% ensembles reduces the prediction error by decreasing the variance term in this
+% decomposition. In Section~\ref{sec:4:random-forests}, we revisit random forests
+% and its variants and study how randomness introduced into the decision trees
+% reduces prediction errors by decorrelating the decision
+% trees in the ensemble. Properties and features of random forests are then outlined
+% in Section~\ref{sec:4:features} while their consistency
+% is finally explored in Section~\ref{sec:4:consistency}.
+% \end{remark}
 
-\begin{remark}{Outline}
-\todo{fix outline}
-In this chapter, we present the well-known family of \textit{random forests}
-methods. In Section~\ref{sec:4:bias-variance}, we first describe the bias-variance
-decomposition of the prediction error and then present, in
-Section~\ref{sec:4:ensemble}, how aggregating randomized models through
-ensembles reduces the prediction error by decreasing the variance term in this
-decomposition. In Section~\ref{sec:4:random-forests}, we revisit random forests
-and its variants and study how randomness introduced into the decision trees
-reduces prediction errors by decorrelating the decision
-trees in the ensemble. Properties and features of random forests are then outlined
-in Section~\ref{sec:4:features} while their consistency
-is finally explored in Section~\ref{sec:4:consistency}.
-\end{remark}
 
-
-\section{Introduction}
+\section{Cost-sensitive classification}
 \todo{ Change notation}
   Classification, in the context of machine learning, deals with the problem of predicting the class
   of a set of examples given their features. Traditionally, classification methods aim at 
@@ -47,7 +47,7 @@ is finally explored in Section~\ref{sec:4:consistency}.
 	modifying the training set by re-weighting the examples proportionately to the misclassification 
 	costs \citep{Elkan2001,Zadrozny2003}.
 
-\section{Binary classification cost characteristic}
+\subsection{Binary classification cost characteristic}
 	  In classification problems with two classes $y_i \in \{0,1\}$, the objective is to learn or 
 		predict to which class $c_i \in \{0,1\}$ a given example $i$ belongs based on its $k$ features 
 		$X_i=[x^1_i, x^2_i,...,x^k_i]$. In this context, classification costs can be represented using 
@@ -134,7 +134,7 @@ misclassification.
 			\end{tabular}
     \end{table}
 
-\section{Example-dependent Cost-based evaluation masures}
+\subsection{Example-dependent Cost-based evaluation masures}
 	  Common cost-insensitive evaluation measures such as misclassification rate or \mbox{$F-Score$}, 
 	  assume the same cost for the different misclassification errors. Using these measures is not 
 	  suitable for example-dependent cost-sensitive binary classification problems. Indeed, two 
@@ -182,7 +182,7 @@ However, the total cost may not be easy to interpret. In \citep{Whitrow2008}, a
   \end{equation} 
 
 
-\section{State-of-the-art methods}
+\subsection{State-of-the-art methods}
 \todo{Extend description of each method}
 
 	  As mentioned earlier, taking into account the different costs associated with each example, 

@@ -1,9 +1,10 @@
       file                               section                                               todo
+ chapter01                             chapter01                                            outline
  chapter02                             chapter02                                            outline
- chapter02                 Classification models                                 Change training eq
+ chapter02              Basics on classification                                 Change training eq
  chapter02                  Performance measures                         how to calculate TP, FP...
  chapter03                             chapter03                                        fix outline
- chapter03                          Introduction                                    Change notation
+ chapter03         Cost-sensitive classification                                    Change notation
  chapter03              State-of-the-art methods                  Extend description of each method
  chapter04                             chapter04                                        fix outline
  chapter04           Credit card fraud detection                        erase percentage of savings
