@@ -8,8 +8,6 @@
  chapter03              State-of-the-art methods                  Extend description of each method
  chapter04                             chapter04                                        fix outline
  chapter04           Credit card fraud detection                        erase percentage of savings
- chapter04                            Evaluation                                      Add svsS plot
- chapter04                               app_cli                          Plot of inputs vs results
  chapter04                             Databases                                    table databases
  chapter05                             chapter05                                        fix outline
  chapter05                        Churn modeling                                   take out savings
@@ -29,4 +27,6 @@
  chapter08                    Pruning techniques                              compare with paper DT
  chapter08                           Experiments                                         complexity
  notations                             notations                take notations from the ECSDT paper
-    thesis                                thesis                                       intro part 2
+    thesis                                thesis                        Update chapters structure}\
+    thesis                                thesis                  Update intro to applications part
+    thesis                                thesis                       Update intro to methods part
