@@ -271,28 +271,28 @@ FUNCTION {format.editors}
 FUNCTION {format.isbn}
 { isbn empty$
     { "" }
-    { new.block "ISBN " isbn * }
+    { "" }
   if$
 }
 
 FUNCTION {format.issn}
 { issn empty$
     { "" }
-    { new.block "ISSN " issn * }
+    { "" }
   if$
 }
 
 FUNCTION {format.url}
 { url empty$
     { "" }
-    { new.block "URL \url{" url * "}" * }
+    { "" }
   if$
 }
 
 FUNCTION {format.doi}
 { doi empty$
     { "" }
-    { new.block "\doi{" doi * "}" * }
+    { "" }
   if$
 }
 
