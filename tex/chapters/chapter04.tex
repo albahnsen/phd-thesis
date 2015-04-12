@@ -582,45 +582,47 @@ transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:von3}}
 
 \section{Credit scoring}
 
+  In order to mitigate the impact of credit risk and make more objective and accurate decisions, 
+  financial institutions use credit scores to predict and control their losses.
   The objective in credit scoring is to classify which potential customers are likely to default a 
   contracted financial obligation based on the customer's past financial experience, and with that 
   information decide whether to approve or decline a loan~\citep{Anderson2007}. This tool has 
-become 
-  a standard practice among financial institutions around the world in order to predict and 
-  control their loans portfolios. When constructing credit scores, it is a common practice to use 
-  standard cost-insensitive binary classification algorithms such as logistic regression, neural 
-  networks, discriminant analysis, genetic programing, decision trees, among 
-  others~\citep{Hand1997,Bahnsen2011}. However, in practice, the cost associated with approving 
-  what is known as a bad customer, i.e., a customer who default his credit loan, is quite 
-  different from the cost associated with declining a good customer,  i.e., a customer who 
-  successfully repay his credit loan. Furthermore, the costs are not constant among customers. 
-  This is because loans have different credit line amounts, terms, and even interest rates. Some 
-  authors have proposed methods that include the misclassification costs in the credit scoring 
-  context \citep{Verbraken2014,Alejo2013,Beling2005,Oliver2009}. However, they assume a constant 
-  misclassification cost, which is not the case in credit scoring.
+  become a standard practice among financial institutions around the world in order to predict 
+  and control their loans portfolios. When constructing credit scores, it is a common practice to 
+  use standard cost-insensitive binary classification algorithms such as logistic regression, 
+  neural networks, discriminant analysis, genetic programing, decision trees, among 
+  others~\citep{Hand1997,Bahnsen2011}. 
   
-  \subsection{Evaluation}
-    In order to mitigate the impact of credit risk and make more objective and accurate decisions, 
-  financial institutions use credit scores to predict and control their losses. The objective of a 
-  credit score is to estimate the risk of a  customer defaulting his contracted financial 
-  obligation if a loan is granted, based on past experiences \citep{Anderson2007}. Formally, a 
-credit 
-  score is a statistical model that allows the estimation of the probability $\hat 
-  p_i=P(y_i=1|X_i)$ of a customer $i$ defaulting a contracted debt. Additionally, since the 
+  Formally, a credit score is a statistical model that allows the estimation of the probability 
+  $\hat p_i=P(y_i=1|X_i)$ of a customer $i$ defaulting a contracted debt. Additionally, since the 
   objective of credit scoring is to estimate a classifier $c_i$ to decide whether or not to grant a 
   loan to a customer $i$, a threshold $t$ is defined such that if $\hat p_i <t$, then the loan is 
   granted, i.e., $c_i(t)=0$, and denied otherwise, i.e., $c_i(t)=1$.
   
-  \todo{Add svsS plot}
   There exists different approaches for defining the probability threshold. The sensitivity versus 
   specificity ($SvsS$) approach is the most widely used among financial institutions 
   \citep{Anderson2007}, where specificity is the true positive rate $F_0(t)$ for a threshold $t$, 
   and the sensitivity is one minus the false positive rate $F_1(t)$ given a threshold $t$ 
   \citep{Hernandez-Orallo2012}. In this method the objective is to fix the threshold at the point 
   where the sensitivity is equal to the specificity $F_0(t)=1-F_1(t)$, where $F_0(t)$ and $F_1(t)$ 
-  are calculated using \mbox{$F_k(t)=\frac{1}{n_k}\vert \{ ( x_i,y_i ) \in D_k \vert \hat p_i \le t 
-  \}\vert$, for $k\in\{0,1\}.$} Lastly, the $SvsS$ threshold $t_{SvsS}$ is found by using 
-  \mbox{$t_{SvsS}= \argmin_t \vert F_0(t) - (1-F_1(t)) \vert.$}
+  are calculated using:
+  \begin{equation}
+   F_k(t)=\frac{1}{n_k}\vert \{ ( x_i,y_i ) \in D_k \vert \hat p_i \le t \}\vert, \text{ for } 
+   k\in\{0,1\}.
+  \end{equation}
+  Lastly, the $SvsS$ threshold $t_{SvsS}$ is found by using
+  \begin{equation}
+  t_{SvsS}= \argmin_t \vert F_0(t) - (1-F_1(t)) \vert.
+  \end{equation}
+  This process is further clarify in \figurename{ \ref{fig:ch4:4}}.
+  
+  \begin{figure}
+  \centering
+  \centering
+  \includegraphics{ch4_fig_4}
+  \caption{Credit scoring sensitivity versus specificity thresholding procedure.}
+  \label{fig:ch4:4}
+  \end{figure}
   
   After the classifier $c_i$ is estimated, there is a need to evaluate its performance. In 
   practice, many statistical evaluation measures are used to assess theperformance of a credit 
@@ -629,30 +631,63 @@ credit
   the most common \citep{Beling2005}. Nevertheless, none of these measures takes into account the 
   business and economical realities that take place in credit scoring. Costs that the financial 
   institution had incurred to acquire customers, or the expected profit due to a particular client, 
-  are not considered in the evaluation of the different models.
+  are not considered in the evaluation of the different models. This is explored in detail in the 
+  next section.
+
   
+  \subsection{Financial evaluation of a credit scorecard }
+  
+  Typically, a credit risk model is evaluated using standard cost-insensitive measures.
+  However, in practice, the cost associated with approving 
+  what is known as a bad customer, i.e., a customer who default his credit loan, is quite 
+  different from the cost associated with declining a good customer,  i.e., a customer who 
+  successfully repay his credit loan. Furthermore, the costs are not constant among customers. 
+  This is because loans have different credit line amounts, terms, and even interest rates. Some 
+  authors have proposed methods that include the misclassification costs in the credit scoring 
+  context \citep{Verbraken2014,Alejo2013,Beling2005,Oliver2009}. However, they assume a constant 
+  misclassification cost, which is not the case in credit scoring.
+  
+ 
   Initial approaches to include the different costs have been published in recent years, 
-  particularly the one proposed by Beling et al. \citep{Beling2005,Oliver2009}, in whichthe costs 
-of 
-  misclassification are assigned for each error. Specifically, setting the cost of a false positive 
-  $C_{FP}$ to the loan's annual interest rate charged to the customer $int_r$, the cost of a false 
-  negative $C_{FN}$ to the loss given default $L_{gd}$, which is the percentage of loss over the 
-  total credit line when the customer defaulted, and setting to zero the costs of true positive 
-  $C_{TP}$ and true negative $C_{TN}$. Using that, they proposed the expected cost (EC) method to 
-  find the probability threshold that minimizes those costs,$t_{ec}= \frac{C_{FN}}{C_{FN}+C_{FP}} 
-  =\frac{L_{gd}}{L_{gd}+int_r}.$ Nevertheless, this approach assumes a constant cost within 
-  examples, which is a strong assumption, since in practice each example carries a very 
-  different cost, given by the different credit limits and conditions of each loan. Consequently, 
-  there is a need for an example-dependent cost matrix that takes into account the cost of 
-  misclassifying each example.
+  particularly the one proposed by Beling et al. \citep{Beling2005,Oliver2009}, in which the costs 
+  of misclassification are assigned for each error. Specifically, setting the cost of a false 
+  positive $C_{FP}$ to the loan's annual interest rate charged to the customer $int_r$, the cost of 
+  a false negative $C_{FN}$ to the loss given default $L_{gd}$, which is the percentage of loss 
+  over the total credit line when the customer defaulted, and setting to zero the costs of true 
+  positive $C_{TP}$ and true negative $C_{TN}$. Using that, they proposed the expected cost (EC) 
+  method to find the probability threshold that minimizes those costs, $t_{ec}= 
+  \frac{C_{FN}}{C_{FN}+C_{FP}} =\frac{L_{gd}}{L_{gd}+int_r}.$ Nevertheless, this approach assumes 
+  a constant cost within examples, which is a strong assumption, since in practice each example 
+  carries a very different cost, given by the different credit limits and conditions of each loan. 
+  Consequently, there is a need for an example-dependent cost matrix that takes into account the 
+  cost of misclassifying each example.
    
-  In order to take into account the varying costs that each example carries, we propose a cost 
-  matrix with example-dependent misclassification costs as given in \tablename{ 
-  \ref{table_costmat2}}. First, we assume that the costs of a correct classification, $C_{TP_i}$ 
-  and $C_{TN_i}$, are zero for every customer $i$. We define $C_{FN_i}$ to be the losses if the 
-  customer $i$ defaults to be proportional to his credit line $Cl_i$. We define the cost of a false 
-  positive per customer $C_{FP_i}$ as the sum of two real financial costs $r_i$ and $C^a_{FP}$,
-  where $r_i$ is the loss in profit by rejecting what would have been a good customer. 
+  In order to take into account the varying costs that each example carries, we proposed in 
+  \citep{CorreaBahnsen2014b}, a cost matrix with example-dependent misclassification costs as 
+  given in \tablename{ \ref{table_costmat2}}. First, we assume that the costs of a correct 
+  classification, $C_{TP_i}$ and $C_{TN_i}$, are zero for every customer $i$. We define $C_{FN_i}$ 
+  to be the losses if the customer $i$ defaults to be proportional to his credit line $Cl_i$. We 
+  define the cost of a false positive per customer $C_{FP_i}$ as the sum of two real financial 
+  costs $r_i$ and $C^a_{FP}$, where $r_i$ is the loss in profit by rejecting what would have been a 
+  good customer. 
+  
+  \begin{table}
+  \caption{Credit scoring example-dependent cost matrix}\label{table_costmat2}
+    \centering
+    \begin{tabular}{c|c|c}
+    %\cline{2-3}
+      \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
+      \multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
+      \hline
+      Predicted Positive& \multirow{ 2}{*}{$C_{TP_i}=0$} & \multirow{2}{*}{$C_{FP_i}=r_i+C^a_{FP}$} 
+      \\
+      $c_i=1$ & &\\
+      \hline
+      Predicted Negative& \multirow{ 2}{*}{$C_{FN_i}=Cl_i \cdot L_{gd}$} & \multirow{
+      2}{*}{$C_{TN_i}=0$} \\
+      $c_i=0$ & &\\
+    \end{tabular}
+  \end{table}
   
   The profit per customer $r_i$ is calculated as the present value of the difference between the 
   financial institution gains and expenses, given the credit line $Cl_i$, the term $l_i$ and the 
@@ -672,57 +707,40 @@ of
   keep the money of the declined customer idle. It will instead give a loan to an alternative 
   customer \citep{Nayak1997}. Since no further information is known about the alternative customer, 
   it is assumed to have an average credit line $\overline{Cl}$ and an average profit $\overline{r}$.
-  Then, \mbox{$C^a_{FP}=- \overline{r} \cdot \pi_0+\overline{Cl}\cdot L_{gd} \cdot \pi_1$}, in 
-  other words minus the profit of an average alternative customer plus the expected loss, taking 
-  into account that the alternative customer will pay his debt with a probability equal to the 
-  prior negative rate, and similarly will default with probability equal to the prior positive rate.
+  Given that, 
+  \begin{equation}
+    C^a_{FP}=- \overline{r} \cdot \pi_0+\overline{Cl}\cdot L_{gd} \cdot \pi_1,
+  \end{equation}
+  in other words minus the profit of an average alternative customer plus the expected loss, 
+  taking into account that the alternative customer will pay his debt with a probability equal to 
+  the prior negative rate, and similarly will default with probability equal to the prior positive 
+  rate.
 
-      
-      
-     \todo{ Move before} There exists several strategies to calculate the $Cl_i$ depending on the 
-type of loans, the 
-    state of the economy, the current portfolio, among others \citep{Anderson2007,Lawrence2012}.
-    Nevertheless, given the lack of information regarding the specific business environments of the 
-    considered datasets, we simply define $Cl_i$ as
-    \begin{equation}\label{eq:cli}
+  \subsubsection{Calculation of the credit limit}
+  
+  One key parameter of our model is the credit limit. There exists several strategies to calculate 
+  the $Cl_i$ depending on the type of loans, the state of the economy, the current portfolio, 
+  among others \citep{Anderson2007,Lawrence2012}. Nevertheless, given the lack of information 
+  regarding the specific business environments of the considered datasets, we simply define 
+  $Cl_i$ as
+  \begin{equation}\label{eq:cli}
       Cl_i = \min \bigg\{ k \cdot Inc_i, Cl_{max}, Cl_{max}(debt_i) \bigg\},
-    \end{equation}
-    where $Inc_i$ and $debt_i$ are the monthly income and debt ratio of the customer $i$, 
-    respectively, $k$ is a parameter that defines the maximum $Cl_i$ in times $Inc_i$, and 
-    $Cl_{max}$ the maximum overall credit line. Lastly, the maximum credit line given the current 
-    debt is calculated as the maximum credit limit such that the current debt ratio plus the new 
-    monthly payment does not surpass the customer monthly income. It is calculated as
-    \begin{equation}
-      Cl_{max}(debt_i)=PV\left(Inc_i \cdot P_{m}(debt_i),int_{r_i},l_i\right),
-    \end{equation}
-    and
-    \begin{equation}
-      P_{m}(debt_i)=\min \left\{ \frac{A(k \cdot Inc_i,int_{r_i},l_i)}{Inc_i},\left(1-debt_i 
-      \right) \right\}.
-    \end{equation}
+  \end{equation}
+  where $Inc_i$ and $debt_i$ are the monthly income and debt ratio of the customer $i$, 
+  respectively, $k$ is a parameter that defines the maximum $Cl_i$ in times $Inc_i$, and 
+  $Cl_{max}$ the maximum overall credit line. Lastly, the maximum credit line given the current 
+  debt is calculated as the maximum credit limit such that the current debt ratio plus the new 
+  monthly payment does not surpass the customer monthly income. It is calculated as
+  \begin{equation}
+    Cl_{max}(debt_i)=PV\left(Inc_i \cdot P_{m}(debt_i),int_{r_i},l_i\right),
+  \end{equation}
+  and
+  \begin{equation}
+    P_{m}(debt_i)=\min \left\{ \frac{A(k \cdot Inc_i,int_{r_i},l_i)}{Inc_i},\left(1-debt_i 
+    \right) \right\}.
+  \end{equation}
   
   
-  \subsection{Example-dependent credit scoring cost-matrix}
-  \begin{table}
-  \caption{Credit scoring example-dependent cost matrix}\label{table_costmat2}
-    \centering
-    \begin{tabular}{c|c|c}
-    %\cline{2-3}
-      \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
-      \multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
-      \hline
-      Predicted Positive& \multirow{ 2}{*}{$C_{TP_i}=0$} & \multirow{2}{*}{$C_{FP_i}=r_i+C^a_{FP}$} 
-      \\
-      $c_i=1$ & &\\
-      \hline
-      Predicted Negative& \multirow{ 2}{*}{$C_{FN_i}=Cl_i \cdot L_{gd}$} & \multirow{
-      2}{*}{$C_{TN_i}=0$} \\
-      $c_i=0$ & &\\
-    \end{tabular}
-  \end{table}
-   
-    \todo{ Plot of inputs vs results}
-
   \subsection{Databases}
 
     For this paper we use two different publicly available credit scoring datasets. The first 
