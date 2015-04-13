@@ -3,29 +3,29 @@
  chapter02                             chapter02                                            outline
  chapter02              Basics on classification                                 Change training eq
  chapter02                  Performance measures                         how to calculate TP, FP...
+ chapter02                                 SMOTE                                        fix outline
+ chapter02         Cost-sensitive classification                                    Change notation
+ chapter02              State-of-the-art methods                  Extend description of each method
  chapter03                             chapter03                                        fix outline
- chapter03         Cost-sensitive classification                                    Change notation
- chapter03              State-of-the-art methods                  Extend description of each method
+ chapter03           Credit card fraud detection                        erase percentage of savings
+ chapter03                             Databases                                    table databases
  chapter04                             chapter04                                        fix outline
- chapter04           Credit card fraud detection                        erase percentage of savings
- chapter04                             Databases                                    table databases
- chapter05                             chapter05                                        fix outline
- chapter05                        Churn modeling                                   take out savings
- chapter05                      Direct marketing                                             extend
- chapter06                             chapter06                                    change notation
+ chapter04                        Churn modeling                                   take out savings
+ chapter04                      Direct marketing                                             extend
+ chapter05                             chapter05                                    change notation
+ chapter05                             chapter05                                            outline
+ chapter05                             chapter05                                          INTRO BMR
+ chapter05  Brier score and reliability diagrams  Figure of the reliabily diaframs or calibratio...
  chapter06                             chapter06                                            outline
- chapter06                             chapter06                                          INTRO BMR
- chapter06  Brier score and reliability diagrams  Figure of the reliabily diaframs or calibratio...
+ chapter06                   Logistic regression                                plot logit function
+ chapter06                   Logistic regression                                 extend description
+ chapter06          Cost-sensitive cost function               intro how to estimate the parameters
  chapter07                             chapter07                                            outline
- chapter07                   Logistic regression                                plot logit function
- chapter07                   Logistic regression                                 extend description
- chapter07          Cost-sensitive cost function               intro how to estimate the parameters
- chapter08                             chapter08                                            outline
- chapter08                        Decision trees                                       extend intro
- chapter08                          Tree growing     figure with steps to construct a decision tree
- chapter08                    Pruning techniques                  figure with the steps for pruning
- chapter08                    Pruning techniques                              compare with paper DT
- chapter08                           Experiments                                         complexity
+ chapter07                        Decision trees                                       extend intro
+ chapter07                          Tree growing     figure with steps to construct a decision tree
+ chapter07                    Pruning techniques                  figure with the steps for pruning
+ chapter07                    Pruning techniques                              compare with paper DT
+ chapter07                           Experiments                                         complexity
  notations                             notations                take notations from the ECSDT paper
     thesis                                thesis                        Update chapters structure}\
     thesis                                thesis                  Update intro to applications part

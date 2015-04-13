@@ -1,6 +1,4 @@
-
-\chapter{Bayes minimum risk}
-\todo{change notation}
+\chapter{Cost-sensitive logistic regression}
 
 \begin{remark}{Outline}
 \todo{outline}
@@ -17,194 +15,206 @@ in Section~\ref{sec:4:features} while their consistency
 is finally explored in Section~\ref{sec:4:consistency}.
 \end{remark}
 
-\todo{INTRO BMR}
+\section{Logistic regression}
 
-  In this paper two different methods for calibrating probabilities are evaluated and analyzed in 
-the context
-  of credit card fraud detection, with the objective of finding the model that minimizes the real 
-losses due to fraud.
-  First, the method proposed \mbox{in \citep{Elkan2001}} to adjust the probabilities based on the 
-difference in
-  bad rates between the training and testing datasets is used.
-  Second, it is compared against the method proposed \mbox{in \citep{Hernandez-Orallo2012}},
-  in which calibrated probabilities are extracted after modifying the receiver operating 
-characteristic (ROC) curve
-  to a convex one using the ROC convex hull methodology.
-  
-\section{BMR Model}
-
-   We use Bayes minimum risk as a method for cost sensitive credit card fraud detection.
-   As defined in \citep{Ghosh2006}, the Bayes minimum risk classifier is a decision model based on
-   quantifying tradeoffs between various decisions using probabilities and the costs that accompany 
-such decisions.
-   In the case of credit card fraud detection, there are two decisions, either predict a 
-transaction as fraud $p_f$ or as legitimate $p_l$.
-   The risk associated with predicting a transaction as fraud is defined as
-   \begin{equation}
-    R(p_{f}|x)=L(p_{f}|y_{f})P(p_{f}|x)+L(p_{f}|y_{l})P(p_{l}|x),
-    \label{Bayes_min1}
-   \end{equation}
-   and when the transaction is predicted as legitimate it is
-   \begin{equation}
-    R(p_{l}|x)=L(p_{l}|y_{l})P(p_{l}|x)+L(p_{l}|y_{f})P(p_{f}|x),
-    \label{Bayes_min2}
-   \end{equation}
-   where %$p_f$ and $p_l$ indicate whether a transaction is predicted as fraud or legitimate, and
-   $y_f$ and $y_l$ are the real labels for fraudulent and legitimate transactions respectively. 
-$P(p_l|x)$ is the 
-   estimated probability of a transaction being legitimate given $x$, similarly 
-   $P(p_f|x)$ is the probability of a transaction being fraud given $x$.
-   Finally $L(a,b)$ is the loss function when a transaction is predicted as $a$ and the
-   real label is $b$.
-   Once both risks are calculated, %the decision will be made by choosing the one with the lowest 
-cost
-   a transaction is classified as fraud if $R(p_{f}|x)\le R(p_{l}|x)$, meaning if the risk 
-associated with
-   that decision is lower than the risk associated with classifying it as legitimate. % as defined 
-in (\ref{Bayes_min3}).
-   
-   %\noindent 
-   Since in the credit card fraud detection case the losses are equal to the cost, first we use 
-   the cost matrix with fixed cost for $FN$ as defined in \tablename{ 
-\ref{table_measure_cost_hand}}.
-   Then a transaction will be classified as fraud if: $C_aP(p_{f}|x)+C_aP(p_{l}|x) \le 
-100C_aP(p_{f}|x)$, 
-   %the Bayes minimum risk classifier using this cost matrix is defined in (\ref{Bayes_min4}).
-   \begin{equation}
-    C_aP(p_{f}|x)+C_aP(p_{l}|x) \le 100\cdot C_aP(p_{f}|x),
-    \label{Bayes_min4}
-   \end{equation}
-   and as legitimate otherwise.
-  
-\section{Calibration of probabilities}
-
-  When using the output of a binary classifier as a basis for decision making,
-  there is a need for a probability that not only separates well between 
-  positive and negative examples, but that also assesses the real probability of the event 
-	\citep{cohen2004}.
-  
-  In this section two methods for calibrating probabilities are explained.
-  First, the method proposed in [6] to adjust the probabilities based on the difference in bad rates
-  between the training and testing datasets.
-  Then, the method proposed in [8], in which calibrated probabilities are extracted after
-  modifying the ROC curve using the ROC convex hull methodology, is described.
-  
-  \subsection{Brier score and reliability diagrams}
-  \todo{Figure of the reliabily diaframs or calibration map}
-  
-  \subsection{Calibration of probabilities due to a change in base rates.}
-  One of the reasons why a probability may not be calibrated is because 
-  the algorithm is trained using a dataset with a different base rate than the one on
-  the evaluation dataset. 
-  This is something common in machine learning since
-  using under-sampling or over-sampling is a typical method to solve problems such as
-  class imbalance and cost sensitivity \citep{Hulse2007}.
-  
-  In order to solve this and find probabilities that are calibrated, in \citep{Elkan2001} a formula
-  that corrects the probabilities based on the difference of the base rates is proposed.
-  The objective is using $p=P(j=1|x)$ which was estimated using a population with base rate 
-\mbox{$b=P(j=1)$},
-  to find $p'=P'(j=1|x)$ for the real population which has a base rate $b'$.
-  A solution for $p'$ is given as follows:
+  Logistic regression is a classification model that, in the specific context of binary 
+  classification, estimates the posterior probability of the positive class, as the logistic 
+  sigmoid of a linear function of the feature vector \citep{Bishop2006}. The estimated probability 
+  is evaluated as 
   \begin{equation}
-  p'=b'\frac{p-pb}{b-bp+b'p-bb'}.
-  \label{cal_prob_br}
+    \hat p_i = P(y=1 \vert X_i) = h_\theta(X_i) = g\biggl(\sum_{j=1}^{k}{\theta^jx_i^j}\biggr),
   \end{equation}
-  Nevertheless, a strong assumption is made by taking: 
-  \mbox{$P'(x|j=1)=P(x|j=1)$} and \mbox{$P'(x|j=0)=P(x|j=0)$}, meaning that there
-  is no change in the example probability within the positive and negative
-  subpopulations density functions.
-  
-  \subsection{Calibrated probabilities using ROC convex hull.}
-  In order to illustrate the ROC convex hull approach proposed in \citep{Hernandez-Orallo2012},
-  let us consider the set of probabilities given in \figurename{ \ref{table_example_prob}}.
-  Their corresponding  ROC curve of that set of probabilities is shown in \figurename{ 
-\ref{ROC_1}}.  It can be seen that this set of probabilities is not calibrated, since at 0.1 there 
-is a positive example  followed by 2 negative examples. That inconsistency is represented in the ROC 
-curve as a non convex segment  over the curve.
-  
-  In order to obtain a set of calibrated probabilities, first the ROC curve must be modified in 
-order to be convex.
-  The way to do that, is to find the convex \mbox{hull \citep{Hernandez-Orallo2012}}, 
-  in order to obtain the minimal convex set containing the different points of the ROC curve.
-  In \figurename{ \ref{ROC_2}}, the convex hull algorithm is applied to the previously evaluated 
-ROC curve.
-  It is shown that the new curve is convex, and includes all the points of the previous ROC curve.
-  
-  Now that there is a new convex ROC curve or ROCCH, the calibrated probabilities can be extracted 
-as shown
-  in  \figurename{ \ref{cal_prob}}. The procedure to extract the new probabilities is to first group 
-the
-  probabilities according to the points in the ROCCH curve, and then make the calibrated
-  probabilities be the slope of the ROCCH for each group.
-  
-\begin{figure}[!t]
-\hskip 0.5cm
-\hbox{
-  \vtop{
-    \hbox{
-      \subfloat[Set of probabilities and their respective class label]{
-	\begin{tabular}{cc}
-	\hline
-	Probability & Label\\
-	\hline
-	0.0&	0\\
-	0.1&	1\\
-	0.2&	0\\
-	0.3&	0\\
-	0.4&	1\\
-	0.5&	0\\
-	0.6&	1\\
-	0.7&	1\\
-	0.8&	0\\
-	0.9&	1\\
-	1.0&	1\\
-	\hline
-	\end{tabular}\label{table_example_prob}
-      }
-    }
-  }\hskip 0.5cm
-  \vtop{\vskip -2.5cm
-    \subfloat[ROC curve of the set of probabilities]{
-      \includegraphics[scale=0.5]{ch6_fig2}\label{ROC_1}
-    }%
-  }%
-}
-\vskip 1.5cm
-
-\hbox{ 
-  \vtop{ \vskip 0.5cm
-    \hbox{
-      \subfloat[Convex hull of the ROC curve]{
-	\includegraphics[scale=0.5]{ch6_fig1}\label{ROC_2}
-      }
-    }
-  }\hskip 1cm
-  \vtop{ \vskip -1cm
-    \subfloat[Calibrated probabilities]{
-	\begin{tabular}{cc}
-	\hline
-	Prob & Cal Prob\\
-	\hline
-	0.0&	0\\
-	0.1&	0.333\\
-	0.2&	0.333\\
-	0.3&	0.333\\
-	0.4&	0.5\\
-	0.5&	0.5\\
-	0.6&	0.666\\
-	0.7&	0.666\\
-	0.8&	0.666\\
-	0.9&	1\\
-	1.0&	1\\
-	\hline
-	\end{tabular}\label{cal_prob} 
-    }
-  }
-}
-\caption{Estimation of calibrated probabilities using the ROC convex hull 
-\citep{Hernandez-Orallo2012}.}\label{fig1}
-
-\end{figure}
+  where $h_\theta(X_i)$ refers to the hypothesis of $i$ given the parameters $\theta$,  and 
+  $g(\cdot)$ is the logistic sigmoid function, defined as \mbox{$g(z)=1/(1+e^{-z})$}.\\
+  The problem then becomes on finding the right parameters that minimize a given cost function. 
+  Usually, in the case of logistic regression the cost function $J(\theta)$ refers to the negative 
+  logarithm of the likelihood, such that
+  \begin{equation}
+    J(\theta)=\frac{1}{N}\sum_{i=1}^{N} J_i(\theta),
+  \end{equation}
+  where
+  \begin{align}
+    J_i(\theta) =  -y_i\log(h_\theta(X_i)) -(1-y_i)\log(1-h_\theta(X_i)).
+  \end{align}\label{eq:j}
    
+   \todo{plot logit function}
+   
+   \todo{extend description}
+   
+	\subsection{Convexity analysis}
+	
+	The gradient of the cost functions is
+	
+		\begin{center}
+		$\left[ \begin{array}{c}
+		\frac{\partial J(\theta)}{\partial \theta_1} \\[0.1in]	
+		\frac{\partial J(\theta)}{\partial \theta_2} \\[0.1in]	
+		\ldots \\[0.1in]	
+		\frac{\partial J(\theta)}{\partial \theta_n}
+		\end{array} \right] =
+		\left[ \begin{array}{c}
+		\frac{1}{m}\sum_{i=1}^{m}\left[x_1^{(i)}\left(h_\theta(x^{(i)})-y^{(i)}\right)\right]\\[0.1in]
+				\frac{1}{m}\sum_{i=1}^{m}\left[x_2^{(i)}\left(h_\theta(x^{(i)})-y^{(i)}\right)\right]
+		\\[0.1in]	
+		\ldots \\[0.1in]	
+		\frac{1}{m}\sum_{i=1}^{m}\left[x_n^{(i)}\left(h_\theta(x^{(i)})-y^{(i)}\right)\right]
+		\\[0.1in]	
+		\end{array} \right]$
+	\end{center}
+	
+	since a a function f(x) which is twice-differentiable is convex if and only if its
+	hessian matrix (matrix of second-order partial derivatives) is positive semi-definite
+
+The Hessian can be generalized as: 
+	\begin{center}
+	 $\partialb{j1}{j2}=\frac{1}{m}\sum_{i=1}^{m}
+	\left[
+	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{j1}^{(i)}x_{j2}^{(i)}
+	\right]
+	$\\[0.2in]
+	\[
+	\left[ \begin{array}{ccc}
+	\sum_{i=1}^{m}	\left[
+	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{1}^{(i)}x_{1}^{(i)}	\right] & \ldots & 
+	\sum_{i=1}^{m}	\left[
+	 (1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{1}^{(i)}x_{n}^{(i)}	\right] \\[0.1in] 
+	 \sum_{i=1}^{m}	\left[
+	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{2}^{(i)}x_{1}^{(i)}	\right]  & \ldots
+	 \ldots & \sum_{i=1}^{m}	\left[
+	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{2}^{(i)}x_{n}^{(i)}	\right] \\ [0.1in]
+	\ldots  & \ldots & \ldots \\ [0.1in]
+	\sum_{i=1}^{m}	\left[
+	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{n}^{(i)}x_{1}^{(i)}	\right] & \ldots &
+	\sum_{i=1}^{m}	\left[
+	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{n}^{(i)}x_{n}^{(i)}	\right] \\ [0.1in]
+	\end{array} \right] 
+	\]
+	\end{center}
+	
+	Using only the internal part of the Hessian sumatory
+	
+	\begin{center}
+	$\forall (j1,j2)$ in $[1..n , 1..n] 
+	:\; (1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{j1}^{(i)}x_{j2}^{(i)} $
+	\end{center}
+	
+	Can be rewrite in matrix form as
+	
+	\begin{center}
+	$(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})(x^{(i)})^Tx^{(i)} $
+	\end{center}
+	
+	For the cost function to be convex the Hessian matrix
+	must be positive-semidefinite
+	A function is positive-semidifinite if:  $\forall z: \;{z^T}\left[\nabla
+	_x^2f(x)\right]z \ge 0$\\ Applied to J($\theta$)
+	\begin{center}
+	$z^T \left[(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})(x^{(i)})^Tx^{(i)} \right]z$\\
+	$(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})\left(( x^{(i)})^Tz\right)^2 \ge 0 $
+	\end{center}
+	
+  Since this cost function is convex \citep{Murphy2012}, it is usually optimized using either 
+  maximum likelihood estimator or gradient descent.	
+	
+	\subsection{Analysis of the cost function}
+	However, this cost function assigns the same 
+  weight to different errors, both false positives and false negatives. As discussed before, this 
+  is not the case in many real-world applications. In particular
+			\quad When  $y^{(i)}==1$
+			
+			\quad $J(\theta)^{(i)}=-\log(h_\theta(x^{(i)})$
+			
+			\quad When $h_\theta(x^{(i)})\approx1$ then $J(\theta)^{(i)}\approx0$
+			
+			\quad Otherwise when $h_\theta(x^{(i)})\approx0$ then
+			$J(\theta)^{(i)}\approx\infty$ \\
+
+			When $y^{(i)}==0$
+			
+			\quad $J(\theta)^{(i)}=-\log(1-h_\theta(x^{(i)})$
+			
+			\quad\quad When $h_\theta(x^{(i)})\approx1$ then
+			$J(\theta)^{(i)}\approx\infty$ 
+
+			\quad\quad Otherwise when $h_\theta(x^{(i)})\approx0$ then
+			$J(\theta)^{(i)}\approx0$ 
+  which in the context of cost-sensitive classification means that $C_{TP_i}=C_{TN_i}\approx 0$ and 
+  $C_{FP_i}=C_{FN_i}\approx \inf$.
+	
+	
+\section{Cost-sensitive cost function}
+  In order to incorporate the different costs from \tablename{ \ref{table_costmat}} into the 
+  logistic regression, first we analyze the expected costs for each case
+  \begin{equation*}
+    J^c_i(\theta) = 
+    \begin{cases}
+      C_{TP_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(X_i) \approx 1  \\
+      C_{TN_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(X_i) \approx 0  \\
+      C_{FP_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(X_i) \approx 1  \\
+      C_{FN_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(X_i) \approx 0 
+    \end{cases}
+  \end{equation*}
+  Finally, we merge the different costs into a cost function which is dependent on new costs:
+  \begin{align}\label{eq:CSLR}
+    J^c(\theta)=\frac{1}{N} \sum_{i=1}^{N} \bigg( y_i(h_\theta(X_i) C_{TP_i} + 
+    (1-h_\theta(X_i))C_{FN_i})  \nonumber\\ 
+    +(1-y_i)(h_\theta(X_i) C_{FP_i} + (1-h_\theta(X_i))C_{TN_i}) \bigg).
+  \end{align}
+  
+\todo{intro how to estimate the parameters}
+\subsection{Genetic algorithms}
+
+A Genetic Algorithm (GA) is an optimization technique that attempts to replicate natural evolution 
+processes in which the individuals with the considered best characteristics to adapt to the 
+environment are more likely to reproduce and survive. These advantageous individuals mate between 
+them, producing descendants similarly characterized, so favorable characteristics are preserved and 
+unfavorable ones destroyed, leading to the progressive evolution of the species.
+GA aims to improve the solution to a problem by keeping the best combination of input variables. The 
+flow diagram presented in Fig. 2 describes the process. It starts with the definition of the problem 
+to optimize, generating an objective function to evaluate the possible candidate solutions 
+(chromosomes), i.e., the objective function is the way of determining which individual produces the 
+best outcome. 
+
+The next step is to generate an initial random population of n individuals called chromosomes that 
+are symbolized by binary strings, where each binary position of the chromosome is called a gene and 
+denotes a specific characteristic (input variable). Therefore the combination of all the different 
+characteristics encoded in the string represents an individual who is a candidate for the solution.
+Each chromosome is evaluated in the objective function and the best individuals are selected to 
+survive for mating (parents), while the worse ones are discarded to make room for new descendants.  
+There are many ways of pairing the selected chromosomes [5]. In this paper, a weighted cost pairing 
+is used, which consists of assigning a selection probability according to each chromosome cost. That 
+is, a chromosome with the higher cost has a greater probability of mating because cost maximization 
+is desired.
+
+After selecting the parent chromosomes with the chosen pairing method, the next step is to create a 
+second generation of individuals, based on the information of the parents. There are several ways of 
+mating [5]. In this paper, two parents create one child. 
+In order to transfer the parents binary information to the child, there are also different kinds 
+of approaches such as the one-point crossover. The one-point crossover technique consists in 
+selecting one random point on the parents string. The child is created in the following way: First, 
+the parent1 transfers its binary code from the first gene to the crossover point. Then the parent2 
+transfers its binary code from the crossover point to the last gene of the chromosome. New parents 
+are randomly selected for each new child and the process continues until the chromosome population 
+grows back to the original size n. 
+Once the breeding process is completed, random mutation is used to alter a certain percentage of the 
+genes of the chromosomes. The purpose of mutation is to introduce diversity into the population, 
+allowing the algorithm to avoid local minima by generating new gene combinations in the chromosomes. 
+The most common mutation procedure is the one called single point mutation. It is implemented by 
+generating a random variable that indicates the position of the gene that will be modified, from the 
+population of chromosomes. Generally, mutation is not allowed in the best solution chromosomes 
+because these elite individuals are destined to propagate unchanged. In genetic algorithm this 
+is called elitism [5].
+
+Finally, after mutation is done the new generation of chromosomes is evaluated with the objective 
+function and used in the next iteration of the described algorithm.
+The algorithm iterates until a maximum number of chromosome generations are created or a 
+satisfactory solution is reached.
+
+	\begin{figure}[t]
+	  \centering
+    \includegraphics[width=8cm]{ch7_fig1}  
+	  \caption{Flow analysis of a churn campaign \citep{Haupt2004}}
+	  \label{fig:ch7:1}
+	\end{figure}
+
 \section{Experiments}

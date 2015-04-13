@@ -1,4 +1,4 @@
-\chapter{Cost-sensitive logistic regression}
+\chapter{Cost-sensitive decision trees}
 
 \begin{remark}{Outline}
 \todo{outline}
@@ -15,206 +15,289 @@ in Section~\ref{sec:4:features} while their consistency
 is finally explored in Section~\ref{sec:4:consistency}.
 \end{remark}
 
-\section{Logistic regression}
+\section{Decision trees}
+Decision trees are one of the most widely used machine learning algorithms \citep{Lior2008}. 
+The technique is considered to be white box, in the sense that is easy to interpret, and has a 
+very low computational cost, while maintaining a good performance as compared with more complex 
+techniques \citep{Hastie2009}. There are two types of decision tree depending on the objective of 
+the model. They work either for classification or regression. In this section we focus on
+binary classification decision tree.
+\todo{extend intro}
 
-  Logistic regression is a classification model that, in the specific context of binary 
-  classification, estimates the posterior probability of the positive class, as the logistic 
-  sigmoid of a linear function of the feature vector \citep{Bishop2006}. The estimated probability 
-  is evaluated as 
-  \begin{equation}
-    \hat p_i = P(y=1 \vert X_i) = h_\theta(X_i) = g\biggl(\sum_{j=1}^{k}{\theta^jx_i^j}\biggr),
-  \end{equation}
-  where $h_\theta(X_i)$ refers to the hypothesis of $i$ given the parameters $\theta$,  and 
-  $g(\cdot)$ is the logistic sigmoid function, defined as \mbox{$g(z)=1/(1+e^{-z})$}.\\
-  The problem then becomes on finding the right parameters that minimize a given cost function. 
-  Usually, in the case of logistic regression the cost function $J(\theta)$ refers to the negative 
-  logarithm of the likelihood, such that
-  \begin{equation}
-    J(\theta)=\frac{1}{N}\sum_{i=1}^{N} J_i(\theta),
-  \end{equation}
+\subsection{Splitting criteria}
+ 
+ In decision trees the splitting criteria is a measure that evaluates how a splitting threshold of 
+a particular feature
+ $(x^j,l^j_m)$ performs on a given set $S$.
+\begin{equation}
+ S = X_i\mbox{ for }  i=1,2,...,N_s
+\end{equation}
+ In order to evaluate the splitting criteria first the training data $S$ must be split in $S^l$ and 
+$S^r$ 
+ according to the splitting rule $(x^j,l^j_m)$:
+ \begin{equation}
+ S^l = \{X \vert X_i \in S \wedge x^j_i \le l^j_m \}
+ \end{equation}
+ \begin{equation}
+ S^r = \{X \vert X_i \in S \wedge x^j_i > l^j_m \}
+ \end{equation}
   where
-  \begin{align}
-    J_i(\theta) =  -y_i\log(h_\theta(X_i)) -(1-y_i)\log(1-h_\theta(X_i)).
-  \end{align}\label{eq:j}
-   
-   \todo{plot logit function}
-   
-   \todo{extend description}
-   
-	\subsection{Convexity analysis}
-	
-	The gradient of the cost functions is
-	
-		\begin{center}
-		$\left[ \begin{array}{c}
-		\frac{\partial J(\theta)}{\partial \theta_1} \\[0.1in]	
-		\frac{\partial J(\theta)}{\partial \theta_2} \\[0.1in]	
-		\ldots \\[0.1in]	
-		\frac{\partial J(\theta)}{\partial \theta_n}
-		\end{array} \right] =
-		\left[ \begin{array}{c}
-		\frac{1}{m}\sum_{i=1}^{m}\left[x_1^{(i)}\left(h_\theta(x^{(i)})-y^{(i)}\right)\right]\\[0.1in]
-				\frac{1}{m}\sum_{i=1}^{m}\left[x_2^{(i)}\left(h_\theta(x^{(i)})-y^{(i)}\right)\right]
-		\\[0.1in]	
-		\ldots \\[0.1in]	
-		\frac{1}{m}\sum_{i=1}^{m}\left[x_n^{(i)}\left(h_\theta(x^{(i)})-y^{(i)}\right)\right]
-		\\[0.1in]	
-		\end{array} \right]$
-	\end{center}
-	
-	since a a function f(x) which is twice-differentiable is convex if and only if its
-	hessian matrix (matrix of second-order partial derivatives) is positive semi-definite
+ \begin{equation}
+ S = S^l \cup S^r
+ \end{equation}
+ Afterwards, the percentage of positives $p$ is calculated for $S$ and each of the subsets:
+  \begin{equation}
+ p_S= P(S(y)= 1\vert S)=\frac{\vert (S\vert S(y)=1) \vert}{\vert S \vert}
+ \end{equation}
+ \begin{equation}
+ p^l_S= P(S(y)= 1\vert S^l)=\frac{\vert (S^l\vert S^l(y)=1) \vert}{\vert S^l \vert}
+ \end{equation}
+ \begin{equation}
+ p^r_S= P(S(y)= 1\vert S^r)=\frac{\vert (S^r\vert S^r(y)=1) \vert}{\vert S^r \vert}
+ \end{equation} 
+  Then, the impurity of each leaf is calculated using either a misclassification error, entropy or 
+Gini measures:
+ \vspace{10pt}
 
-The Hessian can be generalized as: 
-	\begin{center}
-	 $\partialb{j1}{j2}=\frac{1}{m}\sum_{i=1}^{m}
-	\left[
-	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{j1}^{(i)}x_{j2}^{(i)}
-	\right]
-	$\\[0.2in]
-	\[
-	\left[ \begin{array}{ccc}
-	\sum_{i=1}^{m}	\left[
-	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{1}^{(i)}x_{1}^{(i)}	\right] & \ldots & 
-	\sum_{i=1}^{m}	\left[
-	 (1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{1}^{(i)}x_{n}^{(i)}	\right] \\[0.1in] 
-	 \sum_{i=1}^{m}	\left[
-	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{2}^{(i)}x_{1}^{(i)}	\right]  & \ldots
-	 \ldots & \sum_{i=1}^{m}	\left[
-	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{2}^{(i)}x_{n}^{(i)}	\right] \\ [0.1in]
-	\ldots  & \ldots & \ldots \\ [0.1in]
-	\sum_{i=1}^{m}	\left[
-	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{n}^{(i)}x_{1}^{(i)}	\right] & \ldots &
-	\sum_{i=1}^{m}	\left[
-	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{n}^{(i)}x_{n}^{(i)}	\right] \\ [0.1in]
-	\end{array} \right] 
-	\]
-	\end{center}
-	
-	Using only the internal part of the Hessian sumatory
-	
-	\begin{center}
-	$\forall (j1,j2)$ in $[1..n , 1..n] 
-	:\; (1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{j1}^{(i)}x_{j2}^{(i)} $
-	\end{center}
-	
-	Can be rewrite in matrix form as
-	
-	\begin{center}
-	$(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})(x^{(i)})^Tx^{(i)} $
-	\end{center}
-	
-	For the cost function to be convex the Hessian matrix
-	must be positive-semidefinite
-	A function is positive-semidifinite if:  $\forall z: \;{z^T}\left[\nabla
-	_x^2f(x)\right]z \ge 0$\\ Applied to J($\theta$)
-	\begin{center}
-	$z^T \left[(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})(x^{(i)})^Tx^{(i)} \right]z$\\
-	$(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})\left(( x^{(i)})^Tz\right)^2 \ge 0 $
-	\end{center}
-	
-  Since this cost function is convex \citep{Murphy2012}, it is usually optimized using either 
-  maximum likelihood estimator or gradient descent.	
-	
-	\subsection{Analysis of the cost function}
-	However, this cost function assigns the same 
-  weight to different errors, both false positives and false negatives. As discussed before, this 
-  is not the case in many real-world applications. In particular
-			\quad When  $y^{(i)}==1$
-			
-			\quad $J(\theta)^{(i)}=-\log(h_\theta(x^{(i)})$
-			
-			\quad When $h_\theta(x^{(i)})\approx1$ then $J(\theta)^{(i)}\approx0$
-			
-			\quad Otherwise when $h_\theta(x^{(i)})\approx0$ then
-			$J(\theta)^{(i)}\approx\infty$ \\
+ Misclassification:
+ \begin{equation}
+ I_m(p)=1-max(p,1-p)
+ \end{equation}
 
-			When $y^{(i)}==0$
-			
-			\quad $J(\theta)^{(i)}=-\log(1-h_\theta(x^{(i)})$
-			
-			\quad\quad When $h_\theta(x^{(i)})\approx1$ then
-			$J(\theta)^{(i)}\approx\infty$ 
+ Entropy:
+ \begin{equation}
+ I_e(p)=-p\log p -(1-p) \log (1-p)
+ \end{equation}
+ 
+ Gini:
+ \begin{equation}
+ I_g(p)=2p(1-p)
+ \end{equation}
+ In \figurename{ \ref{measures1}}, the three measures are shown. All measures are similar, with the 
+ exception that the gini index and the cross-entropy are differentiable, which makes them
+ more suitable for numerical optimization.
+ \vspace{10pt}
 
-			\quad\quad Otherwise when $h_\theta(x^{(i)})\approx0$ then
-			$J(\theta)^{(i)}\approx0$ 
-  which in the context of cost-sensitive classification means that $C_{TP_i}=C_{TN_i}\approx 0$ and 
-  $C_{FP_i}=C_{FN_i}\approx \inf$.
-	
-	
-\section{Cost-sensitive cost function}
-  In order to incorporate the different costs from \tablename{ \ref{table_costmat}} into the 
-  logistic regression, first we analyze the expected costs for each case
-  \begin{equation*}
-    J^c_i(\theta) = 
-    \begin{cases}
-      C_{TP_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(X_i) \approx 1  \\
-      C_{TN_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(X_i) \approx 0  \\
-      C_{FP_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(X_i) \approx 1  \\
-      C_{FN_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(X_i) \approx 0 
-    \end{cases}
-  \end{equation*}
-  Finally, we merge the different costs into a cost function which is dependent on new costs:
-  \begin{align}\label{eq:CSLR}
-    J^c(\theta)=\frac{1}{N} \sum_{i=1}^{N} \bigg( y_i(h_\theta(X_i) C_{TP_i} + 
-    (1-h_\theta(X_i))C_{FN_i})  \nonumber\\ 
-    +(1-y_i)(h_\theta(X_i) C_{FP_i} + (1-h_\theta(X_i))C_{TN_i}) \bigg).
-  \end{align}
+  \begin{figure}[t!]
+ \includegraphics[scale=0.85]{ch8_fig1}
+ \caption{Impurity measures for a binary classification, as a function of the proportion of
+ positive examples in the set. *Cross-entropy is scaled.\citep{Hastie2009} }
+ \label{measures1}
+ \end{figure} 
+
+ Finally the splitting criteria gain of using the splitting rule $(x^j,l^j_m)$ is calculated as 
+ the impurity of $S$ minus the weighed impurity of each leaf:
+ \begin{equation}
+ Gain((x^j,l^j_m),S)=I(p_S)-\frac{\vert S^l \vert}{\vert S \vert}I(p^l_S)
+ -\frac{\vert S^r \vert}{\vert S \vert}I(p^r_S)
+ \end{equation} 
+ where $I(p)$ can be either of the impurity measures $I_m(p)$, $I_e(p)$ or $I_g(p)$.
+ 
+ \subsection{Tree growing}
+ In order to grow a tree typical algorithms use a top-down induction using a greedy search in each
+ iteration \citep{Rokach2010}. In each iteration, the algorithms evaluates all possible splitting 
+rules
+ and pick the one that maximizes the splitting criteria. After the selection of a splitting rule,
+ each leaf is further selected and it is subdivides into smaller leafs, until one of the stopping 
+criteria is meet.
+ In \figurename{ \ref{program1}, the pseudocode of the tree growing procedure is presented.
+
+\todo{figure with steps to construct a decision tree}
   
-\todo{intro how to estimate the parameters}
-\subsection{Genetic algorithms}
+   \subsection{Stopping criteria}
+ As the growing phase of the algorithm continue, at each iteration the stopping criteria are 
+evaluated \citep{Rokach2010}.
+ The most common stopping criteria are:
+ \begin{enumerate}
+  \item All examples in the set belong to the same class.
+  Meaning that either $p_S=1$ or $p_S=0$.
 
-A Genetic Algorithm (GA) is an optimization technique that attempts to replicate natural evolution 
-processes in which the individuals with the considered best characteristics to adapt to the 
-environment are more likely to reproduce and survive. These advantageous individuals mate between 
-them, producing descendants similarly characterized, so favorable characteristics are preserved and 
-unfavorable ones destroyed, leading to the progressive evolution of the species.
-GA aims to improve the solution to a problem by keeping the best combination of input variables. The 
-flow diagram presented in Fig. 2 describes the process. It starts with the definition of the problem 
-to optimize, generating an objective function to evaluate the possible candidate solutions 
-(chromosomes), i.e., the objective function is the way of determining which individual produces the 
-best outcome. 
+  \item The maximum number of iterations have been reached.
+  
+  \item The number of examples in $S$ are less than the minimum number of examples defined for a 
+split.
+  
+  \item The number of examples in $S^l$ or $S^r$ are less than the minimum number of examples 
+defined for a leaf.
+  
+  \item The best splitting rule has a Gain lower than a defined threshold.
+  
+ \end{enumerate}
+ 
+\subsection{Pruning techniques}
+ After a decision tree has been fully grown, there is the big chance that 
+ the algorithm generates a large tree that is probably over fitting the
+ training data. In order to solve this in \citep{Breiman1984a} originally suggest
+ the use of pruning techniques after the tree growing phase.
+ The overall objective of pruning is to eliminate branches that are not contributing
+ to the generalization accuracy of the \mbox{tree \citep{Rokach2010}.}
+ 
+ In general pruning techniques start from a fully grown tree, and recursively check if
+ by eliminating a $Branch$ there is an $Improvement$ in the error rate $\epsilon$ of the $Tree$.
+  There are two main methods to calculate the $Improvement$ of the error rate $\epsilon$ of the 
+$Tree$,
+  cost-complexity and  error based pruning:
+  
+  \begin{itemize}
+   \item Cost-complexity pruning:
+   
+      Initially proposed by Breiman  \citep{Breiman1984a}, this method evaluate iterative if
+      the removal of a $Branch$ improve the error rate $\epsilon$ of a $Tree$, weighted by 
+      the difference of the number of leafs trees.
+      \begin{equation}
+      PC_{cc} = \frac{\epsilon(EB(Tree,branch),S)-\epsilon(Tree,S) }
+      {\vert Tree\vert-\vert EB(Tree,branch)\vert}
+      \end{equation} 
+      where $\epsilon(Tree,S)$ calculate the error rate of the $Tree$ in
+      set $S$ and $EB(Tree,branch)$ is an auxiliary function that 
+      removes $branch$ from $Tree$ and return a new $Tree$.
+      
+      At each iteration, the current $Tree$ is compared against all possible $Branches$.
+      
 
-The next step is to generate an initial random population of n individuals called chromosomes that 
-are symbolized by binary strings, where each binary position of the chromosome is called a gene and 
-denotes a specific characteristic (input variable). Therefore the combination of all the different 
-characteristics encoded in the string represents an individual who is a candidate for the solution.
-Each chromosome is evaluated in the objective function and the best individuals are selected to 
-survive for mating (parents), while the worse ones are discarded to make room for new descendants.  
-There are many ways of pairing the selected chromosomes [5]. In this paper, a weighted cost pairing 
-is used, which consists of assigning a selection probability according to each chromosome cost. That 
-is, a chromosome with the higher cost has a greater probability of mating because cost maximization 
-is desired.
+   \item Error based pruning:
+   
+      This method proposed by Quinlan  \citep{Quinlan1992} is more pessimistic and instead of
+      using the error rate $\epsilon$ calculate the upper bound of the confidence interval
+      of the error $\epsilon_{UB}$ calculated assuming a normal distribution with a defined 
+significance level $Z_\alpha$.
+      \begin{equation}
+      PC_{eb} = \frac{\epsilon_{UB}(EB(Tree,branch),S)-\epsilon_{UB}(Tree,S) }
+      {\vert Tree\vert-\vert EB(Tree,branch)\vert}
+      \end{equation} 
+      where 
+      \begin{equation}
+      \epsilon_{UB}(Tree,S)= \epsilon(Tree,S)+Z_\alpha \left( 
+      \frac{\epsilon(Tree,S)(1-\epsilon(Tree,S))}{\vert S \vert} 
+      \right)^{(\frac{1}{2})}
+      \end{equation}   
+      Moreover, as a difference from cost-complexity pruning, in the error based method, 
+      at each iteration not all the branches are compared, but only the ones on the same level.
+      Meaning leafs are only compared against other leafs that are in the same level of iterations
+      when the $Tree$ was constructed.
+      This allows for much faster pruning procedure.
+  \end{itemize}
+  
+  \todo{figure with the steps for pruning}
+  
+  \todo{ compare with paper DT}
+  
+   In \figurename{ \ref{program2}, the general method of pruning is shown. The pruning procedure 
+consists in
+  evaluating the $Improvement$ of eliminating all possible branches in a $Tree$, and then eliminate 
+the one
+  with the higher $Improvement$ and repeat the process until a stopping criteria is meet.
 
-After selecting the parent chromosomes with the chosen pairing method, the next step is to create a 
-second generation of individuals, based on the information of the parents. There are several ways of 
-mating [5]. In this paper, two parents create one child. 
-In order to transfer the parents binary information to the child, there are also different kinds 
-of approaches such as the one-point crossover. The one-point crossover technique consists in 
-selecting one random point on the parents string. The child is created in the following way: First, 
-the parent1 transfers its binary code from the first gene to the crossover point. Then the parent2 
-transfers its binary code from the crossover point to the last gene of the chromosome. New parents 
-are randomly selected for each new child and the process continues until the chromosome population 
-grows back to the original size n. 
-Once the breeding process is completed, random mutation is used to alter a certain percentage of the 
-genes of the chromosomes. The purpose of mutation is to introduce diversity into the population, 
-allowing the algorithm to avoid local minima by generating new gene combinations in the chromosomes. 
-The most common mutation procedure is the one called single point mutation. It is implemented by 
-generating a random variable that indicates the position of the gene that will be modified, from the 
-population of chromosomes. Generally, mutation is not allowed in the best solution chromosomes 
-because these elite individuals are destined to propagate unchanged. In genetic algorithm this 
-is called elitism [5].
+ 
+  \subsection{Categorical features}
+  When using continuous features the splitting is done by testing all possible thresholds on the 
+database and
+  selecting the one that maximizes the desired measure. Nevertheless, this is not straight forward 
+when using a
+  categorical feature, since testing all possible ways of binning the feature becomes prohibitively 
+time 
+  consuming the feature has many categories. Instead, a common method for doing this is to calculate
+  $p$ of each category, then sort it, and applied the method as a continuous feature 
+\citep{Marslan}.
+ 
+  \section{Decision tree algorithms}
+  Two main branches of decision trees has being studied in the last years. The main difference is 
+the
+  impurity measure used when splitting. First the CART algorithm that is based in the Gini index, 
+and
+  later the ID3 and C4.5 which uses the entropy measure.
+  
+  \subsection{CART}
+  CART or classification and regression trees was introduced by Brieman et al. in 1984 
+\citep{Breiman1984a}.
+  It is based on using the Gini index as the impurity measure and the tree is grow until all 
+examples in
+  each leaf belong to the same class. Afterwards, the tree is pruned using the cost-complexity
+  method \citep{Rokach2010,Marslan}.
+  
+  \subsection{ID3}
+  The ID3 algorithm uses entropy as the impurity measure. The growing of the tree stop when all 
+examples belong 
+  of each leaf belongs to the same class. In ID3 no pruning is applied \citep{Quinlan1992}
+  \subsection{C4.5}
+  C4.5 the extension of ID3 both proposed by Quinlan \citep{Quinlan1992}.
+  Both are similar regarding the measure used, but C4.5 define the stopping criteria during the 
+growth process
+  to be when the number of examples in a set is less than a threshold. Moreover, after the tree is 
+created
+  a error based pruning is applied \citep{Rokach2010}.
+ 
 
-Finally, after mutation is done the new generation of chromosomes is evaluated with the objective 
-function and used in the next iteration of the described algorithm.
-The algorithm iterates until a maximum number of chromosome generations are created or a 
-satisfactory solution is reached.
 
-	\begin{figure}[t]
-	  \centering
-    \includegraphics[width=8cm]{ch7_fig1}  
-	  \caption{Flow analysis of a churn campaign \citep{Haupt2004}}
-	  \label{fig:ch7:1}
-	\end{figure}
+\section{Example-Dependent Cost-sensitive Decision Trees}
 
+Standard decision tree algorithms focus on inducing trees that maximize accuracy. However this is 
+	not optimal when the misclassification costs are unequal \citep{Elkan2001}.This has led to many 
+	studies that develop algorithms that aim to introduce the cost-sensitivity into the algorithms 
+	\citep{Lomax2013}. These studies have focused on introducing the class-dependent costs  
+	\citep{Draper1994,Ting2002,Ling2004,Li2005,Kretowski2006,Vadera2010}, which is not optimal for 
+	some applications. For example in credit card fraud detection, it is true that false positives 
+	have a different cost than false negatives, nevertheless, false negatives may vary significantly, 
+	which makes class-dependent cost-sensitive methods not suitable for this problem.
+      
+  In this section, we first propose a new method to introduce the costs into the decision tree 
+	induction stage, by creating new-cost based impurity measures. Afterwards, we propose a new 
+	pruning method based on minimizing the cost as pruning criteria.
+
+	\subsection{Cost-sensitive impurity measures}
+
+		Standard impurity measures such as misclassification, entropy or Gini, take into account the 
+		distribution of classes of each leaf to evaluate the predictive power of a splitting rule,
+		leading to an impurity measure that is based on minimizing the misclassification rate. However, 
+		as has been previously shown \citep{CorreaBahnsen2013}, minimizing misclassification does not 
+		lead to the same results than minimizing cost. Instead, we are interested in measuring how good 
+		is a splitting rule in terms of cost not only accuracy. For doing that, we propose a new 
+		example-dependent cost based impurity measure that takes into account the cost matrix of each 
+		example.
+
+		We define a new cost-based impurity measure taking into account the costs when all the examples
+		in a leaf are classified both as negative using $f_0$ and positive using $f_1$
+		\begin{equation}\label{eq:cost_impurity}
+			I_c(S) = \min \bigg\{ Cost(f_0(S)), Cost(f_1(S)) \bigg\}.
+		\end{equation}
+		The objective of this measure is to evaluate the lowest expected cost of a splitting rule.
+		Following the same logic, the classification of each set is calculated as the prediction that 
+		leads to the lowest cost
+	  \begin{equation}\label{eq_pred}
+	    f(S) = 
+	    \begin{cases}
+	      \phantom{-}0 \phantom{-} \mbox{if} \phantom{-} Cost(f_0(S)) \le Cost(f_1(S))\\
+	      \phantom{-}1 \phantom{-}\mbox{otherwise}
+	    \end{cases}
+	  \end{equation}
+
+		Finally, using the cost-based impurity, the splitting criteria cost based gain of using the 
+		splitting rule $(X^j,l^j)$ is calculated with (\ref{eq:gain}). 
+
+	\subsection{Cost-sensitive pruning}
+ 
+		Most of the literature in class-dependent cost-sensitive decision tree focuses on using the 
+		misclassification costs during the construction of the algorithms \citep{Lomax2013}. Only few 
+		algorithms such as AUCSplit \citep{Ferri2002} have \mbox{included} the costs both during and 
+		after the construction of the tree. However, this approach only used the class-dependent costs, 
+		and not the example-dependent costs.
+ 
+		We propose a new example-dependent cost-based impurity measure, by replacing the error rate 
+		$\epsilon$ in (\ref{eq:pruning}) with the cost of using the $Tree$ on $S$ i.e. by replacing 
+with 
+		$Cost(f(S))$.
+		\begin{equation}\label{eq:cost_pruning}
+			PC_{c} = \frac{ Cost(f(S)) - Cost(f^*(S)) }
+		  {\vert Tree\vert-\vert EB(Tree,node)\vert} ,
+		\end{equation}
+		where $f^*$ is the classifier of the tree without the selected node $EB(Tree,node)$.
+ 
+		Using the new pruning criteria, nodes of the tree that do not contribute to the minimization of 
+		the cost will be pruned, regardless of the impact of those nodes on the accuracy of the
+		algorithm. This follows the same logic as in the proposed cost-based impurity measure, since 
+		minimizing the misclassification is different than minimizing the cost, and in several 
+		real-world applications the objectives align with the cost not with the misclassification error.
+		
 \section{Experiments}
+
+\todo{complexity}
