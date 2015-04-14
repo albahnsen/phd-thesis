@@ -48,8 +48,8 @@ $c_i$ of the class of each of the $N$ examples using its feature vector $\mathbf
 
 In \figurename{ \ref{fig:2:1}}, the process of a training and using a classification algorithm is 
 summarized. First, during the training phase, using a training set $\mathcal{S}_{train}$, a 
-algorithm is train to predict $\bf y$. Then the algorithm is used to make estimate the class $\bf 
-c$ of a set of testing examples $\mathcal{S}_{test}$.
+algorithm is train to predict $\mathbf{y}$. Then the algorithm is used to make estimate the class 
+$\mathbf{c}$ of a set of testing examples $\mathcal{S}_{test}$.
 
 \begin{figure}[!t]
 \centering
@@ -63,17 +63,17 @@ c$ of a set of testing examples $\mathcal{S}_{test}$.
 
 There exists several algorithms that can be used for classification tasks. In general a 
 classification algorithm is learn with the objective of finding patterns that separate between the 
-different classes. In order to clarify this intuition, in \figurename{ \ref{fig:2:2}} an example 
-of a classification algorithm is shown. Lets suppose a set of examples as shown in \figurename{ 
-\ref{fig:2:2a}}.  Where the red points represents the positive examples and the blue the negative 
-examples. The objective of a classifier is to find the best way to separate between the positive and 
-negatives examples. In \figurename{ \ref{fig:2:2b}}, the output of a classifier learned using the 
-set of examples is shown. It is observed that this classifier is able to separate almost all the 
-examples using a linear classifier. 
+different classes \citep{Hastie2009}. In order to clarify this intuition, in \figurename{ 
+\ref{fig:2:2}} an example of a classification algorithm is shown. Lets suppose a set of examples as 
+shown in \figurename{ \ref{fig:2:2a}}.  Where the red points represents the positive examples and 
+the blue the negative examples. The objective of a classifier is to find the best way to separate 
+between the positive and negatives examples. In \figurename{ \ref{fig:2:2b}}, the output of a 
+classifier learned using the set of examples is shown. It is observed that this classifier is able 
+to separate almost all the examples using a linear classifier. 
 
-However, not all examples are correctly classified. In particular there are 4 negative examples that 
-were predicted as positive, and 5 positive examples that were predicted as negative. In the next 
-section, we present the standard methods for evaluating the performance of a classification 
+However, not all examples are correctly classified. In particular there are four negative examples 
+that were predicted as positive, and five positive examples that were predicted as negative. In the 
+next section, we present the standard methods for evaluating the performance of a classification 
 algorithm.
 
 \begin{remark}{Classification examples}
@@ -88,29 +88,27 @@ other emerging applications such as terrorism prevention, malware detection, com
 energy consumption prediction, spam classification, and others \citep{Kriegel2007}.
 \end{remark}
 
+
 \subsection{Performance measures}
 
 When evaluating the performance of a classification algorithm, the first thing to do is to check 
 the number of examples that were misclassified. Since the the true class of the training examples 
 is known. Therefore, evaluating the error of a model is as simply as counting the number of times 
-an example is misclassified and divide it by the number of examples.
-
+an example is misclassified and divide it by the number of examples
 \begin{equation}\label{eqn:ch2:error}
-Err(f({\cal S})) = \frac{1}{N}  \sum_{i=1}^N {\bf 1} _{y_i}(c_i),
+Err(f({\cal S})) = \frac{1}{N}  \sum_{i=1}^N \mathbf{1}_{y_i}(c_i),
 \end{equation}
 where $\mathbf{1}_c(z)$ is an indicator function that takes the value of one if $z \in c$ and 
 zero if $z \notin c$. Moreover the accuracy is defined as the percentage of times the algorithm 
 made the correct prediction
-\begin{equation}\label{eqn:ch2:accuracy}
+\begin{equation}\label{eqn:2:accuracy}
 Acc(f({\cal S})) = 1- Err(f({\cal S})).
 \end{equation}
 
 However, just knowing these statistics is not enough to make decisions, as in many applications is 
 important to know where the errors are coming from. In particular, the misclassified examples may 
-belong only to one class, which may give interesting insights about the problem.
-A way to observe the different errors is by looking to the confusion matrix.
-As shown in \tablename{ \ref{tab:ch2:1}}, 
-\todo{how to calculate TP, FP...}
+belong only to one class, which may give interesting insights about the problem. A way to observe 
+the different errors is by looking to the confusion matrix, as shown in \tablename{~\ref{tab:2:1}}. 
 
 	\begin{table}[!t]
 		\centering
@@ -129,19 +127,17 @@ As shown in \tablename{ \ref{tab:ch2:1}},
 			$c=0$ & &\\
 		\end{tabular}
 		\caption{Classification confusion matrix}
-		\label{tab:ch2:1}
+		\label{tab:2:1}
   \end{table}  
 
-  	From this table several statistics are extracted. In particular:
+Afterwards, using the cost matrix several statistics are extracted. In particular:
 	\begin{itemize}
 		\item Recall = $\frac{TP}{TP+FN}$
 		\item Precision = $\frac{TP}{TP+FP}$
 		\item $F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}$
 	\end{itemize}
 
-
-  
-  	\begin{table}[!t]
+ 	\begin{table}[!t]
 		\centering
 		\footnotesize
     \begin{tabular}{c|c|c}
