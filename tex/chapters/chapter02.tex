@@ -38,6 +38,20 @@ set $\mathcal{S}$ of examples or instances, given their $k$ features \mbox{$\mat
 \mathbb{R}^k$}. The objective is to construct a function $f(\cal{S})$ that makes a prediction 
 $c_i$ of the class of each of the $N$ examples using its feature vector $\mathbf{x}_i$.
 \label{ntn:ch2:1}
+Moreover, some algorithm allow to not only know the prediction, but also the confidence of it, in 
+the form of the probability of belonging to the positive class $\hat p_i$. The way for going from 
+$\hat p_i$ to $c_i$, is simply by defining a probability threshold $t$, and applying the following 
+formula
+\begin{equation}\label{eq_pred}
+  c_i = 
+  \begin{cases}
+    \phantom{-}0 \phantom{-} \mbox{if} \phantom{-} \hat p_i \le t\\
+    \phantom{-}1 \phantom{-}\mbox{otherwise,}
+  \end{cases}
+\end{equation}
+Usually, $t=\frac{1}{2}$ \citep{Hastie2009}, as an example with probability of being positive 
+higher than 50\% is classified as positive, and negative otherwise. If $t \ne \frac{1}{2}$, the 
+function that generates the predicted class labels $\mathbf{c}$ is refers as $f^t$.
 
 \begin{figure}
 	\centering
@@ -131,16 +145,17 @@ Afterwards, using the cost matrix several statistics are extracted. In particula
 		\label{tab:2:1}
   \end{table}  
 
-	\begin{itemize}
-		\item Recall = $\frac{TP}{TP+FN}$
-		\item Precision = $\frac{TP}{TP+FP}$
-		\item $F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}$
-	\end{itemize}
-
- 
-  \newpage
+	\begin{equation}
+    Recall = \frac{TP}{TP+FN}
+  \end{equation}
+  \begin{equation}
+    Precision = \frac{TP}{TP+FP}
+  \end{equation}
+  \begin{equation}
+    F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}
+  \end{equation}
   
-  As an ilustrative example, the different statistics are calculated for the toy example presented 
+  As an illustrative example, the different statistics are calculated for the toy example presented 
   in Section~\ref{sec:2:classification}. First, the confusion matrix is calculated as 
   follows:
   \begin{center}
@@ -166,19 +181,19 @@ Afterwards, using the cost matrix several statistics are extracted. In particula
 		\item $F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}=88.8\%$
 	\end{itemize}
 	
-\begin{figure}[b!]
+\begin{figure}[t!]
 	\centering
 	\includegraphics{ch2_fig_3}
 	\caption{Example of a classification algorithm. Using a set of examples from two classes, a 
 	classification algorithm is learn in order to separate between the positives and the negatives. }
-	\label{fig:ch2:2}
+	\label{fig:ch2:3}
 \end{figure}
 
-There is however, several examples that are misclassified, thats because the simple linear 
+There are however, several instances that are misclassified, thats because the simple linear 
 classifier that were used in this example may not be good enough to separate between the positive 
 and negative classes. In order to make a comparison, using the same example toy set, a new 
 algorithm is learn. This time the algorithm made the correct prediction more often as shown in 
-\figurename{ \ref{fig:ch2:2}}. Afterwards, the confusion matrix and the different statistics are 
+\figurename{ \ref{fig:ch2:3}}. Afterwards, the confusion matrix and the different statistics are 
 calculated as follows:
 \begin{center}
 		\footnotesize
@@ -367,7 +382,7 @@ deep analysis of these methods is described in the following Section.
 
   Let $\mathcal{S}$ be a set of $N$ examples $i$, $N=\vert S \vert$, where each example is 
   represented by  the augmented feature vector $\mathbf{x}_i^*=[\mathbf{x}_i, 
-  C_{TP_i},C_{FP_i},C_{FN_i},C_{TN_i}]$  and labelled using the class   label $y_i   \in \{0,1\}$. 
+  C_{TP_i},C_{FP_i},C_{FN_i},C_{TN_i}]$  and labeled using the class   label $y_i   \in \{0,1\}$. 
   A classifier $f$ which generates the   predicted label $c_i$ for each   element $i$ is trained  
   using the set $\mathcal{S}$. Then the cost of   using $f$ on $\mathcal{S}$ is calculated by
   \begin{align}\label{eq:cost}
@@ -404,42 +419,37 @@ deep analysis of these methods is described in the following Section.
 
 
 \subsection{State-of-the-art methods}
-\todo{Extend description of each method}
 
-    As mentioned earlier, taking into account the different costs associated with each example, 
-    some methods have been proposed to make classifiers example-dependent cost-sensitive. These 
-    methods may be grouped in two categories. Methods based on changing the class distribution of 
-    the training data, which are known as cost-proportionate sampling methods; and direct cost 
-    methods \citep{Wang2013}.
+  As mentioned earlier, taking into account the different costs associated with each example, 
+  some methods have been proposed to make classifiers example-dependent cost-sensitive. These 
+  methods may be grouped in two categories. Methods based on changing the class distribution of 
+  the training data, which are known as cost-proportionate sampling methods; and direct cost 
+  methods \citep{Wang2013}.
+
+  A standard method to introduce example-dependent costs into classification algorithms is to 
+  re-weight the training examples based on their costs, either by cost-proportionate 
+  rejection-sampling \citep{Zadrozny2003}, or over-sampling \citep{Elkan2001}. The 
+  rejection-sampling approach consists in selecting a random subset $\mathcal{S}_{r}$  by 
+  randomly  selecting examples from $\mathcal{S}$, and accepting each example $i$ with 
+  probability $w_i/ \max\limits_{1,\dots, N}\{w_i\}$, where $w_i$ is defined as the expected 
+  misclassification error of example $i$:
+  \begin{equation}\label{eq_pred1}
+    w_i = y_i\cdot C_{FN_i}+(1-y_i)\cdot C_{FP_i}.
+  \end{equation}
+  Lastly, the over-sampling method consists in creating a new set $\mathcal{S}_{o}$, by making 
+  $w_i$ copies of each example $i$. However, cost-proportionate over-sampling increases the 
+  training  since $\vert \mathcal{S}_{o}\vert >> \vert \mathcal{S} \vert$, and it also may result 
+  in over-fitting  \citep{Drummond2003}. Furthermore, none of these methods uses the full cost 
+  matrix but only the  misclassification costs.
+
+  The second approach, consists in using the predicted probability $\hat p_i$, estimated using a 
+  given classifier $f$, and   modify the threshold $t$  such that the savings are maximized. 
+  This method is called cost-sensitive thresholding \citep{Sheng2006}. The idea behind this approach 
+  is to adaptively modify the probability threshold of an algorithm $f_t$ in order to maximized the 
+  savings of the algorithm on a given set $Savings(f^t(\mathcal{S}))$. The threshold is calculated 
+  using the following equation
+  \begin{equation}
+   t_{thresholding} = \argmax_t Savings(f^t(\mathcal{S})).
+  \end{equation}
+
   
-    A standard method to introduce example-dependent costs into classification algorithms is to 
-    re-weight the training examples based on their costs, either by cost-proportionate 
-    rejection-sampling \citep{Zadrozny2003}, or over-sampling \citep{Elkan2001}. The 
-    rejection-sampling approach consists in selecting a random subset $S_{r}$  by randomly 
-    selecting examples from $\mathcal{S}$, and accepting each example $i$ with probability $w_i/ 
-    \max\limits_{1,\dots, N}\{w_i\}$, where $w_i$ is defined as the expected misclassification 
-    error of example $i$:
-    \begin{equation}\label{eq_pred1}
-      w_i = y_i\cdot C_{FN_i}+(1-y_i)\cdot C_{FP_i}.
-    \end{equation}
-    Lastly, the over-sampling method consists in creating a new set $S_{o}$, by making $w_i$ 
-    copies of each example $i$. However, cost-proportionate over-sampling increases the training 
-    since $\vert S_{o}\vert >> \vert S \vert$, and it also may result in over-fitting 
-    \citep{Drummond2003}. Furthermore, none of these methods uses the full cost matrix but only the 
-    misclassification costs.
-
-In addition to the traditional aforementioned algorithms we also evaluate a thresholding 
-optimization to make the 
-   classifiers cost sensitive, based on the method proposed in \cite{Sheng2006}.
-   The idea behind this approach is to adaptively modify the probability threshold of an 
-   algorithm such that a certain criterion is minimized; in our case the cost due to fraud.
-   By default the probability threshold of an algorithm is 50\%, meaning that when the probability 
-   of a positive event is greater than 50\% that example is classified as positive.
-   This default threshold is not necessarily the one that minimizes the cost due to fraud. 
-   %So we make an optimization, in the training dataset, in order to find the threshold which 
-minimizes the cost measure,
-   %and by doing so, we make the algorithm cost sensitive.
-   So we make an optimization in the training dataset, in order to find the threshold which 
-minimizes the cost measure.
-   Then, this new threshold is applied to the test dataset to obtain the results,
-   and by doing so, we make the algorithm cost sensitive by threshold optimization.

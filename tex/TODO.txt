@@ -1,6 +1,5 @@
       file                               section                                               todo
  chapter01                             chapter01                                            outline
- chapter02              State-of-the-art methods                  Extend description of each method
  chapter03                             chapter03                                        fix outline
  chapter03           Credit card fraud detection                        erase percentage of savings
  chapter03                             Databases                                    table databases
