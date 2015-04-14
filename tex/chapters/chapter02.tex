@@ -34,42 +34,40 @@ different methods and techniques to estimate the relationships. Afterwards, thes
 summarized in a model that is able to make predictions on new sets of data.
 
 Formally, a classification algorithm deals with the problem	of predicting the class $y_i$ of a 
-set $\cal S$ of examples or instances, given their $k$ features \mbox{$\bf{X}_i \in 
+set $\mathcal{S}$ of examples or instances, given their $k$ features \mbox{$\mathbf{x}_i \in 
 \mathbb{R}^k$}. The objective is to construct a function $f(\cal{S})$ that makes a prediction 
-$c_i$ of the class of each of the $N$ examples using its feature vector $\bf{X}_i$.
+$c_i$ of the class of each of the $N$ examples using its feature vector $\mathbf{x}_i$.
 \label{ntn:ch2:1}
 
 \begin{figure}
 	\centering
 	\input{figures/src/ch2_fig_classification_process}
   \caption{Classification process}
-  \label{fig:ch2:0}
+  \label{fig:2:1}
 \end{figure}
 
-\todo{Change training eq}
-
-In \figurename{ \ref{fig:ch2:0}}, the process of a training and using a classification algorithm is 
+In \figurename{ \ref{fig:2:1}}, the process of a training and using a classification algorithm is 
 summarized. First, during the training phase, using a training set $\mathcal{S}_{train}$, a 
 algorithm is train to predict $\bf y$. Then the algorithm is used to make estimate the class $\bf 
 c$ of a set of testing examples $\mathcal{S}_{test}$.
 
 \begin{figure}[!t]
 \centering
-\subfloat[]{\includegraphics{ch2_fig1a}\label{fig:ch2:1a}}
+\subfloat[]{\includegraphics{ch2_fig_2a}\label{fig:2:2a}}
 \\
-\subfloat[]{\includegraphics{ch2_fig1b}\label{fig:ch2:1b}}
+\subfloat[]{\includegraphics{ch2_fig_2b}\label{fig:2:2b}}
 \caption{Example of a classification algorithm. Using a set of examples from two classes, a 
 	classification algorithm is learn in order to separate between the positives and the negatives. }
-\label{fig:ch2:1}
+\label{fig:2:2}
 \end{figure} 
 
 There exists several algorithms that can be used for classification tasks. In general a 
 classification algorithm is learn with the objective of finding patterns that separate between the 
-different classes. In order to clarify this intuition, in \figurename{ \ref{fig:ch2:1}} an example 
+different classes. In order to clarify this intuition, in \figurename{ \ref{fig:2:2}} an example 
 of a classification algorithm is shown. Lets suppose a set of examples as shown in \figurename{ 
-\ref{fig:ch2:1a}}.  Where the red points represents the positive examples and the blue the negative 
+\ref{fig:2:2a}}.  Where the red points represents the positive examples and the blue the negative 
 examples. The objective of a classifier is to find the best way to separate between the positive and 
-negatives examples. In \figurename{ \ref{fig:ch2:1b}}, the output of a classifier learned using the 
+negatives examples. In \figurename{ \ref{fig:2:2b}}, the output of a classifier learned using the 
 set of examples is shown. It is observed that this classifier is able to separate almost all the 
 examples using a linear classifier. 
 
@@ -176,7 +174,7 @@ time the algorithm made the correct prediction more often as shown in \figurenam
 
 \begin{figure}[t!]
 	\centering
-	\includegraphics{ch2_fig2}
+	\includegraphics{ch2_fig_3}
 	\caption{Example of a classification algorithm. Using a set of examples from two classes, a 
 	classification algorithm is learn in order to separate between the positives and the negatives. }
 	\label{fig:ch2:2}
