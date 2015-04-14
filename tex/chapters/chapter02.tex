@@ -206,12 +206,16 @@ increase in precision  than in recall. There is not a single rule regarding whic
 important to increase, it depends on the applications. For example in applications with a high 
 false negative cost such as failing to identify a tumor in a medical exam, the recall should be the 
 priority, even if that implies having a significant number of false positives. On the other hand, 
-In applications such as spam detection, predicting a nomal email as spam, may have a big impact to 
+In applications such as spam detection, predicting a normal email as spam, may have a big impact to 
 the customer, therefore, in this example is better to allow some false negatives and focus on the 
 false positives.
 
+It is not always straightforward  to define the define the right tradeoff between false positives 
+and false negatives. The best approximation to solve that, is to focus on the actual costs incurred 
+by the different decisions, this is usually solved using cost-sensitive classification methods. A 
+deep analysis of these methods is described in the following Section.
 
-\subsection{Families of binary classifiers}
+%\subsection{Families of binary classifiers}
 % \subsection{Linear models}
 % \subsection{Decision tree models}
 % \subsection{Neural networks}
@@ -221,26 +225,9 @@ false positives.
 % \subsection{Under/over sampling}
 % \subsection{SMOTE}
 
-% \chapter{Cost-sensitive classification}
-% 
-% \begin{remark}{Outline}
-% \todo{fix outline}
-% In this chapter, we present the well-known family of \textit{random forests}
-% methods. In Section~\ref{sec:4:bias-variance}, we first describe the bias-variance
-% decomposition of the prediction error and then present, in
-% Section~\ref{sec:4:ensemble}, how aggregating randomized models through
-% ensembles reduces the prediction error by decreasing the variance term in this
-% decomposition. In Section~\ref{sec:4:random-forests}, we revisit random forests
-% and its variants and study how randomness introduced into the decision trees
-% reduces prediction errors by decorrelating the decision
-% trees in the ensemble. Properties and features of random forests are then outlined
-% in Section~\ref{sec:4:features} while their consistency
-% is finally explored in Section~\ref{sec:4:consistency}.
-% \end{remark}
-
 
 \section{Cost-sensitive classification}\label{sec:2:cs}
-\todo{ Change notation}
+
   Classification, in the context of machine learning, deals with the problem of predicting the class
   of a set of examples given their features. Traditionally, classification methods aim at 
   minimizing the misclassification of examples, in which an example is misclassified if the 
@@ -248,12 +235,14 @@ false positives.
   misclassification errors carry the same cost. This is not the case in many real-world 
   applications. Methods that use different misclassification costs are known as cost-sensitive 
   classifiers. Typical cost-sensitive approaches assume a constant cost for each type of error, in 
-  the sense that, the cost depends on the class and is the same among examples 
+  the sense that, the cost depends on the class and is the same among examples  
   \citep{Elkan2001,Kim2012}. 
-  Although, this class-dependent approach is not realistic in many real-world applications, for 
-  example in credit card fraud detection, failing to detect a fraudulent transaction may have an 
-  economical impact from a few to thousands of Euros, depending on the particular transaction and 
-  card holder \citep{Sahin2013}. In churn modeling, a model is used for predicting which
+  Although, this class-dependent approach is not realistic in many real-world applications.
+  
+  \begin{remark}{Real-world cost sensitive applications}
+  For example in credit card fraud detection, failing to detect a fraudulent transaction may have 
+  an economical impact from a few to thousands of Euros, depending on the particular transaction 
+  and card holder \citep{Sahin2013}. In churn modeling, a model is used for predicting which
   customers are more likely to abandon a service provider. In this context, failing to identify a 
   profitable or unprofitable churner have a significant different financial impact 
   \citep{Glady2009}. Similarly, in direct marketing, wrongly predicting that a customer will not 
@@ -262,6 +251,7 @@ false positives.
   impact since not all  customers generate the same profit \citep{Verbraken2014}. Lastly, in the 
   case of intrusion   detection, classifying a benign connection as malicious have a different cost 
   than when a   malicious connection is accepted \citep{Ma2011}.
+  \end{remark}
 
   In order to deal with these specific types of cost-sensitive problems, called example-dependent
   cost-sensitive, some methods have been proposed recently. However, the literature on 
@@ -270,123 +260,131 @@ false positives.
   modifying the training set by re-weighting the examples proportionately to the misclassification 
   costs \citep{Elkan2001,Zadrozny2003}.
 
+  
 \subsection{Binary classification cost characteristic}
-    In classification problems with two classes $y_i \in \{0,1\}$, the objective is to learn or 
-    predict to which class $c_i \in \{0,1\}$ a given example $i$ belongs based on its $k$ features 
-    $X_i=[x^1_i, x^2_i,...,x^k_i]$. In this context, classification costs can be represented using 
-    a 2x2 cost matrix \citep{Elkan2001}, that introduces the costs associated with two types of 
-    correct classification, true positives ($C_{TP_i}$), true negatives ($C_{TN_i}$), and the two 
-    types of misclassification errors, false positives ($C_{FP_i}$), false negatives ($C_{FN_i}$),
-    as defined below:
-    \begin{table}[h]
-      \caption{Classification cost matrix}
-      \centering
-      \begin{tabular}{c|c|c}
-        \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
-        \multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
-        \hline
-        Predicted Positive    & \multirow{ 2}{*}{$C_{TP_i}$} & \multirow{ 2}{*}{$C_{FP_i}$} \\
-        $c_i=1$ & &\\
-        \hline
-        Predicted Negative    & \multirow{ 2}{*}{$C_{FN_i}$} & \multirow{ 2}{*}{$C_{TN_i}$} \\
-        $c_i=0$ & &\\
-      \end{tabular}
-    \end{table}  
+  In classification problems with two classes $y_i \in \{0,1\}$, the objective is to learn or 
+  predict to which class $c_i \in \{0,1\}$ a given example $i$ belongs based on its $k$ features 
+  $\mathbf{x}_i=[x^1_i, x^2_i,...,x^k_i]$. In this context, classification costs can be 
+  represented using a 2x2 cost matrix \citep{Elkan2001}, that introduces the costs 
+  associated with   two types of correct   classification, true positives ($C_{TP_i}$), true 
+  negatives ($C_{TN_i}$),   and the two  types of   misclassification errors, false positives 
+  ($C_{FP_i}$), false negatives   ($C_{FN_i}$), as   defined in \tablename{ 
+  \ref{tab:2:cost_matrix}}.
+  \label{ntn:ch2:2}
+  
+  \begin{table}[t]
+    \centering
+    \footnotesize
+    \begin{tabular}{c|c|c}
+      \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
+      \multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
+      \hline
+      Predicted Positive    & \multirow{ 2}{*}{$C_{TP_i}$} & \multirow{ 2}{*}{$C_{FP_i}$} \\
+      $c_i=1$ & &\\
+      \hline
+      Predicted Negative    & \multirow{ 2}{*}{$C_{FN_i}$} & \multirow{ 2}{*}{$C_{TN_i}$} \\
+      $c_i=0$ & &\\
+    \end{tabular}
+    \caption{Classification cost matrix}
+    \label{tab:2:cost_matrix}
+  \end{table}  
 
   Conceptually, the cost of correct classification should always be lower than the cost of 
-misclassification.
-  These are referred to as the ``reasonableness`` conditions \citep{Elkan2001}, and are defined as
-  $C_{FP_i} > C_{TN_i}$ and $C_{FN_i} > C_{TP_i}$.
+  misclassification. These are referred to as the ``reasonableness`` conditions \citep{Elkan2001}, 
+  and are defined as  $C_{FP_i} > C_{TN_i}$ and $C_{FN_i} > C_{TP_i}$.
   Taking into account the ``reasonableness`` conditions, a simpler cost matrix 
   with only one degree of freedom has been defined in \citep{Elkan2001},
   by scaling and shifting the initial cost matrix, resulting in:
   \begin{center}
-  \begin{tabular}{c|c}
-
-  \multirow{ 2}{*}{Negative} & \multirow{ 
-2}{*}{$C^*_{FN_i}=\frac{(C_{FN_i}-C_{TN_i})}{(C_{FP_i}-C_{TN_i})}$} \\
-  \\
-  \hline
-  \multirow{ 2}{*}{Positive} & \multirow{ 
-2}{*}{$C^*_{TP_i}=\frac{(C_{TP_i}-C_{TN_i})}{(C_{FP_i}-C_{TN_i})}$} \\
-  \\ 
-  \end{tabular}
-\end{center}
+    \footnotesize
+    \begin{tabular}{c|c}
+    \multirow{ 2}{*}{Negative} & \multirow{ 
+    2}{*}{$C^*_{FN_i}=\frac{(C_{FN_i}-C_{TN_i})}{(C_{FP_i}-C_{TN_i})}$} \\
+    \\
+    \hline
+    \multirow{ 2}{*}{Positive} & \multirow{ 
+    2}{*}{$C^*_{TP_i}=\frac{(C_{TP_i}-C_{TN_i})}{(C_{FP_i}-C_{TN_i})}$} \\
+    \\ 
+    \end{tabular}
+  \end{center}
 
   A classification problem is said to be cost-insensitive if costs of both errors are equal. It 
-    is class-dependent cost-sensitive if the costs are different but constant. Finally we talk 
-    about an example-dependent cost-sensitive classification problem if the cost matrix is not 
-    constant for all the examples.
-  
-    However, the definition above is not general enough. There are many cases when the cost matrix 
-    is not constant and still the problem is cost-insensitive or class-dependent cost-sensitive. 
-    For example, if the costs of correct classification are zero, $C_{TP_i}=C_{TN_i}=0$, 
-    and the costs of misclassification are $C_{FP_i}=a_0\cdot z_i$ and $C_{FN_i}=a_1\cdot z_i$,
-    where $a_0$, $a_1$, are constant and $z_i$ a random variable. This is an example of a cost 
-    matrix that is not constant. However, $C^*_{FN_i}$ and $C^*_{TP_i}$ are constant, i.e. 
-    $C^*_{FN_i}=(a_1\cdot z_i)/(a_0\cdot z_i)=a_1/a_0$ and $C^*_{TP_i}=0$ $\forall i$. In 
-    this case the problem is cost-insensitive if $a_0=a_1$, or class-dependent cost-sensitive if 
-    $a_0 \ne a_1$, even given the fact that the cost matrix is not constant.
-  
-    Nevertheless, using only the simpler cost matrix is not enough to define when a problem is 
-    example-dependent cost-sensitive. To achieve this, we define the classification problem cost 
-    characteristic as 
-    \begin{equation}
-     b_i = C^*_{FN_i}-C^*_{TP_i},
-    \end{equation}
-    and define its mean and standard deviation as $\mu_b$ and $\sigma_b$, respectively.
-  
-    Using $\mu_b$ and $\sigma_b$, we analyze different binary classification problems. In the case 
-    of a cost-insensitive classification problem, for every example $i$ \mbox{$C_{FP_i}=C_{FN_i}$}
-    and $C_{TP_i}=C_{TN_i}$, leading to $b_i=1$ $\forall i$ or more generally $\mu_b=1$ and 
-    $\sigma_b=0$. For class-dependent cost-sensitive problems, the costs are not equal but 
-    constants \mbox{$C_{FP_i}\ne C_{FN_i}$} or \mbox{$C_{TP_i}\ne C_{TN_i}$}, leading to $b_i \ne 
-    1$ $\forall i$, or $\mu_b \ne 1$ and $\sigma_b=0$. Lastly, in the case of example-dependent 
-    cost-sensitive problems, the cost difference is non constant or $\sigma_b \ne 0$.
-  
-    In summary a binary classification problem is defined according to the following conditions:
-    \begin{table}[h]
-      \centering
-      \begin{tabular}{c | c | l}
-        $\mu_b$ & $\sigma_b$ & Type of classification problem \\
-        \hline 
-        && \\
-        $1$ &  $0$ & cost-insensitive \\ &&\\
-        $\ne 1$ & $0$ & class-dependent cost-sensitive \\ &&\\
-        & $\ne 0$ & example-dependent cost-sensitive \\ 
-      \end{tabular}
-    \end{table}
+  is class-dependent cost-sensitive if the costs are different but constant. Finally we talk 
+  about an example-dependent cost-sensitive classification problem if the cost matrix is not 
+  constant for all the examples.
 
-\subsection{Example-dependent Cost-based evaluation masures}
-    Common cost-insensitive evaluation measures such as misclassification rate or \mbox{$F-Score$}, 
-    assume the same cost for the different misclassification errors. Using these measures is not 
-    suitable for example-dependent cost-sensitive binary classification problems. Indeed, two 
-    classifiers with equal misclassification rate but different numbers of false positives and 
-    false negatives do not have the same impact on cost since \mbox{$C_{FP_i}\ne C_{FN_i}$};
-    therefore there is a need for a measure that takes into account the actual costs 
-    ~$C_i=[C_{TP_i},C_{FP_i},C_{FN_i},C_{TN_i}]$ of each example $i$, as introduced in 
-    the previous section.
-  
-    Let $S$ be a set of $N$ examples $i$, $N=\vert S \vert$, where each example is represented by 
-    the augmented feature vector \mbox{$X^a_i=[X_i, C_i]$} and labelled using the class label $y_i 
-    \in \{0,1\}$.
-    A classifier $f$ which generates the predicted label $c_i$ for each element $i$ is trained 
-    using the set $S$. Then the cost of using $f$ on $S$ is calculated by
-    \begin{align}\label{eq:cost}
-      Cost(f(S)) = \sum_{i=1}^{N} & {\bigg( y_i(c_i C_{TP_i} + (1-c_i)C_{FN_i})} + \\
-      & {(1-y_i)(c_i C_{FP_i} + (1-c_i)C_{TN_i}) \bigg)}.
-    \end{align}
+  However, the definition above is not general enough. There are many cases when the cost matrix 
+  is not constant and still the problem is cost-insensitive or class-dependent cost-sensitive. 
+  For example, if the costs of correct classification are zero, $C_{TP_i}=C_{TN_i}=0$, 
+  and the costs of misclassification are $C_{FP_i}=a_0\cdot z_i$ and $C_{FN_i}=a_1\cdot z_i$,
+  where $a_0$, $a_1$, are constant and $z_i$ a random variable. This is an example of a cost 
+  matrix that is not constant. However, $C^*_{FN_i}$ and $C^*_{TP_i}$ are constant, i.e. 
+  $C^*_{FN_i}=(a_1\cdot z_i)/(a_0\cdot z_i)=a_1/a_0$ and $C^*_{TP_i}=0$ $\forall i$. In 
+  this case the problem is cost-insensitive if $a_0=a_1$, or class-dependent cost-sensitive if 
+  $a_0 \ne a_1$, even given the fact that the cost matrix is not constant.
 
-However, the total cost may not be easy to interpret. In \citep{Whitrow2008}, a 
+  Nevertheless, using only the simpler cost matrix is not enough to define when a problem is 
+  example-dependent cost-sensitive. To achieve this, we proposed in \citep{CorreaBahnsen2015}, 
+  the classification problem cost characteristic as:
+  \begin{equation}
+    b_i = C^*_{FN_i}-C^*_{TP_i},
+  \end{equation}
+  and define its mean and standard deviation as $\mu_b$ and $\sigma_b$, respectively.
+
+  Using $\mu_b$ and $\sigma_b$, we analyze different binary classification problems. In the case 
+  of a cost-insensitive classification problem, for every example $i$ \mbox{$C_{FP_i}=C_{FN_i}$}
+  and $C_{TP_i}=C_{TN_i}$, leading to $b_i=1$ $\forall i$ or more generally $\mu_b=1$ and 
+  $\sigma_b=0$. For class-dependent cost-sensitive problems, the costs are not equal but 
+  constants \mbox{$C_{FP_i}\ne C_{FN_i}$} or \mbox{$C_{TP_i}\ne C_{TN_i}$}, leading to $b_i \ne 
+  1$ $\forall i$, or $\mu_b \ne 1$ and $\sigma_b=0$. Lastly, in the case of example-dependent 
+  cost-sensitive problems, the cost difference is non constant or $\sigma_b \ne 0$.
+
+  In summary a binary classification problem is defined according to the following conditions:
+  \begin{center}
+    \footnotesize
+    \begin{tabular}{c | c | l}
+      $\mu_b$ & $\sigma_b$ & Type of classification problem \\
+      \hline 
+      && \\
+      $1$ &  $0$ & cost-insensitive \\ &&\\
+      $\ne 1$ & $0$ & class-dependent cost-sensitive \\ &&\\
+      & $\ne 0$ & example-dependent cost-sensitive \\ 
+    \end{tabular}
+  \end{center}
+  
+
+\subsection{Example-dependent cost-based evaluation measures}
+
+  Common cost-insensitive evaluation measures such as misclassification rate or \mbox{$F_1Score$}, 
+  assume the same cost for the different misclassification errors. Using these measures is not 
+  suitable for example-dependent cost-sensitive binary classification problems. Indeed, two 
+  classifiers with equal misclassification rate but different numbers of false positives and 
+  false negatives do not have the same impact on cost since \mbox{$C_{FP_i}\ne C_{FN_i}$};
+  therefore there is a need for a measure that takes into account the actual costs 
+  $\{C_{TP_i},C_{FP_i},C_{FN_i},C_{TN_i}\}$ of each example $i$, as introduced in the previous 
+  Section.
+  \label{ntn:ch2:3}
+
+  Let $\mathcal{S}$ be a set of $N$ examples $i$, $N=\vert S \vert$, where each example is 
+  represented by  the augmented feature vector $\mathbf{x}_i^*=[\mathbf{x}_i, 
+  C_{TP_i},C_{FP_i},C_{FN_i},C_{TN_i}]$  and labelled using the class   label $y_i   \in \{0,1\}$. 
+  A classifier $f$ which generates the   predicted label $c_i$ for each   element $i$ is trained  
+  using the set $\mathcal{S}$. Then the cost of   using $f$ on $\mathcal{S}$ is calculated by
+  \begin{align}\label{eq:cost}
+    Cost(f(S)) = \sum_{i=1}^{N} & {\bigg( y_i(c_i C_{TP_i} + (1-c_i)C_{FN_i})} + \\
+    & {(1-y_i)(c_i C_{FP_i} + (1-c_i)C_{TN_i}) \bigg)}.
+  \end{align}
+
+  However, the total cost may not be easy to interpret. In \citep{Whitrow2008}, a 
   \textit{normalized} cost measure was proposed, by dividing the total cost by the theoretical 
   maximum cost, which is the cost of misclassifying every example. The \textit{normalized} cost is 
   calculated using
   \begin{align}\label{eq:ncost}
-    NCost(f(\mathcal{S})) = \frac{Cost(f(\mathcal{S}))}
-    {\sum_{i \in \mathcal{S}_0} C_{FN_i} + 
-    \sum_{i \in \mathcal{S}_1} C_{FP_i}},
+    Cost_n(f(\mathcal{S})) = \frac{Cost(f(\mathcal{S}))}
+    {\sum_{i=1}^N C_{FN_i} \cdot \mathbf{1}_0(y_i) 
+    +  C_{FP_i} \cdot \mathbf{1}_1(y_i)  }.
   \end{align} 
-  
+
   We proposed similar approach in \citep{CorreaBahnsen2014b}, where the savings of using an 
   algorithm  are defined as the cost of the algorithm versus the cost of using no algorithm at all. 
   To do that, the cost of the costless class is defined as 
@@ -418,7 +416,7 @@ However, the total cost may not be easy to interpret. In \citep{Whitrow2008}, a
     re-weight the training examples based on their costs, either by cost-proportionate 
     rejection-sampling \citep{Zadrozny2003}, or over-sampling \citep{Elkan2001}. The 
     rejection-sampling approach consists in selecting a random subset $S_{r}$  by randomly 
-    selecting examples from $S$, and accepting each example $i$ with probability $w_i/ 
+    selecting examples from $\mathcal{S}$, and accepting each example $i$ with probability $w_i/ 
     \max\limits_{1,\dots, N}\{w_i\}$, where $w_i$ is defined as the expected misclassification 
     error of example $i$:
     \begin{equation}\label{eq_pred1}
