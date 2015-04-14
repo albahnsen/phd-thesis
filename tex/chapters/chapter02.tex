@@ -1,22 +1,22 @@
 \chapter{Background}
 
 \begin{remark}{Outline}
-\todo{outline}
-In this chapter, we present the well-known family of \textit{random forests}
-methods. In Section~\ref{sec:4:bias-variance}, we first describe the bias-variance
-decomposition of the prediction error and then present, in
-Section~\ref{sec:4:ensemble}, how aggregating randomized models through
-ensembles reduces the prediction error by decreasing the variance term in this
-decomposition. In Section~\ref{sec:4:random-forests}, we revisit random forests
-and its variants and study how randomness introduced into the decision trees
-reduces prediction errors by decorrelating the decision
-trees in the ensemble. Properties and features of random forests are then outlined
-in Section~\ref{sec:4:features} while their consistency
-is finally explored in Section~\ref{sec:4:consistency}.
+In this chapter, we introduce classifications models from a machine learning perspective. 
+Moreover, we present the example-dependent cost-sensitive framework that is the basis of the 
+thesis. In Section~\ref{sec:2:classification}, we give a self contain introduction to 
+classification, including the most-common algorithms, and the main methods for evaluating the 
+performance of the different algorithm. Then, in Section~\ref{sec:2:cs}, we present the general 
+framwork of cost-sensitive classification. Within this Section, we first introduce a method for 
+defining the type of cost-sensitivity of a problem. Afterwards, we present the different 
+cost-sensitive performance evaluation measures. Lastly, we show the state-of-the-art 
+example-dependent cost-sensitive methods cost-proportionate rejection-sampling and 
+cost-proportionate over-sampling.
 \end{remark}
 
 
 \section{Basics on classification}
+\label{sec:2:classification}
+
 In machine learning, classification refers to the attempt of identifying to which of a set of 
 classes a new example belongs, based on learning from examples whose class membership is known. 
 The most important point about classification is that for each example only one know class is 
@@ -231,7 +231,7 @@ time the algorithm made the correct prediction more often as shown in \figurenam
 % \end{remark}
 
 
-\section{Cost-sensitive classification}
+\section{Cost-sensitive classification}\label{sec:2:cs}
 \todo{ Change notation}
   Classification, in the context of machine learning, deals with the problem of predicting the class
   of a set of examples given their features. Traditionally, classification methods aim at 
