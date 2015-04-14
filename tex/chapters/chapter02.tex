@@ -109,6 +109,7 @@ However, just knowing these statistics is not enough to make decisions, as in ma
 important to know where the errors are coming from. In particular, the misclassified examples may 
 belong only to one class, which may give interesting insights about the problem. A way to observe 
 the different errors is by looking to the confusion matrix, as shown in \tablename{~\ref{tab:2:1}}. 
+Afterwards, using the cost matrix several statistics are extracted. In particular:
 
 	\begin{table}[!t]
 		\centering
@@ -130,45 +131,42 @@ the different errors is by looking to the confusion matrix, as shown in \tablena
 		\label{tab:2:1}
   \end{table}  
 
-Afterwards, using the cost matrix several statistics are extracted. In particular:
 	\begin{itemize}
 		\item Recall = $\frac{TP}{TP+FN}$
 		\item Precision = $\frac{TP}{TP+FP}$
 		\item $F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}$
 	\end{itemize}
 
- 	\begin{table}[!t]
-		\centering
-		\footnotesize
-    \begin{tabular}{c|c|c}
-      \multicolumn{3}{c}{}\\
-			\multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
-			\multicolumn{1}{c|}{} & $y=1$& $y=0$ \\
-			\hline
-			Predicted Positive 		& \multirow{ 2}{*}{36} & \multirow{ 
-			2}{*}{4} \\
-			$c=1$ & &\\
-			\hline
-			Predicted Negative  	& \multirow{ 2}{*}{5} & \multirow{ 
-			2}{*}{68} \\
-			$c=0$ & &\\
-		\end{tabular}
-		\caption{Confusion matrix of the toy example}
-		\label{tab:ch2:2}
-  \end{table}  
+ 
+  \newpage
   
-  Calculating the different statistics for this example
-  	\begin{itemize}
-  	\item Error = $\frac{4+9}{36+4+9+68}=8\%$
-		\item Recall = $\frac{TP}{TP+FN}$
-		\item Precision = $\frac{TP}{TP+FP}$
-		\item $F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}$
+  As an ilustrative example, the different statistics are calculated for the toy example presented 
+  in Section~\ref{sec:2:classification}. First, the confusion matrix is calculated as 
+  follows:
+  \begin{center}
+    \footnotesize
+  \begin{tabular}{c|c|c}
+    \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
+    \multicolumn{1}{c|}{} & $y=1$& $y=0$ \\
+    \hline
+    Predicted Positive    & \multirow{ 2}{*}{36} & \multirow{ 
+    2}{*}{4} \\
+    $c=1$ & &\\
+    \hline
+    Predicted Negative    & \multirow{ 2}{*}{5} & \multirow{ 
+    2}{*}{68} \\
+    $c=0$ & &\\
+  \end{tabular}
+  \end{center}
+  Then using the confusion matrix, the statistics are calculated,
+ 	\begin{itemize}
+  	\item Error = $\frac{4+9}{36+4+9+68}=11.11\%$
+		\item Recall = $\frac{TP}{TP+FN}=87.8\%$
+		\item Precision = $\frac{TP}{TP+FP}=90\%$
+		\item $F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}=88.8\%$
 	\end{itemize}
 	
-	In order to make a comparison, using the same example toy set, a new algorithm is learn. This 
-time the algorithm made the correct prediction more often as shown in \figurename{ \ref{fig:ch2:2}}.
-
-\begin{figure}[t!]
+\begin{figure}[b!]
 	\centering
 	\includegraphics{ch2_fig_3}
 	\caption{Example of a classification algorithm. Using a set of examples from two classes, a 
@@ -176,11 +174,15 @@ time the algorithm made the correct prediction more often as shown in \figurenam
 	\label{fig:ch2:2}
 \end{figure}
 
-    	\begin{table}[!t]
-		\centering
+There is however, several examples that are misclassified, thats because the simple linear 
+classifier that were used in this example may not be good enough to separate between the positive 
+and negative classes. In order to make a comparison, using the same example toy set, a new 
+algorithm is learn. This time the algorithm made the correct prediction more often as shown in 
+\figurename{ \ref{fig:ch2:2}}. Afterwards, the confusion matrix and the different statistics are 
+calculated as follows:
+\begin{center}
 		\footnotesize
     \begin{tabular}{c|c|c}
-      \multicolumn{3}{c}{}\\
 			\multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
 			\multicolumn{1}{c|}{} & $y=1$& $y=0$ \\
 			\hline
@@ -192,11 +194,23 @@ time the algorithm made the correct prediction more often as shown in \figurenam
 			2}{*}{70} \\
 			$c=0$ & &\\
 		\end{tabular}
-		\caption{Confusion matrix of the toy example}
-		\label{tab:ch2:2}
-  \end{table}  
-  Error = 5.31\%
-  
+\end{center}
+  \begin{itemize}
+    \item Error = $\frac{4+9}{36+4+9+68}=5.3\%$
+    \item Recall = $\frac{TP}{TP+FN}=90.2\%$
+    \item Precision = $\frac{TP}{TP+FP}=94.9\%$
+    \item $F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}=92.5\%$
+  \end{itemize}
+It is observed that in this case the FP are reduced more than the FN, this leads to a higher 
+increase in precision  than in recall. There is not a single rule regarding which one is more 
+important to increase, it depends on the applications. For example in applications with a high 
+false negative cost such as failing to identify a tumor in a medical exam, the recall should be the 
+priority, even if that implies having a significant number of false positives. On the other hand, 
+In applications such as spam detection, predicting a nomal email as spam, may have a big impact to 
+the customer, therefore, in this example is better to allow some false negatives and focus on the 
+false positives.
+
+
 \subsection{Families of binary classifiers}
 % \subsection{Linear models}
 % \subsection{Decision tree models}
@@ -306,7 +320,7 @@ misclassification.
   
     However, the definition above is not general enough. There are many cases when the cost matrix 
     is not constant and still the problem is cost-insensitive or class-dependent cost-sensitive. 
-    For example, if the costs of correct classification are zero, \mbox{$C_{TP_i}=C_{TN_i}=0$}, 
+    For example, if the costs of correct classification are zero, $C_{TP_i}=C_{TN_i}=0$, 
     and the costs of misclassification are $C_{FP_i}=a_0\cdot z_i$ and $C_{FN_i}=a_1\cdot z_i$,
     where $a_0$, $a_1$, are constant and $z_i$ a random variable. This is an example of a cost 
     matrix that is not constant. However, $C^*_{FN_i}$ and $C^*_{TP_i}$ are constant, i.e. 
