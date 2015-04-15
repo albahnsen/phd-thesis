@@ -374,76 +374,74 @@ good offer to a customer which is more likely to defect.
 
 
 \section{Direct marketing}
-\todo{extend}
 
-		In direct marketing the objective is to classify those customers who are more likely to have a 
-		certain response to a marketing campaign \citep{Ngai2009}. 
-		We used a direct marketing dataset \citep{Moro2011} 
-		available on the UCI machine learning repository \citep{UCI2013}. The dataset contains 45,000 
-		clients of a Portuguese bank who were contacted by phone between March 2008 and October 2010 
-		and received an offer to open a long-term deposit account with attractive interest rates.
-	  The dataset contains features such as age, job, marital status, education, average yearly 
-		balance and current loan status and the label indicating whether or not the client accepted the 
-		offer.
+In direct marketing the objective is to classify those customers who are more likely to have a 
+certain response to a marketing campaign \citep{Ngai2009}. We used a direct marketing dataset 
+\citep{Moro2011} available on the UCI machine learning repository \citep{UCI2013}. The dataset 
+contains 45,000 clients of a Portuguese bank who were contacted by phone between March 2008 and 
+October 2010 and received an offer to open a long-term deposit account with attractive interest 
+rates.  The dataset contains features such as age, job, marital status, education, average yearly 
+balance and current loan status and the label indicating whether or not the client accepted 
+the offer.
 
-		This problem is example-dependent cost sensitive, since there are different costs of false 
-		positives and false negatives. Specifically, in direct marketing, false positives have the 
-		cost of contacting the client, and false negatives have the cost due to the loss of income by 
-		failing to contact a client that otherwise would have opened a long-term deposit. 
+This problem is example-dependent cost sensitive, since there are different costs of false 
+positives and false negatives. Specifically, in direct marketing, false positives have the cost 
+of contacting the client, and false negatives have the cost due to the loss of income by failing 
+to contact a client that otherwise would have opened a long-term deposit. 
   
-	  \begin{table}[!t]
-		  \centering
-	    \caption{Direct marketing example-dependent cost matrix}
-	    \label{tab:d_mat}
-      \begin{tabular}{c|c|c}
-				\multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
-				\multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
-				\hline
-				Predicted Positive 		& \multirow{ 2}{*}{$C_{TP_i}=C_a$} & \multirow{ 2}{*}{$C_{FP_i}=C_a$} 
-				\\
-				$c_i=1$ & &\\
-				\hline
-				Predicted Negative  	& \multirow{ 2}{*}{$C_{FN_i}=Int_i$} & \multirow{ 2}{*}{$C_{TN_i}=0$} 
-				\\
-				$c_i=0$ & &\\
-				%\hline
-			\end{tabular}
-		\end{table}
+\begin{table}[!t]
+  \centering
+  \footnotesize
+  \begin{tabular}{c|c|c}
+    \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
+    \multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
+    \hline
+    Predicted Positive 		& \multirow{ 2}{*}{$C_{TP_i}=C_a$} & \multirow{ 2}{*}{$C_{FP_i}=C_a$} 
+    \\
+    $c_i=1$ & &\\
+    \hline
+    Predicted Negative  	& \multirow{ 2}{*}{$C_{FN_i}=Int_i$} & \multirow{ 2}{*}{$C_{TN_i}=0$} 
+    \\
+    $c_i=0$ & &\\
+    %\hline
+  \end{tabular}
+  \caption{Direct marketing example-dependent cost matrix}
+  \label{tab:4:d_mat}
+\end{table}
 		
-		We used the direct marketing example-dependent cost matrix proposed in 
-		\citep{CorreaBahnsen2014}. The cost matrix is shown in \mbox{\tablename{ \ref{tab:d_mat}}},
-	  where $C_a$ is the administrative cost of contacting the client, as is credit card fraud,  and 
-		$Int_i$ is the expected income when a client opens a long-term deposit. This last term is 
-		defined as the long-term deposit amount times the interest rate spread.
+We used the direct marketing example-dependent cost matrix proposed in \citep{CorreaBahnsen2014}. 
+The cost matrix is shown in \mbox{\tablename{ \ref{tab:4:d_mat}}}, where $C_a$ is the 
+administrative cost of contacting the client, as is credit card fraud,  and $Int_i$ is the expected 
+income when a client opens a long-term deposit. This last term is defined as the long-term deposit 
+amount times the interest rate spread.
  
-	  In order to estimate $Int_i$, first the long-term deposit amount is assumed to be a 20\% of 
-		the average yearly balance, and lastly, the interest rate spread is estimated to be 2.463333\%,
-		which is the average between 2008 and 2010 of the retail banking sector in Portugal as reported 
-		by the Portuguese central bank. Given that, the $Int_i$ is equal to $\left( balance * 20\% 
-		\right) * 2.463333\%$.
+In order to estimate $Int_i$, first the long-term deposit amount is assumed to be a 20\% of the 
+average yearly balance, and lastly, the interest rate spread is estimated to be 2.463333\%,	which 
+is the average between 2008 and 2010 of the retail banking sector in Portugal as reported by the 
+Portuguese central bank. Given that, the $Int_i$ is equal to $\left( balance * 20\% \right) * 
+2.463333\%$.
 		
-  Subsequently, the dataset is split in training, under-sampling, validation and test. Relevant 
-information of the datasets is shown
-  in \tablename{ \ref{table_fraud_trainandtest_marketing}}.
- \footnotetext{Interest rate spread is the difference between the effective lending rate and the 
-cost of funds.}
- 
-	\begin{table}[!t]
-	\caption{Description of datasets of the direct marketing dataset}
-	\label{table_fraud_trainandtest_marketing}
-	\centering
-	\begin{tabular}{|c|c|c|c|} %sum 7.7
-		\hline
-		Database&	No Trx&	Accept&$Int$\\
-		\hline	
-		Total& 47,562&	12.56\%&	394,211\\
-		\hline
-		Train& 19,119&12.64\%&	156,676\\   
-		Undersampled&4,819&50.17\%&42,443   \\
-		\hline
-		Validation& 11,809&12.78\%&97,498   \\
-		Test& 11,815&12.23\%&97,594   \\
-		\hline
-	\end{tabular}
-	\end{table}
-	
+% Subsequently, the dataset is split in training, under-sampling, validation and test. Relevant 
+% information of the datasets is shown in \tablename{ \ref{table_fraud_trainandtest_marketing}}.
+% \footnotetext{Interest rate spread is the difference between the effective lending rate and the 
+% cost of funds.}
+%  
+% 	\begin{table}[!t]
+% 	\caption{Description of datasets of the direct marketing dataset}
+% 	\label{table_fraud_trainandtest_marketing}
+% 	\centering
+% 	\begin{tabular}{|c|c|c|c|} %sum 7.7
+% 		\hline
+% 		Database&	No Trx&	Accept&$Int$\\
+% 		\hline	
+% 		Total& 47,562&	12.56\%&	394,211\\
+% 		\hline
+% 		Train& 19,119&12.64\%&	156,676\\   
+% 		Undersampled&4,819&50.17\%&42,443   \\
+% 		\hline
+% 		Validation& 11,809&12.78\%&97,498   \\
+% 		Test& 11,815&12.23\%&97,594   \\
+% 		\hline
+% 	\end{tabular}
+% 	\end{table}
+% 	
