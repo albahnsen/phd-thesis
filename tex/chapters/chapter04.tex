@@ -283,96 +283,94 @@ which in the case of $g<r$, this is a geometric series meaning that it can be ex
 \subsection{Churn Modeling Database}
 \label{sec:4:1:data}
 
-	For this paper we used a dataset provided by a TV cable provider. 
-	The dataset consists of active customers during the first semester of 2014. 	
-	The total dataset contains 9,410 individual registries, each one with 45 attributes, 
-	including a churn label indicating whenever a customer is a churner.
-	This label was created internally in the company, and can be regarded as highly accurate. 
-	In the dataset only 455 customers are churners, leading to a churn ratio of 4.83\%.
+For the analysis we used a dataset provided by a TV cable provider. 
+The dataset consists of active customers during the first semester of 2014. 	
+The total dataset contains 9,410 individual registries, each one with 45 attributes, 
+including a churn label indicating whenever a customer is a churner.
+This label was created internally in the company, and can be regarded as highly accurate. 
+In the dataset only 455 customers are churners, leading to a churn ratio of 4.83\%.
 	
-	\subsubsection{Offer acceptance calculation}
+\subsubsection{Offer acceptance calculation}
 
 In practice companies have a set of offers to make to a customer as a part of the retention 
 campaign, they vary from discounts, to upgrades among others. In the particular case of a TV cable 
 provided, the offers include adding a new set of channels, changing the TV receiver to one with new 
 technology (ie. high definition, video recording, 4K),  or to offer a discount on the monthly bill.
 Unsurprisingly, not all offers apply to all clients. For instance a customer that already has all 
-the channels can not be offered a new set of channels. 
-Moreover, an offer usually means an additional cost to the company and not all offers have 
-not the same cost or the same impact in reducing churn.
+the channels can not be offered a new set of channels. Moreover, an offer usually means an 
+additional cost to the company and not all offers have not the same cost or the same impact in 
+reducing churn.
 
 Taking into account the cost and the implication of the offers, the problem can be 
 resumed in making each customer the offer that will maximize the acceptance rate and more 
 important reducing the overall cost. 
 
-	\begin{figure}[t!]
-	  \centering
-    \includegraphics[width=10cm]{ch5_fig3}
-	  \caption{Acceptance rate ($\gamma$) of the best offer for each customer profile. As expected, 
-		the higher the churn rate the lower the acceptance rate, as it is more difficult to make a 
-		good offer to a customer which is more likely to defect. }
-	  \label{fig:ch5:3}
-	\end{figure}
+\begin{figure}[t!]
+  \centering
+   \includegraphics[width=10cm]{ch5_fig3}
+  \caption{Acceptance rate ($\gamma$) of the best offer for each customer profile. As expected, 
+	the higher the churn rate the lower the acceptance rate, as it is more difficult to make a 
+	good offer to a customer which is more likely to defect. }
+  \label{fig:ch5:3}
+\end{figure}
 
 In order to calculate the acceptance probability $\gamma_i$ a champion-challenger process was made. 
-First, the customers were grouped into clusters according to 
-their behavioral and socio-economical characteristics. In particular the K-means algorithm was used 
-\citep{Marslan2009}.
-Then for a period of two months, randomly selected offers 
-were made to the customers and their response was evaluated.
-Unfortunately, for confidentiality reasons we can not describe the different clusters, neither the 
-actual offer made to each customer. Nevertheless, in \figurename{ \ref{fig:ch5:3}}, the average 
-churn rate and acceptance rate $\gamma_i$ per cluster is shown. As expected, the higher the churn 
-rate the lower the acceptance rate, as it is more difficult to make a good offer to a customer 
-which is more likely to defect.
+First, the customers were grouped into clusters according to their behavioral and socio-economical 
+characteristics. In particular the K-means algorithm was used \citep{Marslan2009}.
+Then for a period of two months, randomly selected offers were made to the customers and their 
+response was evaluated. Unfortunately, for confidentiality reasons we can not describe the 
+different clusters, neither the actual offer made to each customer. Nevertheless, in \figurename{ 
+\ref{fig:ch5:3}}, the average churn rate and acceptance rate $\gamma_i$ per cluster is shown. As 
+expected, the higher the churn rate the lower the acceptance rate, as it is more difficult to make a 
+good offer to a customer which is more likely to defect.
 
 
-	\subsubsection{Database partitioning}
-	From the initial dataset, three different datasets are extracted: training, validation and 
-  testing. Each one containing 50\%, 25\% and 25\% of the examples, respectively.   
-  Afterwards, with the objective of having a more balanced dataset, ie. same distribution of 
-	churners and not churners, an under-sampling of the churners is made.     
-  Lastly, we also applied the cost-sensitive re-balancing techniques cost-proportionate 
-	rejection-sampling \citep{Zadrozny2003} and cost-proportionate over-sampling \citep{Elkan2001}, 
-	described in cost-sensitive classification Section.
-	\tablename{ \ref{table_trainandtest}}, summarizes the different datasets, where $N$, $\pi_1$ 
-and $C_0$ represents the number of customers, the percentage of churners and the total losses if no 
-model is used, respectively. Moreover, in \figurename{ \ref{fig:ch5:4}}, a comparison of the 
-churn rate 
-and the average unitary cost ($C_u=C_0 / N$) of each dataset with respect of the Total set is shown.
-It is observed that the cost-sensitive sampling procedures have an average unitary cost much higher 
-than the other sets, also showing why a simple under-sampling procedure of the dataset does not 
-take into account the costs.
-
-  \begin{table}[t!]
-    \caption{Description of datasets}
-    \label{table_trainandtest}
-    \centering
-    \begin{tabular}{l c c c } %sum 7.7
-		\\ \hline
-		Set&	$N$ &	$\pi_1$ & $C_0$ \\
-		\hline
-		Total&9,410&.0483&580,884\\
-		Training ($t$)&3,758&.0505&244,542\\
-		Validation&2,824&.0477&174,171\\
-		Testing&2,825&.0442&162,171\\
-		Under-sampling ($u$)&374&.5080&244,542\\
-		CS Rejection-sampling ($r$)&428&.4135&431,428\\
-		CS Over-sampling ($o$)&5,767&.03124&2,350,285\\
-	  \hline
-	  \end{tabular}
-  \end{table}
-
-	\begin{figure}[t!]
-	  \centering
-    \includegraphics{ch5_fig4}
-	  \caption{Comparison of the distribution of the churn rate and the average unitary cost 
-	  ($C_u=C_0 / N$) of each dataset with respect to the Total set.
-It is observed that the cost-sensitive sampling procedures have an average unitary cost much higher 
-than the other sets, also showing why a simple under-sampling procedure of the dataset does not 
-take into account the costs.}
-	  \label{fig:ch5:4}
-	\end{figure}
+% 	\subsubsection{Database partitioning}
+% 	From the initial dataset, three different datasets are extracted: training, validation and 
+%   testing. Each one containing 50\%, 25\% and 25\% of the examples, respectively.   
+%   Afterwards, with the objective of having a more balanced dataset, ie. same distribution of 
+% 	churners and not churners, an under-sampling of the churners is made.     
+%   Lastly, we also applied the cost-sensitive re-balancing techniques cost-proportionate 
+% 	rejection-sampling \citep{Zadrozny2003} and cost-proportionate over-sampling \citep{Elkan2001}, 
+% 	described in cost-sensitive classification Section.
+% 	\tablename{ \ref{table_trainandtest}}, summarizes the different datasets, where $N$, $\pi_1$ 
+% and $C_0$ represents the number of customers, the percentage of churners and the total losses if no 
+% model is used, respectively. Moreover, in \figurename{ \ref{fig:ch5:4}}, a comparison of the 
+% churn rate 
+% and the average unitary cost ($C_u=C_0 / N$) of each dataset with respect of the Total set is shown.
+% It is observed that the cost-sensitive sampling procedures have an average unitary cost much higher 
+% than the other sets, also showing why a simple under-sampling procedure of the dataset does not 
+% take into account the costs.
+% 
+%   \begin{table}[t!]
+%     \caption{Description of datasets}
+%     \label{table_trainandtest}
+%     \centering
+%     \begin{tabular}{l c c c } %sum 7.7
+% 		\\ \hline
+% 		Set&	$N$ &	$\pi_1$ & $C_0$ \\
+% 		\hline
+% 		Total&9,410&.0483&580,884\\
+% 		Training ($t$)&3,758&.0505&244,542\\
+% 		Validation&2,824&.0477&174,171\\
+% 		Testing&2,825&.0442&162,171\\
+% 		Under-sampling ($u$)&374&.5080&244,542\\
+% 		CS Rejection-sampling ($r$)&428&.4135&431,428\\
+% 		CS Over-sampling ($o$)&5,767&.03124&2,350,285\\
+% 	  \hline
+% 	  \end{tabular}
+%   \end{table}
+% 
+% 	\begin{figure}[t!]
+% 	  \centering
+%     \includegraphics{ch5_fig4}
+% 	  \caption{Comparison of the distribution of the churn rate and the average unitary cost 
+% 	  ($C_u=C_0 / N$) of each dataset with respect to the Total set.
+% It is observed that the cost-sensitive sampling procedures have an average unitary cost much higher 
+% than the other sets, also showing why a simple under-sampling procedure of the dataset does not 
+% take into account the costs.}
+% 	  \label{fig:ch5:4}
+% 	\end{figure}
 
 
 \section{Direct marketing}
