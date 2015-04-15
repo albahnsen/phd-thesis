@@ -1,20 +1,16 @@
-
 \chapter{Bayes minimum risk}
-\todo{change notation}
 
 \begin{remark}{Outline}
-\todo{outline}
-In this chapter, we present the well-known family of \textit{random forests}
-methods. In Section~\ref{sec:4:bias-variance}, we first describe the bias-variance
-decomposition of the prediction error and then present, in
-Section~\ref{sec:4:ensemble}, how aggregating randomized models through
-ensembles reduces the prediction error by decreasing the variance term in this
-decomposition. In Section~\ref{sec:4:random-forests}, we revisit random forests
-and its variants and study how randomness introduced into the decision trees
-reduces prediction errors by decorrelating the decision
-trees in the ensemble. Properties and features of random forests are then outlined
-in Section~\ref{sec:4:features} while their consistency
-is finally explored in Section~\ref{sec:4:consistency}.
+In this chapter, we introduce classifications models from a machine learning perspective. 
+Moreover, we present the example-dependent cost-sensitive framework that is the basis of the 
+thesis. In Section~\ref{sec:2:classification}, we give a self contain introduction to 
+classification, including the most-common algorithms, and the main methods for evaluating the 
+performance of the different algorithm. Then, in Section~\ref{sec:2:cs}, we present the general 
+framwork of cost-sensitive classification. Within this Section, we first introduce a method for 
+defining the type of cost-sensitivity of a problem. Afterwards, we present the different 
+cost-sensitive performance evaluation measures. Lastly, we show the state-of-the-art 
+example-dependent cost-sensitive methods cost-proportionate rejection-sampling and 
+cost-proportionate over-sampling.
 \end{remark}
 
 \todo{INTRO BMR}
@@ -31,112 +27,101 @@ difference in
 characteristic (ROC) curve
   to a convex one using the ROC convex hull methodology.
   
-\section{BMR Model}
+\section{Bayes Minimum Risk Model}
 
-   We use Bayes minimum risk as a method for cost sensitive credit card fraud detection.
-   As defined in \citep{Ghosh2006}, the Bayes minimum risk classifier is a decision model based on
-   quantifying tradeoffs between various decisions using probabilities and the costs that accompany 
-such decisions.
-   In the case of credit card fraud detection, there are two decisions, either predict a 
-transaction as fraud $p_f$ or as legitimate $p_l$.
-   The risk associated with predicting a transaction as fraud is defined as
-   \begin{equation}
-    R(p_{f}|x)=L(p_{f}|y_{f})P(p_{f}|x)+L(p_{f}|y_{l})P(p_{l}|x),
-    \label{Bayes_min1}
-   \end{equation}
-   and when the transaction is predicted as legitimate it is
-   \begin{equation}
-    R(p_{l}|x)=L(p_{l}|y_{l})P(p_{l}|x)+L(p_{l}|y_{f})P(p_{f}|x),
-    \label{Bayes_min2}
-   \end{equation}
-   where %$p_f$ and $p_l$ indicate whether a transaction is predicted as fraud or legitimate, and
-   $y_f$ and $y_l$ are the real labels for fraudulent and legitimate transactions respectively. 
-$P(p_l|x)$ is the 
-   estimated probability of a transaction being legitimate given $x$, similarly 
-   $P(p_f|x)$ is the probability of a transaction being fraud given $x$.
-   Finally $L(a,b)$ is the loss function when a transaction is predicted as $a$ and the
-   real label is $b$.
-   Once both risks are calculated, %the decision will be made by choosing the one with the lowest 
-cost
-   a transaction is classified as fraud if $R(p_{f}|x)\le R(p_{l}|x)$, meaning if the risk 
-associated with
-   that decision is lower than the risk associated with classifying it as legitimate. % as defined 
-in (\ref{Bayes_min3}).
-   
-   %\noindent 
-   Since in the credit card fraud detection case the losses are equal to the cost, first we use 
-   the cost matrix with fixed cost for $FN$ as defined in \tablename{ 
-\ref{table_measure_cost_hand}}.
-   Then a transaction will be classified as fraud if: $C_aP(p_{f}|x)+C_aP(p_{l}|x) \le 
-100C_aP(p_{f}|x)$, 
-   %the Bayes minimum risk classifier using this cost matrix is defined in (\ref{Bayes_min4}).
-   \begin{equation}
-    C_aP(p_{f}|x)+C_aP(p_{l}|x) \le 100\cdot C_aP(p_{f}|x),
-    \label{Bayes_min4}
-   \end{equation}
-   and as legitimate otherwise.
-  
+As decribed in Section \ref{sec:2:cs}, state-of-the-art example dependent techniques, only 
+introduce the cost by modifying the training set. In \citep{CorreaBahnsen2013,CorreaBahnsen2014}, 
+we proposed a cost-sensitive model called Bayes minimum risk classifier ($BMR$).  
+
+As defined in \citep{Ghosh2006}, the BMR classifier is a decision model based on
+quantifying tradeoffs between various decisions using probabilities and the costs that accompany 
+such decisions. This is done in a way that for each example the expected losses are minimized. In  
+what follows, we consider the probability estimates $\hat p_i$ as known, regardless of the algorithm 
+used to calculate them.  The risk that accompanies each decision is calculated using the cost matrix 
+as described in \tablename{ \ref{tab:2:cost_matrix}}. In the specific framework of binary 
+classification, the risk of predicting the example $i$ as negative is 
+\begin{equation}
+  R(c_i=0|\mathbf{x}_i)=C_{TN_i}(1-\hat p_i)+C_{FN_i} \cdot \hat p_i, 
+\end{equation}
+and
+\begin{equation}
+  R(c_i=1|\mathbf{x}_i)=C_{TP_i} \cdot \hat p_i + C_{FP_i}(1- \hat p_i), 
+\end{equation}
+is the risk when predicting the example as positive, where $\hat p_i$ is the estimated positive 
+probability for example $i$. Subsequently, if 
+\begin{equation}
+  R(c_i=0|\mathbf{x}_i) \le R(c_i=1|\mathbf{x}_i), 
+\end{equation}
+then  the example $i$ is classified as negative. This means that the risk associated with the 
+decision $c_i$ is lower than the risk associated with classifying it as positive. 
+
+\begin{remark}{Characteristics of probability estimates}
+When using the output of a binary classifier as a basis for decision making, there is a 
+need for a probability that not only separates well between positive and negative examples, but that 
+also assesses the real probability of the event \citep{cohen2004}.
+\end{remark}
+
+
 \section{Calibration of probabilities}
+\label{sec:4:prob}
 
-  When using the output of a binary classifier as a basis for decision making,
-  there is a need for a probability that not only separates well between 
-  positive and negative examples, but that also assesses the real probability of the event 
-	\citep{cohen2004}.
+\todo{Add to intro the brier score}
+In this section two methods for calibrating probabilities are explained. First, the method proposed 
+in \citep{Elkan2001} to adjust the probabilities based on the   difference in bad rates  between the 
+training and testing datasets.  Then, the method proposed in \cite{Hernandez-Orallo2012}, in which 
+calibrated probabilities are extracted after modifying the ROC curve using the ROC convex hull 
+methodology, is described.
   
-  In this section two methods for calibrating probabilities are explained.
-  First, the method proposed in [6] to adjust the probabilities based on the difference in bad rates
-  between the training and testing datasets.
-  Then, the method proposed in [8], in which calibrated probabilities are extracted after
-  modifying the ROC curve using the ROC convex hull methodology, is described.
   
-  \subsection{Brier score and reliability diagrams}
-  \todo{Figure of the reliabily diaframs or calibration map}
+\subsection{Brier score and reliability diagrams}
+\todo{Figure of the reliabily diaframs or calibration map}
+
+Traditional evaluation measures of binary classification problems, such as Accuracy and 
+$F_1Score$, provide a way to analyze the performance of a model. However, when using the classifier 
+output as a basis for decision making, there is a need of a measure that takes into account not only 
+the misclassification of a classifier $\mathbf{c}$, but also the quality of the estimated 
+probability $\mathbf{\hat p}$ \citep{cohen2004}. The most appropriate  is the Brier score 
+\citep{brier1950}. The Brier score is one of a class of so-called proper scores which are used in 
+evaluating the subjective probability assessment of forecasters \citep{DeGroot1983}. The Brier score 
+is the average squared difference between the forecasters estimated probability of and the true 
+label:
+\begin{equation}
+  BS(f(\mathcal{S})) = \frac{1}{N} \sum_{i=1}^{N} (\hat p_i - y_i)^2.
+\end{equation}
+The main justification of this score, is based on decision theoretic considerations, in the sense 
+that, a forecaster should pay a price proportional to the confidence with which it asserts its 
+decision.
+
+
+\subsection{Calibration of probabilities due to a change in base rates.}
+
+One of the reasons why a probability may not be calibrated is because the algorithm is trained using 
+a dataset with a different base (or positive) rate than the one on the evaluation dataset.  This is 
+something common in machine learning since using under-sampling or over-sampling is a typical method 
+to solve problems such as class imbalance and cost sensitivity \citep{Hulse2007}.
   
-  \subsection{Calibration of probabilities due to a change in base rates.}
-  One of the reasons why a probability may not be calibrated is because 
-  the algorithm is trained using a dataset with a different base rate than the one on
-  the evaluation dataset. 
-  This is something common in machine learning since
-  using under-sampling or over-sampling is a typical method to solve problems such as
-  class imbalance and cost sensitivity \citep{Hulse2007}.
+In order to solve this and find probabilities that are calibrated, in \citep{Elkan2001} a formula  
+that corrects the probabilities based on the difference of the base rates is proposed.  The 
+objective is using $\hat p$ which was estimated using a population with base rate $\pi_1$,
+to find $\hat p'$ for the real population which has a base rate $\pi_1'$. A solution for $\hat p'$ 
+is given as follows:
+\begin{equation}
+  \hat p'=\pi_1' \frac{\hat p - \hat p \pi_1}{\pi_1- \pi_1 \hat p +\pi_1' \hat p - \pi_1 \pi_1'}.
+\end{equation}
+
+% Nevertheless, a strong assumption is made by taking: $P'(x|j=1)=P(x|j=1)$} and 
+% \mbox{$P'(x|j=0)=P(x|j=0)$}, meaning that there
+%   is no change in the example probability within the positive and negative
+%   subpopulations density functions.
   
-  In order to solve this and find probabilities that are calibrated, in \citep{Elkan2001} a formula
-  that corrects the probabilities based on the difference of the base rates is proposed.
-  The objective is using $p=P(j=1|x)$ which was estimated using a population with base rate 
-\mbox{$b=P(j=1)$},
-  to find $p'=P'(j=1|x)$ for the real population which has a base rate $b'$.
-  A solution for $p'$ is given as follows:
-  \begin{equation}
-  p'=b'\frac{p-pb}{b-bp+b'p-bb'}.
-  \label{cal_prob_br}
-  \end{equation}
-  Nevertheless, a strong assumption is made by taking: 
-  \mbox{$P'(x|j=1)=P(x|j=1)$} and \mbox{$P'(x|j=0)=P(x|j=0)$}, meaning that there
-  is no change in the example probability within the positive and negative
-  subpopulations density functions.
-  
-  \subsection{Calibrated probabilities using ROC convex hull.}
-  In order to illustrate the ROC convex hull approach proposed in \citep{Hernandez-Orallo2012},
-  let us consider the set of probabilities given in \figurename{ \ref{table_example_prob}}.
-  Their corresponding  ROC curve of that set of probabilities is shown in \figurename{ 
-\ref{ROC_1}}.  It can be seen that this set of probabilities is not calibrated, since at 0.1 there 
-is a positive example  followed by 2 negative examples. That inconsistency is represented in the ROC 
-curve as a non convex segment  over the curve.
-  
-  In order to obtain a set of calibrated probabilities, first the ROC curve must be modified in 
-order to be convex.
-  The way to do that, is to find the convex \mbox{hull \citep{Hernandez-Orallo2012}}, 
-  in order to obtain the minimal convex set containing the different points of the ROC curve.
-  In \figurename{ \ref{ROC_2}}, the convex hull algorithm is applied to the previously evaluated 
-ROC curve.
-  It is shown that the new curve is convex, and includes all the points of the previous ROC curve.
-  
-  Now that there is a new convex ROC curve or ROCCH, the calibrated probabilities can be extracted 
-as shown
-  in  \figurename{ \ref{cal_prob}}. The procedure to extract the new probabilities is to first group 
-the
-  probabilities according to the points in the ROCCH curve, and then make the calibrated
-  probabilities be the slope of the ROCCH for each group.
+\subsection{Calibrated probabilities using ROC convex hull}
+
+In order to illustrate the ROC convex hull approach proposed in \citep{Hernandez-Orallo2012},
+let us consider the set of probabilities given in \figurename{~\ref{tab:5:example_prob}}.
+Their corresponding  ROC curve of that set of probabilities is shown in 
+\figurename{~\ref{fig:5:ROC_1}}.  It can be seen that this set of probabilities is not calibrated, 
+since at 0.1 there is a positive example  followed by 2 negative examples. That inconsistency is 
+represented in the ROC curve as a non convex segment  over the curve.
   
 \begin{figure}[!t]
 \hskip 0.5cm
@@ -144,6 +129,7 @@ the
   \vtop{
     \hbox{
       \subfloat[Set of probabilities and their respective class label]{
+   \footnotesize
 	\begin{tabular}{cc}
 	\hline
 	Probability & Label\\
@@ -160,13 +146,13 @@ the
 	0.9&	1\\
 	1.0&	1\\
 	\hline
-	\end{tabular}\label{table_example_prob}
+	\end{tabular}\label{tab:5:example_prob}
       }
     }
   }\hskip 0.5cm
   \vtop{\vskip -2.5cm
     \subfloat[ROC curve of the set of probabilities]{
-      \includegraphics[scale=0.5]{ch6_fig2}\label{ROC_1}
+      \includegraphics[scale=0.5]{ch6_fig2}\label{fig:5:ROC_1}
     }%
   }%
 }
@@ -176,12 +162,13 @@ the
   \vtop{ \vskip 0.5cm
     \hbox{
       \subfloat[Convex hull of the ROC curve]{
-	\includegraphics[scale=0.5]{ch6_fig1}\label{ROC_2}
+	\includegraphics[scale=0.5]{ch6_fig1}\label{fig:5:ROC_2}
       }
     }
   }\hskip 1cm
   \vtop{ \vskip -1cm
     \subfloat[Calibrated probabilities]{
+   \footnotesize
 	\begin{tabular}{cc}
 	\hline
 	Prob & Cal Prob\\
@@ -198,13 +185,24 @@ the
 	0.9&	1\\
 	1.0&	1\\
 	\hline
-	\end{tabular}\label{cal_prob} 
+	\end{tabular}\label{fig:5:cal_prob} 
     }
   }
 }
-\caption{Estimation of calibrated probabilities using the ROC convex hull 
-\citep{Hernandez-Orallo2012}.}\label{fig1}
-
+\caption{Estimation of calibrated probabilities using the ROC convex hull.}\label{fig:5:rocch}
 \end{figure}
+
+In order to obtain a set of calibrated probabilities, first the ROC curve must be modified in 
+order to be convex. The way to do that, is to find the convex \mbox{hull 
+\citep{Hernandez-Orallo2012}}, in order to obtain the minimal convex set containing the different 
+points of the ROC curve. In \figurename{~\ref{fig:5:ROC_2}}, the convex hull algorithm is applied 
+to the previously evaluated ROC curve. It is shown that the new curve is convex, and includes all 
+the points of the previous ROC curve.
+
+Now that there is a new convex ROC curve or ROCCH, the calibrated probabilities can be extracted 
+as shown in  \figurename{~\ref{fig:5:cal_prob}}. The procedure to extract the new probabilities is 
+to first group the probabilities according to the points in the ROCCH curve, and then make the 
+calibrated  probabilities be the slope of the ROCCH for each group.
+  
    
 \section{Experiments}

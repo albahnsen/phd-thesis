@@ -3,9 +3,8 @@
  chapter03                             chapter03                                        fix outline
  chapter03           Credit card fraud detection                        erase percentage of savings
  chapter03                             Databases                                    table databases
- chapter05                             chapter05                                    change notation
- chapter05                             chapter05                                            outline
  chapter05                             chapter05                                          INTRO BMR
+ chapter05          Calibration of probabilities                       Add to intro the brier score
  chapter05  Brier score and reliability diagrams  Figure of the reliabily diaframs or calibratio...
  chapter06                             chapter06                                            outline
  chapter06                   Logistic regression                                plot logit function
