@@ -122,9 +122,15 @@ Acc(f({\cal S})) = 1- Err(f({\cal S})).
 However, just knowing these statistics is not enough to make decisions, as in many applications is 
 important to know where the errors are coming from. In particular, the misclassified examples may 
 belong only to one class, which may give interesting insights about the problem. A way to observe 
-the different errors is by looking to the confusion matrix, as shown in \tablename{~\ref{tab:2:1}}. 
-Afterwards, using the cost matrix several statistics are extracted. In particular:
-
+the different errors is by looking to the confusion matrix, as shown in 
+\mbox{\tablename{~\ref{tab:2:1}}}. Afterwards, using the cost matrix several statistics are 
+extracted. In particular:
+  \begin{flalign}
+    &Recall = \frac{TP}{TP+FN} &\\
+    &Precision = \frac{TP}{TP+FP}& \\
+    &F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}&
+  \end{flalign}
+  
 	\begin{table}[!t]
 		\centering
 		\footnotesize
@@ -144,17 +150,7 @@ Afterwards, using the cost matrix several statistics are extracted. In particula
 		\caption{Classification confusion matrix}
 		\label{tab:2:1}
   \end{table}  
-
-	\begin{equation}
-    Recall = \frac{TP}{TP+FN}
-  \end{equation}
-  \begin{equation}
-    Precision = \frac{TP}{TP+FP}
-  \end{equation}
-  \begin{equation}
-    F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}
-  \end{equation}
-  
+ 
   As an illustrative example, the different statistics are calculated for the toy example presented 
   in Section~\ref{sec:2:classification}. First, the confusion matrix is calculated as 
   follows:
