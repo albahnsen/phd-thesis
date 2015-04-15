@@ -1,28 +1,12 @@
 \chapter{Marketing Analytics}
 
 \begin{remark}{Outline}
-\todo{fix outline}
-In this chapter, we present the well-known family of \textit{random forests}
-methods. In Section~\ref{sec:4:bias-variance}, we first describe the bias-variance
-decomposition of the prediction error and then present, in
-Section~\ref{sec:4:ensemble}, how aggregating randomized models through
-ensembles reduces the prediction error by decreasing the variance term in this
-decomposition. In Section~\ref{sec:4:random-forests}, we revisit random forests
-and its variants and study how randomness introduced into the decision trees
-reduces prediction errors by decorrelating the decision
-trees in the ensemble. Properties and features of random forests are then outlined
-in Section~\ref{sec:4:features} while their consistency
-is finally explored in Section~\ref{sec:4:consistency}.
-In this chapter, we introduce classifications models from a machine learning perspective. 
-Moreover, we present the example-dependent cost-sensitive framework that is the basis of the 
-thesis. In Section~\ref{sec:2:classification}, we give a self contain introduction to 
-classification, including the most-common algorithms, and the main methods for evaluating the 
-performance of the different algorithm. Then, in Section~\ref{sec:2:cs}, we present the general 
-framwork of cost-sensitive classification. Within this Section, we first introduce a method for 
-defining the type of cost-sensitivity of a problem. Afterwards, we present the different 
-cost-sensitive performance evaluation measures. Lastly, we show the state-of-the-art 
-example-dependent cost-sensitive methods cost-proportionate rejection-sampling and 
-cost-proportionate over-sampling.
+In this chapter, we present two different marketing real-world example-dependent 
+cost-sensitive problems, namely, churn modeling and direct marketing. Both problems deal 
+with identifying those customers with certain characteristic with the objective to maximize the 
+results of the different CRM strategies.
+First, we introduce the churn modeling problem in Section \ref{sec:4:churn}. Lastly in Section 
+\ref{sec:4:directmarketing}, the direct marketing problem is presented.
 \end{remark}
 
 
@@ -164,7 +148,7 @@ positives and true negatives, for each customer.	In \figurename{ \ref{fig:ch5:2}
 impact of a churn model is shown. Note than we take into account the costs and not the profit in 
 each case.
 
-\begin{figure}[t]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=12cm]{ch5_fig2}
   \caption{Financial impact of the different decisions ie. False positives, false negatives, 
@@ -187,7 +171,7 @@ Either the customer is not a churner, then the cost is zero, or the customer is 
 cost is $CLV_i$. 
 \end{remark}
 
-  \begin{table}[t]
+  \begin{table}[htbp]
 	  \centering
 	  \footnotesize
      \begin{tabular}{c|c|c}
@@ -211,7 +195,7 @@ cost is $CLV_i$.
     \label{tab:ch5:1}
   \end{table}
 
-The different costs are sumarized in \tablename{ \ref{tab:ch5:1}}.	Afterwards using the cost 
+The different costs are sumarized in \tablename{ \ref{tab:ch5:1}}.	Then using the cost 
 matrix, and the example-dependent cost-sensitive framework as described in Section 
 \ref{sec:2:csmeasures}, an example-dependent cost statistic is calculated as:
 \begin{align}
@@ -374,6 +358,7 @@ good offer to a customer which is more likely to defect.
 
 
 \section{Direct marketing}
+\label{sec:4:directmarketing}
 
 In direct marketing the objective is to classify those customers who are more likely to have a 
 certain response to a marketing campaign \citep{Ngai2009}. We used a direct marketing dataset 

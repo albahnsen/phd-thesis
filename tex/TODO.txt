@@ -3,9 +3,6 @@
  chapter03                             chapter03                                        fix outline
  chapter03           Credit card fraud detection                        erase percentage of savings
  chapter03                             Databases                                    table databases
- chapter04                             chapter04                                        fix outline
- chapter04                        Churn modeling                                   take out savings
- chapter04                      Direct marketing                                             extend
  chapter05                             chapter05                                    change notation
  chapter05                             chapter05                                            outline
  chapter05                             chapter05                                          INTRO BMR
