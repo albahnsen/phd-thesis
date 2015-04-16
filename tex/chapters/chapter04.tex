@@ -51,13 +51,13 @@ With this in mind the companies use intelligence to create and improve retention
 strategies. In the first case, this usually implies an offer that can be either a discount or a 
 free upgrade during certain span of time. In both cases the company has to 	assume a cost for that 
 offer, therefore, accurate prediction of the churners becomes important. The logic of this flow is 
-shown in \figurename{ \ref{fig:ch5:1}}.
+shown in \figurename{ \ref{fig:ch4:1}}.
 
 	\begin{figure}[htbp]
 	  \centering
-    \includegraphics[width=11.5cm]{ch5_fig1}   %CHANGE TO 12cm
+    \includegraphics[width=11.5cm]{ch4_fig1}   %CHANGE TO 12cm
 	  \caption{Flow analysis of a churn campaign \citep{Verbraken2012}}
-	  \label{fig:ch5:1}
+	  \label{fig:ch4:1}
 	\end{figure}
 
 \begin{remark}{Flow analysis of a churn campaign}
@@ -144,16 +144,16 @@ has the same $CLV$ and $C_o$, whereas this is not true in practice. In fact, dif
 have a very different $CLV$, and not all offers can be made to every customer, neither do they have 
 the same impact across customers. In order to obtain a more business oriented measure, we first 
 analyze the financial impact of the different decisions, ie. false positives, false negatives, true 
-positives and true negatives, for each customer.	In \figurename{ \ref{fig:ch5:2}}, the financial 
+positives and true negatives, for each customer.	In \figurename{ \ref{fig:ch4:2}}, the financial 
 impact of a churn model is shown. Note than we take into account the costs and not the profit in 
 each case.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=12cm]{ch5_fig2}
+  \includegraphics[width=12cm]{ch4_fig2}
   \caption{Financial impact of the different decisions ie. False positives, false negatives, 
   true 	positives and true negatives}
-	\label{fig:ch5:2}
+	\label{fig:ch4:2}
 \end{figure}
 
 \begin{remark}{Financial analysis of a churn champaing}
@@ -192,10 +192,10 @@ cost is $CLV_i$.
 			%\hline
 		\end{tabular}
 		\caption{Proposed churn modeling example-dependent cost matrix}
-    \label{tab:ch5:1}
+    \label{tab:ch4:1}
   \end{table}
 
-The different costs are sumarized in \tablename{ \ref{tab:ch5:1}}.	Then using the cost 
+The different costs are sumarized in \tablename{ \ref{tab:ch4:1}}.	Then using the cost 
 matrix, and the example-dependent cost-sensitive framework as described in Section 
 \ref{sec:2:csmeasures}, an example-dependent cost statistic is calculated as:
 \begin{align}
@@ -291,11 +291,11 @@ important reducing the overall cost.
 
 \begin{figure}[t!]
   \centering
-   \includegraphics[width=10cm]{ch5_fig3}
+   \includegraphics[width=10cm]{ch4_fig3}
   \caption{Acceptance rate ($\gamma$) of the best offer for each customer profile. As expected, 
 	the higher the churn rate the lower the acceptance rate, as it is more difficult to make a 
 	good offer to a customer which is more likely to defect. }
-  \label{fig:ch5:3}
+  \label{fig:ch4:3}
 \end{figure}
 
 In order to calculate the acceptance probability $\gamma_i$ a champion-challenger process was made. 
@@ -304,7 +304,7 @@ characteristics. In particular the K-means algorithm was used \citep{Marslan2009
 Then for a period of two months, randomly selected offers were made to the customers and their 
 response was evaluated. Unfortunately, for confidentiality reasons we can not describe the 
 different clusters, neither the actual offer made to each customer. Nevertheless, in \figurename{ 
-\ref{fig:ch5:3}}, the average churn rate and acceptance rate $\gamma_i$ per cluster is shown. As 
+\ref{fig:ch4:3}}, the average churn rate and acceptance rate $\gamma_i$ per cluster is shown. As 
 expected, the higher the churn rate the lower the acceptance rate, as it is more difficult to make a 
 good offer to a customer which is more likely to defect.
 
