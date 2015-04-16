@@ -45,7 +45,7 @@ logarithm of the likelihood, such that
   J(\theta)=\frac{1}{N}\sum_{i=1}^{N} J_i(\theta),
 \end{equation}
 where
-\begin{align}
+\begin{align}\label{eq:6:lrcost}
   J_i(\theta) =  -y_i\log(h_\theta(\mathbf{x}_i)) -(1-y_i)\log(1-h_\theta(\mathbf{x}_i)).
 \end{align}
 Therefore, the parameters are found using the following equation
@@ -96,15 +96,15 @@ H=\left[ \begin{array}{cccc}
 \end{equation}
 
 For the cost function to be convex the Hessian matrix	must be positive-semidefinite, and
-a function is positive-semidifinite if:  
+a function is positive-semidefinite if:  
 \begin{equation}
   z^T\left[\nabla_x^2f(x)\right]z \ge 0 \quad  \forall z
 \end{equation}
-Applied to J($\theta$), it is nessesary to proof
+Applied to J($\theta$), it is necessary to proof
 \begin{equation}\label{eq:6:pos1}
   z^T\left[H \right]z \ge 0 \quad  \forall z
 \end{equation}
-Moreover, $H$ can be rewritten, using only the internal part of the summatory, since it do not 
+Moreover, $H$ can be rewritten, using only the internal part of the sum, since it do not 
 dependent on $\theta$
 \begin{equation}
  H = \frac{1}{N}\sum_{i=1}^{N} \left[ 
@@ -123,34 +123,43 @@ Therefore, proving that $J(\theta)$ is convex, as $\left(\mathbf{x}_i^Tz\right)^
 \ge 0$ and \\ $\left((1-h_\theta(\mathbf{x}_i))h_\theta(\mathbf{x}_i)\right)\ge 0$ because $0\ge 
 h_\theta(\mathbf{x}_i) \ge 1$.
 
-	
-	\subsection{Analysis of the cost function}
-	However, this cost function assigns the same 
-  weight to different errors, both false positives and false negatives. As discussed before, this 
-  is not the case in many real-world applications. In particular
-			\quad When  $y^{(i)}==1$
-			
-			\quad $J(\theta)^{(i)}=-\log(h_\theta(\mathbf{x}_i)$
-			
-			\quad When $h_\theta(\mathbf{x}_i)\approx1$ then $J(\theta)^{(i)}\approx0$
-			
-			\quad Otherwise when $h_\theta(\mathbf{x}_i)\approx0$ then
-			$J(\theta)^{(i)}\approx\infty$ \\
 
-			When $y^{(i)}==0$
-			
-			\quad $J(\theta)^{(i)}=-\log(1-h_\theta(\mathbf{x}_i)$
-			
-			\quad\quad When $h_\theta(\mathbf{x}_i)\approx1$ then
-			$J(\theta)^{(i)}\approx\infty$ 
+\section{Cost-sensitive logistic regression}
+\label{sec:6:cslr}
 
-			\quad\quad Otherwise when $h_\theta(\mathbf{x}_i)\approx0$ then
-			$J(\theta)^{(i)}\approx0$ 
-  which in the context of cost-sensitive classification means that $C_{TP_i}=C_{TN_i}\approx 0$ and 
-  $C_{FP_i}=C_{FN_i}\approx \inf$.
-	
-	
-\section{Cost-sensitive cost function}
+In this section we introduce our proposed cost-sensitive logistic regression 
+\citep{CorreaBahnsen2014b}. First, we motive the need to modify the logistic regression, as we 
+analyze the implicit costs that the logistic regression assign to each misclassification error 
+during the estimation of the parameters $\theta$.
+\todo{finish intro}
+
+\subsection{Analysis of the logistic cost function}
+
+The logistic regression cost function, as described in (\ref{eq:6:lrcost}), implicitly assume that 
+a false positives and a false negatives have the same cost, i.e. $C_{{FP}_i} = C_{{FN}_i}$ $\forall 
+i \in \{1,\cdots,N\}$. This can be easily shown by analyzing the logistic cost function for both 
+values of $y_i$ and the algorithm prediction $h_\theta(\mathbf{x}_i))$. 
+\todo{introduce table}
+
+\begin{table}[htbp]
+ \centering
+ \footnotesize
+\begin{tabular}{|c|c|c|c|}
+\hline
+\multirow{2}{*}{$y_i$} & \multirow{2}{*}{$J_i(\theta)$} & 
+\multicolumn{2}{c}{value of $J_i(\theta)$ if:} \\
+& & $h_\theta(\mathbf{x}_i)) \approx 0$& $h_\theta(\mathbf{x}_i)) \approx 1$ \\
+ \hline
+ 0 & $-\log(1-h_\theta(\mathbf{x}_i))$ & $\approx0$ & $\approx\infty $ \\
+ 1 & $-\log(h_\theta(\mathbf{x}_i))$ &  $\approx\infty $ & $\approx0$ \\
+ \hline
+\end{tabular}
+\caption{Analysis of the logistic cost function}
+\end{table}
+
+
+\subsection{Cost-sensitive cost function}
+
   In order to incorporate the different costs from \tablename{ \ref{table_costmat}} into the 
   logistic regression, first we analyze the expected costs for each case
   \begin{equation*}
