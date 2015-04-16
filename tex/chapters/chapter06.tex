@@ -30,15 +30,13 @@ and  $g(\cdot)$ is the logistic sigmoid function, defined as
 \begin{equation}
   g(z)=\frac{1}{(1+e^{-z})} 
 \end{equation}
-The logistic sigmoid function, have
+In the next Figure, the logistic sigmoid function is shown.
 \begin{figure}[htbp]
   \centering
   \includegraphics{ch6_fig1}
-  \caption{Example of a classification algorithm. Using a set of examples from two classes, a 
-  classification algorithm is learn in order to separate between the positives and the negatives. }
+  \caption{Sigmoid function}
   \label{fig:ch6:1}
 \end{figure}
-
 
 The problem then becomes on finding the right parameters that minimize a given cost function.   
 Usually, in the case of logistic regression the cost function $J(\theta)$ refers to the negative   
@@ -50,83 +48,70 @@ where
 \begin{align}
   J_i(\theta) =  -y_i\log(h_\theta(\mathbf{x}_i)) -(1-y_i)\log(1-h_\theta(\mathbf{x}_i)).
 \end{align}
-Therefore,
+Therefore, the parameters are found using the following equation
 \begin{align}
   \theta = \argmin_\theta J(\theta).
 \end{align}
+There are several methods used to estimate the logistic regression, in particular, maximum 
+likelihood \citep{Hastie2009}, Newton, coordinate descent \citep{Murphy2012} and dual coordinate 
+descent \citep{Yu2011}. Nevertheless, all these methods rely on the assuption of convexity of the
+negative logarithm of the likelihood function. In the next section we analyze the convexity of the 
+logistic regression.
 
+\subsection{Convexity analysis of the logistic regression}
 
-   \todo{plot logit function}
-   
-   \todo{extend description}
-   
-	\subsection{Convexity analysis}
-	
-	The gradient of the cost functions is
-	
-		\begin{center}
-		$\left[ \begin{array}{c}
-		\frac{\partial J(\theta)}{\partial \theta_1} \\[0.1in]	
-		\frac{\partial J(\theta)}{\partial \theta_2} \\[0.1in]	
-		\ldots \\[0.1in]	
-		\frac{\partial J(\theta)}{\partial \theta_n}
-		\end{array} \right] =
-		\left[ \begin{array}{c}
-		\frac{1}{m}\sum_{i=1}^{m}\left[x_1^{(i)}\left(h_\theta(x^{(i)})-y^{(i)}\right)\right]\\[0.1in]
-				\frac{1}{m}\sum_{i=1}^{m}\left[x_2^{(i)}\left(h_\theta(x^{(i)})-y^{(i)}\right)\right]
-		\\[0.1in]	
-		\ldots \\[0.1in]	
-		\frac{1}{m}\sum_{i=1}^{m}\left[x_n^{(i)}\left(h_\theta(x^{(i)})-y^{(i)}\right)\right]
-		\\[0.1in]	
-		\end{array} \right]$
-	\end{center}
-	
-	since a a function f(x) which is twice-differentiable is convex if and only if its
-	hessian matrix (matrix of second-order partial derivatives) is positive semi-definite
+A function $f(\mathbf{x})$ which is twice-differentiable is convex if and only if its hessian 
+matrix (matrix of second-order partial derivatives) is positive semi-definite \citep{Boyd2010}.
+Therefore, with the objective of evaluating the convexity of the logistic function, first the first 
+order partial derivatives are calculated as follows:
 
-The Hessian can be generalized as: 
-	\begin{center}
-	 $\partialb{j1}{j2}=\frac{1}{m}\sum_{i=1}^{m}
-	\left[
-	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{j1}^{(i)}x_{j2}^{(i)}
-	\right]
-	$\\[0.2in]
-	\[
-	\left[ \begin{array}{ccc}
-	\sum_{i=1}^{m}	\left[
-	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{1}^{(i)}x_{1}^{(i)}	\right] & \ldots & 
-	\sum_{i=1}^{m}	\left[
-	 (1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{1}^{(i)}x_{n}^{(i)}	\right] \\[0.1in] 
-	 \sum_{i=1}^{m}	\left[
-	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{2}^{(i)}x_{1}^{(i)}	\right]  & \ldots
-	 \ldots & \sum_{i=1}^{m}	\left[
-	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{2}^{(i)}x_{n}^{(i)}	\right] \\ [0.1in]
-	\ldots  & \ldots & \ldots \\ [0.1in]
-	\sum_{i=1}^{m}	\left[
-	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{n}^{(i)}x_{1}^{(i)}	\right] & \ldots &
-	\sum_{i=1}^{m}	\left[
-	(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{n}^{(i)}x_{n}^{(i)}	\right] \\ [0.1in]
-	\end{array} \right] 
-	\]
-	\end{center}
-	
-	Using only the internal part of the Hessian sumatory
-	
-	\begin{center}
-	$\forall (j1,j2)$ in $[1..n , 1..n] 
-	:\; (1-h_\theta(x^{(i)}))h_\theta(x^{(i)})x_{j1}^{(i)}x_{j2}^{(i)} $
-	\end{center}
-	
-	Can be rewrite in matrix form as
-	
-	\begin{center}
-	$(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})(x^{(i)})^Tx^{(i)} $
-	\end{center}
-	
-	For the cost function to be convex the Hessian matrix
-	must be positive-semidefinite
-	A function is positive-semidifinite if:  $\forall z: \;{z^T}\left[\nabla
-	_x^2f(x)\right]z \ge 0$\\ Applied to J($\theta$)
+\begin{equation}
+\left[ \begin{array}{c}
+  \frac{\partial J(\theta)}{\partial \theta_1} \\[0.1in]	
+  \frac{\partial J(\theta)}{\partial \theta_2} \\[0.1in]	
+  \ldots \\[0.1in]	
+  \frac{\partial J(\theta)}{\partial \theta_k}
+\end{array} \right] =
+\left[ \begin{array}{c}
+  \frac{1}{N}\sum_{i=1}^{N}\left[x_i^{(1)}\left(h_\theta(\mathbf{x}_i)-y_i\right)\right]\\[0.1in]
+  \frac{1}{N}\sum_{i=1}^{N}\left[x_i^{(2)}\left(h_\theta(\mathbf{x}_i)-y_i\right)\right]\\[0.1in]
+  \ldots \\[0.1in]	
+  \frac{1}{N}\sum_{i=1}^{N}\left[x_i^{(k)}\left(h_\theta(\mathbf{x}_i)-y_i\right)\right]\\[0.1in]	
+\end{array} \right]
+\end{equation}
+
+Then, using the first order partial derivatives, the Hessian can be generalized as
+\begin{equation}
+  \partialb{j1}{j2}=\frac{1}{N}\sum_{i=1}^{N}
+  \left[\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)x_i^{(j1)}x_i^{(j2)}\right],
+\end{equation}
+where, $j1$ and $j2$ $\in \{1\cdots k\}$. Which is the same as
+\begin{equation}
+\left[ \begin{array}{cccc}
+  \partialb{1}{1} & \partialb{1}{2} & \cdots & \partialb{1}{k} \\[0.1in]  
+  \partialb{2}{1} & \partialb{2}{2} & \cdots & \partialb{2}{k} \\[0.1in]  
+  \cdots & \cdots & \cdots & \cdots \\[0.1in]  
+  \partialb{k}{1} & \partialb{k}{2} & \cdots & \partialb{k}{k}  
+\end{array} \right]
+\end{equation}
+
+Afterwards, using only the internal part of the Hessian sumatory
+\begin{equation}
+  \forall (j1,j2) \in \{1\cdots k , 1\cdots k \} 
+:\; \bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)x_i^{(j1)}x_i^{(j2)},
+\end{equation}
+can be rewrite in matrix form
+\begin{equation}
+  \bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)x_i^T x_i
+\end{equation}
+
+For the cost function to be convex the Hessian matrix	must be positive-semidefinite, and
+a function is positive-semidifinite if:  
+\begin{equation}
+  z^T\left[\nabla_x^2f(x)\right]z \ge 0 \quad  \forall z
+\end{equation}
+
+ Applied to J($\theta$)
 	\begin{center}
 	$z^T \left[(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})(x^{(i)})^Tx^{(i)} \right]z$\\
 	$(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})\left(( x^{(i)})^Tz\right)^2 \ge 0 $
