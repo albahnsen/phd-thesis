@@ -17,26 +17,45 @@ is finally explored in Section~\ref{sec:4:consistency}.
 
 \section{Logistic regression}
 
-  Logistic regression is a classification model that, in the specific context of binary 
-  classification, estimates the posterior probability of the positive class, as the logistic 
-  sigmoid of a linear function of the feature vector \citep{Bishop2006}. The estimated probability 
-  is evaluated as 
-  \begin{equation}
-    \hat p_i = P(y=1 \vert X_i) = h_\theta(X_i) = g\biggl(\sum_{j=1}^{k}{\theta^jx_i^j}\biggr),
-  \end{equation}
-  where $h_\theta(X_i)$ refers to the hypothesis of $i$ given the parameters $\theta$,  and 
-  $g(\cdot)$ is the logistic sigmoid function, defined as \mbox{$g(z)=1/(1+e^{-z})$}.\\
-  The problem then becomes on finding the right parameters that minimize a given cost function. 
-  Usually, in the case of logistic regression the cost function $J(\theta)$ refers to the negative 
-  logarithm of the likelihood, such that
-  \begin{equation}
-    J(\theta)=\frac{1}{N}\sum_{i=1}^{N} J_i(\theta),
-  \end{equation}
-  where
-  \begin{align}
-    J_i(\theta) =  -y_i\log(h_\theta(X_i)) -(1-y_i)\log(1-h_\theta(X_i)).
-  \end{align}\label{eq:j}
-   
+Logistic regression is a classification model that, in the specific context of binary 
+classification, estimates the posterior probability of the positive class, as the logistic sigmoid 
+of a linear function of the feature vector \citep{Bishop2006}. The estimated probability  is 
+evaluated as 
+\begin{equation}
+  \hat p_i = P(y=1 \vert \mathbf{x}_i) = h_{\theta}(\mathbf{x}_i) = 
+  g\bigg(\sum_{j=1}^{k}{\theta^jx_i^j}\bigg),
+\end{equation}
+where $h_\theta(\mathbf{x}_i)$ refers to the hypothesis of $i$ given the parameters $\theta$,  
+and  $g(\cdot)$ is the logistic sigmoid function, defined as
+\begin{equation}
+  g(z)=\frac{1}{(1+e^{-z})} 
+\end{equation}
+The logistic sigmoid function, have
+\begin{figure}[htbp]
+  \centering
+  \includegraphics{ch6_fig1}
+  \caption{Example of a classification algorithm. Using a set of examples from two classes, a 
+  classification algorithm is learn in order to separate between the positives and the negatives. }
+  \label{fig:ch6:1}
+\end{figure}
+
+
+The problem then becomes on finding the right parameters that minimize a given cost function.   
+Usually, in the case of logistic regression the cost function $J(\theta)$ refers to the negative   
+logarithm of the likelihood, such that
+\begin{equation}
+  J(\theta)=\frac{1}{N}\sum_{i=1}^{N} J_i(\theta),
+\end{equation}
+where
+\begin{align}
+  J_i(\theta) =  -y_i\log(h_\theta(\mathbf{x}_i)) -(1-y_i)\log(1-h_\theta(\mathbf{x}_i)).
+\end{align}
+Therefore,
+\begin{align}
+  \theta = \argmin_\theta J(\theta).
+\end{align}
+
+
    \todo{plot logit function}
    
    \todo{extend description}
@@ -148,17 +167,17 @@ The Hessian can be generalized as:
   \begin{equation*}
     J^c_i(\theta) = 
     \begin{cases}
-      C_{TP_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(X_i) \approx 1  \\
-      C_{TN_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(X_i) \approx 0  \\
-      C_{FP_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(X_i) \approx 1  \\
-      C_{FN_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(X_i) \approx 0 
+      C_{TP_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(\mathbf{x}_i) \approx 1  \\
+      C_{TN_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(\mathbf{x}_i) \approx 0  \\
+      C_{FP_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(\mathbf{x}_i) \approx 1  \\
+      C_{FN_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(\mathbf{x}_i) \approx 0 
     \end{cases}
   \end{equation*}
   Finally, we merge the different costs into a cost function which is dependent on new costs:
   \begin{align}\label{eq:CSLR}
-    J^c(\theta)=\frac{1}{N} \sum_{i=1}^{N} \bigg( y_i(h_\theta(X_i) C_{TP_i} + 
-    (1-h_\theta(X_i))C_{FN_i})  \nonumber\\ 
-    +(1-y_i)(h_\theta(X_i) C_{FP_i} + (1-h_\theta(X_i))C_{TN_i}) \bigg).
+    J^c(\theta)=\frac{1}{N} \sum_{i=1}^{N} \bigg( y_i(h_\theta(\mathbf{x}_i) C_{TP_i} + 
+    (1-h_\theta(\mathbf{x}_i))C_{FN_i})  \nonumber\\ 
+    +(1-y_i)(h_\theta(\mathbf{x}_i) C_{FP_i} + (1-h_\theta(\mathbf{x}_i))C_{TN_i}) \bigg).
   \end{align}
   
 \todo{intro how to estimate the parameters}
@@ -181,14 +200,15 @@ denotes a specific characteristic (input variable). Therefore the combination of
 characteristics encoded in the string represents an individual who is a candidate for the solution.
 Each chromosome is evaluated in the objective function and the best individuals are selected to 
 survive for mating (parents), while the worse ones are discarded to make room for new descendants.  
-There are many ways of pairing the selected chromosomes [5]. In this paper, a weighted cost pairing 
+There are many ways of pairing the selected chromosomes \citep{Haupt2004}. In this paper, a weighted 
+cost pairing 
 is used, which consists of assigning a selection probability according to each chromosome cost. That 
 is, a chromosome with the higher cost has a greater probability of mating because cost maximization 
 is desired.
 
 After selecting the parent chromosomes with the chosen pairing method, the next step is to create a 
 second generation of individuals, based on the information of the parents. There are several ways of 
-mating [5]. In this paper, two parents create one child. 
+mating. In this paper, two parents create one child. 
 In order to transfer the parents binary information to the child, there are also different kinds 
 of approaches such as the one-point crossover. The one-point crossover technique consists in 
 selecting one random point on the parents string. The child is created in the following way: First, 
@@ -203,7 +223,7 @@ The most common mutation procedure is the one called single point mutation. It i
 generating a random variable that indicates the position of the gene that will be modified, from the 
 population of chromosomes. Generally, mutation is not allowed in the best solution chromosomes 
 because these elite individuals are destined to propagate unchanged. In genetic algorithm this 
-is called elitism [5].
+is called elitism.
 
 Finally, after mutation is done the new generation of chromosomes is evaluated with the objective 
 function and used in the next iteration of the described algorithm.
@@ -212,9 +232,9 @@ satisfactory solution is reached.
 
 	\begin{figure}[t]
 	  \centering
-    \includegraphics[width=8cm]{ch7_fig1}  
+    \includegraphics[width=8cm]{ch6_fig2}  
 	  \caption{Flow analysis of a churn campaign \citep{Haupt2004}}
-	  \label{fig:ch7:1}
+	  \label{fig:ch6:2}
 	\end{figure}
 
 \section{Experiments}
