@@ -80,14 +80,14 @@ order partial derivatives are calculated as follows:
 \end{array} \right]
 \end{equation}
 
-Then, using the first order partial derivatives, the Hessian can be generalized as
+Then, using the first order partial derivatives, the Hessian ($H$) can be generalized as
 \begin{equation}
   \partialb{j1}{j2}=\frac{1}{N}\sum_{i=1}^{N}
   \left[\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)x_i^{(j1)}x_i^{(j2)}\right],
 \end{equation}
 where, $j1$ and $j2$ $\in \{1\cdots k\}$. Which is the same as
 \begin{equation}
-\left[ \begin{array}{cccc}
+H=\left[ \begin{array}{cccc}
   \partialb{1}{1} & \partialb{1}{2} & \cdots & \partialb{1}{k} \\[0.1in]  
   \partialb{2}{1} & \partialb{2}{2} & \cdots & \partialb{2}{k} \\[0.1in]  
   \cdots & \cdots & \cdots & \cdots \\[0.1in]  
@@ -95,30 +95,34 @@ where, $j1$ and $j2$ $\in \{1\cdots k\}$. Which is the same as
 \end{array} \right]
 \end{equation}
 
-Afterwards, using only the internal part of the Hessian sumatory
-\begin{equation}
-  \forall (j1,j2) \in \{1\cdots k , 1\cdots k \} 
-:\; \bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)x_i^{(j1)}x_i^{(j2)},
-\end{equation}
-can be rewrite in matrix form
-\begin{equation}
-  \bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)x_i^T x_i
-\end{equation}
-
 For the cost function to be convex the Hessian matrix	must be positive-semidefinite, and
 a function is positive-semidifinite if:  
 \begin{equation}
   z^T\left[\nabla_x^2f(x)\right]z \ge 0 \quad  \forall z
 \end{equation}
+Applied to J($\theta$), it is nessesary to proof
+\begin{equation}\label{eq:6:pos1}
+  z^T\left[H \right]z \ge 0 \quad  \forall z
+\end{equation}
+Moreover, $H$ can be rewritten, using only the internal part of the summatory, since it do not 
+dependent on $\theta$
+\begin{equation}
+ H = \frac{1}{N}\sum_{i=1}^{N} \left[ 
+\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)\mathbf{x}_i^T \mathbf{x} \right]. 
+\end{equation}
+Then, (\ref{eq:6:pos1}) becomes
+\begin{align}
+  z^T \left[\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)\mathbf{x}_i^T 
+\mathbf{x}\right] z,
+\end{align}
+which can be rewritten as
+\begin{align}
+  (1-h_\theta(\mathbf{x}_i))h_\theta(\mathbf{x}_i)\left(\mathbf{x}_i^Tz\right)^2 \ge 0.
+\end{align}
+Therefore, proving that $J(\theta)$ is convex, as $\left(\mathbf{x}_i^Tz\right)^2 
+\ge 0$ and \\ $\left((1-h_\theta(\mathbf{x}_i))h_\theta(\mathbf{x}_i)\right)\ge 0$ because $0\ge 
+h_\theta(\mathbf{x}_i) \ge 1$.
 
- Applied to J($\theta$)
-	\begin{center}
-	$z^T \left[(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})(x^{(i)})^Tx^{(i)} \right]z$\\
-	$(1-h_\theta(x^{(i)}))h_\theta(x^{(i)})\left(( x^{(i)})^Tz\right)^2 \ge 0 $
-	\end{center}
-	
-  Since this cost function is convex \citep{Murphy2012}, it is usually optimized using either 
-  maximum likelihood estimator or gradient descent.	
 	
 	\subsection{Analysis of the cost function}
 	However, this cost function assigns the same 
@@ -126,21 +130,21 @@ a function is positive-semidifinite if:
   is not the case in many real-world applications. In particular
 			\quad When  $y^{(i)}==1$
 			
-			\quad $J(\theta)^{(i)}=-\log(h_\theta(x^{(i)})$
+			\quad $J(\theta)^{(i)}=-\log(h_\theta(\mathbf{x}_i)$
 			
-			\quad When $h_\theta(x^{(i)})\approx1$ then $J(\theta)^{(i)}\approx0$
+			\quad When $h_\theta(\mathbf{x}_i)\approx1$ then $J(\theta)^{(i)}\approx0$
 			
-			\quad Otherwise when $h_\theta(x^{(i)})\approx0$ then
+			\quad Otherwise when $h_\theta(\mathbf{x}_i)\approx0$ then
 			$J(\theta)^{(i)}\approx\infty$ \\
 
 			When $y^{(i)}==0$
 			
-			\quad $J(\theta)^{(i)}=-\log(1-h_\theta(x^{(i)})$
+			\quad $J(\theta)^{(i)}=-\log(1-h_\theta(\mathbf{x}_i)$
 			
-			\quad\quad When $h_\theta(x^{(i)})\approx1$ then
+			\quad\quad When $h_\theta(\mathbf{x}_i)\approx1$ then
 			$J(\theta)^{(i)}\approx\infty$ 
 
-			\quad\quad Otherwise when $h_\theta(x^{(i)})\approx0$ then
+			\quad\quad Otherwise when $h_\theta(\mathbf{x}_i)\approx0$ then
 			$J(\theta)^{(i)}\approx0$ 
   which in the context of cost-sensitive classification means that $C_{TP_i}=C_{TN_i}\approx 0$ and 
   $C_{FP_i}=C_{FN_i}\approx \inf$.
