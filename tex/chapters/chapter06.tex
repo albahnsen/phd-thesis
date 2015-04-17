@@ -52,11 +52,14 @@ Therefore, the parameters are found using the following equation
 \begin{align}
   \theta = \argmin_\theta J(\theta).
 \end{align}
+
+\begin{remark}{Logistic regression estimation}
 There are several methods used to estimate the logistic regression, in particular, maximum 
 likelihood \citep{Hastie2009}, Newton, coordinate descent \citep{Murphy2012} and dual coordinate 
-descent \citep{Yu2011}. Nevertheless, all these methods rely on the assuption of convexity of the
+descent \citep{Yu2011}. Nevertheless, all these methods rely on the assumption of convexity of the
 negative logarithm of the likelihood function. In the next section we analyze the convexity of the 
 logistic regression.
+\end{remark}
 
 \subsection{Convexity analysis of the logistic regression}
 
@@ -138,27 +141,63 @@ during the estimation of the parameters $\theta$.
 The logistic regression cost function, as described in (\ref{eq:6:lrcost}), implicitly assume that 
 a false positives and a false negatives have the same cost, i.e. $C_{{FP}_i} = C_{{FN}_i}$ $\forall 
 i \in \{1,\cdots,N\}$. This can be easily shown by analyzing the logistic cost function for both 
-values of $y_i$ and the algorithm prediction $h_\theta(\mathbf{x}_i))$. 
-\todo{introduce table}
+values of $y_i$ and the algorithm prediction $h_\theta(\mathbf{x}_i))$:
 
-\begin{table}[htbp]
- \centering
- \footnotesize
-\begin{tabular}{|c|c|c|c|}
-\hline
-\multirow{2}{*}{$y_i$} & \multirow{2}{*}{$J_i(\theta)$} & 
-\multicolumn{2}{c}{value of $J_i(\theta)$ if:} \\
-& & $h_\theta(\mathbf{x}_i)) \approx 0$& $h_\theta(\mathbf{x}_i)) \approx 1$ \\
- \hline
- 0 & $-\log(1-h_\theta(\mathbf{x}_i))$ & $\approx0$ & $\approx\infty $ \\
- 1 & $-\log(h_\theta(\mathbf{x}_i))$ &  $\approx\infty $ & $\approx0$ \\
- \hline
-\end{tabular}
-\caption{Analysis of the logistic cost function}
-\end{table}
+\begin{itemize}
+\item If $y_i=0$ and $h_\theta(\mathbf{x}_i)) \approx 0$, 
+\begin{align*}
+ J_i(\theta) &= -y_i\log(h_\theta(\mathbf{x}_i)) -(1-y_i)\log(1-h_\theta(\mathbf{x}_i)) \nonumber \\
+ &\approx -(0)\log((0)) -(1-(0))\log(1-(0)) \nonumber \\
+ &\approx 0.
+\end{align*}
 
+\item If $y_i=0$ and $h_\theta(\mathbf{x}_i)) \approx 1$, 
+\begin{align*}
+ J_i(\theta) &\approx -(0)\log((1)) -(1-(0))\log(1-(1)) \nonumber \\
+ &\approx \infty.
+\end{align*}
 
+\item If $y_i=1$ and $h_\theta(\mathbf{x}_i)) \approx 0$, 
+\begin{align*}
+ J_i(\theta) &\approx -(1)\log((0)) -(1-(1))\log(1-(0)) \nonumber \\
+ &\approx \infty.
+\end{align*}
+
+\item If $y_i=1$ and $h_\theta(\mathbf{x}_i)) \approx 1$, 
+\begin{align*}
+ J_i(\theta) &\approx -(1)\log((1)) -(1-(1))\log(1-(1)) \nonumber \\
+ &\approx 0.
+\end{align*}
+\end{itemize}
+
+\noindent Then, we collect the previous results in a cost matrix:
+  \begin{table}[htbp]
+    \centering
+    \footnotesize
+    \begin{tabular}{c|c|c}
+      \multicolumn{3}{c}{}\\
+      \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
+      \multicolumn{1}{c|}{} & $y=1$& $y=0$ \\
+      \hline
+      Predicted Positive    & \multirow{ 2}{*}{$C_{{TP}_i}\approx 0$} & 
+      \multirow{2}{*}{$C_{{FP}_i}\approx \infty$} \\
+      $c=1$ & &\\
+      \hline
+      Predicted Negative    & \multirow{ 2}{*}{$C_{{FN}_i}\approx \infty$} & \multirow{ 
+      2}{*}{$C_{{TN}_i}\approx 0$} \\
+      $c=0$ & &\\
+    \end{tabular}
+    \caption{Logistic regression cost matrix}
+    \label{tab:2:1}
+  \end{table} 
+  
+This confirm our notion that the logistic regression cost function implicitly assume that 
+a false positives and a false negatives have the same cost. However, as discussed in previous 
+chapters, this is not the case in several real-world applications.
+
+  
 \subsection{Cost-sensitive cost function}
+\label{sec:6:cscostfunction}
 
   In order to incorporate the different costs from \tablename{ \ref{table_costmat}} into the 
   logistic regression, first we analyze the expected costs for each case
@@ -181,16 +220,16 @@ values of $y_i$ and the algorithm prediction $h_\theta(\mathbf{x}_i))$.
 \todo{intro how to estimate the parameters}
 \subsection{Genetic algorithms}
 
-A Genetic Algorithm (GA) is an optimization technique that attempts to replicate natural evolution 
+Genetic Algorithms, is an optimization technique that attempts to replicate natural evolution 
 processes in which the individuals with the considered best characteristics to adapt to the 
 environment are more likely to reproduce and survive. These advantageous individuals mate between 
 them, producing descendants similarly characterized, so favorable characteristics are preserved and 
-unfavorable ones destroyed, leading to the progressive evolution of the species.
-GA aims to improve the solution to a problem by keeping the best combination of input variables. The 
-flow diagram presented in Fig. 2 describes the process. It starts with the definition of the problem 
-to optimize, generating an objective function to evaluate the possible candidate solutions 
-(chromosomes), i.e., the objective function is the way of determining which individual produces the 
-best outcome. 
+unfavorable ones destroyed, leading to the progressive evolution of the species. The model aims 
+to improve the solution to a problem by keeping the best combination of input variables. The 
+flow diagram presented in \figurename{~\ref{fig:6:geneticalgorithms}} describes the process. It 
+starts with the definition of the problem to optimize, generating an objective function to evaluate 
+the possible candidate solutions (chromosomes), i.e., the objective function is the way of 
+determining which individual produces the best outcome. 
 
 The next step is to generate an initial random population of n individuals called chromosomes that 
 are symbolized by binary strings, where each binary position of the chromosome is called a gene and 
@@ -199,10 +238,9 @@ characteristics encoded in the string represents an individual who is a candidat
 Each chromosome is evaluated in the objective function and the best individuals are selected to 
 survive for mating (parents), while the worse ones are discarded to make room for new descendants.  
 There are many ways of pairing the selected chromosomes \citep{Haupt2004}. In this paper, a weighted 
-cost pairing 
-is used, which consists of assigning a selection probability according to each chromosome cost. That 
-is, a chromosome with the higher cost has a greater probability of mating because cost maximization 
-is desired.
+cost pairing is used, which consists of assigning a selection probability according to each 
+chromosome cost. That is, a chromosome with the higher cost has a greater probability of mating 
+because cost maximization is desired.
 
 After selecting the parent chromosomes with the chosen pairing method, the next step is to create a 
 second generation of individuals, based on the information of the parents. There are several ways of 
@@ -214,6 +252,7 @@ the parent1 transfers its binary code from the first gene to the crossover point
 transfers its binary code from the crossover point to the last gene of the chromosome. New parents 
 are randomly selected for each new child and the process continues until the chromosome population 
 grows back to the original size n. 
+
 Once the breeding process is completed, random mutation is used to alter a certain percentage of the 
 genes of the chromosomes. The purpose of mutation is to introduce diversity into the population, 
 allowing the algorithm to avoid local minima by generating new gene combinations in the chromosomes. 
@@ -232,7 +271,7 @@ satisfactory solution is reached.
 	  \centering
     \includegraphics[width=8cm]{ch6_fig2}  
 	  \caption{Flow analysis of a churn campaign \citep{Haupt2004}}
-	  \label{fig:ch6:2}
+	  \label{fig:6:geneticalgorithms}
 	\end{figure}
 
 \section{Experiments}
