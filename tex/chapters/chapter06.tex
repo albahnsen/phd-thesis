@@ -1,21 +1,21 @@
 \chapter{Cost-sensitive logistic regression}
 
 \begin{remark}{Outline}
-\todo{outline}
-In this chapter, we present the well-known family of \textit{random forests}
-methods. In Section~\ref{sec:4:bias-variance}, we first describe the bias-variance
-decomposition of the prediction error and then present, in
-Section~\ref{sec:4:ensemble}, how aggregating randomized models through
-ensembles reduces the prediction error by decreasing the variance term in this
-decomposition. In Section~\ref{sec:4:random-forests}, we revisit random forests
-and its variants and study how randomness introduced into the decision trees
-reduces prediction errors by decorrelating the decision
-trees in the ensemble. Properties and features of random forests are then outlined
-in Section~\ref{sec:4:features} while their consistency
-is finally explored in Section~\ref{sec:4:consistency}.
+In this chapter, we introduce the logistic regression algorithm in Section 
+\ref{sec:6:logistic}. Then, in Section \ref{sec:6:cslr}, we described our previously proposed 
+cost-sensitive logistic regression. For this, we do a deep analysis of the logistic regression 
+implicit misclassification costs in Section \ref{sec:6:log_cost_analysis}. Then in Section 
+\ref{sec:6:cscostfunction}, we shown a new version of the logistic regression cost function, one 
+that takes into account the real costs due to misclassification and correct classification. 
+Afterwards, in Section \ref{sec:6:ga}, we give a brief introduction to genetic algorithms, since is 
+the model used to estimate the parameters of our proposed cost-sensitive logistic regression. 
+Finally, in Section \ref{sec:6:results}, we compare the results of the proposed algorithm, against 
+state-of-the-art methods, using the five real-world cost-sensitive databases.
 \end{remark}
 
+
 \section{Logistic regression}
+\label{sec:6:logistic}
 
 Logistic regression is a classification model that, in the specific context of binary 
 classification, estimates the posterior probability of the positive class, as the logistic sigmoid 
@@ -133,10 +133,11 @@ h_\theta(\mathbf{x}_i) \ge 1$.
 In this section we introduce our proposed cost-sensitive logistic regression 
 \citep{CorreaBahnsen2014b}. First, we motive the need to modify the logistic regression, as we 
 analyze the implicit costs that the logistic regression assign to each misclassification error 
-during the estimation of the parameters $\theta$.
-\todo{finish intro}
+during the estimation of the parameters $\theta$. Then, we show our proposed algorithm.
+
 
 \subsection{Analysis of the logistic cost function}
+\label{sec:6:log_cost_analysis}
 
 The logistic regression cost function, as described in (\ref{eq:6:lrcost}), implicitly assume that 
 a false positives and a false negatives have the same cost, i.e. $C_{{FP}_i} = C_{{FN}_i}$ $\forall 
@@ -228,8 +229,9 @@ convex \citep{Haupt2004}. In the next section we give a brief introduction to ge
 
 
 \subsection{Genetic algorithms}
+\label{sec:6:ga}
 
-Genetic Algorithms, is an optimization technique that attempts to replicate natural evolution 
+Genetic algorithms, is an optimization technique that attempts to replicate natural evolution 
 processes in which the individuals with the considered best characteristics to adapt to the 
 environment are more likely to reproduce and survive. These advantageous individuals mate between 
 them, producing descendants similarly characterized, so favorable characteristics are preserved and 
@@ -251,6 +253,13 @@ cost pairing is used, which consists of assigning a selection probability accord
 chromosome cost. That is, a chromosome with the higher cost has a greater probability of mating 
 because cost maximization is desired.
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=8cm]{ch6_fig2}  
+  \caption{Genetic algorithms \citep{Haupt2004}}
+  \label{fig:6:geneticalgorithms}
+\end{figure}
+  
 After selecting the parent chromosomes with the chosen pairing method, the next step is to create a 
 second generation of individuals, based on the information of the parents. There are several ways of 
 mating. In this paper, two parents create one child. 
@@ -276,11 +285,6 @@ function and used in the next iteration of the described algorithm.
 The algorithm iterates until a maximum number of chromosome generations are created or a 
 satisfactory solution is reached.
 
-	\begin{figure}[t]
-	  \centering
-    \includegraphics[width=8cm]{ch6_fig2}  
-	  \caption{Flow analysis of a churn campaign \citep{Haupt2004}}
-	  \label{fig:6:geneticalgorithms}
-	\end{figure}
 
 \section{Experiments}
+\label{sec:6:results}

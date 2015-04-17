@@ -6,9 +6,6 @@
  chapter05                             chapter05                                          INTRO BMR
  chapter05          Calibration of probabilities                       Add to intro the brier score
  chapter05  Brier score and reliability diagrams  Figure of the reliabily diaframs or calibratio...
- chapter06                             chapter06                                            outline
- chapter06    Cost-sensitive logistic regression                                       finish intro
- chapter06          Cost-sensitive cost function               intro how to estimate the parameters
  chapter07                             chapter07                                            outline
  chapter07                        Decision trees                                       extend intro
  chapter07                          Tree growing     figure with steps to construct a decision tree
