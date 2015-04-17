@@ -115,17 +115,17 @@ Pseudocode of the tree growing procedure.
 \begin{algorithmic}[1]
 \Function{TreeGrow}{$\mathcal{S}$}
     \State $Tree = Empty$
-    \If{$Stopping(Tree, \mathcal{S})$}
+    \If{\Call{Stopping}{$Tree, \mathcal{S}$}}
       \State \Return $Tree$
      \EndIf
     \State \# For all features
     \For{$j=1 \  to \ k$}
       \State \# For all possible thresholds
       \For{$m=1 \ to N_k$}
-        \State $Gains(j,m) = Gain(\mathbf{x}^j,l^j_m, \mathcal{S})$
+        \State $Gains(j,m) = $ \Call{Gain}{$\mathbf{x}^j,l^j_m, \mathcal{S}$}
       \EndFor
     \EndFor
-    \State \# Select the threshold with the highest Gain
+    \State \# Select the threshold with the highest gain
     \State $(j^*, l^*) = argmax_{(j,m)}Gains$
     \State \# Split the set using the best rule
     \State $\mathcal{S}^l = \{\mathbf{x}^a_i \vert \mathbf{x}_i^a \in \mathcal{S} 
@@ -199,11 +199,11 @@ PC_{eb} = \frac{\epsilon_{UB}(EB(Tree,branch),\mathcal{S})-\epsilon_{UB}(Tree,\m
     {\vert Tree\vert-\vert EB(Tree,branch)\vert}
 \end{equation} 
 where 
-\begin{equation}
-    \epsilon_{UB}(Tree,\mathcal{S})= \epsilon(Tree,\mathcal{S})+Z_\alpha \left(     
-\frac{\epsilon(Tree,\mathcal{S})(1-\epsilon(Tree,\mathcal{S}))}{\vert \mathcal{S} \vert} 
-\right)^{(\frac{1}{2})}
-\end{equation}   
+\begin{align}
+    \epsilon_{UB}(Tree,&\mathcal{S})= \epsilon(Tree,\mathcal{S}) & \nonumber \\
+    &+Z_\alpha \sqrt{  
+\frac{\epsilon(Tree,\mathcal{S})(1-\epsilon(Tree,\mathcal{S}))}{\vert \mathcal{S} \vert}} &
+\end{align}   
 Moreover, as a difference from cost-complexity pruning, in the error based method, at each 
 iteration not all the branches are compared, but only the ones on the same level. Meaning leafs 
 are only compared against other leafs that are in the same level of iterations when the $Tree$ 
@@ -223,16 +223,20 @@ Pseudocode of the tree pruning procedure.
     \State \# For all branches
     \For{$branch \  in \ Tree.branches$}
       \State \# Evaluate the pruning criteria
-      \State $Improvements(branch) = PC(\mathcal{S}, Tree, branch)$
+      \State $Improvements(branch) = $ \Call{PC}{$\mathcal{S}, Tree, branch$}
     \EndFor
     \State \# Select the branch to prune
     \State $branch^* = argmax_{branch} Improvements$
+    \State \# Prune selected branch
+    \State $Tree = $ \Call{EB}{$TreeTree,branch^*$}
+    \State \# Recursively continue pruning the tree
+    \State \Call{TreePruning}{$\mathcal{S}, Tree$}
     \State \Return $Tree$
 \EndFunction
 \end{algorithmic}
 }
 \end{algorithm}
-\todo{Finish algorithm}
+
  
 \subsubsection{Categorical features}
 When using continuous features the splitting is done by testing all possible thresholds on the 
