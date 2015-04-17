@@ -199,25 +199,34 @@ chapters, this is not the case in several real-world applications.
 \subsection{Cost-sensitive cost function}
 \label{sec:6:cscostfunction}
 
-  In order to incorporate the different costs from \tablename{ \ref{table_costmat}} into the 
-  logistic regression, first we analyze the expected costs for each case
-  \begin{equation*}
-    J^c_i(\theta) = 
-    \begin{cases}
-      C_{TP_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(\mathbf{x}_i) \approx 1  \\
-      C_{TN_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(\mathbf{x}_i) \approx 0  \\
-      C_{FP_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(\mathbf{x}_i) \approx 1  \\
-      C_{FN_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(\mathbf{x}_i) \approx 0 
-    \end{cases}
-  \end{equation*}
-  Finally, we merge the different costs into a cost function which is dependent on new costs:
-  \begin{align}\label{eq:CSLR}
-    J^c(\theta)=\frac{1}{N} \sum_{i=1}^{N} \bigg( y_i(h_\theta(\mathbf{x}_i) C_{TP_i} + 
-    (1-h_\theta(\mathbf{x}_i))C_{FN_i})  \nonumber\\ 
-    +(1-y_i)(h_\theta(\mathbf{x}_i) C_{FP_i} + (1-h_\theta(\mathbf{x}_i))C_{TN_i}) \bigg).
-  \end{align}
-  
-\todo{intro how to estimate the parameters}
+In order to incorporate the different real costs as discussed in 
+\tablename{~\ref{tab:2:cost_matrix}} into the logistic regression. We start by analyzing the 
+expected costs that a modified logistic regression cost function should made for each 
+misclassification and correct classification case.
+\begin{equation*}
+  J^c_i(\theta) = 
+  \begin{cases}
+    C_{TP_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(\mathbf{x}_i) \approx 1  \\
+    C_{TN_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(\mathbf{x}_i) \approx 0  \\
+    C_{FP_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(\mathbf{x}_i) \approx 1  \\
+    C_{FN_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(\mathbf{x}_i) \approx 0 .
+  \end{cases}
+\end{equation*}
+
+Then, as we already have the real costs, we create a new cost-sensitive logistic regression cost 
+function, by including the different costs into the logistic function,
+\begin{align}\label{eq:CSLR}
+  J^c(\theta)=\frac{1}{N} \sum_{i=1}^{N} \bigg( y_i(h_\theta(\mathbf{x}_i) C_{TP_i} + 
+  (1-h_\theta(\mathbf{x}_i))C_{FN_i})  \nonumber\\ 
+  +(1-y_i)(h_\theta(\mathbf{x}_i) C_{FP_i} + (1-h_\theta(\mathbf{x}_i))C_{TN_i}) \bigg).
+\end{align}
+
+Nevertheless, our previous analysis have shown that this new cost function is not always convex 
+\citep{CorreaBahnsen2014b}, therefore, we estimate the parameters $\theta$ with genetic algorithms, 
+as this optimization heuristic does not require the underlying function to be differentiable or 
+convex \citep{Haupt2004}. In the next section we give a brief introduction to generic algorithms.
+
+
 \subsection{Genetic algorithms}
 
 Genetic Algorithms, is an optimization technique that attempts to replicate natural evolution 
