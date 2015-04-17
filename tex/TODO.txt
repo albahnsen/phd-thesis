@@ -6,11 +6,6 @@
  chapter05                             chapter05                                          INTRO BMR
  chapter05          Calibration of probabilities                       Add to intro the brier score
  chapter05  Brier score and reliability diagrams  Figure of the reliabily diaframs or calibratio...
- chapter07                             chapter07                                            outline
- chapter07                        Decision trees                                       extend intro
- chapter07                          Tree growing     figure with steps to construct a decision tree
- chapter07                    Pruning techniques                  figure with the steps for pruning
- chapter07                    Pruning techniques                              compare with paper DT
  chapter07                           Experiments                                         complexity
  notations                             notations                take notations from the ECSDT paper
     thesis                                thesis                        Update chapters structure}\

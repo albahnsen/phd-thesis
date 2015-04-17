@@ -1,21 +1,17 @@
 \chapter{Cost-sensitive decision trees}
 
 \begin{remark}{Outline}
-\todo{outline}
-In this chapter, we present the well-known family of \textit{random forests}
-methods. In Section~\ref{sec:4:bias-variance}, we first describe the bias-variance
-decomposition of the prediction error and then present, in
-Section~\ref{sec:4:ensemble}, how aggregating randomized models through
-ensembles reduces the prediction error by decreasing the variance term in this
-decomposition. In Section~\ref{sec:4:random-forests}, we revisit random forests
-and its variants and study how randomness introduced into the decision trees
-reduces prediction errors by decorrelating the decision
-trees in the ensemble. Properties and features of random forests are then outlined
-in Section~\ref{sec:4:features} while their consistency
-is finally explored in Section~\ref{sec:4:consistency}.
+In this chapter, we introduce the decision tree algorithm in Section \ref{sec:7:dt}. Then, in 
+Section \ref{sec:7:csdt}, we described our previously proposed cost-sensitive decision tree. For 
+this, we first shown the new cost-sensitive impurity measure, that introduces the diferent costs 
+when evaluating the performance of a split. Then, we introduce a new cost-sensitive pruning 
+criteria. Finally, in Section \ref{sec:7:experiments}, we compare the results of the proposed 
+algorithm, against state-of-the-art methods, using the five real-world cost-sensitive databases.
 \end{remark}
 
 \section{Decision trees}
+\label{sec:7:dt}
+
 Decision trees are one of the most widely used machine learning algorithms \citep{Lior2008}. 
 The technique is considered to be white box, in the sense that is easy to interpret, and has a 
 very low computational cost, while maintaining a good performance as compared with more complex 
@@ -87,7 +83,7 @@ positive examples in the set (Cross-entropy is scaled) \citep{Hastie2009}.}
 
 Finally the gain of the splitting criteria using the rule $(\mathbf{x}^j,l^j)$ is calculated as the 
 impurity of $\mathcal{S}$ minus the weighted impurity of each leaf:
-\begin{equation}
+\begin{equation}\label{eq:7:gain}
   Gain(\mathbf{x}^j,l^j)=I(\pi_1)-\frac{\vert \mathcal{S}^l \vert}{\vert \mathcal{S} 
 \vert}I(\pi^l_1)  -\frac{\vert \mathcal{S}^r \vert}{\vert \mathcal{S} \vert}I(\pi^r_1),
 \end{equation} 
@@ -180,7 +176,7 @@ and  error based pruning:
 Initially proposed by Breiman  \citep{Breiman1984a}, this method evaluate iterative if the removal 
 of a $Branch$ improve the error rate $\epsilon$ of a $Tree$, weighted by the difference of the 
 number of leafs trees.
-\begin{equation}
+\begin{equation}\label{eq:7:pruning}
 PC_{cc} = \frac{\epsilon(EB(Tree,branch),S)-\epsilon(Tree,\mathcal{S}) }
 {\vert Tree\vert-\vert EB(Tree,branch)\vert}
 \end{equation} 
@@ -274,10 +270,12 @@ created  a error based pruning is applied \citep{Rokach2010}.
 \end{itemize} 
 % \end{remark}
 
+
 \section{Example-Dependent Cost-sensitive Decision Trees}
+\label{sec:7:csdt}
 
 Standard decision tree algorithms focus on inducing trees that maximize accuracy. However this is 
-	not optimal when the misclassification costs are unequal \citep{Elkan2001}.This has led to many 
+	not optimal when the misclassification costs are unequal \citep{Elkan2001}. This has led to many 
 	studies that develop algorithms that aim to introduce the cost-sensitivity into the algorithms 
 	\citep{Lomax2013}. These studies have focused on introducing the class-dependent costs  
 	\citep{Draper1994,Ting2002,Ling2004,Li2005,Kretowski2006,Vadera2010}, which is not optimal for 
@@ -303,21 +301,22 @@ Standard decision tree algorithms focus on inducing trees that maximize accuracy
 		We define a new cost-based impurity measure taking into account the costs when all the examples
 		in a leaf are classified both as negative using $f_0$ and positive using $f_1$
 		\begin{equation}\label{eq:cost_impurity}
-			I_c(S) = \min \bigg\{ Cost(f_0(S)), Cost(f_1(S)) \bigg\}.
+			I_c(\mathcal{S}) = \min \bigg\{ Cost(f_0(\mathcal{S})), Cost(f_1(\mathcal{S})) \bigg\}.
 		\end{equation}
 		The objective of this measure is to evaluate the lowest expected cost of a splitting rule.
 		Following the same logic, the classification of each set is calculated as the prediction that 
 		leads to the lowest cost
 	  \begin{equation}\label{eq_pred}
-	    f(S) = 
+	    f(\mathcal{S}) = 
 	    \begin{cases}
-	      \phantom{-}0 \phantom{-} \mbox{if} \phantom{-} Cost(f_0(S)) \le Cost(f_1(S))\\
+	      \phantom{-}0 \phantom{-} \mbox{if} \phantom{-} Cost(f_0(\mathcal{S})) \le 
+        Cost(f_1(\mathcal{S}))\\
 	      \phantom{-}1 \phantom{-}\mbox{otherwise}
 	    \end{cases}
 	  \end{equation}
 
 		Finally, using the cost-based impurity, the splitting criteria cost based gain of using the 
-		splitting rule $(\mathbf{x}^j,l^j)$ is calculated with (\ref{eq:gain}). 
+		splitting rule $(\mathbf{x}^j,l^j)$ is calculated with (\ref{eq:7:gain}). 
 
 	\subsection{Cost-sensitive pruning}
  
@@ -328,12 +327,10 @@ Standard decision tree algorithms focus on inducing trees that maximize accuracy
 		and not the example-dependent costs.
  
 		We propose a new example-dependent cost-based impurity measure, by replacing the error rate 
-		$\epsilon$ in (\ref{eq:pruning}) with the cost of using the $Tree$ on $\mathcal{S}$ i.e. by 
-replacing 
-with 
-		$Cost(f(S))$.
+		$\epsilon$ in (\ref{eq:7:pruning}) with the cost of using the $Tree$ on $\mathcal{S}$ i.e. by 
+    replacing with 	$Cost(f(\mathcal{S}))$.
 		\begin{equation}\label{eq:cost_pruning}
-			PC_{c} = \frac{ Cost(f(S)) - Cost(f^*(S)) }
+			PC_{c} = \frac{ Cost(f(\mathcal{S})) - Cost(f^*(\mathcal{S})) }
 		  {\vert Tree\vert-\vert EB(Tree,node)\vert} ,
 		\end{equation}
 		where $f^*$ is the classifier of the tree without the selected node $EB(Tree,node)$.
@@ -345,5 +342,6 @@ with
 		real-world applications the objectives align with the cost not with the misclassification error.
 		
 \section{Experiments}
+\label{sec:7:experiments}
 
 \todo{complexity}
