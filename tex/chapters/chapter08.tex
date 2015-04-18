@@ -149,7 +149,7 @@ algorithms.
   each base classifier and selecting the decision with the highest number of votes, see 
   (\ref{eq:8:majority-vote}).
 
-  \subsubsection*{Cost-sensitive weighted voting}
+  \subsubsection{Cost-sensitive weighted voting}
 
   This method is an extension of weighted voting. First, in the traditional approach, a 
   similar comparison of the votes of the base classifiers is made, but giving a weight $\alpha_j$ 
@@ -178,7 +178,7 @@ algorithms.
   This method guaranties that the base classifiers that contribute to a higher increase in savings 
   have more importance in the ensemble.
   
-  \subsubsection*{Cost-sensitive stacking}
+  \subsubsection{Cost-sensitive stacking}
   
   The staking method consists in combining the different base classifiers by learning a 
   second level algorithm on top of them \citep{Wolpert1992}. In this framework, once the base 
@@ -189,24 +189,24 @@ algorithms.
   Even though there is no restriction on which algorithm can be used as a second level learner, 
   it is common to use a lineal model \citep{Zhou2012}, such as 
   \begin{align}
-    f_s(\mathcal{S},\mathcal{M},\mathcal{\beta}) =
+    f_s(\mathcal{S},\mathcal{M},\beta) =
     g \left( \sum_{j=1}^T \beta_j M_j(\mathcal{S}) \right),
   \end{align}
-  where $\mathcal{\beta}=\{\beta_j\}_{j=1}^T$, and $g(z)$ is the sign function 
+  where $\beta=\{\beta_j\}_{j=1}^T$, and $g(z)$ is the sign function 
   \mbox{$g(z)=sign(z)$} in the case of a lineal regression or the sigmoid function, defined 
   as \mbox{$g(z)=1/(1+e^{-z})$}, in the case of a logistic regression. 
   
   Moreover, following the logic used in \citep{Nesbitt2010}, we propose learning the set of  
-  parameters $\mathcal{\beta}$  using our proposed cost-sensitive logistic regression ($CSLR$) 
+  parameters $\beta$  using our proposed cost-sensitive logistic regression ($CSLR$) 
   \citep{CorreaBahnsen2014b}. The $CSLR$ algorithm consists in introducing example-dependent costs 
   into a logistic regression, by changing the objective function of the model to one that is 
   cost-sensitive. For the specific case of cost-sensitive stacking, we define the cost function as: 
   \begin{align}
     &J(\mathcal{S},\mathcal{M},\beta)= \nonumber \\
     & \sum_{i=1}^{N} \bigg[ y_i\bigg( 
-    f_s(\mathbf{x}_i,\mathcal{M},\mathcal{\beta}) \cdot(C_{TP_i} - C_{FN_i}) + C_{FN_i} \bigg) + 
+    f_s(\mathbf{x}_i,\mathcal{M},\beta) \cdot(C_{TP_i} - C_{FN_i}) + C_{FN_i} \bigg) + 
     \nonumber \\
-    & (1-y_i)\bigg( f_s(\mathbf{x}_i,\mathcal{M},\mathcal{\beta}) \cdot(C_{FP_i} - C_{TN_i}) 
+    & (1-y_i)\bigg( f_s(\mathbf{x}_i,\mathcal{M},\beta) \cdot(C_{FP_i} - C_{TN_i}) 
       +C_{TN_i} \bigg) \bigg].
   \end{align}
   Then, the parameters $\beta$ that minimize the logistic cost function are used in order to 
