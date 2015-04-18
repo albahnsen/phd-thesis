@@ -109,10 +109,9 @@ combination approaches, cost-sensitive weighted  voting and cost-sensitive stack
 being an extension of our previously proposed cost-sensitive logistic regression 
 \citep{CorreaBahnsen2014b}. 
 
-The remainder of the section is organized as follows: First, we introduce the example-dependent 
-cost-sensitive decision tree. Then we present the different random inducers and combination 
-methods. Finally, we define our proposed algorithms.
-\todo{fix intro}
+The remainder of the section is organized as follows: First, we introduce the different random 
+inducers used to create the base classifiers. Then, we present the combination methods. Finally, we 
+define our proposed algorithms.
 
 
 \subsection{Random inducers}
@@ -144,86 +143,301 @@ algorithms.
 
 
 \subsection{Combination methods}
-  Lastly, the base classifiers are combined using either majority voting, cost-sensitive weighted 
-  voting and cost-sensitive stacking. Majority voting consists in collecting the predictions of 
-  each base classifier and selecting the decision with the highest number of votes, see 
-  (\ref{eq:8:majority-vote}).
 
-  \subsubsection{Cost-sensitive weighted voting}
+Lastly, the base classifiers are combined using either majority voting, cost-sensitive weighted 
+voting and cost-sensitive stacking. Majority voting consists in collecting the predictions of 
+each base classifier and selecting the decision with the highest number of votes, see 
+(\ref{eq:8:majority-vote}).
 
-  This method is an extension of weighted voting. First, in the traditional approach, a 
-  similar comparison of the votes of the base classifiers is made, but giving a weight $\alpha_j$ 
-  to each classifier $j$ during the voting phase \citep{Zhou2012}
-  \begin{align} \label{eq:8:weighted-majority-vote}
-    f_{wv}(\mathcal{S},\mathcal{M}, \alpha)
-    =\argmax_{c \in \{0,1\}} \sum_{j=1}^T \alpha_j \mathbf{1}_c(M_j(\mathcal{S})),
-  \end{align}
-  where $\alpha=\{\alpha_j\}_{j=1}^T$.
-  The calculation of $\alpha_j$ is related to the performance of each classifier $M_j$.
-  It is usually defined as the normalized misclassification error   $\epsilon$ of the base 
-  classifier $M_j$  in the out of bag set   $\mathcal{S}_j^{oob}=\mathcal{S}-\mathcal{S}_j$
-  \begin{equation}
-    \alpha_j=\frac{1-\epsilon(M_j(\mathcal{S}_j^{oob}))}{\sum_{j_1=1}^T 
-    1-\epsilon(M_{j_1}(\mathcal{S}_{j_1}^{oob}))}.
-  \end{equation}
+\subsubsection{Cost-sensitive weighted voting}
 
-  However, as discussed in Section \ref{sec:edcs}, the misclassification measure is not suitable in 
-  many real-world classification problems. We propose a method to calculate the weights $\alpha_j$ 
-  taking into account the actual savings of the classifiers. Therefore using (\ref{eq:savings}), we 
-  define
-  \begin{equation}
-    \alpha_j=\frac{Savings(M_j(\mathcal{S}_j^{oob}))}
-    {\sum_{j_1=1}^T Savings(M_{j_1}(\mathcal{S}_j^{oob}))}.
-  \end{equation}
-  This method guaranties that the base classifiers that contribute to a higher increase in savings 
-  have more importance in the ensemble.
-  
-  \subsubsection{Cost-sensitive stacking}
-  
-  The staking method consists in combining the different base classifiers by learning a 
-  second level algorithm on top of them \citep{Wolpert1992}. In this framework, once the base 
-  classifiers are constructed using the training set  $\mathcal{S}$, a new set is constructed 
-  where the output of the base classifiers  are now considered as the features while keeping the 
-  class labels.
-  
-  Even though there is no restriction on which algorithm can be used as a second level learner, 
-  it is common to use a lineal model \citep{Zhou2012}, such as 
-  \begin{align}
-    f_s(\mathcal{S},\mathcal{M},\beta) =
-    g \left( \sum_{j=1}^T \beta_j M_j(\mathcal{S}) \right),
-  \end{align}
-  where $\beta=\{\beta_j\}_{j=1}^T$, and $g(z)$ is the sign function 
-  \mbox{$g(z)=sign(z)$} in the case of a lineal regression or the sigmoid function, defined 
-  as \mbox{$g(z)=1/(1+e^{-z})$}, in the case of a logistic regression. 
-  
-  Moreover, following the logic used in \citep{Nesbitt2010}, we propose learning the set of  
-  parameters $\beta$  using our proposed cost-sensitive logistic regression ($CSLR$) 
-  \citep{CorreaBahnsen2014b}. The $CSLR$ algorithm consists in introducing example-dependent costs 
-  into a logistic regression, by changing the objective function of the model to one that is 
-  cost-sensitive. For the specific case of cost-sensitive stacking, we define the cost function as: 
-  \begin{align}
-    &J(\mathcal{S},\mathcal{M},\beta)= \nonumber \\
-    & \sum_{i=1}^{N} \bigg[ y_i\bigg( 
-    f_s(\mathbf{x}_i,\mathcal{M},\beta) \cdot(C_{TP_i} - C_{FN_i}) + C_{FN_i} \bigg) + 
-    \nonumber \\
-    & (1-y_i)\bigg( f_s(\mathbf{x}_i,\mathcal{M},\beta) \cdot(C_{FP_i} - C_{TN_i}) 
-      +C_{TN_i} \bigg) \bigg].
-  \end{align}
-  Then, the parameters $\beta$ that minimize the logistic cost function are used in order to 
-  combine the different base classifiers. However, as discussed in \citep{CorreaBahnsen2014b}, 
-  this cost function is not convex for all possible cost matrices, therefore, we use genetic 
-  algorithms to minimize it.
-  
-  Similarly to cost-sensitive weighting, this method guaranties that the base classifiers that 
-  contribute to a higher increase in savings have more importance in the ensemble. Furthermore, 
-  by learning an additional second level cost-sensitive method, the combination is made such that 
-  the overall   savings measure is maximized.
+This method is an extension of weighted voting. First, in the traditional approach, a 
+similar comparison of the votes of the base classifiers is made, but giving a weight $\alpha_j$ 
+to each classifier $j$ during the voting phase \citep{Zhou2012}
+\begin{align} \label{eq:8:weighted-majority-vote}
+  f_{wv}(\mathcal{S},\mathcal{M}, \alpha)
+  =\argmax_{c \in \{0,1\}} \sum_{j=1}^T \alpha_j \mathbf{1}_c(M_j(\mathcal{S})),
+\end{align}
+where $\alpha=\{\alpha_j\}_{j=1}^T$.
+The calculation of $\alpha_j$ is related to the performance of each classifier $M_j$.
+It is usually defined as the normalized misclassification error   $\epsilon$ of the base 
+classifier $M_j$  in the out of bag set   $\mathcal{S}_j^{oob}=\mathcal{S}-\mathcal{S}_j$
+\begin{equation}
+  \alpha_j=\frac{1-\epsilon(M_j(\mathcal{S}_j^{oob}))}{\sum_{j_1=1}^T 
+  1-\epsilon(M_{j_1}(\mathcal{S}_{j_1}^{oob}))}.
+\end{equation}
+
+However, as previously discussed, the misclassification measure is not suitable in  many 
+real-world classification problems. We propose a method to calculate the weights $\alpha_j$  taking 
+into account the actual savings of the classifiers. Therefore using (\ref{eq:savings}), we define
+\begin{equation}
+  \alpha_j=\frac{Savings(M_j(\mathcal{S}_j^{oob}))}
+  {\sum_{j_1=1}^T Savings(M_{j_1}(\mathcal{S}_j^{oob}))}.
+\end{equation}
+This method guaranties that the base classifiers that contribute to a higher increase in savings 
+have more importance in the ensemble.
+
+\subsubsection{Cost-sensitive stacking}
+
+The staking method consists in combining the different base classifiers by learning a 
+second level algorithm on top of them \citep{Wolpert1992}. In this framework, once the base 
+classifiers are constructed using the training set  $\mathcal{S}$, a new set is constructed 
+where the output of the base classifiers  are now considered as the features while keeping the 
+class labels.
+
+Even though there is no restriction on which algorithm can be used as a second level learner, 
+it is common to use a lineal model \citep{Zhou2012}, such as 
+\begin{align}
+  f_s(\mathcal{S},\mathcal{M},\beta) =
+  g \left( \sum_{j=1}^T \beta_j M_j(\mathcal{S}) \right),
+\end{align}
+where $\beta=\{\beta_j\}_{j=1}^T$, and $g(z)$ is the sign function 
+\mbox{$g(z)=sign(z)$} in the case of a lineal regression or the sigmoid function, defined 
+as \mbox{$g(z)=1/(1+e^{-z})$}, in the case of a logistic regression. 
+
+Moreover, following the logic used in \citep{Nesbitt2010}, we propose learning the set of  
+parameters $\beta$  using our proposed cost-sensitive logistic regression ($CSLR$) 
+\citep{CorreaBahnsen2014b}. The $CSLR$ algorithm consists in introducing example-dependent costs 
+into a logistic regression, by changing the objective function of the model to one that is 
+cost-sensitive. For the specific case of cost-sensitive stacking, we define the cost function as: 
+\begin{align}
+  &J(\mathcal{S},\mathcal{M},\beta)= \nonumber \\
+  & \sum_{i=1}^{N} \bigg[ y_i\bigg( 
+  f_s(\mathbf{x}_i,\mathcal{M},\beta) \cdot(C_{TP_i} - C_{FN_i}) + C_{FN_i} \bigg) + 
+  \nonumber \\
+  & (1-y_i)\bigg( f_s(\mathbf{x}_i,\mathcal{M},\beta) \cdot(C_{FP_i} - C_{TN_i}) 
+    +C_{TN_i} \bigg) \bigg].
+\end{align}
+Then, the parameters $\beta$ that minimize the logistic cost function are used in order to 
+combine the different base classifiers. However, as discussed in \citep{CorreaBahnsen2014b}, 
+this cost function is not convex for all possible cost matrices, therefore, we use genetic 
+algorithms to minimize it.
+
+Similarly to cost-sensitive weighting, this method guaranties that the base classifiers that 
+contribute to a higher increase in savings have more importance in the ensemble. Furthermore, 
+by learning an additional second level cost-sensitive method, the combination is made such that 
+the overall   savings measure is maximized.
 
 
+\subsection{Algorithms}
+
+Finally, Algorithm \ref{alg:8:algorithms} summarizes the proposed $ECSDT$ methods. In total, we   
+evaluate 12 different algorithms, as four different random inducers (bagging, pasting, random 
+forest and random patches) and three different combinators (majority voting, cost-sensitive 
+weighted voting and cost-sensitive stacking) can be selected in order to construct the 
+cost-sensitive ensemble.
+  
+
+\begin{algorithm}\label{alg:8:algorithms}
+The proposed $ECSDT$ algorithms.
+\textnormal{
+\begin{algorithmic}[1]
+\Require $CSDT$ (an example-dependent cost-sensitive decision tree algorithm), $T$ the number of 
+iterations, $\mathcal{S}$ the training set, $inducer$, $N_e$ number of 
+examples for each base classifier, $N_f$ number of examples for each base classifier, 
+$combinator$.
+\Function{ECSDT}{$\mathcal{S},T,inducer,N_e,N_f,combinator$}
+  \State \textbf{Step 1:} Create the set of base classifiers
+  \For{$j  \leftarrow 1$ to $T$}
+    \State \textbf{switch}($inducer$)
+    \State \textbf{case} Bagging:
+      \State $\mathcal{S}_j \leftarrow $ Sample $N_e$ examples from $\mathcal{S}$ with replacement.
+    \State \textbf{case} Pasting:
+      \State $\mathcal{S}_j \leftarrow $ Sample $N_e$ examples from $\mathcal{S}$ without
+      replacement.
+    \State \textbf{case} Random forests:
+      \State $\mathcal{S}_j \leftarrow $ Sample $N_e$ examples from $\mathcal{S}$ with replacement.
+    \State \textbf{case} Random patches:
+      \State $\mathcal{S}_j \leftarrow $ Sample $N_e$ examples and $N_f$ features from  
+      $\mathcal{S}$ with replacement.
+    \State \textbf{end switch}
+    \State $M_j \leftarrow CSDT(\mathcal{S}_j)$
+    \State $\mathcal{S}_j^{oob} \leftarrow \mathcal{S}-\mathcal{S}_j$
+    \State $\alpha_j \leftarrow Savings( M_j(\mathcal{S}_j^{oob}))$
+  \EndFor
+  \State \textbf{Step 2:} Combine the different base classifiers
+  \State \textbf{switch}($combinator$)
+  \State \textbf{case} Majority voting:
+  \State  $H \leftarrow f_{mv}(\mathcal{S}, \mathcal{M})$
+  \State \textbf{case} Cost-sensitive weighted voting:
+  \State $H \leftarrow f_{wv}(\mathcal{S}, \mathcal{M}, \alpha)$
+  \State \textbf{case} Cost-sensitive stacking:
+  \State $\beta \leftarrow \argmin_{\beta \in \mathbb{R}^T} 
+        J(\mathcal{S},\mathcal{M},\beta)$
+  \State  $H \leftarrow f_{s}(\mathcal{S}, \mathcal{M},\beta)$
+  \State \textbf{end switch}
+  \State \Return $H$
+\EndFunction
+\end{algorithmic}
+}
+\end{algorithm}
+
+  
 \section{Theoretical analysis of the ECSDT}
 \label{sec:8:theoretical}
 
-    
+  Although the above proposed algorithm is simple, there is little work that has formally 
+  investigated ensemble performance in terms other than accuracy. In this section, our aim is to 
+  prove theoretically that combining individual cost-sensitive classifiers achieves better results 
+  in the sense of higher savings.
+  
+  We denote $\mathcal{S}_a$ $a\in \{0,1\}$, as the subset of $\mathcal{S}$ 
+  where the examples belong to the class $a$:
+  \begin{equation}\label{eq:8:S_a}
+    \mathcal{S}_a = \{\mathbf{x}_i^* \vert y_i = a, i \in 1,\dots,N\},
+  \end{equation}
+  where $\mathcal{S}=\mathcal{S}_0 \cup \mathcal{S}_1$, $\mathcal{S}_0 \cap \mathcal{S}_1 = 
+  \varnothing$, and $N_a=\vert \mathcal{S}_a \vert$. Also, we define the average cost of the base 
+  classifiers as:
+  \begin{align}\label{eq:8:avg_cost}
+    \overline{Cost} (\mathcal{M}(\mathcal{S}))= \frac{1}{T} \sum_{j=1}^{T} Cost(M_j(\mathcal{S})). 
+  \end{align}
+  
+  \noindent Firstly, we prove the following lemma that states the cost of an ensemble $H$ on the 
+  subset $\mathcal{S}_a$ is lower than the average cost of the base classifiers on the same set for 
+  $a  \in \{0,1\}$.
+
+  \begin{lemma}\label{lemma1}
+  Let $H$ be an ensemble of $T$ classifiers $\mathcal{M}=\{M_1, M_2,\dots,M_T\}$, and 
+  $\mathcal{S}$ a testing set of size $N$. If each one of the base classifiers has a probability 
+  of being correct higher or equal than one half $\rho \ge \frac{1}{2}$, and the 
+  \textit{reasonableness conditions} of the cost matrix are satisfied, then the following holds true
+  \begin{align}\label{eq:8:lemma}
+    Cost(H(\mathcal{S}_a)) &\le \overline{Cost} (\mathcal{M}(\mathcal{S}_a)) , a  \in\{0,1\}, 
+  \end{align}
+  \end{lemma}
+  
+  \begin{proof}
+  First, we decompose the total cost of the ensemble by applying equations (\ref{eq:2:cost_total}) 
+  and (\ref{eq:2:cost}). Additionally, we separate the analysis for $a=0$ and $a=1$:
+
+  \textbullet\ $a=0:$
+  \begin{align}
+  Cost(H(\mathcal{S}_0)) =& \sum_{i=1}^{N_0} y_i(c_i C_{TP_i} + (1-c_i)C_{FN_i})+ \nonumber \\  
+    & (1-y_i)(c_i C_{FP_i} + (1-c_i)C_{TN_i}) . 
+  \end{align}
+  
+  \noindent Moreover, we know from (\ref{eq:8:prob}) that the probability of an ensemble 
+  making the right decision, i.e. $y_i=c_i$, for any given  example, is equal to $P_c$. 
+  Therefore, we can use this probability to estimate the expected savings of an ensemble: 
+  \begin{align}
+    Cost(H(\mathcal{S}_0)) &= \sum_{i=1}^{N_0} P_c C_{TN_i} +(1-P_c)C_{FP_i}.
+  \end{align}
+  
+  \textbullet\ $a=1:$
+  
+  \noindent In the case of $\mathcal{S}_1$, and following the same logic as when $a=0$, the cost of 
+  an  ensemble is:
+  \begin{align}
+    Cost(H(\mathcal{S}_1)) &= \sum_{i=1}^{N_1} P_c C_{TP_i} + (1-P_c)C_{FN_i}.  
+  \end{align}
+
+  \noindent The second part of the proof consists in analyzing the right hand side of 
+  (\ref{eq:8:lemma}),   specifically, the average cost of the base classifiers on set 
+  $\mathcal{S}_a$. To do that, with the help of (\ref{eq:2:cost_total}) and (\ref{eq:8:avg_cost}), 
+  we may express the average cost of the base classifiers as:
+  \begin{align}
+    \overline{Cost} (\mathcal{M}(\mathcal{S}_a)) = \frac{1}{T} \sum_{j=1}^{T} \sum_{i=1}^{N_a} 
+    Cost(M_j(\mathbf{x}_i^*)).  
+  \end{align} 
+  
+  \noindent We define set of base classifiers that make a negative prediction as
+  \begin{align}
+    \mathcal{T}_{i0}=\{M_j(\mathbf{x}_i^*) \vert M_j(\mathbf{x}_i^*) = 0, j \in 1,\dots,T\},
+  \end{align}
+  similarly, the set of classifiers that make a positive prediction as
+  \begin{align}
+    \mathcal{T}_{i1}=\{M_j(\mathbf{x}_i^*) \vert M_j(\mathbf{x}_i^*) = 1, j \in 1,\dots,T\}.
+  \end{align}
+  Then, by taking the cost of negative and positive predictions from (\ref{eq:2:f_a}), the 
+  average cost of the base learners becomes:
+  \begin{align}
+    \overline{Cost} (\mathcal{M}(\mathcal{S}_a)) =& 
+    \frac{1}{T} \sum_{i=1}^{N_a} \bigg( \vert \mathcal{T}_{i0} \vert \cdot 
+    Cost(f_0(\mathbf{x}_i^*)) \nonumber \\
+    & + \vert \mathcal{T}_{i1} \vert \cdot Cost(f_1(\mathbf{x}_i^*)) \bigg).
+  \end{align} 
+
+  \noindent We separate the analysis for $a=0$ and $a=1$:
+  
+  \textbullet\ $a=0:$
+  
+  \begin{align}
+    \overline{Cost} (\mathcal{M}(\mathcal{S}_0)) =& \sum_{i=1}^{N_0} \bigg( 
+    \frac{\vert \mathcal{T}_{i0} \vert}{T} \cdot C_{TN_i}
+    + \frac{\vert \mathcal{T}_{i1} \vert}{T} \cdot C_{FP_i}\bigg).
+  \end{align}
+  Furthermore, we know from (\ref{eq:8:prob}) that an average base classifier will have a correct 
+  classification probability of $\rho$, then $\frac{\vert \mathcal{T}_{i0} \vert}{T}=\rho$, leading 
+  to:
+  \begin{align}
+    \overline{Cost} (\mathcal{M}(\mathcal{S}_0)) =& \sum_{i=1}^{N_0}  
+    \rho \cdot C_{TN_i} + (1-\rho) \cdot C_{FP_i} .
+  \end{align}
+
+  \textbullet\ $a=1:$
+ 
+ \noindent Similarly on the set $\mathcal{S}_1$ the average classifier will have a correct 
+  classification probability of $\rho$, then $\frac{\vert \mathcal{T}_{i1} \vert}{T}=\rho$. 
+  
+  \noindent Therefore,
+  \begin{align}
+    \overline{Cost} (\mathcal{M}(\mathcal{S}_1)) =& \sum_{i=1}^{N_1}  
+    \rho \cdot C_{TP_i} + (1-\rho) \cdot C_{FN_i} .
+  \end{align}
+ 
+  \noindent Finally, putting all together, (\ref{eq:8:lemma}) is rewritten
+  
+  \noindent for $a=0$ as:
+  \begin{align}\label{eq:8:lemma1}
+    \sum_{i=1}^{N_0} P_c C_{TN_i} +(1-P_c)C_{FP_i} \le 
+    \sum_{i=1}^{N_0} \rho \cdot C_{TN_i} + (1-\rho) \cdot C_{FP_i},
+  \end{align}
+  and for $a=1$ as:
+  \begin{align}\label{eq:8:lemma2}
+    \sum_{i=1}^{N_1} P_c C_{TP_i} + (1-P_c)C_{FN_i} \le 
+    \sum_{i=1}^{N_1}  \rho \cdot C_{TP_i} + (1-\rho) \cdot C_{FN_i}.
+  \end{align}
+ 
+  \noindent Both (\ref{eq:8:lemma1}) and (\ref{eq:8:lemma2}) hold true since if $\rho \ge 
+  \frac{1}{2}$  then $P_c\ge\rho$, and accordingly to the cost matrix \textit{reasonableness 
+  conditions},  described in Section \ref{sec:2:cost_characteristic}, $C_{FP_i} > C_{TN_i}$ and 
+  $C_{FN_i} >   C_{TP_i}$~$\forall i$.
+  \end{proof}
+  
+  Lemma \ref{lemma1} separates the costs on sets $\mathcal{S}_0$ and  $\mathcal{S}_1$. We are 
+  interested in analyzing the overall savings of an ensemble. In this direction, we demonstrate 
+  in the following theorem, that the expected savings of an ensemble of classifiers are higher 
+  than the expected average savings of the base learners.
+  
+  \begin{theorem}\label{theorem1}
+  Let $H$ be an ensemble of $T$ classifiers $\mathcal{M}=\{M_1,\dots,M_T\}$, and $\mathcal{S}$ a 
+  testing set of size $ N $, then the expected savings of using $H$ in 
+  $\mathcal{S}$ are lower than the average expected savings of the base classifiers, in other words,
+  \begin{equation}\label{eq:8:theorem}
+    Savings(H(\mathcal{S})) \ge \overline{Savings}(\mathcal{M}(\mathcal{S})). 
+  \end{equation}
+  \end{theorem}
+  
+  \begin{proof}
+  Given (\ref{eq:2:savings}), (\ref{eq:8:theorem}) is equivalent to
+  \begin{equation}\label{eq:8:theorem2}
+    Cost(H(\mathcal{S})) \le \overline{Cost} (\mathcal{M}(\mathcal{S})). 
+  \end{equation}
+
+  \noindent Afterwards, by applying the definition of cost in (\ref{eq:2:cost}), and grouping the 
+  sets of negative and positive examples using (\ref{eq:8:S_a}), (\ref{eq:8:theorem2}) becomes
+  \begin{equation}
+    \sum_{a\in \{0,1\}} Cost(H(\mathcal{S}_a)) \le \sum_{a\in \{0,1\}} \overline{Cost} (\mathcal{M} 
+    (\mathcal{S}_a)),
+  \end{equation}
+  
+  \noindent which can be easily proved using Lemma \ref{lemma1}, since, if the cost of an ensemble 
+  $H$ is  lower than the average cost of the base classifiers on both $\mathcal{S}_0$ and 
+  $\mathcal{S}_1$,  implies that it is also lower on the sum of the cost on both sets, 
+  therefore, proving Theorem~\ref{theorem1}.
+  \end{proof}
+  
 \section{Experiments}
 \label{sec:8:experiments}
 
