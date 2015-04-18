@@ -274,6 +274,8 @@ deep analysis of these methods is described in the following Section.
 
   
 \subsection{Binary classification cost characteristic}
+\label{sec:2:cost_characteristic}
+
   In classification problems with two classes $y_i \in \{0,1\}$, the objective is to learn or 
   predict to which class $c_i \in \{0,1\}$ a given example $i$ belongs based on its $k$ features 
   $\mathbf{x}_i=[x^1_i, x^2_i,...,x^k_i]$. In this context, classification costs can be 
@@ -383,16 +385,20 @@ deep analysis of these methods is described in the following Section.
   C_{TP_i},C_{FP_i},C_{FN_i},C_{TN_i}]$  and labeled using the class   label $y_i   \in \{0,1\}$. 
   A classifier $f$ which generates the   predicted label $c_i$ for each   element $i$ is trained  
   using the set $\mathcal{S}$. Then the cost of   using $f$ on $\mathcal{S}$ is calculated by
-  \begin{align}\label{eq:cost}
-    Cost(f(S)) = \sum_{i=1}^{N} & {\bigg( y_i(c_i C_{TP_i} + (1-c_i)C_{FN_i})} + \\
-    & {(1-y_i)(c_i C_{FP_i} + (1-c_i)C_{TN_i}) \bigg)}.
+  \begin{equation}\label{eq:2:cost_total}
+     Cost(f(\mathcal{S})) = \sum_{i=1}^N Cost(f(\mathbf{x}_i^*)),
+  \end{equation}
+  where
+   \begin{align}\label{eq:2:cost}
+    Cost(f(\mathbf{x}_i^*)) =& y_i(c_i C_{TP_i} + (1-c_i)C_{FN_i}) + \nonumber \\  
+    & (1-y_i)(c_i C_{FP_i} + (1-c_i)C_{TN_i}).
   \end{align}
 
   However, the total cost may not be easy to interpret. In \citep{Whitrow2008}, a 
   \textit{normalized} cost measure was proposed, by dividing the total cost by the theoretical 
   maximum cost, which is the cost of misclassifying every example. The \textit{normalized} cost is 
   calculated using
-  \begin{align}\label{eq:ncost}
+  \begin{align}\label{eq:2:ncost}
     Cost_n(f(\mathcal{S})) = \frac{Cost(f(\mathcal{S}))}
     {\sum_{i=1}^N C_{FN_i} \cdot \mathbf{1}_0(y_i) 
     +  C_{FP_i} \cdot \mathbf{1}_1(y_i)  }.
@@ -405,12 +411,12 @@ deep analysis of these methods is described in the following Section.
     Cost_l(\mathcal{S}) = \min \{Cost(f_0(\mathcal{S})), Cost(f_1(\mathcal{S}))\},
   \end{equation}
   where 
-  \begin{equation}\label{eq:f_a}
+  \begin{equation}\label{eq:2:f_a}
     f_a(\mathcal{S}) = \mathbf{a}, \text{ with } a\in \{0,1\}.
   \end{equation}
 
   The cost improvement can be expressed as the cost savings as compared with $Cost_l(\mathcal{S})$. 
-  \begin{equation}\label{eq:savings}
+  \begin{equation}\label{eq:2:savings}
     Savings(f(\mathcal{S})) = \frac{ Cost_l(\mathcal{S}) - Cost(f(\mathcal{S}))}
     {Cost_l(\mathcal{S})}.
   \end{equation} 
