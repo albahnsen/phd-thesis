@@ -271,7 +271,7 @@ $combinator$.
 }
 \end{algorithm}
 
-  
+\newpage 
 \section{Theoretical analysis of the ECSDT}
 \label{sec:8:theoretical}
 
@@ -463,6 +463,102 @@ $combinator$.
   not as good as the ones on the $u$, this is highly related to the unbalanced distribution of the 
   positives and negatives in all the databases.
 
+\begin{table}[!t]
+    \centering
+    \footnotesize
+    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 
+    0in}c@{\hskip 0in}l  } %sum 7.7
+    \hline
+    \bf{Family} & \bf{Algorithm} & \multicolumn{3}{c}{\bf{Fraud}} & 
+    \multicolumn{3}{c}{\bf{Churn}} & \multicolumn{3}{c}{\bf{Credit 1}} \\ 
+    \hline
+CI&DT-t & 0.3176 &$\pm$& 0.0357 & -0.0018 &$\pm$& 0.0194 & 0.1931 &$\pm$& 0.0087 \\
+&LR-t & 0.0092 &$\pm$& 0.0002 & -0.0001 &$\pm$& 0.0002 & 0.0177 &$\pm$& 0.0126 \\
+&RF-t & 0.3342 &$\pm$& 0.0156 & -0.0026 &$\pm$& 0.0079 & 0.1471 &$\pm$& 0.0071\\
+&DT-u & 0.5239 &$\pm$& 0.0118 & -0.0389 &$\pm$& 0.0583 & 0.3287 &$\pm$& 0.0125 \\
+&LR-u & 0.1243 &$\pm$& 0.0387 & 0.0039 &$\pm$& 0.0492 & 0.4118 &$\pm$& 0.0313 \\
+&RF-u & 0.5684 &$\pm$& 0.0097 & 0.0433 &$\pm$& 0.0533 & 0.4981 &$\pm$& 0.0079 \\
+\hline 
+CPS&DT-r & 0.3439 &$\pm$& 0.0453 & 0.0054 &$\pm$& 0.0568 & 0.3310 &$\pm$& 0.0126 \\
+&LR-r & 0.3077 &$\pm$& 0.0301 & 0.0484 &$\pm$& 0.0375 & 0.3965 &$\pm$& 0.0263 \\
+&RF-r & 0.3812 &$\pm$& 0.0264 & 0.1056 &$\pm$& 0.0412 & 0.4989 &$\pm$& 0.0080 \\
+&DT-o & 0.3172 &$\pm$& 0.0274 & 0.0251 &$\pm$& 0.0195 & 0.1738 &$\pm$& 0.0092 \\
+&LR-o & 0.2793 &$\pm$& 0.0185 & 0.0316 &$\pm$& 0.0228 & 0.3301 &$\pm$& 0.0109 \\
+&RF-o & 0.3612 &$\pm$& 0.0295 & 0.0205 &$\pm$& 0.0156 & 0.2128 &$\pm$& 0.0081 \\
+\hline 
+BMR&DT-t-BMR & 0.6045 &$\pm$& 0.0386 & 0.0298 &$\pm$& 0.0145 & 0.1054 &$\pm$& 0.0358 \\
+&LR-t-BMR & 0.4552 &$\pm$& 0.0203 & 0.1082 &$\pm$& 0.0316 & 0.2189 &$\pm$& 0.0541 \\
+&RF-t-BMR & 0.6414 &$\pm$& 0.0154 & 0.0856 &$\pm$& 0.0354 & 0.4924 &$\pm$& 0.0087 \\
+\hline 
+CST&CSLR-t & 0.6113 &$\pm$& 0.0262 & 0.1118 &$\pm$& 0.0484 & 0.4554 &$\pm$& 0.1039 \\
+&CSDT-t & 0.7116 &$\pm$& 0.2557 & 0.1115 &$\pm$& 0.0378 & 0.4829 &$\pm$& 0.0098 \\
+\hline 
+ECSDT&CSB-mv-t & 0.7124 &$\pm$& 0.0162 & 0.1237 &$\pm$& 0.0368 & 0.4862 &$\pm$& 0.0102 \\
+&CSB-wv-t & 0.7276 &$\pm$& 0.0116 & 0.1539 &$\pm$& 0.0255 & 0.4862 &$\pm$& 0.0102 \\
+&CSB-s-t & 0.7181 &$\pm$& 0.0109 & 0.1441 &$\pm$& 0.0364 & 0.4847 &$\pm$& 0.0096 \\
+&CSP-mv-t & 0.7106 &$\pm$& 0.0113 & 0.1227 &$\pm$& 0.0399 & 0.4853 &$\pm$& 0.0104 \\
+&CSP-wv-t & 0.7244 &$\pm$& 0.0202 & 0.1501 &$\pm$& 0.0302 & 0.4854 &$\pm$& 0.0105 \\
+&CSP-s-t & 0.7212 &$\pm$& 0.0067 & 0.1488 &$\pm$& 0.0272 & 0.4848 &$\pm$& 0.0084 \\
+&CSRF-mv-t & 0.6498 &$\pm$& 0.0598 & 0.0300 &$\pm$& 0.0488 & 0.4980 &$\pm$& 0.0120 \\
+&CSRF-wv-t & 0.7249 &$\pm$& 0.0742 & 0.0624 &$\pm$& 0.0477 & 0.4979 &$\pm$& 0.0124 \\
+&CSRF-s-t & 0.6731 &$\pm$& 0.0931 & 0.0586 &$\pm$& 0.0507 & 0.4839 &$\pm$& 0.0160 \\
+&CSRP-mv-t & 0.7220 &$\pm$& 0.0082 & 0.1321 &$\pm$& 0.0280 & \bf{0.5154} &\bf{$\pm$}& \bf{0.0077} \\
+&CSRP-wv-t & \bf{0.7348} &\bf{$\pm$}& \bf{0.0131} & 0.1615 &$\pm$& 0.0252 & 0.5152 &$\pm$& 0.0083 \\
+&CSRP-s-t & 0.7336 &$\pm$& 0.0108 & \bf{0.1652} &\bf{$\pm$}& \bf{0.0264} & 0.4989 &$\pm$& 0.0088 \\
+  \hline
+  \multicolumn{11}{c}{(those models with the highest savings are market as bold)}
+  \end{tabular}
+    \caption{Results of the algorithms measured by savings}
+    \label{tab:8:results_savings}
+  \end{table}
+\begin{table}[!t]
+    \centering
+    \footnotesize
+    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l  } %sum 7.7
+    \hline
+    \bf{Family} & \bf{Algorithm} &  \multicolumn{3}{c}{\bf{Credit 2}} 
+& \multicolumn{3}{c}{\bf{Marketing}} \\ 
+    \hline
+CI&DT-t & -0.0616 &$\pm$& 0.0229 & -0.2342 &$\pm$& 0.0609\\ 
+&LR-t & 0.0039 &$\pm$& 0.0012 & -0.2931 &$\pm$& 0.0602\\ 
+&RF-t & 0.0303 &$\pm$& 0.0040 & -0.2569 &$\pm$& 0.0637\\ 
+&DT-u & -0.1893 &$\pm$& 0.0314 & -0.0278 &$\pm$& 0.0475\\ 
+&LR-u &  0.1850 &$\pm$& 0.0231 & 0.2200 &$\pm$& 0.0376\\ 
+&RF-u & 0.1237 &$\pm$& 0.0228 & 0.1227 &$\pm$& 0.0443\\ 
+\hline 
+CPS&DT-r & 0.0724 &$\pm$&0.0212 & 0.1960 &$\pm$& 0.0527\\ 
+&LR-r &  0.2650 &$\pm$& 0.0115 & 0.4210 &$\pm$& 0.0267\\ 
+&RF-r & 0.3055 &$\pm$& 0.0106 & 0.3840 &$\pm$& 0.0360\\ 
+&DT-o &  0.0918 &$\pm$&0.0225 & -0.2598 &$\pm$& 0.0559\\ 
+&LR-o &  0.2554 &$\pm$&0.0090 & 0.3129 &$\pm$& 0.0277\\ 
+&RF-o &  0.2242 &$\pm$&0.0070 & -0.1782 &$\pm$& 0.0618\\ 
+\hline 
+BMR&DT-t-BMR & 0.2740 &$\pm$& 0.0067 & 0.4598 &$\pm$& 0.0089\\ 
+&LR-t-BMR & \bf{0.3148} &\bf{$\pm$}& \bf{0.0094} & \bf{0.4973} &\bf{$\pm$}& \bf{0.0084}\\ 
+&RF-t-BMR & 0.3133 &$\pm$& 0.0094 & 0.4807 &$\pm$& 0.0093\\ 
+\hline 
+CST&CSLR-t & 0.2748 &$\pm$&0.0069 & 0.4484 &$\pm$& 0.0072\\ 
+&CSDT-t &  0.2835 &$\pm$& 0.0078 & 0.4741 &$\pm$& 0.0063\\ 
+\hline 
+ECSDT&CSB-mv-t &  0.2945 &$\pm$& 0.0105 & 0.4837 &$\pm$& 0.0078\\ 
+&CSB-wv-t & 0.2948 &$\pm$&0.0106 & 0.4838 &$\pm$& 0.0079\\ 
+&CSB-s-t &  0.2856 &$\pm$& 0.0088 & 0.4769 &$\pm$& 0.0078\\ 
+&CSP-mv-t & 0.2919 &$\pm$& 0.0097 & 0.4831 &$\pm$& 0.0081\\ 
+&CSP-wv-t & 0.2921 &$\pm$& 0.0098 & 0.4832 &$\pm$& 0.0082\\ 
+&CSP-s-t &  0.2870 &$\pm$& 0.0084 & 0.4752 &$\pm$& 0.0089\\ 
+&CSRF-mv-t &  0.2274 &$\pm$& 0.0520 & 0.3929 &$\pm$& 0.0655\\ 
+&CSRF-wv-t &  0.2948 &$\pm$& 0.0079 & 0.4728 &$\pm$& 0.0125\\ 
+&CSRF-s-t &  0.2518 &$\pm$& 0.0281 & 0.3854 &$\pm$& 0.0899\\ 
+&CSRP-mv-t & 0.3053 &$\pm$& 0.0087 & 0.4960 &$\pm$& 0.0075\\ 
+&CSRP-wv-t & 0.3015 &$\pm$& 0.0086 & 0.4885 &$\pm$& 0.0076\\ 
+&CSRP-s-t & 0.2956 &$\pm$& 0.0078 & 0.4878 &$\pm$& 0.0080\\ 
+  \hline
+  \multicolumn{8}{c}{(those models with the highest savings are market as bold)}
+  \end{tabular}
+    \caption{Continuation of \tablename{~\ref{tab:8:results_savings}}}
+    \label{tab:8:results_savings2}
+  \end{table}
+  
   In the case of cost-proportionate sampling methods ($CPS$), specifically the 
   cost-proportionate rejection sampling ($r$) and cost-proportionate over 
   sampling ($o$). It is observed than in four cases the savings increases quite 
@@ -480,95 +576,16 @@ $combinator$.
   two databases the results are improved. Lastly, we evaluate the proposed $ECSDT$ algorithms. The 
   results show that these methods arise to the best overall results in three sets, while being 
   quite competitive in the others.
-
-  \begin{table}[t]
-    \caption{Results of the algorithms measured by savings}
-    \centering
-    \footnotesize
-    \label{tab:8:results_savings}
-    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 
-    0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l  } %sum 7.7
-    \hline
-    \bf{Family} & \bf{Algorithm} & \multicolumn{3}{c}{\bf{Fraud}} & 
-    \multicolumn{3}{c}{\bf{Churn}} & \multicolumn{3}{c}{\bf{Credit 1}} & 
-    \multicolumn{3}{c}{\bf{Credit 2}} & \multicolumn{3}{c}{\bf{Marketing}} \\ 
-    \hline
-CI&DT-t & 0.3176 &$\pm$& 0.0357 & -0.0018 &$\pm$& 0.0194 & 0.1931 &$\pm$& 0.0087 & -0.0616 &$\pm$& 
-0.0229 & -0.2342 &$\pm$& 0.0609\\ 
-&LR-t & 0.0092 &$\pm$& 0.0002 & -0.0001 &$\pm$& 0.0002 & 0.0177 &$\pm$& 0.0126 & 0.0039 &$\pm$& 
-0.0012 & -0.2931 &$\pm$& 0.0602\\ 
-&RF-t & 0.3342 &$\pm$& 0.0156 & -0.0026 &$\pm$& 0.0079 & 0.1471 &$\pm$& 0.0071 & 0.0303 &$\pm$& 
-0.0040 & -0.2569 &$\pm$& 0.0637\\ 
-&DT-u & 0.5239 &$\pm$& 0.0118 & -0.0389 &$\pm$& 0.0583 & 0.3287 &$\pm$& 0.0125 & -0.1893 &$\pm$& 
-0.0314 & -0.0278 &$\pm$& 0.0475\\ 
-&LR-u & 0.1243 &$\pm$& 0.0387 & 0.0039 &$\pm$& 0.0492 & 0.4118 &$\pm$& 0.0313 & 0.1850 &$\pm$& 
-0.0231 & 0.2200 &$\pm$& 0.0376\\ 
-&RF-u & 0.5684 &$\pm$& 0.0097 & 0.0433 &$\pm$& 0.0533 & 0.4981 &$\pm$& 0.0079 & 0.1237 &$\pm$& 
-0.0228 & 0.1227 &$\pm$& 0.0443\\ 
-\hline 
-CPS&DT-r & 0.3439 &$\pm$& 0.0453 & 0.0054 &$\pm$& 0.0568 & 0.3310 &$\pm$& 0.0126 & 0.0724 &$\pm$& 
-0.0212 & 0.1960 &$\pm$& 0.0527\\ 
-&LR-r & 0.3077 &$\pm$& 0.0301 & 0.0484 &$\pm$& 0.0375 & 0.3965 &$\pm$& 0.0263 & 0.2650 &$\pm$& 
-0.0115 & 0.4210 &$\pm$& 0.0267\\ 
-&RF-r & 0.3812 &$\pm$& 0.0264 & 0.1056 &$\pm$& 0.0412 & 0.4989 &$\pm$& 0.0080 & 0.3055 &$\pm$& 
-0.0106 & 0.3840 &$\pm$& 0.0360\\ 
-&DT-o & 0.3172 &$\pm$& 0.0274 & 0.0251 &$\pm$& 0.0195 & 0.1738 &$\pm$& 0.0092 & 0.0918 &$\pm$& 
-0.0225 & -0.2598 &$\pm$& 0.0559\\ 
-&LR-o & 0.2793 &$\pm$& 0.0185 & 0.0316 &$\pm$& 0.0228 & 0.3301 &$\pm$& 0.0109 & 0.2554 &$\pm$& 
-0.0090 & 0.3129 &$\pm$& 0.0277\\ 
-&RF-o & 0.3612 &$\pm$& 0.0295 & 0.0205 &$\pm$& 0.0156 & 0.2128 &$\pm$& 0.0081 & 0.2242 &$\pm$& 
-0.0070 & -0.1782 &$\pm$& 0.0618\\ 
-\hline 
-BMR&DT-t-BMR & 0.6045 &$\pm$& 0.0386 & 0.0298 &$\pm$& 0.0145 & 0.1054 &$\pm$& 0.0358 & 0.2740 
-&$\pm$& 0.0067 & 0.4598 &$\pm$& 0.0089\\ 
-&LR-t-BMR & 0.4552 &$\pm$& 0.0203 & 0.1082 &$\pm$& 0.0316 & 0.2189 &$\pm$& 0.0541 & \bf{0.3148} 
-&\bf{$\pm$}& \bf{0.0094} & \bf{0.4973} &\bf{$\pm$}& \bf{0.0084}\\ 
-&RF-t-BMR & 0.6414 &$\pm$& 0.0154 & 0.0856 &$\pm$& 0.0354 & 0.4924 &$\pm$& 0.0087 & 0.3133 &$\pm$& 
-0.0094 & 0.4807 &$\pm$& 0.0093\\ 
-\hline 
-CST&CSLR-t & 0.6113 &$\pm$& 0.0262 & 0.1118 &$\pm$& 0.0484 & 0.4554 &$\pm$& 0.1039 & 0.2748 &$\pm$& 
-0.0069 & 0.4484 &$\pm$& 0.0072\\ 
-&CSDT-t & 0.7116 &$\pm$& 0.2557 & 0.1115 &$\pm$& 0.0378 & 0.4829 &$\pm$& 0.0098 & 0.2835 &$\pm$& 
-0.0078 & 0.4741 &$\pm$& 0.0063\\ 
-\hline 
-ECSDT&CSB-mv-t & 0.7124 &$\pm$& 0.0162 & 0.1237 &$\pm$& 0.0368 & 0.4862 &$\pm$& 0.0102 & 0.2945 
-&$\pm$& 0.0105 & 0.4837 &$\pm$& 0.0078\\ 
-&CSB-wv-t & 0.7276 &$\pm$& 0.0116 & 0.1539 &$\pm$& 0.0255 & 0.4862 &$\pm$& 0.0102 & 0.2948 &$\pm$& 
-0.0106 & 0.4838 &$\pm$& 0.0079\\ 
-&CSB-s-t & 0.7181 &$\pm$& 0.0109 & 0.1441 &$\pm$& 0.0364 & 0.4847 &$\pm$& 0.0096 & 0.2856 &$\pm$& 
-0.0088 & 0.4769 &$\pm$& 0.0078\\ 
-&CSP-mv-t & 0.7106 &$\pm$& 0.0113 & 0.1227 &$\pm$& 0.0399 & 0.4853 &$\pm$& 0.0104 & 0.2919 &$\pm$& 
-0.0097 & 0.4831 &$\pm$& 0.0081\\ 
-&CSP-wv-t & 0.7244 &$\pm$& 0.0202 & 0.1501 &$\pm$& 0.0302 & 0.4854 &$\pm$& 0.0105 & 0.2921 &$\pm$& 
-0.0098 & 0.4832 &$\pm$& 0.0082\\ 
-&CSP-s-t & 0.7212 &$\pm$& 0.0067 & 0.1488 &$\pm$& 0.0272 & 0.4848 &$\pm$& 0.0084 & 0.2870 &$\pm$& 
-0.0084 & 0.4752 &$\pm$& 0.0089\\ 
-&CSRF-mv-t & 0.6498 &$\pm$& 0.0598 & 0.0300 &$\pm$& 0.0488 & 0.4980 &$\pm$& 0.0120 & 0.2274 &$\pm$& 
-0.0520 & 0.3929 &$\pm$& 0.0655\\ 
-&CSRF-wv-t & 0.7249 &$\pm$& 0.0742 & 0.0624 &$\pm$& 0.0477 & 0.4979 &$\pm$& 0.0124 & 0.2948 &$\pm$& 
-0.0079 & 0.4728 &$\pm$& 0.0125\\ 
-&CSRF-s-t & 0.6731 &$\pm$& 0.0931 & 0.0586 &$\pm$& 0.0507 & 0.4839 &$\pm$& 0.0160 & 0.2518 &$\pm$& 
-0.0281 & 0.3854 &$\pm$& 0.0899\\ 
-&CSRP-mv-t & 0.7220 &$\pm$& 0.0082 & 0.1321 &$\pm$& 0.0280 & \bf{0.5154} &\bf{$\pm$}& \bf{0.0077} & 
-0.3053 &$\pm$& 0.0087 & 0.4960 &$\pm$& 0.0075\\ 
-&CSRP-wv-t & \bf{0.7348} &\bf{$\pm$}& \bf{0.0131} & 0.1615 &$\pm$& 0.0252 & 0.5152 &$\pm$& 0.0083 & 
-0.3015 &$\pm$& 0.0086 & 0.4885 &$\pm$& 0.0076\\ 
-&CSRP-s-t & 0.7336 &$\pm$& 0.0108 & \bf{0.1652} &\bf{$\pm$}& \bf{0.0264} & 0.4989 &$\pm$& 0.0088 & 
-0.2956 &$\pm$& 0.0078 & 0.4878 &$\pm$& 0.0080\\ 
-  \hline
-  \multicolumn{17}{c}{(those models with the highest savings are market as bold)}
-  \end{tabular}
-  \end{table}
   
   Subsequently, in order to statistically sort the classifiers we computed the Friedman ranking 
   (F-Rank)  statistic \citep{Demsar2006}. This rank increases with the cost of the algorithms. 
   We also calculate the average savings of each algorithm compared with the highest savings in 
   each set (perBest), as a  measure of how close are the savings of an algorithm to the best result. 
-  In \tablename{ \ref{tab:8:results_ranking}}, the results are shown. It is observed that  the 
+  In \tablename{~\ref{tab:8:results_ranking}}, the results are shown. It is observed that  the 
   first six algorithms, according to the F-Rank, belong to the $ECSDT$ family. In particular, the 
   best three classifiers is the ensemble of cost-sensitive decision trees using the random patches 
   approach. Giving the best result the one that blends the base classifiers using weighted voting 
-  method. Moreover as shown in  \tablename{ \ref{tab:results_best}}, this method ranks on each 
+  method. Moreover as shown in  \tablename{~\ref{tab:8:results_best}}, this method ranks on each 
   dataset \nth{1}, \nth{2}, \nth{2}, \nth{5} and \nth{3}, respectively. For comparison the best 
   method from an other family is the $RF$ with $BMR$, which ranks \nth{14}, \nth{14}, \nth{8}, 
   \nth{2} and \nth{9}.
@@ -576,7 +593,6 @@ ECSDT&CSB-mv-t & 0.7124 &$\pm$& 0.0162 & 0.1237 &$\pm$& 0.0368 & 0.4862 &$\pm$& 
     \begin{table}[!t]
      \centering
     \footnotesize
-    \label{tab:8:results_ranking}
     \begin{tabular}{ll c c  } %sum 7.7
       \hline
       \bf{Family} & \bf{Algorithm} & \bf{F-Rank} & \bf{perBest}\\
@@ -613,35 +629,11 @@ ECSDT&CSB-mv-t & 0.7124 &$\pm$& 0.0162 & 0.1237 &$\pm$& 0.0368 & 0.4862 &$\pm$& 
       \hline
     \end{tabular}
     \caption{Savings Friedman ranking and average percentage of best result}
+    \label{tab:8:results_ranking}
   \end{table}
-  
-    \begin{figure}[t]
-    \centering
-    \includegraphics{ch8_fig3}
-    \caption{\textbf{Comparison of the savings of the algorithms versus the highest savings in 
-    each database.} The $CSRP-wt$ is very close to the best result in all the databases. 
-    Additionally, even though the $LR-BMR$ is the best algorithm in two databases, the performance 
-    in the other three is very poor.}
-    \label{fig_comparison_best}
-  \end{figure} 
-  
-   \begin{figure*}[!t]
-  \centering
-  \subfloat[Comparison of the Friedman ranking.]{\includegraphics{ch8_fig4}%
-    \label{fig_1}}
-  \hfil
-  \subfloat[Comparison of the average savings of the algorithms versus the 
-    highest savings.]{\includegraphics{ch8_fig5}%
-    \label{fig_comparison_best_by_family}}
-  \caption{\textbf{Comparison of the results by family of classifiers.} The $ECSDT$ family has the 
-  best performance measured either by Friedman ranking or average percentage of best model.}
-  \label{fig_comparison_family}
-\end{figure*}
-
   \begin{table}[t]
     \centering
     \footnotesize
-    \label{tab:8:results_best}
     \begin{tabular}{l c c c c c  } %sum 7.7
       \hline
       \bf{Algorithm} & \bf{Fraud} & \bf{Churn} &\bf{Credit1} & \bf{Credit2} & \bf{Marketing} \\
@@ -654,127 +646,67 @@ ECSDT&CSB-mv-t & 0.7124 &$\pm$& 0.0162 & 0.1237 &$\pm$& 0.0368 & 0.4862 &$\pm$& 
       \hline
     \end{tabular}
     \caption{Savings ranks of best algorithm of each family by database}
+    \label{tab:8:results_best}
   \end{table}
-  
-   \begin{figure*}[!t]
-  \centering
-  \subfloat[Comparison by inducer methodology.]{\includegraphics{ch8_fig6}%
-    \label{fig_rank_ecsdt1}}
-  \hfil
-  \subfloat[Comparison by combination of base classifiers approach.]{\includegraphics{ch8_fig7}%
-    \label{fig_rank_ecsdt2}}
-  \caption{\textbf{Comparison of the Friedman ranking within the $ECSDT$ family.} Overall, the 
-  random inducer method that provides the best results is the $CSRP$. Moreover, the best 
-  combination method compared by Friedman ranking is the cost-sensitive weighted voting.}
-  \label{fig_rank_ecsdt}
-\end{figure*}
-  
-      Moreover, when analyzing the perBest statistic, it is observed that it follows almost the 
-same 
+ 
+  \begin{figure}[t]
+    \centering
+    \includegraphics{ch8_fig3}
+    \caption{\textbf{Comparison of the savings of the algorithms versus the highest savings in 
+    each database.} The $CSRP-wt$ is very close to the best result in all the databases. 
+    Additionally, even though the $LR-BMR$ is the best algorithm in two databases, the performance 
+    in the other three is very poor.}
+    \label{fig:8:comparison_best}
+  \end{figure} 
+
+  Moreover, when analyzing the perBest statistic, it is observed that it follows almost the same 
   order as the F-Rank. Notwithstanding, there are cases in which algorithms ranks are different in 
   the two statistics, for example the $CSDT-t$ algorithm has a lower F-Rank than the $RF-BMR$, 
   but the perBest if better. This happens because, the F-Rank does not take into account the 
   difference in savings within algorithms. This can be further investigated in \figurename{ 
-  \ref{fig_comparison_best}}. Even that ranks of the $BMR$ models are better than the $CSDT$, the 
+  \ref{fig:8:comparison_best}}. Even that ranks of the $BMR$ models are better than the $CSDT$, the 
   latter is on average closer to the best performance method in each set. Moreover, it is confirmed 
   that the $CSRP-wt$ is very close to the best result in all cases. Lastly, it is shown why the 
   F-Rank of the $LR-BMR$ is high, given the fact that is the best model in two databases. The 
   reason  for that, is because the performance on the other sets is very poor.
   
-  \todo{change references to tables}
-  
-  \begin{table*}[t]
-    \caption{Results as measured by F1Score}
-    \centering
-    \footnotesize
-    \label{tab:results_f1score}
-    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 
-0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l  } %sum 7.7
-      \hline
-    \bf{Family} & \bf{Algorithm} & \multicolumn{3}{c}{\bf{Fraud}} & 
-\multicolumn{3}{c}{\bf{Churn}} & \multicolumn{3}{c}{\bf{Credit 1}} & \multicolumn{3}{c}{\bf{Credit 
-2}} & \multicolumn{3}{c}{\bf{Marketing}} \\ 
-      \hline
-CI&DT-t & 0.4458 &$\pm$& 0.0133 & 0.0733 &$\pm$& 0.0198 & 0.2593 &$\pm$& 0.0068 & 0.2614 &$\pm$& 
-0.0083 & 0.2647 &$\pm$& 0.0079\\ 
-&LR-t & 0.1531 &$\pm$& 0.0045 & 0.0000 &$\pm$& 0.0000 & 0.0494 &$\pm$& 0.0277 & 0.0155 &$\pm$& 
-0.0037 & 0.2702 &$\pm$& 0.0125\\ 
-&RF-t & 0.2061 &$\pm$& 0.0041 & 0.0249 &$\pm$& 0.0146 & 0.2668 &$\pm$& 0.0085 & 0.0887 &$\pm$& 
-0.0061 & 0.2884 &$\pm$& 0.0116\\ 
-&DT-u & 0.1502 &$\pm$& 0.0066 & 0.1175 &$\pm$& 0.0103 & 0.2276 &$\pm$& 0.0044 & 0.3235 &$\pm$& 
-0.0055 & 0.2659 &$\pm$& 0.0061\\ 
-&LR-u & 0.0241 &$\pm$& 0.0163 & 0.1222 &$\pm$& 0.0098 & 0.3160 &$\pm$& 0.0314 & \bf{0.3890} 
-&\bf{$\pm$}& \bf{0.0053} & 0.3440 &$\pm$& 0.0083\\ 
-&RF-u & 0.0359 &$\pm$& 0.0065 & 0.1346 &$\pm$& 0.0112 & 0.3193 &$\pm$& 0.0053 & 0.3815 &$\pm$& 
-0.0051 & 0.3088 &$\pm$& 0.0065\\ 
-\hline 
-CPS&DT-r & 0.4321 &$\pm$& 0.0086 & 0.1206 &$\pm$& 0.0132 & 0.2310 &$\pm$& 0.0049 & 0.3409 &$\pm$& 
-0.0046 & 0.2739 &$\pm$& 0.0076\\ 
-&LR-r & 0.1846 &$\pm$& 0.0123 & 0.1258 &$\pm$& 0.0111 & 0.3597 &$\pm$& 0.0156 & 0.3793 &$\pm$& 
-0.0049 & 0.3374 &$\pm$& 0.0101\\ 
-&RF-r & 0.2171 &$\pm$& 0.0100 & 0.1450 &$\pm$& 0.0131 & 0.3361 &$\pm$& 0.0067 & 0.3570 &$\pm$& 
-0.0048 & 0.3103 &$\pm$& 0.0075\\ 
-&DT-o & \bf{0.4495} &\bf{$\pm$}& \bf{0.0063} & 0.1022 &$\pm$& 0.0180 & 0.2459 &$\pm$& 0.0081 & 
-0.3258 &$\pm$& 0.0056 & 0.2634 &$\pm$& 0.0089\\ 
-&LR-o & 0.1776 &$\pm$& 0.0117 & 0.1085 &$\pm$& 0.0203 & 0.3769 &$\pm$& 0.0067 & 0.3804 &$\pm$& 
-0.0044 & \bf{0.3568} &\bf{$\pm$}& \bf{0.0102}\\ 
-&RF-o & 0.2129 &$\pm$& 0.0080 & 0.0841 &$\pm$& 0.0201 & 0.3281 &$\pm$& 0.0078 & 0.3212 &$\pm$& 
-0.0054 & 0.3083 &$\pm$& 0.0093\\ 
-\hline 
-BMR&DT-t-BMR & 0.2139 &$\pm$& 0.0215 & 0.0941 &$\pm$& 0.0157 & 0.1514 &$\pm$& 0.0390 & 0.3338 
-&$\pm$& 0.0052 & 0.2433 &$\pm$& 0.0071\\ 
-&LR-t-BMR & 0.1384 &$\pm$& 0.0044 & 0.1370 &$\pm$& 0.0150 & 0.1915 &$\pm$& 0.0340 & 0.3572 &$\pm$& 
-0.0045 & 0.2954 &$\pm$& 0.0079\\ 
-&RF-t-BMR & 0.2052 &$\pm$& 0.0183 & 0.1264 &$\pm$& 0.0156 & 0.3186 &$\pm$& 0.0072 & 0.3551 &$\pm$& 
-0.0053 & 0.2744 &$\pm$& 0.0070\\ 
-\hline 
-CST&CSLR-t & 0.2031 &$\pm$& 0.0065 & 0.1134 &$\pm$& 0.0151 & 0.1454 &$\pm$& 0.0517 & 0.3363 &$\pm$& 
-0.0045 & 0.2339 &$\pm$& 0.0051\\ 
-&CSDT-t & 0.2522 &$\pm$& 0.0980 & 0.1288 &$\pm$& 0.0194 & 0.2754 &$\pm$& 0.0059 & 0.3483 &$\pm$& 
-0.0046 & 0.2680 &$\pm$& 0.0060\\ 
-\hline 
-ECSDT&CSB-mv-t & 0.2112 &$\pm$& 0.0125 & 0.1481 &$\pm$& 0.0122 & 0.2927 &$\pm$& 0.0108 & 0.3503 
-&$\pm$& 0.0046 & 0.2758 &$\pm$& 0.0072\\ 
-&CSB-wv-t & 0.2112 &$\pm$& 0.0091 & 0.1686 &$\pm$& 0.0125 & 0.2926 &$\pm$& 0.0108 & 0.3503 &$\pm$& 
-0.0046 & 0.2757 &$\pm$& 0.0072\\ 
-&CSB-s-t & 0.2072 &$\pm$& 0.0103 & 0.1554 &$\pm$& 0.0121 & 0.2818 &$\pm$& 0.0075 & 0.3533 &$\pm$& 
-0.0046 & 0.2799 &$\pm$& 0.0074\\ 
-&CSP-mv-t & 0.2098 &$\pm$& 0.0126 & 0.1480 &$\pm$& 0.0136 & 0.2903 &$\pm$& 0.0108 & 0.3499 &$\pm$& 
-0.0044 & 0.2749 &$\pm$& 0.0064\\ 
-&CSP-wv-t & 0.2099 &$\pm$& 0.0054 & 0.1651 &$\pm$& 0.0120 & 0.2905 &$\pm$& 0.0110 & 0.3498 &$\pm$& 
-0.0045 & 0.2749 &$\pm$& 0.0064\\ 
-&CSP-s-t & 0.2064 &$\pm$& 0.0069 & 0.1590 &$\pm$& 0.0099 & 0.2809 &$\pm$& 0.0062 & 0.3524 &$\pm$& 
-0.0046 & 0.2778 &$\pm$& 0.0104\\ 
-&CSRF-mv-t & 0.2208 &$\pm$& 0.0022 & 0.1081 &$\pm$& 0.0224 & 0.2994 &$\pm$& 0.0226 & 0.3560 &$\pm$& 
-0.0118 & 0.2780 &$\pm$& 0.0106\\ 
-&CSRF-wv-t & 0.2175 &$\pm$& 0.0019 & 0.1220 &$\pm$& 0.0234 & 0.2992 &$\pm$& 0.0236 & 0.3549 &$\pm$& 
-0.0069 & 0.2552 &$\pm$& 0.0187\\ 
-&CSRF-s-t & 0.2169 &$\pm$& 0.0045 & 0.1304 &$\pm$& 0.0162 & 0.2916 &$\pm$& 0.0236 & 0.3540 &$\pm$& 
-0.0071 & 0.2578 &$\pm$& 0.0186\\ 
-&CSRP-mv-t & 0.2691 &$\pm$& 0.0054 & 0.1511 &$\pm$& 0.0110 & 0.4031 &$\pm$& 0.0079 & 0.3743 &$\pm$& 
-0.0050 & 0.2916 &$\pm$& 0.0062\\ 
-&CSRP-wv-t & 0.2780 &$\pm$& 0.0041 & \bf{0.1710} &\bf{$\pm$}& \bf{0.0140} & \bf{0.4049} 
-&\bf{$\pm$}& 
-\bf{0.0066} & 0.3721 &$\pm$& 0.0051 & 0.2781 &$\pm$& 0.0063\\ 
-&CSRP-s-t & 0.2735 &$\pm$& 0.0148 & 0.1622 &$\pm$& 0.0103 & 0.3953 &$\pm$& 0.0141 & 0.3720 &$\pm$& 
-0.0049 & 0.2922 &$\pm$& 0.0137\\ 
-      \hline
-      \multicolumn{17}{c}{(those models with the highest F1Score are market as bold)}
-    \end{tabular}
-  \end{table*}
-  
-  Furthermore \figurename{ \ref{fig_1}}, shows the Friedman ranking of each family of classifiers. 
-  The $ECSDT$ methods are overall better, followed by the $BMR$ and the $CST$ methods. As 
-  expected, the $CI$ family is the one that performs the worst. Nevertheless, there is 
+\begin{figure}[!t]
+  \centering
+  \subfloat[Comparison of the Friedman ranking.]{\includegraphics{ch8_fig4}%
+    \label{fig:8:family_rank}}
+  \hfil
+  \subfloat[Comparison of the average savings of the algorithms versus the 
+    highest savings.]{\includegraphics{ch8_fig5}%
+    \label{fig:8:family_avgsav}}
+  \caption{\textbf{Comparison of the results by family of classifiers.} The $ECSDT$ family has the 
+  best performance measured either by Friedman ranking or average percentage of best model.}
+  \label{fig:8:comparison_family}
+\end{figure}
+
+ \begin{figure}[!t]
+  \centering
+  \subfloat[Comparison by inducer methodology.]{\includegraphics{ch8_fig6}%
+    \label{fig:8:rank_ecsdt1}}
+  \hfil
+  \subfloat[Comparison by combination of base classifiers approach.]{\includegraphics{ch8_fig7}%
+    \label{fig:8:rank_ecsdt2}}
+  \caption{\textbf{Comparison of the Friedman ranking within the $ECSDT$ family.} Overall, the 
+  random inducer method that provides the best results is the $CSRP$. Moreover, the best 
+  combination method compared by Friedman ranking is the cost-sensitive weighted voting.}
+  \label{fig:8:rank_ecsdt}
+\end{figure}
+ 
+  Furthermore \figurename{~\ref{fig:8:family_rank}}, shows the Friedman ranking of each family of 
+  classifiers. The $ECSDT$ methods are overall better, followed by the $BMR$ and the $CST$ methods. 
+  As expected, the $CI$ family is the one that performs the worst. Nevertheless, there is 
   a significant variance within the ranks in the $ECSDT$ family, as the best one has a Friedman 
   ranking of 2.6 and the worst 16. Similar results are found when observing the perBest shown in 
-  \figurename{  \ref{fig_comparison_best_by_family}}. However, in the case of the perBest, the 
-  $CST$ methods perform better than the $BMR$. It is important, in both cases it is confirmed 
-  that the $ECSDT$ family of methods is the one that arise to the best results as measured by 
-  savings.
+  \figurename{~\ref{fig:8:family_avgsav}}. However, in the case of the perBest, the $CST$ methods 
+  perform better than the $BMR$. It is important, in both cases it is confirmed that the $ECSDT$ 
+  family of methods is the one that arise to the best results as measured by savings.
 
   We further investigate the different methods that compose the $ECSDT$ family, first by inducer 
-  methods and by the combination approach. In \figurename{ \ref{fig_rank_ecsdt1}}, the Friedman 
+  methods and by the combination approach. In \figurename{ \ref{fig:8:rank_ecsdt1}}, the Friedman 
   ranking of the $ECSDT$ methods grouped by inducer algorithm are shown. It is observed that the 
   worst method is the random forest methodology. This may be related to the fact that within the 
   random inducer methods, this is the only one that also modified the learner algorithm in the 
@@ -782,22 +714,11 @@ ECSDT&CSB-mv-t & 0.2112 &$\pm$& 0.0125 & 0.1481 &$\pm$& 0.0122 & 0.2927 &$\pm$& 
   as expected the bagging and pasting methods perform quite similar, after all the only difference 
   is that in bagging the sampling is done with replacement, while it is not the case in pasting. 
   In  general the best methodology is random patches. Additionally, in \figurename{ 
-  \ref{fig_rank_ecsdt2}}, a similar analysis is made taking into account the combination of base 
+  \ref{fig:8:rank_ecsdt2}}, a similar analysis is made taking into account the combination of base 
   classifiers approach. In this case, the best combination method is weighted voting, while 
   majority voting and staking have a similar performance.
 
-  Finally, in \tablename{ \ref{tab:results_f1score}} the results of the algorithms measured by 
-  F1Score are shown. It is observed that the model with the highest savings is not the same as the 
-  one with the highest F1Score in all of the databases, corroborating the conclusions from 
-  \citep{CorreaBahnsen2013}, as selecting a method by a traditional statistic does not give the 
-  same result as selecting it using a business oriented measure such as financial savings. This can 
-  be  further examined in \mbox{\figurename{ \ref{fig_2}}}, where the ranking of the F1Score and 
-  savings are compared. It is observed that the best two algorithms according to their Friedman 
-  rank of F1Score are indeed the best ones measured by the Friedman rank of the savings. However, 
-  this relation does not consistently hold for the other algorithms as the correlation between 
-  the rankings is just 65.10\%.
-  
-  \begin{figure}[t]
+  \begin{figure}[b!]
   \centering
   \includegraphics{ch8_fig8}
   \caption{\textbf{Comparison of the Friedman ranking of the savings and F1Score sorted by F1Score 
@@ -805,5 +726,114 @@ ECSDT&CSB-mv-t & 0.2112 &$\pm$& 0.0125 & 0.1481 &$\pm$& 0.0122 & 0.2927 &$\pm$& 
   best ones measured by the Friedman rank of the savings. However, this relation does not 
   consistently hold for the other algorithms as the correlation between the rankings is just 
   65.10\%.}
-  \label{fig_2}
+  \label{fig:8:friedman_vs_fscore}
   \end{figure}
+
+\begin{table}[!t]
+     \centering
+    \footnotesize
+    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 
+0in}c@{\hskip 0in}l} %sum 7.7
+      \hline
+    \bf{Family} & \bf{Algorithm} & \multicolumn{3}{c}{\bf{Fraud}} & 
+\multicolumn{3}{c}{\bf{Churn}} & \multicolumn{3}{c}{\bf{Credit 1}} \\
+      \hline
+CI&DT-t & 0.4458 &$\pm$& 0.0133 & 0.0733 &$\pm$& 0.0198 & 0.2593 &$\pm$& 0.0068 \\
+&LR-t & 0.1531 &$\pm$& 0.0045 & 0.0000 &$\pm$& 0.0000 & 0.0494 &$\pm$& 0.0277 \\
+&RF-t & 0.2061 &$\pm$& 0.0041 & 0.0249 &$\pm$& 0.0146 & 0.2668 &$\pm$& 0.0085 \\
+&DT-u & 0.1502 &$\pm$& 0.0066 & 0.1175 &$\pm$& 0.0103 & 0.2276 &$\pm$& 0.0044 \\
+&LR-u & 0.0241 &$\pm$& 0.0163 & 0.1222 &$\pm$& 0.0098 & 0.3160 &$\pm$& 0.0314 \\
+&RF-u & 0.0359 &$\pm$& 0.0065 & 0.1346 &$\pm$& 0.0112 & 0.3193 &$\pm$& 0.0053 \\
+\hline 
+CPS&DT-r & 0.4321 &$\pm$& 0.0086 & 0.1206 &$\pm$& 0.0132 & 0.2310 &$\pm$& 0.0049 \\
+&LR-r & 0.1846 &$\pm$& 0.0123 & 0.1258 &$\pm$& 0.0111 & 0.3597 &$\pm$& 0.0156 \\
+&RF-r & 0.2171 &$\pm$& 0.0100 & 0.1450 &$\pm$& 0.0131 & 0.3361 &$\pm$& 0.0067 \\
+&DT-o & \bf{0.4495} &\bf{$\pm$}& \bf{0.0063} & 0.1022 &$\pm$& 0.0180 & 0.2459 &$\pm$& 0.0081 \\
+&LR-o & 0.1776 &$\pm$& 0.0117 & 0.1085 &$\pm$& 0.0203 & 0.3769 &$\pm$& 0.0067 \\
+&RF-o & 0.2129 &$\pm$& 0.0080 & 0.0841 &$\pm$& 0.0201 & 0.3281 &$\pm$& 0.0078 \\
+\hline 
+BMR&DT-t-BMR & 0.2139 &$\pm$& 0.0215 & 0.0941 &$\pm$& 0.0157 & 0.1514 &$\pm$& 0.0390 \\
+&LR-t-BMR & 0.1384 &$\pm$& 0.0044 & 0.1370 &$\pm$& 0.0150 & 0.1915 &$\pm$& 0.0340 \\
+&RF-t-BMR & 0.2052 &$\pm$& 0.0183 & 0.1264 &$\pm$& 0.0156 & 0.3186 &$\pm$& 0.0072\\
+\hline 
+CST&CSLR-t & 0.2031 &$\pm$& 0.0065 & 0.1134 &$\pm$& 0.0151 & 0.1454 &$\pm$& 0.0517 \\
+&CSDT-t & 0.2522 &$\pm$& 0.0980 & 0.1288 &$\pm$& 0.0194 & 0.2754 &$\pm$& 0.0059 \\
+\hline 
+ECSDT&CSB-mv-t & 0.2112 &$\pm$& 0.0125 & 0.1481 &$\pm$& 0.0122 & 0.2927 &$\pm$& 0.0108 \\
+&CSB-wv-t & 0.2112 &$\pm$& 0.0091 & 0.1686 &$\pm$& 0.0125 & 0.2926 &$\pm$& 0.0108 \\
+&CSB-s-t & 0.2072 &$\pm$& 0.0103 & 0.1554 &$\pm$& 0.0121 & 0.2818 &$\pm$& 0.0075 \\
+&CSP-mv-t & 0.2098 &$\pm$& 0.0126 & 0.1480 &$\pm$& 0.0136 & 0.2903 &$\pm$& 0.0108 \\
+&CSP-wv-t & 0.2099 &$\pm$& 0.0054 & 0.1651 &$\pm$& 0.0120 & 0.2905 &$\pm$& 0.0110 \\
+&CSP-s-t & 0.2064 &$\pm$& 0.0069 & 0.1590 &$\pm$& 0.0099 & 0.2809 &$\pm$& 0.0062 \\
+&CSRF-mv-t & 0.2208 &$\pm$& 0.0022 & 0.1081 &$\pm$& 0.0224 & 0.2994 &$\pm$& 0.0226 \\
+&CSRF-wv-t & 0.2175 &$\pm$& 0.0019 & 0.1220 &$\pm$& 0.0234 & 0.2992 &$\pm$& 0.0236 \\
+&CSRF-s-t & 0.2169 &$\pm$& 0.0045 & 0.1304 &$\pm$& 0.0162 & 0.2916 &$\pm$& 0.0236 \\
+&CSRP-mv-t & 0.2691 &$\pm$& 0.0054 & 0.1511 &$\pm$& 0.0110 & 0.4031 &$\pm$& 0.0079 \\
+&CSRP-wv-t & 0.2780 &$\pm$& 0.0041 & \bf{0.1710} &\bf{$\pm$}& \bf{0.0140} & \bf{0.4049} 
+&\bf{$\pm$}& \bf{0.0066}\\
+&CSRP-s-t & 0.2735 &$\pm$& 0.0148 & 0.1622 &$\pm$& 0.0103 & 0.3953 &$\pm$& 0.0141 \\
+      \hline
+      \multicolumn{11}{c}{(those models with the highest F1Score are market as bold)}
+    \end{tabular}
+\caption{Results as measured by F1Score}
+\label{tab:8:results_f1score}
+  \end{table}
+
+\begin{table}[!t]
+     \centering
+    \footnotesize
+    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l  } %sum 7.7
+    \hline
+    \bf{Family} & \bf{Algorithm} &  \multicolumn{3}{c}{\bf{Credit 2}} 
+& \multicolumn{3}{c}{\bf{Marketing}} \\ 
+      \hline
+CI&DT-t &  0.2614 &$\pm$& 0.0083 & 0.2647 &$\pm$& 0.0079\\ 
+&LR-t & 0.0155 &$\pm$& 0.0037 & 0.2702 &$\pm$& 0.0125\\ 
+&RF-t &  0.0887 &$\pm$&0.0061 & 0.2884 &$\pm$& 0.0116\\ 
+&DT-u &  0.3235 &$\pm$&0.0055 & 0.2659 &$\pm$& 0.0061\\ 
+&LR-u &  \bf{0.3890} &\bf{$\pm$}& \bf{0.0053} & 0.3440 &$\pm$& 0.0083\\ 
+&RF-u & 0.3815 &$\pm$&0.0051 & 0.3088 &$\pm$& 0.0065\\ 
+\hline 
+CPS&DT-r &0.3409 &$\pm$&0.0046 & 0.2739 &$\pm$& 0.0076\\ 
+&LR-r &  0.3793 &$\pm$& 0.0049 & 0.3374 &$\pm$& 0.0101\\ 
+&RF-r & 0.3570 &$\pm$& 0.0048 & 0.3103 &$\pm$& 0.0075\\ 
+&DT-o & 0.3258 &$\pm$& 0.0056 & 0.2634 &$\pm$& 0.0089\\ 
+&LR-o & 0.3804 &$\pm$& 0.0044 & \bf{0.3568} &\bf{$\pm$}& \bf{0.0102}\\ 
+&RF-o & 0.3212 &$\pm$& 0.0054 & 0.3083 &$\pm$& 0.0093\\ 
+\hline 
+BMR&DT-t-BMR & 0.3338 &$\pm$& 0.0052 & 0.2433 &$\pm$& 0.0071\\ 
+&LR-t-BMR &  0.3572 &$\pm$&0.0045 & 0.2954 &$\pm$& 0.0079\\ 
+&RF-t-BMR &  0.3551 &$\pm$&0.0053 & 0.2744 &$\pm$& 0.0070\\ 
+\hline 
+CST&CSLR-t & 0.3363 &$\pm$&0.0045 & 0.2339 &$\pm$& 0.0051\\ 
+&CSDT-t & 0.3483 &$\pm$& 0.0046 & 0.2680 &$\pm$& 0.0060\\ 
+\hline 
+ECSDT&CSB-mv-t & 0.3503 &$\pm$& 0.0046 & 0.2758 &$\pm$& 0.0072\\ 
+&CSB-wv-t &  0.3503 &$\pm$&0.0046 & 0.2757 &$\pm$& 0.0072\\ 
+&CSB-s-t &  0.3533 &$\pm$& 0.0046 & 0.2799 &$\pm$& 0.0074\\ 
+&CSP-mv-t &0.3499 &$\pm$& 0.0044 & 0.2749 &$\pm$& 0.0064\\ 
+&CSP-wv-t & 0.3498 &$\pm$&0.0045 & 0.2749 &$\pm$& 0.0064\\ 
+&CSP-s-t &  0.3524 &$\pm$&0.0046 & 0.2778 &$\pm$& 0.0104\\ 
+&CSRF-mv-t & 0.3560 &$\pm$&0.0118 & 0.2780 &$\pm$& 0.0106\\ 
+&CSRF-wv-t & 0.3549 &$\pm$&0.0069 & 0.2552 &$\pm$& 0.0187\\ 
+&CSRF-s-t &  0.3540 &$\pm$&0.0071 & 0.2578 &$\pm$& 0.0186\\ 
+&CSRP-mv-t &0.3743 &$\pm$& 0.0050 & 0.2916 &$\pm$& 0.0062\\ 
+&CSRP-wv-t & 0.3721 &$\pm$& 0.0051 & 0.2781 &$\pm$& 0.0063\\ 
+&CSRP-s-t & 0.3720 &$\pm$& 0.0049 & 0.2922 &$\pm$& 0.0137\\ 
+      \hline
+      \multicolumn{8}{c}{(those models with the highest F1Score are market as bold)}
+    \end{tabular}
+\caption{Continuation of \tablename{~\ref{tab:8:results_f1score}}}
+\label{tab:8:results_f1score2}
+  \end{table}
+
+  Finally, in \tablename{~\ref{tab:8:results_f1score}} the results of the algorithms measured by 
+  F1Score are shown. It is observed that the model with the highest savings is not the same as the 
+  one with the highest F1Score in all of the databases, corroborating the conclusions from 
+  \citep{CorreaBahnsen2013}, as selecting a method by a traditional statistic does not give the 
+  same result as selecting it using a business oriented measure such as financial savings. This can 
+  be  further examined in \mbox{\figurename{~\ref{fig:8:friedman_vs_fscore}}}, where the ranking of 
+  the F1Score and savings are compared. It is observed that the best two algorithms according to 
+  their Friedman rank of F1Score are indeed the best ones measured by the Friedman rank of the 
+  savings. However, this relation does not consistently hold for the other algorithms as the 
+  correlation between the rankings is just 65.10\%. 
