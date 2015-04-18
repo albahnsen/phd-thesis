@@ -59,7 +59,7 @@ representable functions.
   For simplicity we define $M_j \equiv  M(\mathcal{S}_j)$ for $j=1,\dots,T$, and 
   $\mathcal{M}=\{M_j\}_{j=1}^{T}$ a set of base classifiers.
   Then, these models are combined using majority voting to create the ensemble $H$ as follows
-  \begin{align}\label{eqn:majority-vote}
+  \begin{align}\label{eq:8:majority-vote}
     f_{mv}(\mathcal{S},\mathcal{M}) = \argmax_{c \in \{0,1\}} \sum_{j=1}^T 
     \mathbf{1}_c(M_j(\mathcal{S})).
   \end{align}
@@ -70,7 +70,7 @@ representable functions.
   If we assume that each one of the $T$ base classifiers have a probability $\rho$ of 
   being correct, the probability of an ensemble making the correct decision, denoted by $P_c$,
   can be calculated using the binomial \mbox{distribution \citep{Hansen1990}}
-  \begin{equation}\label{eq:prob}
+  \begin{equation}\label{eq:8:prob}
     P_c = \sum_{j>T/2}^{T} {{T}\choose{j}} \rho^j(1-\rho)^{T-j}.
   \end{equation}
   Furthermore, as shown in \citep{Lam1997}, if $T\ge3$ then:
@@ -141,6 +141,84 @@ algorithms.
 \caption{Visual representation of the random inducers algorithms.}
 \label{fig:8:2}
 \end{figure} 
+
+
+\subsection{Combination methods}
+  Lastly, the base classifiers are combined using either majority voting, cost-sensitive weighted 
+  voting and cost-sensitive stacking. Majority voting consists in collecting the predictions of 
+  each base classifier and selecting the decision with the highest number of votes, see 
+  (\ref{eq:8:majority-vote}).
+
+  \subsubsection*{Cost-sensitive weighted voting}
+
+  This method is an extension of weighted voting. First, in the traditional approach, a 
+  similar comparison of the votes of the base classifiers is made, but giving a weight $\alpha_j$ 
+  to each classifier $j$ during the voting phase \citep{Zhou2012}
+  \begin{align} \label{eq:8:weighted-majority-vote}
+    f_{wv}(\mathcal{S},\mathcal{M}, \alpha)
+    =\argmax_{c \in \{0,1\}} \sum_{j=1}^T \alpha_j \mathbf{1}_c(M_j(\mathcal{S})),
+  \end{align}
+  where $\alpha=\{\alpha_j\}_{j=1}^T$.
+  The calculation of $\alpha_j$ is related to the performance of each classifier $M_j$.
+  It is usually defined as the normalized misclassification error   $\epsilon$ of the base 
+  classifier $M_j$  in the out of bag set   $\mathcal{S}_j^{oob}=\mathcal{S}-\mathcal{S}_j$
+  \begin{equation}
+    \alpha_j=\frac{1-\epsilon(M_j(\mathcal{S}_j^{oob}))}{\sum_{j_1=1}^T 
+    1-\epsilon(M_{j_1}(\mathcal{S}_{j_1}^{oob}))}.
+  \end{equation}
+
+  However, as discussed in Section \ref{sec:edcs}, the misclassification measure is not suitable in 
+  many real-world classification problems. We propose a method to calculate the weights $\alpha_j$ 
+  taking into account the actual savings of the classifiers. Therefore using (\ref{eq:savings}), we 
+  define
+  \begin{equation}
+    \alpha_j=\frac{Savings(M_j(\mathcal{S}_j^{oob}))}
+    {\sum_{j_1=1}^T Savings(M_{j_1}(\mathcal{S}_j^{oob}))}.
+  \end{equation}
+  This method guaranties that the base classifiers that contribute to a higher increase in savings 
+  have more importance in the ensemble.
+  
+  \subsubsection*{Cost-sensitive stacking}
+  
+  The staking method consists in combining the different base classifiers by learning a 
+  second level algorithm on top of them \citep{Wolpert1992}. In this framework, once the base 
+  classifiers are constructed using the training set  $\mathcal{S}$, a new set is constructed 
+  where the output of the base classifiers  are now considered as the features while keeping the 
+  class labels.
+  
+  Even though there is no restriction on which algorithm can be used as a second level learner, 
+  it is common to use a lineal model \citep{Zhou2012}, such as 
+  \begin{align}
+    f_s(\mathcal{S},\mathcal{M},\mathcal{\beta}) =
+    g \left( \sum_{j=1}^T \beta_j M_j(\mathcal{S}) \right),
+  \end{align}
+  where $\mathcal{\beta}=\{\beta_j\}_{j=1}^T$, and $g(z)$ is the sign function 
+  \mbox{$g(z)=sign(z)$} in the case of a lineal regression or the sigmoid function, defined 
+  as \mbox{$g(z)=1/(1+e^{-z})$}, in the case of a logistic regression. 
+  
+  Moreover, following the logic used in \citep{Nesbitt2010}, we propose learning the set of  
+  parameters $\mathcal{\beta}$  using our proposed cost-sensitive logistic regression ($CSLR$) 
+  \citep{CorreaBahnsen2014b}. The $CSLR$ algorithm consists in introducing example-dependent costs 
+  into a logistic regression, by changing the objective function of the model to one that is 
+  cost-sensitive. For the specific case of cost-sensitive stacking, we define the cost function as: 
+  \begin{align}
+    &J(\mathcal{S},\mathcal{M},\beta)= \nonumber \\
+    & \sum_{i=1}^{N} \bigg[ y_i\bigg( 
+    f_s(\mathbf{x}_i,\mathcal{M},\mathcal{\beta}) \cdot(C_{TP_i} - C_{FN_i}) + C_{FN_i} \bigg) + 
+    \nonumber \\
+    & (1-y_i)\bigg( f_s(\mathbf{x}_i,\mathcal{M},\mathcal{\beta}) \cdot(C_{FP_i} - C_{TN_i}) 
+      +C_{TN_i} \bigg) \bigg].
+  \end{align}
+  Then, the parameters $\beta$ that minimize the logistic cost function are used in order to 
+  combine the different base classifiers. However, as discussed in \citep{CorreaBahnsen2014b}, 
+  this cost function is not convex for all possible cost matrices, therefore, we use genetic 
+  algorithms to minimize it.
+  
+  Similarly to cost-sensitive weighting, this method guaranties that the base classifiers that 
+  contribute to a higher increase in savings have more importance in the ensemble. Furthermore, 
+  by learning an additional second level cost-sensitive method, the combination is made such that 
+  the overall   savings measure is maximized.
+
 
 \section{Theoretical analysis of the ECSDT}
 \label{sec:8:theoretical}
