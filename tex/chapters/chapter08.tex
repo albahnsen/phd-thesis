@@ -112,8 +112,36 @@ being an extension of our previously proposed cost-sensitive logistic regression
 The remainder of the section is organized as follows: First, we introduce the example-dependent 
 cost-sensitive decision tree. Then we present the different random inducers and combination 
 methods. Finally, we define our proposed algorithms.
-  
+\todo{fix intro}
+
+
+\subsection{Random inducers}
+
+With the objective of creating an ensemble of example-dependent cost-sensitive decision trees, we 
+first create $T$ different random subsamples $\mathcal{S}_j$ for $j=1,\dots,T$, of the training  set 
+$\mathcal{S}$, and train a $CSDT$ algorithm on each one. In particular we create the different 
+subsets using four different methods: bagging \citep{Breiman1996}, pasting \citep{Breiman1999}, 
+random forests \citep{Breiman2001} and random patches \citep{Louppe2012}. 
+
+In bagging \citep{Breiman1996}, base classifiers are built on randomly drawn bootstrap subsets of 
+the original data, hence producing different base classifiers. Similarly, in pasting 
+\citep{Breiman1999}, the base classifiers are built on random  samples without replacement from 
+the training set. In random forests \citep{Breiman2001}, using decision trees as the base learner, 
+bagging   is extended and   combined  with a  randomization of the input features that  are used 
+when  considering candidates  to split    internal nodes. In particular, instead of looking for  
+the best  split among all   features, the   algorithm selects, at each node, a random subset of 
+features  and then determines   the best split only over  these features. In the random patches   
+algorithm \citep{Louppe2012}, base classifiers are created by randomly     drawn bootstrap subsets 
+of both examples and features. To further clarify the difference between the random inducer 
+methods, in \figurename{~\ref{fig:8:2}}, we show a visual representation of the random inducers 
+algorithms.
  
+\begin{figure}[t!]
+\includegraphics[scale=.5]{ch8_fig2}
+\caption{Visual representation of the random inducers algorithms.}
+\label{fig:8:2}
+\end{figure} 
+
 \section{Theoretical analysis of the ECSDT}
 \label{sec:8:theoretical}
 
