@@ -1,17 +1,17 @@
 \chapter{Bayes minimum risk}\label{ch:5}
 
 \begin{remark}{Outline}
-In this chapter, we introduce classifications models from a machine learning perspective. 
-Moreover, we present the example-dependent cost-sensitive framework that is the basis of the 
-thesis. In Section~\ref{sec:2:classification}, we give a self contain introduction to 
-classification, including the most-common algorithms, and the main methods for evaluating the 
-performance of the different algorithm. Then, in Section~\ref{sec:2:cs}, we present the general 
-framwork of cost-sensitive classification. Within this Section, we first introduce a method for 
-defining the type of cost-sensitivity of a problem. Afterwards, we present the different 
-cost-sensitive performance evaluation measures. Lastly, we show the state-of-the-art 
-example-dependent cost-sensitive methods cost-proportionate rejection-sampling and 
-cost-proportionate over-sampling.
+In this chapter, we introduce the Bayes minimum risk algorithm in Section~\ref{sec:5:bmr}. Then, in 
+Section~\ref{sec:5:prob}, we discuss the impact of calibrating the probabilities in the model. 
+Finally, in Section \ref{sec:5:experiments}, we compare the results of the proposed 
+algorithm, against state-of-the-art methods, using the five real-world cost-sensitive databases.
 \end{remark}
+
+In this chapter, we introduce the decision tree algorithm in Section \ref{sec:7:dt}. Then, in 
+Section \ref{sec:7:csdt}, we described our previously proposed cost-sensitive decision tree. For 
+this, we first shown the new cost-sensitive impurity measure, that introduces the diferent costs 
+when evaluating the performance of a split. Then, we introduce a new cost-sensitive pruning 
+criteria. 
 
 \todo{INTRO BMR}
 
@@ -28,6 +28,7 @@ characteristic (ROC) curve
   to a convex one using the ROC convex hull methodology.
   
 \section{Bayes minimum risk model}
+\label{sec:5:bmr}
 
 As decribed in Section \ref{sec:2:cs}, state-of-the-art example dependent techniques, only 
 introduce the cost by modifying the training set. In \citep{CorreaBahnsen2013,CorreaBahnsen2014}, 
@@ -63,7 +64,7 @@ also assesses the real probability of the event \citep{cohen2004}.
 
 
 \section{Calibration of probabilities}
-\label{sec:4:prob}
+\label{sec:5:prob}
 
 \todo{Add to intro the brier score}
 In this section two methods for calibrating probabilities are explained. First, the method proposed 
@@ -206,3 +207,4 @@ calibrated  probabilities be the slope of the ROCCH for each group.
   
    
 \section{Experiments}
+\label{sec:5:experiments}
