@@ -1,2 +1,75 @@
 \chapter{Conclusions}\label{ch:10}
 \todo{copy from last two papers}
+
+%CSDT
+Several real-world business applications of classification models are example-dependent 
+cost-sensitive, in the sense that the objective of using an algorithm is related to maximizing the 
+profit of the company. Moreover, the different costs due to misclassification vary among examples. 
+In this paper, we focus on three different applications: credit card fraud detection, credit 
+scoring 
+and direct marketing. In all cases, evaluating a classification algorithm using traditional 
+statistics such as misclassification rate or $F_1Score$, do not accurately represent the business 
+oriented goals.
+
+State-of-the-art example-dependent cost-sensitive techniques only introduce the cost to the 
+algorithm, either before or after training, therefore, leaving opportunities to investigate
+the potential impact of algorithms that take into account the real financial example-dependent 
+costs during an algorithm training. In this paper, we proposed a new example-dependent 
+cost-sensitive decision tree algorithm, by incorporating the different example-dependent costs into 
+a new cost-based impurity measure and a new cost-based pruning criteria. We show the importance of 
+including the costs during the algorithm construction, both by using a classical decision tree 
+and then the cost-based pruning procedure, and by fully creating a decision tree taking into 
+account 
+the costs per example.
+
+ Our proposed algorithm maintains the simplicity and interpretability of decision trees, 
+therefore, the resulting tree is easy to analyze and to obtain straightforward explanations of 
+the decisions made by the algorithm. This is a highly desirable feature, since in real-world 
+applications, it is important to explain the rationale behind the models decisions.
+Moreover, when comparing the results of the proposed method and state-of-the-art algorithms, 
+we found that in all cases our method provides the best performance measured by savings.
+
+Furthermore, when comparing our method with standard decision trees in terms of complexity 
+and training time, our proposed algorithm creates significantly smaller trees in a fraction of the 
+time. This, is an interesting result, as simpler trees are found to perform better when maximizing 
+the savings than when maximizing standard impurity measures.
+However, this may cause our algorithm to struggle with high cost outliers, as they may be ignored 
+by the method. Also, individual decision trees typically suffer from high variance.
+
+To overcome the algorithm's limitations, a future research should be focused on evaluating the 
+algorithm in a bagging framework, specifically, by learning different example-dependent 
+cost-sensitive decision trees on random subsets of the training set, and then combining them in 
+order to produce a more robust result. This approach, should take care of most outliers and should 
+arise to better results, as it has been proved to do with standard decision trees, i.e. random 
+forest. Moreover, we are aware that drawing conclusions from only three databases is not ideal. 
+Future work should include focusing efforts on finding more example-dependent cost-sensitive 
+databases. Lastly, it is worth investigating the combination of traditional impurity measures and 
+the proposed cost-sensitive impurity measure, as a measure that takes both the information gain and 
+the savings gain may produce good results.
+
+% ECSDT
+  In this paper we proposed a new framework of ensembles of example-dependent cost-sensitive 
+  decision-trees by creating cost-sensitive decision trees using four different 
+  random inducer methods and then blending them using three different combination approaches.
+  The proposed method was tested using five databases, from four real-world applications: credit 
+  card fraud detection, churn modeling, credit scoring and direct marketing. It is shown that our 
+  method ranks the best and outperforms state-of-the-art example-dependent cost-sensitive 
+  methodologies, when measured by financial savings.
+  
+  In total our framework is compose of 12 different algorithms, since, the example-dependent 
+  cost-sensitive ensemble can be constructed by inducing the base classifiers using either 
+  bagging, pasting, random forest or random patches, and then blending them using majority voting, 
+  cost-sensitive weighted voting or cost-sensitive stacking. When analyzing the results within our 
+  proposed framework, it is observed that the inducer method that performs the best is the random 
+  patches algorithm. Furthermore, the random patches algorithm is the one with the 
+  lower complexity as each base classifier is learned on a smaller subset than with the 
+  other inducer methods. Nevertheless, there is not a clear winner among the different combination  
+  methods, however, since the most time consuming step is the inducing and constructing of the 
+  base classifiers, testing all combination methods does not add a significant additional  
+  complexity.
+  
+  Lastly, our results show the importance of using the real example-dependent financial costs 
+  associated with real-world applications, since there are significant differences in the 
+  results when evaluating a model using a traditional cost-insensitive measure such as the 
+  accuracy or F1Score,  than when using the savings, leading to the conclusion of the 
+  importance of using the real practical financial costs of each context.
