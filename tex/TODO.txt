@@ -1,6 +1,17 @@
-      file                      section                                 todo
- chapter03                    chapter03                          fix outline
- chapter03  Credit card fraud detection          erase percentage of savings
- chapter03                    Databases                      table databases
- chapter10                    chapter10            copy from last two papers
- notations                    notations  take notations from the ECSDT paper
+      file                      section                                               todo
+ chapter01    Outline and contributions                  ask Djamila, ch2 is not on a Part
+ chapter02                    chapter02            ask Djamila, is Section allways in caps
+ chapter03                    chapter03                                        fix outline
+ chapter03  Credit card fraud detection                        erase percentage of savings
+ chapter03                    Databases                                    table databases
+ chapter05                  Brier score          ask Djamila, should this be in background
+ chapter05                  Experiments                                        experiments
+ chapter06           Genetic algorithms          ask Djamila, should this be in background
+ chapter06                  Experiments                                        Experiments
+ chapter07                  Experiments                                        Experiments
+ chapter09                    chapter09  ask Djamila if a separate chapter or on each m...
+ chapter10                    chapter10                               organize conclusions
+ chapter10                    chapter10                           also include the library
+  abstract                     abstract                   abstract, copy from other papers
+ notations                    notations                 Finish notations from all chapters
+ notations                    notations        Ask Djamila notations chapters applications
