@@ -1,5 +1,4 @@
       file                               section                                               todo
- chapter01                             chapter01  add flowchart of the organization of the diffe...
  chapter03                             chapter03                                        fix outline
  chapter03           Credit card fraud detection                        erase percentage of savings
  chapter03                             Databases                                    table databases
@@ -8,8 +7,6 @@
  chapter05  Brier score and reliability diagrams  Figure of the reliabily diaframs or calibratio...
  chapter07                           Experiments                                         complexity
  notations                             notations                take notations from the ECSDT paper
-    thesis                                thesis                        Update chapters structure}\
     thesis                                thesis                  Update intro to applications part
     thesis                                thesis                       Update intro to methods part
     thesis                                thesis                          copy from last two papers
-    thesis                              Examples                          move costcla as a chapter
