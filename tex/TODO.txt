@@ -8,4 +8,3 @@
  chapter07                           Experiments                                         complexity
  chapter10                             chapter10                          copy from last two papers
  notations                             notations                take notations from the ECSDT paper
-    thesis                                thesis                       Update intro to methods part
