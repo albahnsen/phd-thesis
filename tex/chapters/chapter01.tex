@@ -1,4 +1,69 @@
 \chapter{Introduction}
 
+  Classification, in the context of machine learning, deals with the problem of 
+  predicting the class of a set of examples given their features. Traditionally, classification 
+  methods aim at minimizing the misclassification of examples, in which an example is 
+  misclassified if the predicted class is different from the true class. Such a traditional 
+  framework assumes that all misclassification errors carry the same cost. This is not the case in 
+  many real-world applications. Methods that use different misclassification costs are known as 
+  cost-sensitive classifiers. Typical cost-sensitive approaches assume a constant cost for each 
+  type of error, in the sense that, the cost depends on the class and is the same among examples 
+  \citep{Elkan2001,Kim2012}. 
+  
+  This class-dependent approach is not realistic in many real-world applications. For 
+  example in credit card fraud detection, failing to detect a fraudulent transaction may have an 
+  economical impact from a few to thousands of Euros, depending on the particular transaction and 
+  card holder \citep{Ngai2011a}. In churn modeling, a model is used for predicting which
+  customers are more likely to abandon a service provider. In this context, failing to identify a 
+  profitable or unprofitable churner has a significant different economic 
+  result~\citep{Verbraken2013}. Similarly, in direct marketing, wrongly predicting that a customer 
+  will not accept an offer when in fact he will, may have different financial impact, as not all 
+  customers generate the same profit \citep{Zadrozny2003}. Lastly, in credit scoring, accepting 
+  loans from bad customers does not have the same economical loss, since customers have different 
+  credit lines, therefore, different profit \citep{Verbraken2014}.
+  
+  Methods that use different misclassification costs are known as cost-sensitive classifiers. In 
+  particular we are interested in methods that are example-dependent cost-sensitive, in the sense 
+  that the costs vary among examples and not only among classes \citep{Elkan2001}. However, the 
+  literature on example-dependent cost-sensitive methods is limited, mostly because there is a 
+  lack of publicly available datasets that fit the problem \citep{MacAodha2013}.
+  Example-dependent cost-sensitive classification methods can be grouped according to the step 
+  where the costs are introduced into the system. Either the costs are introduced prior to the 
+  training of the algorithm, after the training or during training \citep{Wang2013}. In 
+  \figurename{ \ref{fig_algos}}, the different algorithms are grouped according to the stage in a 
+  classification system where they are used.
+
+  The first set of methods that were proposed to deal with cost-sensitivity consist in 
+  re-weighting the training examples based on their costs, either by cost-proportionate 
+  rejection-sampling \citep{Zadrozny2003}, or cost-proportionate over-sampling \citep{Elkan2001}.
+  The rejection-sampling approach consists in selecting a random subset by randomly 
+  selecting examples from a training set, and accepting each example with probability equal to 
+  the normalized misclassification cost of the example. On the other hand, the over-sampling 
+  method consists in creating a new set, by making $n$ copies of each example, where $n$ is related 
+  to the normalized misclassification cost of the example.
+  Recently, we proposed a direct cost approach to make the classification decision based on   the  
+  expected costs. This method is called Bayes minimum risk ($BMR$), and has been successfully   
+  applied to detect credit card fraud \citep{CorreaBahnsen2013,CorreaBahnsen2014}. The method   
+  consists in quantifying tradeoffs between various decisions using probabilities and the costs   
+  that accompany such decisions. 
+  \todo{add other papers}
+
+  We evaluate the 
+  proposed framework using five different databases from four real-world problems. In particular,
+  credit card fraud detection, churn modeling, credit scoring and direct marketing. The 
+  results show that the proposed method outperforms state-of-the-art  example-dependent   
+  cost-sensitive methods. Furthermore, our source code, as used for the experiments, is publicly 
+  available as part of the \textit{CostSensitiveClassification}\footnote{
+  https://github.com/albahnsen/CostSensitiveClassification} library.
+  
+  By taking into account the real financial costs of the different real-world applications, our 
+  proposed example-dependent cost-sensitive decision tree is a better choice for these and many 
+  other applications. This is because, our algorithm is focusing on solving the actual 
+  business problems,  and not proxies as standard classification models do. We foresee that 
+  our approach should open the door to developing more business focused algorithms, and 
+  that ultimately, the use of the actual financial costs during training will become a common 
+  practice.
+  \todo{add conclusions}
+
 \todo{add flowchart of the organization of the different chapters}
 
