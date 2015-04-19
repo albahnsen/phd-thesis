@@ -3,30 +3,11 @@
 \begin{remark}{Outline}
 In this chapter, we introduce the Bayes minimum risk algorithm in Section~\ref{sec:5:bmr}. Then, in 
 Section~\ref{sec:5:prob}, we discuss the impact of calibrating the probabilities in the model. 
-Finally, in Section \ref{sec:5:experiments}, we compare the results of the proposed 
+Finally, in Section~\ref{sec:5:experiments}, we compare the results of the proposed 
 algorithm, against state-of-the-art methods, using the five real-world cost-sensitive databases.
 \end{remark}
 
-In this chapter, we introduce the decision tree algorithm in Section \ref{sec:7:dt}. Then, in 
-Section \ref{sec:7:csdt}, we described our previously proposed cost-sensitive decision tree. For 
-this, we first shown the new cost-sensitive impurity measure, that introduces the diferent costs 
-when evaluating the performance of a split. Then, we introduce a new cost-sensitive pruning 
-criteria. 
 
-\todo{INTRO BMR}
-
-  In this paper two different methods for calibrating probabilities are evaluated and analyzed in 
-the context
-  of credit card fraud detection, with the objective of finding the model that minimizes the real 
-losses due to fraud.
-  First, the method proposed \mbox{in \citep{Elkan2001}} to adjust the probabilities based on the 
-difference in
-  bad rates between the training and testing datasets is used.
-  Second, it is compared against the method proposed \mbox{in \citep{Hernandez-Orallo2012}},
-  in which calibrated probabilities are extracted after modifying the receiver operating 
-characteristic (ROC) curve
-  to a convex one using the ROC convex hull methodology.
-  
 \section{Bayes minimum risk model}
 \label{sec:5:bmr}
 
@@ -66,16 +47,16 @@ also assesses the real probability of the event \citep{cohen2004}.
 \section{Calibration of probabilities}
 \label{sec:5:prob}
 
-\todo{Add to intro the brier score}
-In this section two methods for calibrating probabilities are explained. First, the method proposed 
-in \citep{Elkan2001} to adjust the probabilities based on the   difference in bad rates  between the 
-training and testing datasets.  Then, the method proposed in \cite{Hernandez-Orallo2012}, in which 
-calibrated probabilities are extracted after modifying the ROC curve using the ROC convex hull 
-methodology, is described.
+In this section we discussed a measure for evaluating how well calibrated are a set of 
+pobabilities. Furthermore, two methods for calibrating probabilities are explained. First, the 
+method proposed in \citep{Elkan2001} to adjust the probabilities based on the   difference in bad 
+rates  between the training and testing datasets.  Then, the method proposed in 
+\cite{Hernandez-Orallo2012}, in which calibrated probabilities are extracted after modifying the ROC 
+curve using the ROC convex hull methodology, is described.
   
   
-\subsection{Brier score and reliability diagrams}
-\todo{Figure of the reliabily diaframs or calibration map}
+\subsection{Brier score}
+% \todo{Figure of the reliabily diaframs or calibration map}
 
 Traditional evaluation measures of binary classification problems, such as Accuracy and 
 $F_1Score$, provide a way to analyze the performance of a model. However, when using the classifier 

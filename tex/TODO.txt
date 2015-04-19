@@ -1,10 +1,8 @@
-      file                               section                                               todo
- chapter03                             chapter03                                        fix outline
- chapter03           Credit card fraud detection                        erase percentage of savings
- chapter03                             Databases                                    table databases
- chapter05                             chapter05                                          INTRO BMR
- chapter05          Calibration of probabilities                       Add to intro the brier score
- chapter05  Brier score and reliability diagrams  Figure of the reliabily diaframs or calibratio...
- chapter07                           Experiments                                         complexity
- chapter10                             chapter10                          copy from last two papers
- notations                             notations                take notations from the ECSDT paper
+      file                      section                                               todo
+ chapter03                    chapter03                                        fix outline
+ chapter03  Credit card fraud detection                        erase percentage of savings
+ chapter03                    Databases                                    table databases
+ chapter05                  Brier score  Figure of the reliabily diaframs or calibratio...
+ chapter07                  Experiments                                         complexity
+ chapter10                    chapter10                          copy from last two papers
+ notations                    notations                take notations from the ECSDT paper
