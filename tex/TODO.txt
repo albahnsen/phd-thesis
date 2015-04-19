@@ -1,5 +1,4 @@
       file                               section                                               todo
- chapter01             Outline and contributions                                     finish outline
  chapter03                             chapter03                                        fix outline
  chapter03           Credit card fraud detection                        erase percentage of savings
  chapter03                             Databases                                    table databases
