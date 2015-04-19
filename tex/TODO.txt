@@ -6,7 +6,6 @@
  chapter05          Calibration of probabilities                       Add to intro the brier score
  chapter05  Brier score and reliability diagrams  Figure of the reliabily diaframs or calibratio...
  chapter07                           Experiments                                         complexity
+ chapter10                             chapter10                          copy from last two papers
  notations                             notations                take notations from the ECSDT paper
-    thesis                                thesis                  Update intro to applications part
     thesis                                thesis                       Update intro to methods part
-    thesis                                thesis                          copy from last two papers
