@@ -1,48 +1,39 @@
 % Abstract ====================================================================
-
 \pdfbookmark[1]{Abstract}{Abstract}
 \chapter*{Abstract}
-\todo{abstract, copy from other papers}
 
-% Data analysis and machine learning have become an integrative part of the
-% modern scientific methodology, offering automated procedures for the prediction
-% of a phenomenon based on past observations, unraveling underlying patterns in
-% data and providing insights about the problem. Yet, caution should
-% avoid using machine learning as a black-box tool, but rather consider it as a
-% methodology, with a rational thought process that is entirely dependent on the
-% problem under study. In particular, the use of algorithms
-% should ideally require a reasonable understanding of their
-% mechanisms, properties and limitations, in order to better apprehend and
-% interpret their results.
-% 
-% Accordingly, the goal of this thesis is to provide an in-depth
-% analysis of random forests, consistently calling into
-% question each and every part of the algorithm, in order to shed new light on
-% its learning capabilities, inner workings and interpretability. The first
-% part of this work studies the induction of decision trees and the construction of
-% ensembles of randomized trees, motivating their design and purpose whenever
-% possible. Our contributions follow with an original complexity
-% analysis of random forests, showing their good computational performance
-% and scalability, along with an in-depth discussion of their
-% implementation details, as contributed within Scikit-Learn.
-% 
-% In the second part of this work, we analyze and discuss the interpretability of
-% random forests in the eyes of variable importance measures. The core of our
-% contributions rests in the theoretical characterization of the Mean Decrease of
-% Impurity variable importance measure, from which we prove and derive some of
-% its properties in the case of multiway totally randomized trees and in
-% asymptotic conditions. In consequence of this work, our analysis  demonstrates
-% that variable importances as computed from non-totally randomized trees (e.g.,
-% standard Random Forest) suffer from a combination of defects, due to masking
-% effects, misestimations of node impurity or due to the binary structure of
-% decision trees.
-% 
-% Finally, the last part of this dissertation addresses limitations of random
-% forests in the context of large datasets. Through extensive experiments, we
-% show that subsampling both samples and features simultaneously provides on par
-% performance while lowering at the same time the memory requirements. Overall
-% this paradigm highlights an intriguing practical fact: there is often no need
-% to build single models over immensely large datasets. Good performance can
-% often be achieved by building models on (very) small random parts of the data
-% and then combining them all in an ensemble, thereby avoiding all practical
-% burdens of making large data fit into memory.
+Several real-world classification problems are example-dependent cost-sensitive in nature, where the 
+costs due to misclassification vary between examples and not only within classes. However, standard 
+classification methods do not take these costs into account, and assume a constant cost of 
+misclassification errors. This approach is not realistic in many real-world applications. For  
+example in credit card fraud detection, failing to detect a fraudulent transaction may have an 
+economical impact from a few to thousands of Euros, depending on the particular transaction and card 
+holder. In churn modeling, a model is used for predicting which customers are more likely to 
+abandon a service provider. In this context, failing to identify a   profitable or unprofitable 
+churner has a significant different economic   result. Similarly, in direct marketing, wrongly 
+predicting that a customer   will not accept an offer when in fact he will, may have different 
+financial impact, as not all   customers generate the same profit. Lastly, in credit scoring, 
+accepting   loans from bad customers does not have the same economical loss, since customers have 
+different   credit lines, therefore, different profit.
+
+Accordingly, the goal of this thesis is to provide an in-depth analysis of example-dependent 
+cost-sensitive classification. The first part of this manuscript is dedicated to explain the 
+particularities of the four real-world classification problems that are the focus of this thesis, in 
+particular, credit card fraud detection, credit scoring, churn modeling and direct marketing. In 
+general, we show why each of the applications is example-dependent cost-sensitive, and we elaborate 
+a framework for the analysis of each problem. 
+
+In the second part of this work, we introduce our previously proposed example-dependent 
+cost-sensitive methods, namely, Bayes minimum risk, cost-sensitive logistic regression, 
+cost-sensitive decision trees algorithm and ensemble of cost-sensitive decision trees.
+Moreover, we present the library \mbox{\textit{CostCla}} that we develop as part of the thesis. 
+This library is an open-source implementation of all the algorithms covered in this manuscript.
+
+
+Finally, the results will show the importance of using the real example-dependent financial 
+costs associated with real-world applications, since there are significant differences in the 
+results when evaluating a model using a traditional cost-insensitive measure such as the accuracy 
+or F1Score,  than when using the savings, leading to the conclusion of the importance of using the 
+real practical financial costs of each context.
+
+
