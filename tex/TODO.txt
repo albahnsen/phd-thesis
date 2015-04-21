@@ -10,7 +10,6 @@
  chapter06                  Experiments                                     Experiments
  chapter07                  Experiments                                     Experiments
  chapter09                    chapter09  Ask Djamila if as a chapter or in the appendix
- chapter10                    chapter10                            organize conclusions
   abstract                     abstract                abstract, copy from other papers
  notations                    notations              Finish notations from all chapters
  notations                    notations     Ask Djamila notations chapters applications
