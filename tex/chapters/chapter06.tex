@@ -1,292 +1,192 @@
-\chapter{Cost-sensitive logistic regression}\label{ch:6}
+\chapter{Bayes minimum risk}\label{ch:5}
 
 \begin{remark}{Outline}
-In this chapter, we introduce the logistic regression algorithm in Section 
-\ref{sec:6:logistic}. Then, in Section \ref{sec:6:cslr}, we described our previously proposed 
-cost-sensitive logistic regression. For this, we do a deep analysis of the logistic regression 
-implicit misclassification costs in Section \ref{sec:6:log_cost_analysis}. Then in Section 
-\ref{sec:6:cscostfunction}, we shown a new version of the logistic regression cost function, one 
-that takes into account the real costs due to misclassification and correct classification. 
-Afterwards, in Section \ref{sec:6:ga}, we give a brief introduction to genetic algorithms, since is 
-the model used to estimate the parameters of our proposed cost-sensitive logistic regression. 
-Finally, in Section \ref{sec:6:results}, we compare the results of the proposed algorithm, against 
-state-of-the-art methods, using the five real-world cost-sensitive databases.
+In this chapter, we introduce the Bayes minimum risk algorithm in Section~\ref{sec:5:bmr}. Then, in 
+Section~\ref{sec:5:prob}, we discuss the impact of calibrating the probabilities in the model. 
+Finally, in Section~\ref{sec:5:experiments}, we compare the results of the proposed 
+algorithm, against state-of-the-art methods, using the five real-world cost-sensitive databases.
 \end{remark}
 
 
-\section{Logistic regression}
-\label{sec:6:logistic}
+\section{Bayes minimum risk model}
+\label{sec:5:bmr}
 
-Logistic regression is a classification model that, in the specific context of binary 
-classification, estimates the posterior probability of the positive class, as the logistic sigmoid 
-of a linear function of the feature vector \citep{Bishop2006}. The estimated probability  is 
-evaluated as 
-\begin{equation}
-  \hat p_i = P(y=1 \vert \mathbf{x}_i) = h_{\theta}(\mathbf{x}_i) = 
-  g\bigg(\sum_{j=1}^{k}{\theta^jx_i^j}\bigg),
-\end{equation}
-where $h_\theta(\mathbf{x}_i)$ refers to the hypothesis of $i$ given the parameters $\theta$,  
-and  $g(\cdot)$ is the logistic sigmoid function, defined as
-\begin{equation}
-  g(z)=\frac{1}{(1+e^{-z})} 
-\end{equation}
-In the next Figure, the logistic sigmoid function is shown.
-\begin{figure}[htbp]
-  \centering
-  \includegraphics{ch6_fig1}
-  \caption{Sigmoid function}
-  \label{fig:ch6:1}
-\end{figure}
+As decribed in Section \ref{sec:2:cs}, state-of-the-art example dependent techniques, only 
+introduce the cost by modifying the training set. In \citep{CorreaBahnsen2013,CorreaBahnsen2014}, 
+we proposed a cost-sensitive model called Bayes minimum risk classifier ($BMR$).  
 
-The problem then becomes on finding the right parameters that minimize a given cost function.   
-Usually, in the case of logistic regression the cost function $J(\theta)$ refers to the negative   
-logarithm of the likelihood, such that
+As defined in \citep{Ghosh2006}, the BMR classifier is a decision model based on
+quantifying tradeoffs between various decisions using probabilities and the costs that accompany 
+such decisions. This is done in a way that for each example the expected losses are minimized. In  
+what follows, we consider the probability estimates $\hat p_i$ as known, regardless of the algorithm 
+used to calculate them.  The risk that accompanies each decision is calculated using the cost matrix 
+as described in \tablename{ \ref{tab:2:cost_matrix}}. In the specific framework of binary 
+classification, the risk of predicting the example $i$ as negative is 
 \begin{equation}
-  J(\theta)=\frac{1}{N}\sum_{i=1}^{N} J_i(\theta),
+  R(c_i=0|\mathbf{x}_i)=C_{TN_i}(1-\hat p_i)+C_{FN_i} \cdot \hat p_i, 
 \end{equation}
-where
-\begin{align}\label{eq:6:lrcost}
-  J_i(\theta) =  -y_i\log(h_\theta(\mathbf{x}_i)) -(1-y_i)\log(1-h_\theta(\mathbf{x}_i)).
-\end{align}
-Therefore, the parameters are found using the following equation
-\begin{align}
-  \theta = \argmin_\theta J(\theta).
-\end{align}
+and
+\begin{equation}
+  R(c_i=1|\mathbf{x}_i)=C_{TP_i} \cdot \hat p_i + C_{FP_i}(1- \hat p_i), 
+\end{equation}
+is the risk when predicting the example as positive, where $\hat p_i$ is the estimated positive 
+probability for example $i$. Subsequently, if 
+\begin{equation}
+  R(c_i=0|\mathbf{x}_i) \le R(c_i=1|\mathbf{x}_i), 
+\end{equation}
+then  the example $i$ is classified as negative. This means that the risk associated with the 
+decision $c_i$ is lower than the risk associated with classifying it as positive. 
 
-\begin{remark}{Logistic regression estimation}
-There are several methods used to estimate the logistic regression, in particular, maximum 
-likelihood \citep{Hastie2009}, Newton, coordinate descent \citep{Murphy2012} and dual coordinate 
-descent \citep{Yu2011}. Nevertheless, all these methods rely on the assumption of convexity of the
-negative logarithm of the likelihood function. In the next section we analyze the convexity of the 
-logistic regression.
+\begin{remark}{Characteristics of probability estimates}
+When using the output of a binary classifier as a basis for decision making, there is a 
+need for a probability that not only separates well between positive and negative examples, but that 
+also assesses the real probability of the event \citep{cohen2004}.
 \end{remark}
 
-\subsection{Convexity analysis}
 
-A function $f(\mathbf{x})$ which is twice-differentiable is convex if and only if its hessian 
-matrix (matrix of second-order partial derivatives) is positive semi-definite \citep{Boyd2010}.
-Therefore, with the objective of evaluating the convexity of the logistic function, first the first 
-order partial derivatives are calculated as follows:
+\section{Calibration of probabilities}
+\label{sec:5:prob}
 
-\begin{equation}
-\left[ \begin{array}{c}
-  \frac{\partial J(\theta)}{\partial \theta_1} \\[0.1in]	
-  \frac{\partial J(\theta)}{\partial \theta_2} \\[0.1in]	
-  \ldots \\[0.1in]	
-  \frac{\partial J(\theta)}{\partial \theta_k}
-\end{array} \right] =
-\left[ \begin{array}{c}
-  \frac{1}{N}\sum_{i=1}^{N}\left[x_i^{(1)}\left(h_\theta(\mathbf{x}_i)-y_i\right)\right]\\[0.1in]
-  \frac{1}{N}\sum_{i=1}^{N}\left[x_i^{(2)}\left(h_\theta(\mathbf{x}_i)-y_i\right)\right]\\[0.1in]
-  \ldots \\[0.1in]	
-  \frac{1}{N}\sum_{i=1}^{N}\left[x_i^{(k)}\left(h_\theta(\mathbf{x}_i)-y_i\right)\right]\\[0.1in]	
-\end{array} \right]
-\end{equation}
-
-Then, using the first order partial derivatives, the Hessian ($H$) can be generalized as
-\begin{equation}
-  \partialb{j1}{j2}=\frac{1}{N}\sum_{i=1}^{N}
-  \left[\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)x_i^{(j1)}x_i^{(j2)}\right],
-\end{equation}
-where, $j1$ and $j2$ $\in \{1\cdots k\}$. Which is the same as
-\begin{equation}
-H=\left[ \begin{array}{cccc}
-  \partialb{1}{1} & \partialb{1}{2} & \cdots & \partialb{1}{k} \\[0.1in]  
-  \partialb{2}{1} & \partialb{2}{2} & \cdots & \partialb{2}{k} \\[0.1in]  
-  \cdots & \cdots & \cdots & \cdots \\[0.1in]  
-  \partialb{k}{1} & \partialb{k}{2} & \cdots & \partialb{k}{k}  
-\end{array} \right]
-\end{equation}
-
-For the cost function to be convex the Hessian matrix	must be positive-semidefinite, and
-a function is positive-semidefinite if:  
-\begin{equation}
-  z^T\left[\nabla_x^2f(x)\right]z \ge 0 \quad  \forall z
-\end{equation}
-Applied to J($\theta$), it is necessary to proof
-\begin{equation}\label{eq:6:pos1}
-  z^T\left[H \right]z \ge 0 \quad  \forall z
-\end{equation}
-Moreover, $H$ can be rewritten, using only the internal part of the sum, since it do not 
-dependent on $\theta$
-\begin{equation}
- H = \frac{1}{N}\sum_{i=1}^{N} \left[ 
-\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)\mathbf{x}_i^T \mathbf{x} \right]. 
-\end{equation}
-Then, (\ref{eq:6:pos1}) becomes
-\begin{align}
-  z^T \left[\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)\mathbf{x}_i^T 
-\mathbf{x}\right] z,
-\end{align}
-which can be rewritten as
-\begin{align}
-  (1-h_\theta(\mathbf{x}_i))h_\theta(\mathbf{x}_i)\left(\mathbf{x}_i^Tz\right)^2 \ge 0.
-\end{align}
-Therefore, proving that $J(\theta)$ is convex, as $\left(\mathbf{x}_i^Tz\right)^2 
-\ge 0$ and \\ $\left((1-h_\theta(\mathbf{x}_i))h_\theta(\mathbf{x}_i)\right)\ge 0$ because $0\ge 
-h_\theta(\mathbf{x}_i) \ge 1$.
-
-
-\section{Cost-sensitive logistic regression}
-\label{sec:6:cslr}
-
-In this section we introduce our proposed cost-sensitive logistic regression 
-\citep{CorreaBahnsen2014b}. First, we motive the need to modify the logistic regression, as we 
-analyze the implicit costs that the logistic regression assign to each misclassification error 
-during the estimation of the parameters $\theta$. Then, we show our proposed algorithm.
-
-
-\subsection{Analysis of the logistic cost function}
-\label{sec:6:log_cost_analysis}
-
-The logistic regression cost function, as described in (\ref{eq:6:lrcost}), implicitly assume that 
-a false positives and a false negatives have the same cost, i.e. $C_{{FP}_i} = C_{{FN}_i}$ $\forall 
-i \in \{1,\cdots,N\}$. This can be easily shown by analyzing the logistic cost function for both 
-values of $y_i$ and the algorithm prediction $h_\theta(\mathbf{x}_i))$:
-
-\begin{itemize}
-\item If $y_i=0$ and $h_\theta(\mathbf{x}_i)) \approx 0$, 
-\begin{align*}
- J_i(\theta) &= -y_i\log(h_\theta(\mathbf{x}_i)) -(1-y_i)\log(1-h_\theta(\mathbf{x}_i)) \nonumber \\
- &\approx -(0)\log((0)) -(1-(0))\log(1-(0)) \nonumber \\
- &\approx 0.
-\end{align*}
-
-\item If $y_i=0$ and $h_\theta(\mathbf{x}_i)) \approx 1$, 
-\begin{align*}
- J_i(\theta) &\approx -(0)\log((1)) -(1-(0))\log(1-(1)) \nonumber \\
- &\approx \infty.
-\end{align*}
-
-\item If $y_i=1$ and $h_\theta(\mathbf{x}_i)) \approx 0$, 
-\begin{align*}
- J_i(\theta) &\approx -(1)\log((0)) -(1-(1))\log(1-(0)) \nonumber \\
- &\approx \infty.
-\end{align*}
-
-\item If $y_i=1$ and $h_\theta(\mathbf{x}_i)) \approx 1$, 
-\begin{align*}
- J_i(\theta) &\approx -(1)\log((1)) -(1-(1))\log(1-(1)) \nonumber \\
- &\approx 0.
-\end{align*}
-\end{itemize}
-
-\noindent Then, we collect the previous results in a cost matrix:
-  \begin{table}[htbp]
-    \centering
-    \footnotesize
-    \begin{tabular}{c|c|c}
-      \multicolumn{3}{c}{}\\
-      \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
-      \multicolumn{1}{c|}{} & $y=1$& $y=0$ \\
-      \hline
-      Predicted Positive    & \multirow{ 2}{*}{$C_{{TP}_i}\approx 0$} & 
-      \multirow{2}{*}{$C_{{FP}_i}\approx \infty$} \\
-      $c=1$ & &\\
-      \hline
-      Predicted Negative    & \multirow{ 2}{*}{$C_{{FN}_i}\approx \infty$} & \multirow{ 
-      2}{*}{$C_{{TN}_i}\approx 0$} \\
-      $c=0$ & &\\
-    \end{tabular}
-    \caption{Logistic regression cost matrix}
-    \label{tab:2:1}
-  \end{table} 
+In this section we discussed a measure for evaluating how well calibrated are a set of 
+pobabilities. Furthermore, two methods for calibrating probabilities are explained. First, the 
+method proposed in \citep{Elkan2001} to adjust the probabilities based on the   difference in bad 
+rates  between the training and testing datasets.  Then, the method proposed in 
+\cite{Hernandez-Orallo2012}, in which calibrated probabilities are extracted after modifying the ROC 
+curve using the ROC convex hull methodology, is described.
   
-This confirm our notion that the logistic regression cost function implicitly assume that 
-a false positives and a false negatives have the same cost. However, as discussed in previous 
-chapters, this is not the case in several real-world applications.
-
   
-\subsection{Cost-sensitive cost function}
-\label{sec:6:cscostfunction}
+\subsection{Brier score}
+\todo{To background}
 
-In order to incorporate the different real costs as discussed in 
-\tablename{~\ref{tab:2:cost_matrix}} into the logistic regression. We start by analyzing the 
-expected costs that a modified logistic regression cost function should made for each 
-misclassification and correct classification case.
-\begin{equation*}
-  J^c_i(\theta) = 
-  \begin{cases}
-    C_{TP_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(\mathbf{x}_i) \approx 1  \\
-    C_{TN_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(\mathbf{x}_i) \approx 0  \\
-    C_{FP_i}    & \text{if} \phantom{-}  y_i = 0 \text{ and } h_\theta(\mathbf{x}_i) \approx 1  \\
-    C_{FN_i}    & \text{if} \phantom{-}  y_i = 1 \text{ and } h_\theta(\mathbf{x}_i) \approx 0 .
-  \end{cases}
-\end{equation*}
-
-Then, as we already have the real costs, we create a new cost-sensitive logistic regression cost 
-function, by including the different costs into the logistic function,
-\begin{align}\label{eq:CSLR}
-  J^c(\theta)=\frac{1}{N} \sum_{i=1}^{N} \bigg( y_i(h_\theta(\mathbf{x}_i) C_{TP_i} + 
-  (1-h_\theta(\mathbf{x}_i))C_{FN_i})  \nonumber\\ 
-  +(1-y_i)(h_\theta(\mathbf{x}_i) C_{FP_i} + (1-h_\theta(\mathbf{x}_i))C_{TN_i}) \bigg).
-\end{align}
-
-Nevertheless, our previous analysis have shown that this new cost function is not always convex 
-\citep{CorreaBahnsen2014b}, therefore, we estimate the parameters $\theta$ with genetic algorithms, 
-as this optimization heuristic does not require the underlying function to be differentiable or 
-convex \citep{Haupt2004}. In the next section we give a brief introduction to generic algorithms.
+Traditional evaluation measures of binary classification problems, such as Accuracy and 
+$F_1Score$, provide a way to analyze the performance of a model. However, when using the classifier 
+output as a basis for decision making, there is a need of a measure that takes into account not only 
+the misclassification of a classifier $\mathbf{c}$, but also the quality of the estimated 
+probability $\mathbf{\hat p}$ \citep{cohen2004}. The most appropriate  is the Brier score 
+\citep{brier1950}. The Brier score is one of a class of so-called proper scores which are used in 
+evaluating the subjective probability assessment of forecasters \citep{DeGroot1983}. The Brier score 
+is the average squared difference between the forecasters estimated probability of and the true 
+label:
+\begin{equation}
+  BS(f(\mathcal{S})) = \frac{1}{N} \sum_{i=1}^{N} (\hat p_i - y_i)^2.
+\end{equation}
+The main justification of this score, is based on decision theoretic considerations, in the sense 
+that, a forecaster should pay a price proportional to the confidence with which it asserts its 
+decision.
 
 
-\subsection{Genetic algorithms}
-\label{sec:6:ga}
-\todo{ask Djamila, should this be in background}
+\subsection{Calibration due to a change in base rates}
 
-Genetic algorithms, is an optimization technique that attempts to replicate natural evolution 
-processes in which the individuals with the considered best characteristics to adapt to the 
-environment are more likely to reproduce and survive. These advantageous individuals mate between 
-them, producing descendants similarly characterized, so favorable characteristics are preserved and 
-unfavorable ones destroyed, leading to the progressive evolution of the species. The model aims 
-to improve the solution to a problem by keeping the best combination of input variables. The 
-flow diagram presented in \figurename{~\ref{fig:6:geneticalgorithms}} describes the process. It 
-starts with the definition of the problem to optimize, generating an objective function to evaluate 
-the possible candidate solutions (chromosomes), i.e., the objective function is the way of 
-determining which individual produces the best outcome. 
+One of the reasons why a probability may not be calibrated is because the algorithm is trained using 
+a dataset with a different base (or positive) rate than the one on the evaluation dataset.  This is 
+something common in machine learning since using under-sampling or over-sampling is a typical method 
+to solve problems such as class imbalance and cost sensitivity \citep{Hulse2007}.
+  
+In order to solve this and find probabilities that are calibrated, in \citep{Elkan2001} a formula  
+that corrects the probabilities based on the difference of the base rates is proposed.  The 
+objective is using $\hat p$ which was estimated using a population with base rate $\pi_1$,
+to find $\hat p'$ for the real population which has a base rate $\pi_1'$. A solution for $\hat p'$ 
+is given as follows:
+\begin{equation}
+  \hat p'=\pi_1' \frac{\hat p - \hat p \pi_1}{\pi_1- \pi_1 \hat p +\pi_1' \hat p - \pi_1 \pi_1'}.
+\end{equation}
 
-The next step is to generate an initial random population of n individuals called chromosomes that 
-are symbolized by binary strings, where each binary position of the chromosome is called a gene and 
-denotes a specific characteristic (input variable). Therefore the combination of all the different 
-characteristics encoded in the string represents an individual who is a candidate for the solution.
-Each chromosome is evaluated in the objective function and the best individuals are selected to 
-survive for mating (parents), while the worse ones are discarded to make room for new descendants.  
-There are many ways of pairing the selected chromosomes \citep{Haupt2004}. In this paper, a weighted 
-cost pairing is used, which consists of assigning a selection probability according to each 
-chromosome cost. That is, a chromosome with the higher cost has a greater probability of mating 
-because cost maximization is desired.
+% Nevertheless, a strong assumption is made by taking: $P'(x|j=1)=P(x|j=1)$} and 
+% \mbox{$P'(x|j=0)=P(x|j=0)$}, meaning that there
+%   is no change in the example probability within the positive and negative
+%   subpopulations density functions.
+  
+\subsection{Calibrated using the ROC convex hull}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=8cm]{ch6_fig2}  
-  \caption{Genetic algorithms \citep{Haupt2004}}
-  \label{fig:6:geneticalgorithms}
+In order to illustrate the ROC convex hull approach proposed in \citep{Hernandez-Orallo2012},
+let us consider the set of probabilities given in \figurename{~\ref{tab:5:example_prob}}.
+Their corresponding  ROC curve of that set of probabilities is shown in 
+\figurename{~\ref{fig:5:ROC_1}}.  It can be seen that this set of probabilities is not calibrated, 
+since at 0.1 there is a positive example  followed by 2 negative examples. That inconsistency is 
+represented in the ROC curve as a non convex segment  over the curve.
+  
+\begin{figure}[!t]
+\hskip 0.5cm
+\hbox{
+  \vtop{
+    \hbox{
+      \subfloat[Set of probabilities and their respective class label]{
+   \footnotesize
+	\begin{tabular}{cc}
+	\hline
+	Probability & Label\\
+	\hline
+	0.0&	0\\
+	0.1&	1\\
+	0.2&	0\\
+	0.3&	0\\
+	0.4&	1\\
+	0.5&	0\\
+	0.6&	1\\
+	0.7&	1\\
+	0.8&	0\\
+	0.9&	1\\
+	1.0&	1\\
+	\hline
+	\end{tabular}\label{tab:5:example_prob}
+      }
+    }
+  }\hskip 0.5cm
+  \vtop{\vskip -2.5cm
+    \subfloat[ROC curve of the set of probabilities]{
+      \includegraphics[scale=0.5]{ch5_fig2}\label{fig:5:ROC_1}
+    }%
+  }%
+}
+\vskip 1.5cm
+
+\hbox{ 
+  \vtop{ \vskip 0.5cm
+    \hbox{
+      \subfloat[Convex hull of the ROC curve]{
+	\includegraphics[scale=0.5]{ch5_fig1}\label{fig:5:ROC_2}
+      }
+    }
+  }\hskip 1cm
+  \vtop{ \vskip -1cm
+    \subfloat[Calibrated probabilities]{
+   \footnotesize
+	\begin{tabular}{cc}
+	\hline
+	Prob & Cal Prob\\
+	\hline
+	0.0&	0\\
+	0.1&	0.333\\
+	0.2&	0.333\\
+	0.3&	0.333\\
+	0.4&	0.5\\
+	0.5&	0.5\\
+	0.6&	0.666\\
+	0.7&	0.666\\
+	0.8&	0.666\\
+	0.9&	1\\
+	1.0&	1\\
+	\hline
+	\end{tabular}\label{fig:5:cal_prob} 
+    }
+  }
+}
+\caption{Estimation of calibrated probabilities using the ROC convex hull.}\label{fig:5:rocch}
 \end{figure}
+
+In order to obtain a set of calibrated probabilities, first the ROC curve must be modified in 
+order to be convex. The way to do that, is to find the convex \mbox{hull 
+\citep{Hernandez-Orallo2012}}, in order to obtain the minimal convex set containing the different 
+points of the ROC curve. In \figurename{~\ref{fig:5:ROC_2}}, the convex hull algorithm is applied 
+to the previously evaluated ROC curve. It is shown that the new curve is convex, and includes all 
+the points of the previous ROC curve.
+
+Now that there is a new convex ROC curve or ROCCH, the calibrated probabilities can be extracted 
+as shown in  \figurename{~\ref{fig:5:cal_prob}}. The procedure to extract the new probabilities is 
+to first group the probabilities according to the points in the ROCCH curve, and then make the 
+calibrated  probabilities be the slope of the ROCCH for each group.
   
-After selecting the parent chromosomes with the chosen pairing method, the next step is to create a 
-second generation of individuals, based on the information of the parents. There are several ways of 
-mating. In this paper, two parents create one child. 
-In order to transfer the parents binary information to the child, there are also different kinds 
-of approaches such as the one-point crossover. The one-point crossover technique consists in 
-selecting one random point on the parents string. The child is created in the following way: First, 
-the parent1 transfers its binary code from the first gene to the crossover point. Then the parent2 
-transfers its binary code from the crossover point to the last gene of the chromosome. New parents 
-are randomly selected for each new child and the process continues until the chromosome population 
-grows back to the original size n. 
-
-Once the breeding process is completed, random mutation is used to alter a certain percentage of the 
-genes of the chromosomes. The purpose of mutation is to introduce diversity into the population, 
-allowing the algorithm to avoid local minima by generating new gene combinations in the chromosomes. 
-The most common mutation procedure is the one called single point mutation. It is implemented by 
-generating a random variable that indicates the position of the gene that will be modified, from the 
-population of chromosomes. Generally, mutation is not allowed in the best solution chromosomes 
-because these elite individuals are destined to propagate unchanged. In genetic algorithm this 
-is called elitism.
-
-Finally, after mutation is done the new generation of chromosomes is evaluated with the objective 
-function and used in the next iteration of the described algorithm.
-The algorithm iterates until a maximum number of chromosome generations are created or a 
-satisfactory solution is reached.
-
-
+   
 \section{Experiments}
-\label{sec:6:results}
-\todo{Experiments}
+\label{sec:5:experiments}
+\todo{experiments}

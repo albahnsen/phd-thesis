@@ -1,839 +1,346 @@
-\chapter{Ensembles of cost-sensitive decision trees}\label{ch:8}
+\chapter{Cost-sensitive decision trees}\label{ch:7}
 
 \begin{remark}{Outline}
-In this chapter, we introduce the framework of ensembles of example-dependent cost-sensitive 
-decision-trees, by training example-dependent cost-sensitive decision trees using four different 
-random inducer methods and then blending them using three different combination approaches.
-First, in Section \ref{sec:8:ensemble}, we give the background behind ensemble learning. Then, in 
-Section \ref{sec:8:ecsdt}, we present our previously proposed ensembles of cost-sensitive 
-decision-trees framework. Moreover, in Section \ref{sec:8:theoretical}, we prove theoretically that 
-combining individual cost-sensitive classifiers achives better  results in the sense of higher 
-financial savings. Finally, in Section \ref{sec:8:experiments}, we compare the results of the 
-proposed algorithm, against state-of-the-art methods, using the five real-world cost-sensitive 
-databases.
+In this chapter, we introduce the decision tree algorithm in Section \ref{sec:7:dt}. Then, in 
+Section \ref{sec:7:csdt}, we described our previously proposed cost-sensitive decision tree. For 
+this, we first shown the new cost-sensitive impurity measure, that introduces the diferent costs 
+when evaluating the performance of a split. Then, we introduce a new cost-sensitive pruning 
+criteria. Finally, in Section \ref{sec:7:experiments}, we compare the results of the proposed 
+algorithm, against state-of-the-art methods, using the five real-world cost-sensitive databases.
 \end{remark}
 
+\section{Decision trees}
+\label{sec:7:dt}
 
-\section{Ensemble methods}
-\label{sec:8:ensemble}
+Decision trees are one of the most widely used machine learning algorithms \citep{Lior2008}. 
+The technique is considered to be white box, in the sense that is easy to interpret, and has a 
+very low computational cost, while maintaining a good performance as compared with more complex 
+techniques \citep{Hastie2009}. There are two types of decision tree depending on the objective of 
+the model. They work either for classification or regression. In this section we focus on
+binary classification decision tree.
 
-  Ensemble learning is a widely studied topic in the machine learning community. The main
-  idea behind the ensemble methodology is to combine several individual base classifiers in
-  order to have a classifier that outperforms each of them \citep{Rokach2009}. Nowadays, 
-  ensemble methods are  one of the most popular and well studied machine learning techniques 
-  \citep{Zhou2012}, and it can be noted that since 2009 all the first-place and 
-  second-place winners of the KDD-Cup competition\footnote{https\://www.sigkdd.org/kddcup/} used 
-  ensemble methods. The core principle in ensemble learning, is to induce random perturbations into 
-  the learning procedure in order to produce several different base classifiers from a single 
-  training set, then combining the base classifiers in order to make the final prediction.
-  In order to induce the random permutations and therefore create the different base classifiers, 
-  several methods have been proposed, in particular: bagging \citep{Breiman1996}, 
-  pasting~\citep{Breiman1999}, random forests \citep{Breiman2001} and random patches 
-  \citep{Louppe2012}. Finally, after  the base   classifiers are trained, they are typically 
-  combined using either   majority voting,  weighted  voting    or  stacking~\citep{Zhou2012}.
+\subsection{Construction of classification trees}
 
-As shown in \figurename{~\ref{fig:8:1}, there are three main reasons regarding why ensemble 
-methods perform better than single models: statistical, computational and representational 
-\citep{Dietterich2000a}. First, from a statistical point of view, when the learning set is too 
-small, an algorithm can find several good models withing the search space, that arise to the same 
-performance on the training set $\mathcal{S}$. Nevertheless, without a validation set, there is 
-the risk of choosing the wrong model. The second reason is computational; in general, algorithms 
-rely on some local search optimization and may get stuck in a local optima. Then, an ensemble may 
-solve this by focusing different algorithms to different spaces across the training set. The last 
-reason is representational. In most cases, for a learning set of finite size, the  true function 
-$f$ cannot be represented by any of the candidate models. By combining several  models in an 
-ensemble, it may be possible to obtain a model with a larger coverage across the  space of 
-representable functions.
-  
-\begin{figure}[t!]
-\includegraphics[scale=.5]{ch8_fig1}
-\caption{Main reasons regarding why ensemble methods perform better than 
-  single models: statistical, computational and representational \citep{Dietterich2000a}.}
-\label{fig:8:1}
-\end{figure} 
-  
-  The most typical form of an ensemble is made by combining $T$ different base classifiers.
-  Each  base classifier $M(\mathcal{S}_j)$ is trained by applying algorithm $M$ to a random subset 
-  $\mathcal{S}_j$ of the training set $\mathcal{S}$.  %  $\mathcal{S_j} = RI(\mathcal{S})$
-  For simplicity we define $M_j \equiv  M(\mathcal{S}_j)$ for $j=1,\dots,T$, and 
-  $\mathcal{M}=\{M_j\}_{j=1}^{T}$ a set of base classifiers.
-  Then, these models are combined using majority voting to create the ensemble $H$ as follows
-  \begin{align}\label{eq:8:majority-vote}
-    f_{mv}(\mathcal{S},\mathcal{M}) = \argmax_{c \in \{0,1\}} \sum_{j=1}^T 
-    \mathbf{1}_c(M_j(\mathcal{S})).
-  \end{align}
+Classification trees is one of the most common types of decision tree, in which the objective 
+is to find the $Tree$ that best discriminates between classes. In general the decision tree 
+represents a set of splitting rules organized in levels in a flowchart structure.
 
-  \newpage
-  \begin{remark}{Theoretical performance of an ensemble}
-%   Moreover, i
-  If we assume that each one of the $T$ base classifiers have a probability $\rho$ of 
-  being correct, the probability of an ensemble making the correct decision, denoted by $P_c$,
-  can be calculated using the binomial \mbox{distribution \citep{Hansen1990}}
-  \begin{equation}\label{eq:8:prob}
-    P_c = \sum_{j>T/2}^{T} {{T}\choose{j}} \rho^j(1-\rho)^{T-j}.
-  \end{equation}
-  Furthermore, as shown in \citep{Lam1997}, if $T\ge3$ then:
-  \begin{itemize}
-    \item If $\rho>0.5$, then $ \lim_{T \to  \infty} P_c=1 $
-    \item If $\rho<0.5$, then $ \lim_{T \to  \infty} P_c=0 $
-    \item If $\rho=0.5$, then $P_c=0.5$ for any $T$.
-  \end{itemize}
-  Leading to the conclusion that $P_c\ge \rho$ if $\rho \ge 0.5$ for any $T$.
-  \end{remark}
-  
-\subsection{Cost-sensitive ensembles}
+\subsubsection{Splitting criteria}
 
-  In the context of cost-sensitive classification, some authors have proposed methods for using 
-  ensemble techniques. In \citep{Masnadi-shirazi2011}, the authors proposed a framework for 
-  cost-sensitive boosting that is expected to minimized the losses by using optimal cost-sensitive 
-  decision rules. In \citep{Street2008}, a bagging algorithm with adaptive costs was proposed. In 
-  his doctoral thesis, Nesbitt \citep{Nesbitt2010}, proposed a method for cost-sensitive 
-  tree-stacking. In this method different decision trees are learned, and then combined in a way 
-  that a cost function is minimized. Lastly in \citep{Lomax2013}, a survey of application of 
-  cost-sensitive learning with decision trees is shown, in particular including other methods that 
-  create cost-sensitive ensembles. However, in all the previously presented method, the 
-  misclassification costs only dependent on the class, therefore, assuming a constant cost across 
-  examples. Given that, these methods are not  well suited for example-dependent cost-sensitive 
-  problems. 
+In the $Tree$, each rule is shown as a node, and it is represented as $(\mathbf{x}^j,l^j)$, meaning 
+that the 
+set $\mathcal{S}$ is split in two sets $\mathcal{S}^l$ and $\mathcal{S}^r$ according to 
+$\mathbf{x}^j$ and $l^j$:
+\begin{equation}
+  \mathcal{S}^l = \{\mathbf{x}^a_i \vert \mathbf{x}^a_i \in \mathcal{S} \wedge x^j_i \le l^j \},
+\end{equation}
+and
+\begin{equation}
+  \mathcal{S}^r = \{\mathbf{x}^a_i \vert \mathbf{x}^a_i \in \mathcal{S} \wedge x^j_i > l^j \},
+\end{equation}
+where $\mathbf{x}^j$ is the $j^{th}$ feature represented in the vector 
+$\mathbf{x}^j=[x_1^j,x_2^j,...,x_N^j]$, and $l^j$ is a value such that $min(\mathbf{x}^j) \le l^j < 
+max(\mathbf{x}^j)$. Moreover, $\mathcal{S} = \mathcal{S}^l \cup \mathcal{S}^r$.
 
-      
-\section{Ensembles of cost-sensitive decision trees}
-\label{sec:8:ecsdt}
+After the training set have been split, the percentage of positives in the different sets is 
+calculated. First, the number of positives in each set is estimated by
+\begin{equation}
+ \mathcal{S}_1 = \{\mathbf{x}^a_i \vert \mathbf{x}_i^a \in \mathcal{S} \wedge y_i =1 \},
+\end{equation}
+then the percentage of positives is calculates as
+\begin{equation}
+ \pi_1=\vert \mathcal{S}_1 \vert / \vert \mathcal{S} \vert.
+\end{equation}
 
-In this section we shown our previously proposed framework of ensembles of  example-dependent 
-cost-sensitive  decision-trees \citep{CorreaBahnsen2015b}, by training example-dependent 
-cost-sensitive decision trees using four different  random inducer methods and then blending them 
-using three different combination approaches. Moreover, we propose two new cost-sensitive 
-combination approaches, cost-sensitive weighted  voting and cost-sensitive stacking. The latter 
-being an extension of our previously proposed cost-sensitive logistic regression 
-\citep{CorreaBahnsen2014b}. 
-
-The remainder of the section is organized as follows: First, we introduce the different random 
-inducers used to create the base classifiers. Then, we present the combination methods. Finally, we 
-define our proposed algorithms.
-
-
-\subsection{Random inducers}
-
-With the objective of creating an ensemble of example-dependent cost-sensitive decision trees, we 
-first create $T$ different random subsamples $\mathcal{S}_j$ for $j=1,\dots,T$, of the training  set 
-$\mathcal{S}$, and train a $CSDT$ algorithm on each one. In particular we create the different 
-subsets using four different methods: bagging \citep{Breiman1996}, pasting \citep{Breiman1999}, 
-random forests \citep{Breiman2001} and random patches \citep{Louppe2012}. 
-
-In bagging \citep{Breiman1996}, base classifiers are built on randomly drawn bootstrap subsets of 
-the original data, hence producing different base classifiers. Similarly, in pasting 
-\citep{Breiman1999}, the base classifiers are built on random  samples without replacement from 
-the training set. In random forests \citep{Breiman2001}, using decision trees as the base learner, 
-bagging   is extended and   combined  with a  randomization of the input features that  are used 
-when  considering candidates  to split    internal nodes. In particular, instead of looking for  
-the best  split among all   features, the   algorithm selects, at each node, a random subset of 
-features  and then determines   the best split only over  these features. In the random patches   
-algorithm \citep{Louppe2012}, base classifiers are created by randomly     drawn bootstrap subsets 
-of both examples and features. To further clarify the difference between the random inducer 
-methods, in \figurename{~\ref{fig:8:2}}, we show a visual representation of the random inducers 
-algorithms.
+Then, the impurity of each leaf is calculated using either a misclassification error, 
+entropy or Gini measures:
+\begin{itemize}
+ \item  Misclassification
+ \begin{equation}
+ I_m(\pi_1)=1-max(\pi_1,1-\pi_1)
+ \end{equation}
  
+ \item Entropy
+ \begin{equation}
+ I_e(\pi_1)=-\pi_1\log \pi_1 -(1-\pi_1) \log (1-\pi_1)
+ \end{equation}
+ 
+ \item Gini
+ \begin{equation}
+ I_g(\pi_1)=2\pi_1(1-\pi_1)
+ \end{equation}
+\end{itemize}
+
+In \figurename{ \ref{fig:7:impurity}}, the three measures are shown. All measures are similar, with 
+the exception that the gini index and the cross-entropy are differentiable, which makes them
+more suitable for numerical optimization.
 \begin{figure}[t!]
-\includegraphics[scale=.5]{ch8_fig2}
-\caption{Visual representation of the random inducers algorithms.}
-\label{fig:8:2}
+\includegraphics[scale=0.85]{ch7_fig1}
+\caption{Impurity measures for a binary classification, as a function of the proportion of
+positive examples in the set (Cross-entropy is scaled) \citep{Hastie2009}.}
+\label{fig:7:impurity}
 \end{figure} 
 
+Finally the gain of the splitting criteria using the rule $(\mathbf{x}^j,l^j)$ is calculated as the 
+impurity of $\mathcal{S}$ minus the weighted impurity of each leaf:
+\begin{equation}\label{eq:7:gain}
+  Gain(\mathbf{x}^j,l^j)=I(\pi_1)-\frac{\vert \mathcal{S}^l \vert}{\vert \mathcal{S} 
+\vert}I(\pi^l_1)  -\frac{\vert \mathcal{S}^r \vert}{\vert \mathcal{S} \vert}I(\pi^r_1),
+\end{equation} 
+where $I(\pi_1)$ can be either of the impurity measures $I_e(\pi_1)$ or $I_g(\pi_1)$.
 
-\subsection{Combination methods}
-
-Lastly, the base classifiers are combined using either majority voting, cost-sensitive weighted 
-voting and cost-sensitive stacking. Majority voting consists in collecting the predictions of 
-each base classifier and selecting the decision with the highest number of votes, see 
-(\ref{eq:8:majority-vote}).
-
-\subsubsection{Cost-sensitive weighted voting}
-
-This method is an extension of weighted voting. First, in the traditional approach, a 
-similar comparison of the votes of the base classifiers is made, but giving a weight $\alpha_j$ 
-to each classifier $j$ during the voting phase \citep{Zhou2012}
-\begin{align} \label{eq:8:weighted-majority-vote}
-  f_{wv}(\mathcal{S},\mathcal{M}, \alpha)
-  =\argmax_{c \in \{0,1\}} \sum_{j=1}^T \alpha_j \mathbf{1}_c(M_j(\mathcal{S})),
-\end{align}
-where $\alpha=\{\alpha_j\}_{j=1}^T$.
-The calculation of $\alpha_j$ is related to the performance of each classifier $M_j$.
-It is usually defined as the normalized misclassification error   $\epsilon$ of the base 
-classifier $M_j$  in the out of bag set   $\mathcal{S}_j^{oob}=\mathcal{S}-\mathcal{S}_j$
+Subsequently, the gain of all possible splitting rules is calculated. The rule with maximal 
+gain is selected
 \begin{equation}
-  \alpha_j=\frac{1-\epsilon(M_j(\mathcal{S}_j^{oob}))}{\sum_{j_1=1}^T 
-  1-\epsilon(M_{j_1}(\mathcal{S}_{j_1}^{oob}))}.
+  (best_x, best_l) = \argmax_{(\mathbf{x}^j,l^j)}Gain(\mathbf{x}^j,l^j),
 \end{equation}
-
-However, as previously discussed, the misclassification measure is not suitable in  many 
-real-world classification problems. We propose a method to calculate the weights $\alpha_j$  taking 
-into account the actual savings of the classifiers. Therefore using (\ref{eq:savings}), we define
-\begin{equation}
-  \alpha_j=\frac{Savings(M_j(\mathcal{S}_j^{oob}))}
-  {\sum_{j_1=1}^T Savings(M_{j_1}(\mathcal{S}_j^{oob}))}.
-\end{equation}
-This method guaranties that the base classifiers that contribute to a higher increase in savings 
-have more importance in the ensemble.
-
-\subsubsection{Cost-sensitive stacking}
-
-The staking method consists in combining the different base classifiers by learning a 
-second level algorithm on top of them \citep{Wolpert1992}. In this framework, once the base 
-classifiers are constructed using the training set  $\mathcal{S}$, a new set is constructed 
-where the output of the base classifiers  are now considered as the features while keeping the 
-class labels.
-
-Even though there is no restriction on which algorithm can be used as a second level learner, 
-it is common to use a lineal model \citep{Zhou2012}, such as 
-\begin{align}
-  f_s(\mathcal{S},\mathcal{M},\beta) =
-  g \left( \sum_{j=1}^T \beta_j M_j(\mathcal{S}) \right),
-\end{align}
-where $\beta=\{\beta_j\}_{j=1}^T$, and $g(z)$ is the sign function 
-\mbox{$g(z)=sign(z)$} in the case of a lineal regression or the sigmoid function, defined 
-as \mbox{$g(z)=1/(1+e^{-z})$}, in the case of a logistic regression. 
-
-Moreover, following the logic used in \citep{Nesbitt2010}, we propose learning the set of  
-parameters $\beta$  using our proposed cost-sensitive logistic regression ($CSLR$) 
-\citep{CorreaBahnsen2014b}. The $CSLR$ algorithm consists in introducing example-dependent costs 
-into a logistic regression, by changing the objective function of the model to one that is 
-cost-sensitive. For the specific case of cost-sensitive stacking, we define the cost function as: 
-\begin{align}
-  &J(\mathcal{S},\mathcal{M},\beta)= \nonumber \\
-  & \sum_{i=1}^{N} \bigg[ y_i\bigg( 
-  f_s(\mathbf{x}_i,\mathcal{M},\beta) \cdot(C_{TP_i} - C_{FN_i}) + C_{FN_i} \bigg) + 
-  \nonumber \\
-  & (1-y_i)\bigg( f_s(\mathbf{x}_i,\mathcal{M},\beta) \cdot(C_{FP_i} - C_{TN_i}) 
-    +C_{TN_i} \bigg) \bigg].
-\end{align}
-Then, the parameters $\beta$ that minimize the logistic cost function are used in order to 
-combine the different base classifiers. However, as discussed in \citep{CorreaBahnsen2014b}, 
-this cost function is not convex for all possible cost matrices, therefore, we use genetic 
-algorithms to minimize it.
-
-Similarly to cost-sensitive weighting, this method guaranties that the base classifiers that 
-contribute to a higher increase in savings have more importance in the ensemble. Furthermore, 
-by learning an additional second level cost-sensitive method, the combination is made such that 
-the overall   savings measure is maximized.
+and the set $\mathcal{S}$ is split into $\mathcal{S}^l$ and $\mathcal{S}^r$ according to that rule. 
 
 
-\subsection{Algorithms}
+\subsubsection{Tree growing}
+In order to grow a tree typical algorithms use a top-down induction using a greedy search in each
+iteration \citep{Rokach2010}. In each iteration, the algorithms evaluates all possible splitting 
+rules and pick the one that maximizes the splitting criteria. After the selection of a splitting 
+rule, each leaf is further selected and it is subdivides into smaller leafs, until one of the 
+stopping criteria is meet. In Algorithm \ref{alg:7:tree_grow}, the pseudocode of the tree 
+growing procedure is presented.
 
-Finally, Algorithm \ref{alg:8:algorithms} summarizes the proposed $ECSDT$ methods. In total, we   
-evaluate 12 different algorithms, as four different random inducers (bagging, pasting, random 
-forest and random patches) and three different combinators (majority voting, cost-sensitive 
-weighted voting and cost-sensitive stacking) can be selected in order to construct the 
-cost-sensitive ensemble.
-  
-
-\begin{algorithm}\label{alg:8:algorithms}
-The proposed $ECSDT$ algorithms.
+\begin{algorithm}\label{alg:7:tree_grow}
+Pseudocode of the tree growing procedure.
 \textnormal{
 \begin{algorithmic}[1]
-\Require $CSDT$ (an example-dependent cost-sensitive decision tree algorithm), $T$ the number of 
-iterations, $\mathcal{S}$ the training set, $inducer$, $N_e$ number of 
-examples for each base classifier, $N_f$ number of examples for each base classifier, 
-$combinator$.
-\Function{ECSDT}{$\mathcal{S},T,inducer,N_e,N_f,combinator$}
-  \State \textbf{Step 1:} Create the set of base classifiers
-  \For{$j  \leftarrow 1$ to $T$}
-    \State \textbf{switch}($inducer$)
-    \State \textbf{case} Bagging:
-      \State $\mathcal{S}_j \leftarrow $ Sample $N_e$ examples from $\mathcal{S}$ with replacement.
-    \State \textbf{case} Pasting:
-      \State $\mathcal{S}_j \leftarrow $ Sample $N_e$ examples from $\mathcal{S}$ without
-      replacement.
-    \State \textbf{case} Random forests:
-      \State $\mathcal{S}_j \leftarrow $ Sample $N_e$ examples from $\mathcal{S}$ with replacement.
-    \State \textbf{case} Random patches:
-      \State $\mathcal{S}_j \leftarrow $ Sample $N_e$ examples and $N_f$ features from  
-      $\mathcal{S}$ with replacement.
-    \State \textbf{end switch}
-    \State $M_j \leftarrow CSDT(\mathcal{S}_j)$
-    \State $\mathcal{S}_j^{oob} \leftarrow \mathcal{S}-\mathcal{S}_j$
-    \State $\alpha_j \leftarrow Savings( M_j(\mathcal{S}_j^{oob}))$
-  \EndFor
-  \State \textbf{Step 2:} Combine the different base classifiers
-  \State \textbf{switch}($combinator$)
-  \State \textbf{case} Majority voting:
-  \State  $H \leftarrow f_{mv}(\mathcal{S}, \mathcal{M})$
-  \State \textbf{case} Cost-sensitive weighted voting:
-  \State $H \leftarrow f_{wv}(\mathcal{S}, \mathcal{M}, \alpha)$
-  \State \textbf{case} Cost-sensitive stacking:
-  \State $\beta \leftarrow \argmin_{\beta \in \mathbb{R}^T} 
-        J(\mathcal{S},\mathcal{M},\beta)$
-  \State  $H \leftarrow f_{s}(\mathcal{S}, \mathcal{M},\beta)$
-  \State \textbf{end switch}
-  \State \Return $H$
+\Function{TreeGrow}{$\mathcal{S}$}
+    \State $Tree = Empty$
+    \If{\Call{Stopping}{$Tree, \mathcal{S}$}}
+      \State \Return $Tree$
+     \EndIf
+    \State \# For all features
+    \For{$j=1 \  to \ k$}
+      \State \# For all possible thresholds
+      \For{$m=1 \ to N_k$}
+        \State $Gains(j,m) = $ \Call{Gain}{$\mathbf{x}^j,l^j_m, \mathcal{S}$}
+      \EndFor
+    \EndFor
+    \State \# Select the threshold with the highest gain
+    \State $(j^*, l^*) = argmax_{(j,m)}Gains$
+    \State \# Split the set using the best rule
+    \State $\mathcal{S}^l = \{\mathbf{x}^a_i \vert \mathbf{x}_i^a \in \mathcal{S} 
+            \wedge \mathbf{x}_i^{j^*} \le l^* \}$
+    \State $\mathcal{S}^r = \{\mathbf{x}^a_i \vert \mathbf{x}_i^a \in \mathcal{S} 
+            \wedge \mathbf{x}_i^{j^*} > l^* \}$
+    \State \# Recursively continue growing tree
+    \State \Call{TreeGrow}{$\mathcal{S}^l$}
+    \State \Call{TreeGrow}{$\mathcal{S}^r$}
+    \State \# Return the tree
+    \State \Return $Tree$
 \EndFunction
 \end{algorithmic}
 }
 \end{algorithm}
 
-\newpage 
-\section{Theoretical analysis of the ECSDT}
-\label{sec:8:theoretical}
+  
+\subsubsection{Stopping criteria}
+As the growing phase of the algorithm continue, at each iteration the stopping criteria are 
+evaluated \citep{Rokach2010}. The most common stopping criteria are:
+ \begin{itemize}
+   \item All examples in the set belong to the same class. Meaning that either $\pi_1=1$ or 
+    $\pi_1=0$.
 
-  Although the above proposed algorithm is simple, there is little work that has formally 
-  investigated ensemble performance in terms other than accuracy. In this section, our aim is to 
-  prove theoretically that combining individual cost-sensitive classifiers achieves better results 
-  in the sense of higher savings.
+  \item The maximum number of iterations have been reached.
   
-  We denote $\mathcal{S}_a$ $a\in \{0,1\}$, as the subset of $\mathcal{S}$ 
-  where the examples belong to the class $a$:
-  \begin{equation}\label{eq:8:S_a}
-    \mathcal{S}_a = \{\mathbf{x}_i^* \vert y_i = a, i \in 1,\dots,N\},
-  \end{equation}
-  where $\mathcal{S}=\mathcal{S}_0 \cup \mathcal{S}_1$, $\mathcal{S}_0 \cap \mathcal{S}_1 = 
-  \varnothing$, and $N_a=\vert \mathcal{S}_a \vert$. Also, we define the average cost of the base 
-  classifiers as:
-  \begin{align}\label{eq:8:avg_cost}
-    \overline{Cost} (\mathcal{M}(\mathcal{S}))= \frac{1}{T} \sum_{j=1}^{T} Cost(M_j(\mathcal{S})). 
-  \end{align}
+  \item The number of examples in $\mathcal{S}$ are less than the minimum number of examples 
+defined for a split.
   
-  \noindent Firstly, we prove the following lemma that states the cost of an ensemble $H$ on the 
-  subset $\mathcal{S}_a$ is lower than the average cost of the base classifiers on the same set for 
-  $a  \in \{0,1\}$.
+  \item The number of examples in $\mathcal{S}^l$ or $\mathcal{S}^r$ are less than the minimum 
+number of examples defined for a leaf.
+  
+  \item The best splitting rule has a Gain lower than a defined threshold.
+\end{itemize}
 
-  \begin{lemma}\label{lemma1}
-  Let $H$ be an ensemble of $T$ classifiers $\mathcal{M}=\{M_1, M_2,\dots,M_T\}$, and 
-  $\mathcal{S}$ a testing set of size $N$. If each one of the base classifiers has a probability 
-  of being correct higher or equal than one half $\rho \ge \frac{1}{2}$, and the 
-  \textit{reasonableness conditions} of the cost matrix are satisfied, then the following holds true
-  \begin{align}\label{eq:8:lemma}
-    Cost(H(\mathcal{S}_a)) &\le \overline{Cost} (\mathcal{M}(\mathcal{S}_a)) , a  \in\{0,1\}, 
-  \end{align}
-  \end{lemma}
-  
-  \begin{proof}
-  First, we decompose the total cost of the ensemble by applying equations (\ref{eq:2:cost_total}) 
-  and (\ref{eq:2:cost}). Additionally, we separate the analysis for $a=0$ and $a=1$:
 
-  \textbullet\ $a=0:$
-  \begin{align}
-  Cost(H(\mathcal{S}_0)) =& \sum_{i=1}^{N_0} y_i(c_i C_{TP_i} + (1-c_i)C_{FN_i})+ \nonumber \\  
-    & (1-y_i)(c_i C_{FP_i} + (1-c_i)C_{TN_i}) . 
-  \end{align}
-  
-  \noindent Moreover, we know from (\ref{eq:8:prob}) that the probability of an ensemble 
-  making the right decision, i.e. $y_i=c_i$, for any given  example, is equal to $P_c$. 
-  Therefore, we can use this probability to estimate the expected savings of an ensemble: 
-  \begin{align}
-    Cost(H(\mathcal{S}_0)) &= \sum_{i=1}^{N_0} P_c C_{TN_i} +(1-P_c)C_{FP_i}.
-  \end{align}
-  
-  \textbullet\ $a=1:$
-  
-  \noindent In the case of $\mathcal{S}_1$, and following the same logic as when $a=0$, the cost of 
-  an  ensemble is:
-  \begin{align}
-    Cost(H(\mathcal{S}_1)) &= \sum_{i=1}^{N_1} P_c C_{TP_i} + (1-P_c)C_{FN_i}.  
-  \end{align}
-
-  \noindent The second part of the proof consists in analyzing the right hand side of 
-  (\ref{eq:8:lemma}),   specifically, the average cost of the base classifiers on set 
-  $\mathcal{S}_a$. To do that, with the help of (\ref{eq:2:cost_total}) and (\ref{eq:8:avg_cost}), 
-  we may express the average cost of the base classifiers as:
-  \begin{align}
-    \overline{Cost} (\mathcal{M}(\mathcal{S}_a)) = \frac{1}{T} \sum_{j=1}^{T} \sum_{i=1}^{N_a} 
-    Cost(M_j(\mathbf{x}_i^*)).  
-  \end{align} 
-  
-  \noindent We define set of base classifiers that make a negative prediction as
-  \begin{align}
-    \mathcal{T}_{i0}=\{M_j(\mathbf{x}_i^*) \vert M_j(\mathbf{x}_i^*) = 0, j \in 1,\dots,T\},
-  \end{align}
-  similarly, the set of classifiers that make a positive prediction as
-  \begin{align}
-    \mathcal{T}_{i1}=\{M_j(\mathbf{x}_i^*) \vert M_j(\mathbf{x}_i^*) = 1, j \in 1,\dots,T\}.
-  \end{align}
-  Then, by taking the cost of negative and positive predictions from (\ref{eq:2:f_a}), the 
-  average cost of the base learners becomes:
-  \begin{align}
-    \overline{Cost} (\mathcal{M}(\mathcal{S}_a)) =& 
-    \frac{1}{T} \sum_{i=1}^{N_a} \bigg( \vert \mathcal{T}_{i0} \vert \cdot 
-    Cost(f_0(\mathbf{x}_i^*)) \nonumber \\
-    & + \vert \mathcal{T}_{i1} \vert \cdot Cost(f_1(\mathbf{x}_i^*)) \bigg).
-  \end{align} 
-
-  \noindent We separate the analysis for $a=0$ and $a=1$:
-  
-  \textbullet\ $a=0:$
-  
-  \begin{align}
-    \overline{Cost} (\mathcal{M}(\mathcal{S}_0)) =& \sum_{i=1}^{N_0} \bigg( 
-    \frac{\vert \mathcal{T}_{i0} \vert}{T} \cdot C_{TN_i}
-    + \frac{\vert \mathcal{T}_{i1} \vert}{T} \cdot C_{FP_i}\bigg).
-  \end{align}
-  Furthermore, we know from (\ref{eq:8:prob}) that an average base classifier will have a correct 
-  classification probability of $\rho$, then $\frac{\vert \mathcal{T}_{i0} \vert}{T}=\rho$, leading 
-  to:
-  \begin{align}
-    \overline{Cost} (\mathcal{M}(\mathcal{S}_0)) =& \sum_{i=1}^{N_0}  
-    \rho \cdot C_{TN_i} + (1-\rho) \cdot C_{FP_i} .
-  \end{align}
-
-  \textbullet\ $a=1:$
+\subsubsection{Pruning techniques}
+After a decision tree has been fully grown, there is the big chance that  the algorithm generates a 
+large tree that is probably over fitting the  training data. In order to solve this in 
+\citep{Breiman1984a} originally suggest the use of pruning techniques after the tree growing phase.
+The overall objective of pruning is to eliminate branches that are not contributing
+to the generalization accuracy of the \mbox{tree \citep{Rokach2010}.}
  
- \noindent Similarly on the set $\mathcal{S}_1$ the average classifier will have a correct 
-  classification probability of $\rho$, then $\frac{\vert \mathcal{T}_{i1} \vert}{T}=\rho$. 
+In general pruning techniques start from a fully grown tree, and recursively check if by eliminating 
+a $Branch$ there is an $Improvement$ in the error rate $\epsilon$ of the $Tree$.  There are two main 
+methods to calculate the $Improvement$ of the error rate $\epsilon$ of the $Tree$, cost-complexity 
+and  error based pruning:
   
-  \noindent Therefore,
-  \begin{align}
-    \overline{Cost} (\mathcal{M}(\mathcal{S}_1)) =& \sum_{i=1}^{N_1}  
-    \rho \cdot C_{TP_i} + (1-\rho) \cdot C_{FN_i} .
-  \end{align}
- 
-  \noindent Finally, putting all together, (\ref{eq:8:lemma}) is rewritten
+\begin{itemize}
+\item Cost-complexity pruning:
   
-  \noindent for $a=0$ as:
-  \begin{align}\label{eq:8:lemma1}
-    \sum_{i=1}^{N_0} P_c C_{TN_i} +(1-P_c)C_{FP_i} \le 
-    \sum_{i=1}^{N_0} \rho \cdot C_{TN_i} + (1-\rho) \cdot C_{FP_i},
-  \end{align}
-  and for $a=1$ as:
-  \begin{align}\label{eq:8:lemma2}
-    \sum_{i=1}^{N_1} P_c C_{TP_i} + (1-P_c)C_{FN_i} \le 
-    \sum_{i=1}^{N_1}  \rho \cdot C_{TP_i} + (1-\rho) \cdot C_{FN_i}.
-  \end{align}
- 
-  \noindent Both (\ref{eq:8:lemma1}) and (\ref{eq:8:lemma2}) hold true since if $\rho \ge 
-  \frac{1}{2}$  then $P_c\ge\rho$, and accordingly to the cost matrix \textit{reasonableness 
-  conditions},  described in Section \ref{sec:2:cost_characteristic}, $C_{FP_i} > C_{TN_i}$ and 
-  $C_{FN_i} >   C_{TP_i}$~$\forall i$.
-  \end{proof}
+Initially proposed by Breiman  \citep{Breiman1984a}, this method evaluate iterative if the removal 
+of a $Branch$ improve the error rate $\epsilon$ of a $Tree$, weighted by the difference of the 
+number of leafs trees.
+\begin{equation}\label{eq:7:pruning}
+PC_{cc} = \frac{\epsilon(EB(Tree,branch),S)-\epsilon(Tree,\mathcal{S}) }
+{\vert Tree\vert-\vert EB(Tree,branch)\vert}
+\end{equation} 
+where $\epsilon(Tree,\mathcal{S})$ calculate the error rate of the $Tree$ in set $\mathcal{S}$ and 
+$EB(Tree,branch)$ is an auxiliary function that removes $branch$ from $Tree$ and return a new 
+$Tree$. At each iteration, the current $Tree$ is compared against all possible $Branches$.
+    
+\item Error based pruning:
   
-  Lemma \ref{lemma1} separates the costs on sets $\mathcal{S}_0$ and  $\mathcal{S}_1$. We are 
-  interested in analyzing the overall savings of an ensemble. In this direction, we demonstrate 
-  in the following theorem, that the expected savings of an ensemble of classifiers are higher 
-  than the expected average savings of the base learners.
-  
-  \begin{theorem}\label{theorem1}
-  Let $H$ be an ensemble of $T$ classifiers $\mathcal{M}=\{M_1,\dots,M_T\}$, and $\mathcal{S}$ a 
-  testing set of size $ N $, then the expected savings of using $H$ in 
-  $\mathcal{S}$ are lower than the average expected savings of the base classifiers, in other words,
-  \begin{equation}\label{eq:8:theorem}
-    Savings(H(\mathcal{S})) \ge \overline{Savings}(\mathcal{M}(\mathcal{S})). 
-  \end{equation}
-  \end{theorem}
-  
-  \begin{proof}
-  Given (\ref{eq:2:savings}), (\ref{eq:8:theorem}) is equivalent to
-  \begin{equation}\label{eq:8:theorem2}
-    Cost(H(\mathcal{S})) \le \overline{Cost} (\mathcal{M}(\mathcal{S})). 
-  \end{equation}
+This method proposed by Quinlan  \citep{Quinlan1992} is more pessimistic and instead of  using the 
+error rate $\epsilon$ calculate the upper bound of the confidence interval   of the error 
+$\epsilon_{UB}$ calculated assuming a normal distribution with a defined significance level 
+$Z_\alpha$.
+\begin{equation}
+PC_{eb} = \frac{\epsilon_{UB}(EB(Tree,branch),\mathcal{S})-\epsilon_{UB}(Tree,\mathcal{S}) }
+    {\vert Tree\vert-\vert EB(Tree,branch)\vert}
+\end{equation} 
+where 
+\begin{align}
+    \epsilon_{UB}(Tree,&\mathcal{S})= \epsilon(Tree,\mathcal{S}) & \nonumber \\
+    &+Z_\alpha \sqrt{  
+\frac{\epsilon(Tree,\mathcal{S})(1-\epsilon(Tree,\mathcal{S}))}{\vert \mathcal{S} \vert}} &
+\end{align}   
+Moreover, as a difference from cost-complexity pruning, in the error based method, at each 
+iteration not all the branches are compared, but only the ones on the same level. Meaning leafs 
+are only compared against other leafs that are in the same level of iterations when the $Tree$ 
+was constructed. This allows for much faster pruning procedure.
+\end{itemize}
 
-  \noindent Afterwards, by applying the definition of cost in (\ref{eq:2:cost}), and grouping the 
-  sets of negative and positive examples using (\ref{eq:8:S_a}), (\ref{eq:8:theorem2}) becomes
-  \begin{equation}
-    \sum_{a\in \{0,1\}} Cost(H(\mathcal{S}_a)) \le \sum_{a\in \{0,1\}} \overline{Cost} (\mathcal{M} 
-    (\mathcal{S}_a)),
-  \end{equation}
+In Algorithm~\ref{alg:7:tree_pruning}, the general method of pruning is shown. The pruning 
+procedure consists in evaluating the $Improvement$ of eliminating all possible branches in a $Tree$, 
+and then eliminate the one with the higher $Improvement$ and repeat the process until a stopping 
+criteria is meet.
+
+\begin{algorithm}\label{alg:7:tree_pruning}
+Pseudocode of the tree pruning procedure.
+\textnormal{
+\begin{algorithmic}[1]
+\Function{TreePruning}{$\mathcal{S}, Tree$}
+    \State \# For all branches
+    \For{$branch \  in \ Tree.branches$}
+      \State \# Evaluate the pruning criteria
+      \State $Improvements(branch) = $ \Call{PC}{$\mathcal{S}, Tree, branch$}
+    \EndFor
+    \State \# Select the branch to prune
+    \State $branch^* = argmax_{branch} Improvements$
+    \State \# Prune selected branch
+    \State $Tree = $ \Call{EB}{$TreeTree,branch^*$}
+    \State \# Recursively continue pruning the tree
+    \State \Call{TreePruning}{$\mathcal{S}, Tree$}
+    \State \Return $Tree$
+\EndFunction
+\end{algorithmic}
+}
+\end{algorithm}
+
+ 
+\subsubsection{Categorical features}
+When using continuous features the splitting is done by testing all possible thresholds on the 
+database and  selecting the one that maximizes the desired measure. Nevertheless, this is not 
+straight forward when using a  categorical feature, since testing all possible ways of binning the 
+feature becomes prohibitively time  consuming the feature has many categories. Instead, a common 
+method for doing this is to calculate $\pi_1$ of each category, then sort it, and applied the 
+method as a continuous feature \citep{Marslan2009}.
+
+
+
+\subsection{Decision tree algorithms}
+% \begin{remark}{Decision tree algorithms}
+Two main branches of decision trees has being studied in the last years. The main difference is 
+the  impurity measure used when splitting. First the CART algorithm that is based in the Gini 
+index, and  later the ID3 and C4.5 which uses the entropy measure.
+
+\begin{itemize}
+ \item 
+  CART or classification and regression trees was introduced by Brieman et al. in 1984 
+\citep{Breiman1984a}. It is based on using the Gini index as the impurity measure and the tree is 
+grow until all examples in  each leaf belong to the same class. Afterwards, the tree is pruned using 
+the cost-complexity  method \citep{Rokach2010,Marslan2009}.
   
-  \noindent which can be easily proved using Lemma \ref{lemma1}, since, if the cost of an ensemble 
-  $H$ is  lower than the average cost of the base classifiers on both $\mathcal{S}_0$ and 
-  $\mathcal{S}_1$,  implies that it is also lower on the sum of the cost on both sets, 
-  therefore, proving Theorem~\ref{theorem1}.
-  \end{proof}
+\item ID3
+  algorithm uses entropy as the impurity measure. The growing of the tree stop when all 
+examples belong  of each leaf belongs to the same class. In ID3 no pruning is applied 
+\citep{Quinlan1992}.
   
+\item C4.5
+  the extension of ID3 both proposed by Quinlan \citep{Quinlan1992}.  Both are similar 
+regarding the measure used, but C4.5 define the stopping criteria during the growth process
+  to be when the number of examples in a set is less than a threshold. Moreover, after the tree is 
+created  a error based pruning is applied \citep{Rokach2010}.
+\end{itemize} 
+% \end{remark}
+
+
+\section{Example-Dependent Cost-sensitive Decision Trees}
+\label{sec:7:csdt}
+
+Standard decision tree algorithms focus on inducing trees that maximize accuracy. However this is 
+	not optimal when the misclassification costs are unequal \citep{Elkan2001}. This has led to many 
+	studies that develop algorithms that aim to introduce the cost-sensitivity into the algorithms 
+	\citep{Lomax2013}. These studies have focused on introducing the class-dependent costs  
+	\citep{Draper1994,Ting2002,Ling2004,Li2005,Kretowski2006,Vadera2010}, which is not optimal for 
+	some applications. For example in credit card fraud detection, it is true that false positives 
+	have a different cost than false negatives, nevertheless, false negatives may vary significantly, 
+	which makes class-dependent cost-sensitive methods not suitable for this problem.
+      
+  In this section, we first propose a new method to introduce the costs into the decision tree 
+	induction stage, by creating new-cost based impurity measures. Afterwards, we propose a new 
+	pruning method based on minimizing the cost as pruning criteria.
+
+	\subsection{Cost-sensitive impurity measures}
+
+		Standard impurity measures such as misclassification, entropy or Gini, take into account the 
+		distribution of classes of each leaf to evaluate the predictive power of a splitting rule,
+		leading to an impurity measure that is based on minimizing the misclassification rate. However, 
+		as has been previously shown \citep{CorreaBahnsen2013}, minimizing misclassification does not 
+		lead to the same results than minimizing cost. Instead, we are interested in measuring how good 
+		is a splitting rule in terms of cost not only accuracy. For doing that, we propose a new 
+		example-dependent cost based impurity measure that takes into account the cost matrix of each 
+		example.
+
+		We define a new cost-based impurity measure taking into account the costs when all the examples
+		in a leaf are classified both as negative using $f_0$ and positive using $f_1$
+		\begin{equation}\label{eq:cost_impurity}
+			I_c(\mathcal{S}) = \min \bigg\{ Cost(f_0(\mathcal{S})), Cost(f_1(\mathcal{S})) \bigg\}.
+		\end{equation}
+		The objective of this measure is to evaluate the lowest expected cost of a splitting rule.
+		Following the same logic, the classification of each set is calculated as the prediction that 
+		leads to the lowest cost
+	  \begin{equation}\label{eq_pred}
+	    f(\mathcal{S}) = 
+	    \begin{cases}
+	      \phantom{-}0 \phantom{-} \mbox{if} \phantom{-} Cost(f_0(\mathcal{S})) \le 
+        Cost(f_1(\mathcal{S}))\\
+	      \phantom{-}1 \phantom{-}\mbox{otherwise}
+	    \end{cases}
+	  \end{equation}
+
+		Finally, using the cost-based impurity, the splitting criteria cost based gain of using the 
+		splitting rule $(\mathbf{x}^j,l^j)$ is calculated with (\ref{eq:7:gain}). 
+
+	\subsection{Cost-sensitive pruning}
+ 
+		Most of the literature in class-dependent cost-sensitive decision tree focuses on using the 
+		misclassification costs during the construction of the algorithms \citep{Lomax2013}. Only few 
+		algorithms such as AUCSplit \citep{Ferri2002} have \mbox{included} the costs both during and 
+		after the construction of the tree. However, this approach only used the class-dependent costs, 
+		and not the example-dependent costs.
+ 
+		We propose a new example-dependent cost-based impurity measure, by replacing the error rate 
+		$\epsilon$ in (\ref{eq:7:pruning}) with the cost of using the $Tree$ on $\mathcal{S}$ i.e. by 
+    replacing with 	$Cost(f(\mathcal{S}))$.
+		\begin{equation}\label{eq:cost_pruning}
+			PC_{c} = \frac{ Cost(f(\mathcal{S})) - Cost(f^*(\mathcal{S})) }
+		  {\vert Tree\vert-\vert EB(Tree,node)\vert} ,
+		\end{equation}
+		where $f^*$ is the classifier of the tree without the selected node $EB(Tree,node)$.
+ 
+		Using the new pruning criteria, nodes of the tree that do not contribute to the minimization of 
+		the cost will be pruned, regardless of the impact of those nodes on the accuracy of the
+		algorithm. This follows the same logic as in the proposed cost-based impurity measure, since 
+		minimizing the misclassification is different than minimizing the cost, and in several 
+		real-world applications the objectives align with the cost not with the misclassification error.
+		
 \section{Experiments}
-\label{sec:8:experiments}
-
-  For the experiments we first used three classification algorithms, decision tree ($DT$), logistic 
-  regression ($LR$) and random forest ($RF$). Using the implementation of Scikit-learn 
-  \citep{Pedregosa2011}, each algorithm is trained using the different training sets: training 
-  ($t$), under-sampling ($u$), cost-proportionate rejection-sampling  ($r$) \citep{Zadrozny2003}   
-  and   cost-proportionate over-sampling ($o$) \citep{Elkan2001}. Afterwards,  we evaluate the 
-  results of  the algorithms using $BMR$ \citep{CorreaBahnsen2014}. Then, the cost-sensitive 
-  logistic  regression ($CSLR$) \citep{CorreaBahnsen2014b} and cost-sensitive decision tree 
-  ($CSDT$) \citep{CorreaBahnsen2015} were also evaluated. Lastly, we calculate the 
-  proposed ensembles of cost-sensitive decision trees algorithms. In particular, using each of the 
-  random inducer methods, bagging ($CSB$), pasting ($CSP$), random forests ($CSRF$) and random 
-  patches ($CSRP$), and then blending the base classifiers using each one of the combination 
-  methods; majority voting ($mv$), cost-sensitive weighted voting ($wv$) and cost-sensitive 
-  stacking ($s$). Unless otherwise stated, the random selection of the training set was repeated 50 
-  times, and in each time the models were trained and results collected, this allows us to measure 
-  the stability of the results. 
-  
-    The results are shown in \tablename{ \ref{tab:8:results_savings}}. First, when observing  the 
-  results of the cost-insensitive methods ($CI$), that is, $DT$, $LR$ and $RF$ algorithms trained 
-  on the $t$ and $u$ sets, the $RF$ algorithm produces the best result by savings in three out of 
-  the five sets, followed by the $LR-u$. It is also clear that the results on the $t$ dataset are 
-  not as good as the ones on the $u$, this is highly related to the unbalanced distribution of the 
-  positives and negatives in all the databases.
-
-\begin{table}[!t]
-    \centering
-    \footnotesize
-    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 
-    0in}c@{\hskip 0in}l  } %sum 7.7
-    \hline
-    \bf{Family} & \bf{Algorithm} & \multicolumn{3}{c}{\bf{Fraud}} & 
-    \multicolumn{3}{c}{\bf{Churn}} & \multicolumn{3}{c}{\bf{Credit 1}} \\ 
-    \hline
-CI&DT-t & 0.3176 &$\pm$& 0.0357 & -0.0018 &$\pm$& 0.0194 & 0.1931 &$\pm$& 0.0087 \\
-&LR-t & 0.0092 &$\pm$& 0.0002 & -0.0001 &$\pm$& 0.0002 & 0.0177 &$\pm$& 0.0126 \\
-&RF-t & 0.3342 &$\pm$& 0.0156 & -0.0026 &$\pm$& 0.0079 & 0.1471 &$\pm$& 0.0071\\
-&DT-u & 0.5239 &$\pm$& 0.0118 & -0.0389 &$\pm$& 0.0583 & 0.3287 &$\pm$& 0.0125 \\
-&LR-u & 0.1243 &$\pm$& 0.0387 & 0.0039 &$\pm$& 0.0492 & 0.4118 &$\pm$& 0.0313 \\
-&RF-u & 0.5684 &$\pm$& 0.0097 & 0.0433 &$\pm$& 0.0533 & 0.4981 &$\pm$& 0.0079 \\
-\hline 
-CPS&DT-r & 0.3439 &$\pm$& 0.0453 & 0.0054 &$\pm$& 0.0568 & 0.3310 &$\pm$& 0.0126 \\
-&LR-r & 0.3077 &$\pm$& 0.0301 & 0.0484 &$\pm$& 0.0375 & 0.3965 &$\pm$& 0.0263 \\
-&RF-r & 0.3812 &$\pm$& 0.0264 & 0.1056 &$\pm$& 0.0412 & 0.4989 &$\pm$& 0.0080 \\
-&DT-o & 0.3172 &$\pm$& 0.0274 & 0.0251 &$\pm$& 0.0195 & 0.1738 &$\pm$& 0.0092 \\
-&LR-o & 0.2793 &$\pm$& 0.0185 & 0.0316 &$\pm$& 0.0228 & 0.3301 &$\pm$& 0.0109 \\
-&RF-o & 0.3612 &$\pm$& 0.0295 & 0.0205 &$\pm$& 0.0156 & 0.2128 &$\pm$& 0.0081 \\
-\hline 
-BMR&DT-t-BMR & 0.6045 &$\pm$& 0.0386 & 0.0298 &$\pm$& 0.0145 & 0.1054 &$\pm$& 0.0358 \\
-&LR-t-BMR & 0.4552 &$\pm$& 0.0203 & 0.1082 &$\pm$& 0.0316 & 0.2189 &$\pm$& 0.0541 \\
-&RF-t-BMR & 0.6414 &$\pm$& 0.0154 & 0.0856 &$\pm$& 0.0354 & 0.4924 &$\pm$& 0.0087 \\
-\hline 
-CST&CSLR-t & 0.6113 &$\pm$& 0.0262 & 0.1118 &$\pm$& 0.0484 & 0.4554 &$\pm$& 0.1039 \\
-&CSDT-t & 0.7116 &$\pm$& 0.2557 & 0.1115 &$\pm$& 0.0378 & 0.4829 &$\pm$& 0.0098 \\
-\hline 
-ECSDT&CSB-mv-t & 0.7124 &$\pm$& 0.0162 & 0.1237 &$\pm$& 0.0368 & 0.4862 &$\pm$& 0.0102 \\
-&CSB-wv-t & 0.7276 &$\pm$& 0.0116 & 0.1539 &$\pm$& 0.0255 & 0.4862 &$\pm$& 0.0102 \\
-&CSB-s-t & 0.7181 &$\pm$& 0.0109 & 0.1441 &$\pm$& 0.0364 & 0.4847 &$\pm$& 0.0096 \\
-&CSP-mv-t & 0.7106 &$\pm$& 0.0113 & 0.1227 &$\pm$& 0.0399 & 0.4853 &$\pm$& 0.0104 \\
-&CSP-wv-t & 0.7244 &$\pm$& 0.0202 & 0.1501 &$\pm$& 0.0302 & 0.4854 &$\pm$& 0.0105 \\
-&CSP-s-t & 0.7212 &$\pm$& 0.0067 & 0.1488 &$\pm$& 0.0272 & 0.4848 &$\pm$& 0.0084 \\
-&CSRF-mv-t & 0.6498 &$\pm$& 0.0598 & 0.0300 &$\pm$& 0.0488 & 0.4980 &$\pm$& 0.0120 \\
-&CSRF-wv-t & 0.7249 &$\pm$& 0.0742 & 0.0624 &$\pm$& 0.0477 & 0.4979 &$\pm$& 0.0124 \\
-&CSRF-s-t & 0.6731 &$\pm$& 0.0931 & 0.0586 &$\pm$& 0.0507 & 0.4839 &$\pm$& 0.0160 \\
-&CSRP-mv-t & 0.7220 &$\pm$& 0.0082 & 0.1321 &$\pm$& 0.0280 & \bf{0.5154} &\bf{$\pm$}& \bf{0.0077} \\
-&CSRP-wv-t & \bf{0.7348} &\bf{$\pm$}& \bf{0.0131} & 0.1615 &$\pm$& 0.0252 & 0.5152 &$\pm$& 0.0083 \\
-&CSRP-s-t & 0.7336 &$\pm$& 0.0108 & \bf{0.1652} &\bf{$\pm$}& \bf{0.0264} & 0.4989 &$\pm$& 0.0088 \\
-  \hline
-  \multicolumn{11}{c}{(those models with the highest savings are market as bold)}
-  \end{tabular}
-    \caption{Results of the algorithms measured by savings}
-    \label{tab:8:results_savings}
-  \end{table}
-\begin{table}[!t]
-    \centering
-    \footnotesize
-    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l  } %sum 7.7
-    \hline
-    \bf{Family} & \bf{Algorithm} &  \multicolumn{3}{c}{\bf{Credit 2}} 
-& \multicolumn{3}{c}{\bf{Marketing}} \\ 
-    \hline
-CI&DT-t & -0.0616 &$\pm$& 0.0229 & -0.2342 &$\pm$& 0.0609\\ 
-&LR-t & 0.0039 &$\pm$& 0.0012 & -0.2931 &$\pm$& 0.0602\\ 
-&RF-t & 0.0303 &$\pm$& 0.0040 & -0.2569 &$\pm$& 0.0637\\ 
-&DT-u & -0.1893 &$\pm$& 0.0314 & -0.0278 &$\pm$& 0.0475\\ 
-&LR-u &  0.1850 &$\pm$& 0.0231 & 0.2200 &$\pm$& 0.0376\\ 
-&RF-u & 0.1237 &$\pm$& 0.0228 & 0.1227 &$\pm$& 0.0443\\ 
-\hline 
-CPS&DT-r & 0.0724 &$\pm$&0.0212 & 0.1960 &$\pm$& 0.0527\\ 
-&LR-r &  0.2650 &$\pm$& 0.0115 & 0.4210 &$\pm$& 0.0267\\ 
-&RF-r & 0.3055 &$\pm$& 0.0106 & 0.3840 &$\pm$& 0.0360\\ 
-&DT-o &  0.0918 &$\pm$&0.0225 & -0.2598 &$\pm$& 0.0559\\ 
-&LR-o &  0.2554 &$\pm$&0.0090 & 0.3129 &$\pm$& 0.0277\\ 
-&RF-o &  0.2242 &$\pm$&0.0070 & -0.1782 &$\pm$& 0.0618\\ 
-\hline 
-BMR&DT-t-BMR & 0.2740 &$\pm$& 0.0067 & 0.4598 &$\pm$& 0.0089\\ 
-&LR-t-BMR & \bf{0.3148} &\bf{$\pm$}& \bf{0.0094} & \bf{0.4973} &\bf{$\pm$}& \bf{0.0084}\\ 
-&RF-t-BMR & 0.3133 &$\pm$& 0.0094 & 0.4807 &$\pm$& 0.0093\\ 
-\hline 
-CST&CSLR-t & 0.2748 &$\pm$&0.0069 & 0.4484 &$\pm$& 0.0072\\ 
-&CSDT-t &  0.2835 &$\pm$& 0.0078 & 0.4741 &$\pm$& 0.0063\\ 
-\hline 
-ECSDT&CSB-mv-t &  0.2945 &$\pm$& 0.0105 & 0.4837 &$\pm$& 0.0078\\ 
-&CSB-wv-t & 0.2948 &$\pm$&0.0106 & 0.4838 &$\pm$& 0.0079\\ 
-&CSB-s-t &  0.2856 &$\pm$& 0.0088 & 0.4769 &$\pm$& 0.0078\\ 
-&CSP-mv-t & 0.2919 &$\pm$& 0.0097 & 0.4831 &$\pm$& 0.0081\\ 
-&CSP-wv-t & 0.2921 &$\pm$& 0.0098 & 0.4832 &$\pm$& 0.0082\\ 
-&CSP-s-t &  0.2870 &$\pm$& 0.0084 & 0.4752 &$\pm$& 0.0089\\ 
-&CSRF-mv-t &  0.2274 &$\pm$& 0.0520 & 0.3929 &$\pm$& 0.0655\\ 
-&CSRF-wv-t &  0.2948 &$\pm$& 0.0079 & 0.4728 &$\pm$& 0.0125\\ 
-&CSRF-s-t &  0.2518 &$\pm$& 0.0281 & 0.3854 &$\pm$& 0.0899\\ 
-&CSRP-mv-t & 0.3053 &$\pm$& 0.0087 & 0.4960 &$\pm$& 0.0075\\ 
-&CSRP-wv-t & 0.3015 &$\pm$& 0.0086 & 0.4885 &$\pm$& 0.0076\\ 
-&CSRP-s-t & 0.2956 &$\pm$& 0.0078 & 0.4878 &$\pm$& 0.0080\\ 
-  \hline
-  \multicolumn{8}{c}{(those models with the highest savings are market as bold)}
-  \end{tabular}
-    \caption{Continuation of \tablename{~\ref{tab:8:results_savings}}}
-    \label{tab:8:results_savings2}
-  \end{table}
-  
-  In the case of cost-proportionate sampling methods ($CPS$), specifically the 
-  cost-proportionate rejection sampling ($r$) and cost-proportionate over 
-  sampling ($o$). It is observed than in four cases the savings increases quite 
-  significantly. It is on the fraud detection database where these methods do not outperform the 
-  algorithms trained on the under-sampled set. This may be related to the fact that in this 
-  database the initial percentage of positives is 1.5\% which is similar to the percentage in the 
-  $r$ and   $o$ sets. However it is 50.42\% in the $u$ set, which may help explain why this method 
-  performs much better as measured by savings.
-
-  Afterwards, in the case of the $BMR$ algorithms, the results show that this method outperforms 
-  the previous ones in four cases and has almost the same result in the other set. In the fraud 
-  detection  set, the results are quite better, since the savings of the three classification 
-  algorithms increase when using this methodology. The next family of algorithms is the 
-  cost-sensitive training, which includes the $CSLR$ and $CSDT$ techniques. In this case, only in 
-  two databases the results are improved. Lastly, we evaluate the proposed $ECSDT$ algorithms. The 
-  results show that these methods arise to the best overall results in three sets, while being 
-  quite competitive in the others.
-  
-  Subsequently, in order to statistically sort the classifiers we computed the Friedman ranking 
-  (F-Rank)  statistic \citep{Demsar2006}. This rank increases with the cost of the algorithms. 
-  We also calculate the average savings of each algorithm compared with the highest savings in 
-  each set (perBest), as a  measure of how close are the savings of an algorithm to the best result. 
-  In \tablename{~\ref{tab:8:results_ranking}}, the results are shown. It is observed that  the 
-  first six algorithms, according to the F-Rank, belong to the $ECSDT$ family. In particular, the 
-  best three classifiers is the ensemble of cost-sensitive decision trees using the random patches 
-  approach. Giving the best result the one that blends the base classifiers using weighted voting 
-  method. Moreover as shown in  \tablename{~\ref{tab:8:results_best}}, this method ranks on each 
-  dataset \nth{1}, \nth{2}, \nth{2}, \nth{5} and \nth{3}, respectively. For comparison the best 
-  method from an other family is the $RF$ with $BMR$, which ranks \nth{14}, \nth{14}, \nth{8}, 
-  \nth{2} and \nth{9}.
-  
-    \begin{table}[!t]
-     \centering
-    \footnotesize
-    \begin{tabular}{ll c c  } %sum 7.7
-      \hline
-      \bf{Family} & \bf{Algorithm} & \bf{F-Rank} & \bf{perBest}\\
-      \hline
-        ECSDT&CSRP-wv-t&2.6&98.35\\ 
-        ECSDT&CSRP-s-t&3.4&97.72\\ 
-        ECSDT&CSRP-mv-t&4.0&94.99\\ 
-        ECSDT&CSB-wv-t&5.6&95.49\\ 
-        ECSDT&CSP-wv-t&7.4&94.72\\ 
-        ECSDT&CSB-mv-t&8.2&91.39\\ 
-        ECSDT&CSRF-wv-t&9.4&84.35\\ 
-        BMR&RF-t-BMR&9.4&86.16\\ 
-        ECSDT&CSP-s-t&9.6&93.80\\ 
-        ECSDT&CSP-mv-t&10.2&91.00\\ 
-        ECSDT&CSB-s-t&10.2&93.12\\ 
-        BMR&LR-t-BMR&11.2&73.98\\ 
-        CPS&RF-r&11.6&77.37\\ 
-        CST&CSDT-t&12.6&88.69\\ 
-        CST&CSLR-t&14.4&83.34\\ 
-        ECSDT&CSRF-mv-t&15.2&70.88\\ 
-        ECSDT&CSRF-s-t&16.0&75.68\\ 
-        CI&RF-u&17.2&52.83\\ 
-        CPS&LR-r&19.0&63.39\\ 
-        BMR&DT-t-BMR&19.0&60.05\\ 
-        CPS&LR-o&21.0&53.05\\ 
-        CPS&DT-r&22.6&35.33\\ 
-        CI&LR-u&22.8&40.43\\ 
-        CPS&RF-o&22.8&34.81\\ 
-        CI&DT-u&24.4&27.01\\ 
-        CPS&DT-o&25.0&24.25\\ 
-        CI&DT-t&26.0&16.14\\ 
-        CI&RF-t&26.2&16.73\\ 
-        CI&LR-t&28.0&1.19\\ 
-      \hline
-    \end{tabular}
-    \caption{Savings Friedman ranking and average percentage of best result}
-    \label{tab:8:results_ranking}
-  \end{table}
-  \begin{table}[t]
-    \centering
-    \footnotesize
-    \begin{tabular}{l c c c c c  } %sum 7.7
-      \hline
-      \bf{Algorithm} & \bf{Fraud} & \bf{Churn} &\bf{Credit1} & \bf{Credit2} & \bf{Marketing} \\
-      \hline
-      RF-u&17&18&5&23&23\\ 
-      RF-r&20&13&3&3&19\\ 
-      RF-t-BMR&14&14&8&2&9\\ 
-      CSDT-t&10&11&16&14&12\\ 
-      CSRP-wv-t&1&2&2&5&3\\ 
-      \hline
-    \end{tabular}
-    \caption{Savings ranks of best algorithm of each family by database}
-    \label{tab:8:results_best}
-  \end{table}
- 
-  \begin{figure}[t]
-    \centering
-    \includegraphics{ch8_fig3}
-    \caption{\textbf{Comparison of the savings of the algorithms versus the highest savings in 
-    each database.} The $CSRP-wt$ is very close to the best result in all the databases. 
-    Additionally, even though the $LR-BMR$ is the best algorithm in two databases, the performance 
-    in the other three is very poor.}
-    \label{fig:8:comparison_best}
-  \end{figure} 
-
-  Moreover, when analyzing the perBest statistic, it is observed that it follows almost the same 
-  order as the F-Rank. Notwithstanding, there are cases in which algorithms ranks are different in 
-  the two statistics, for example the $CSDT-t$ algorithm has a lower F-Rank than the $RF-BMR$, 
-  but the perBest if better. This happens because, the F-Rank does not take into account the 
-  difference in savings within algorithms. This can be further investigated in \figurename{ 
-  \ref{fig:8:comparison_best}}. Even that ranks of the $BMR$ models are better than the $CSDT$, the 
-  latter is on average closer to the best performance method in each set. Moreover, it is confirmed 
-  that the $CSRP-wt$ is very close to the best result in all cases. Lastly, it is shown why the 
-  F-Rank of the $LR-BMR$ is high, given the fact that is the best model in two databases. The 
-  reason  for that, is because the performance on the other sets is very poor.
-  
-\begin{figure}[!t]
-  \centering
-  \subfloat[Comparison of the Friedman ranking.]{\includegraphics{ch8_fig4}%
-    \label{fig:8:family_rank}}
-  \hfil
-  \subfloat[Comparison of the average savings of the algorithms versus the 
-    highest savings.]{\includegraphics{ch8_fig5}%
-    \label{fig:8:family_avgsav}}
-  \caption{\textbf{Comparison of the results by family of classifiers.} The $ECSDT$ family has the 
-  best performance measured either by Friedman ranking or average percentage of best model.}
-  \label{fig:8:comparison_family}
-\end{figure}
-
- \begin{figure}[!t]
-  \centering
-  \subfloat[Comparison by inducer methodology.]{\includegraphics{ch8_fig6}%
-    \label{fig:8:rank_ecsdt1}}
-  \hfil
-  \subfloat[Comparison by combination of base classifiers approach.]{\includegraphics{ch8_fig7}%
-    \label{fig:8:rank_ecsdt2}}
-  \caption{\textbf{Comparison of the Friedman ranking within the $ECSDT$ family.} Overall, the 
-  random inducer method that provides the best results is the $CSRP$. Moreover, the best 
-  combination method compared by Friedman ranking is the cost-sensitive weighted voting.}
-  \label{fig:8:rank_ecsdt}
-\end{figure}
- 
-  Furthermore \figurename{~\ref{fig:8:family_rank}}, shows the Friedman ranking of each family of 
-  classifiers. The $ECSDT$ methods are overall better, followed by the $BMR$ and the $CST$ methods. 
-  As expected, the $CI$ family is the one that performs the worst. Nevertheless, there is 
-  a significant variance within the ranks in the $ECSDT$ family, as the best one has a Friedman 
-  ranking of 2.6 and the worst 16. Similar results are found when observing the perBest shown in 
-  \figurename{~\ref{fig:8:family_avgsav}}. However, in the case of the perBest, the $CST$ methods 
-  perform better than the $BMR$. It is important, in both cases it is confirmed that the $ECSDT$ 
-  family of methods is the one that arise to the best results as measured by savings.
-
-  We further investigate the different methods that compose the $ECSDT$ family, first by inducer 
-  methods and by the combination approach. In \figurename{ \ref{fig:8:rank_ecsdt1}}, the Friedman 
-  ranking of the $ECSDT$ methods grouped by inducer algorithm are shown. It is observed that the 
-  worst method is the random forest methodology. This may be related to the fact that within the 
-  random inducer methods, this is the only one that also modified the learner algorithm in the 
-  sense that it randomly select features for each step during the decision tree growing. Moreover, 
-  as expected the bagging and pasting methods perform quite similar, after all the only difference 
-  is that in bagging the sampling is done with replacement, while it is not the case in pasting. 
-  In  general the best methodology is random patches. Additionally, in \figurename{ 
-  \ref{fig:8:rank_ecsdt2}}, a similar analysis is made taking into account the combination of base 
-  classifiers approach. In this case, the best combination method is weighted voting, while 
-  majority voting and staking have a similar performance.
-
-  \begin{figure}[b!]
-  \centering
-  \includegraphics{ch8_fig8}
-  \caption{\textbf{Comparison of the Friedman ranking of the savings and F1Score sorted by F1Score 
-  ranking.} The best two algorithms according to their Friedman rank of F1Score are indeed the 
-  best ones measured by the Friedman rank of the savings. However, this relation does not 
-  consistently hold for the other algorithms as the correlation between the rankings is just 
-  65.10\%.}
-  \label{fig:8:friedman_vs_fscore}
-  \end{figure}
-
-\begin{table}[!t]
-     \centering
-    \footnotesize
-    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 
-0in}c@{\hskip 0in}l} %sum 7.7
-      \hline
-    \bf{Family} & \bf{Algorithm} & \multicolumn{3}{c}{\bf{Fraud}} & 
-\multicolumn{3}{c}{\bf{Churn}} & \multicolumn{3}{c}{\bf{Credit 1}} \\
-      \hline
-CI&DT-t & 0.4458 &$\pm$& 0.0133 & 0.0733 &$\pm$& 0.0198 & 0.2593 &$\pm$& 0.0068 \\
-&LR-t & 0.1531 &$\pm$& 0.0045 & 0.0000 &$\pm$& 0.0000 & 0.0494 &$\pm$& 0.0277 \\
-&RF-t & 0.2061 &$\pm$& 0.0041 & 0.0249 &$\pm$& 0.0146 & 0.2668 &$\pm$& 0.0085 \\
-&DT-u & 0.1502 &$\pm$& 0.0066 & 0.1175 &$\pm$& 0.0103 & 0.2276 &$\pm$& 0.0044 \\
-&LR-u & 0.0241 &$\pm$& 0.0163 & 0.1222 &$\pm$& 0.0098 & 0.3160 &$\pm$& 0.0314 \\
-&RF-u & 0.0359 &$\pm$& 0.0065 & 0.1346 &$\pm$& 0.0112 & 0.3193 &$\pm$& 0.0053 \\
-\hline 
-CPS&DT-r & 0.4321 &$\pm$& 0.0086 & 0.1206 &$\pm$& 0.0132 & 0.2310 &$\pm$& 0.0049 \\
-&LR-r & 0.1846 &$\pm$& 0.0123 & 0.1258 &$\pm$& 0.0111 & 0.3597 &$\pm$& 0.0156 \\
-&RF-r & 0.2171 &$\pm$& 0.0100 & 0.1450 &$\pm$& 0.0131 & 0.3361 &$\pm$& 0.0067 \\
-&DT-o & \bf{0.4495} &\bf{$\pm$}& \bf{0.0063} & 0.1022 &$\pm$& 0.0180 & 0.2459 &$\pm$& 0.0081 \\
-&LR-o & 0.1776 &$\pm$& 0.0117 & 0.1085 &$\pm$& 0.0203 & 0.3769 &$\pm$& 0.0067 \\
-&RF-o & 0.2129 &$\pm$& 0.0080 & 0.0841 &$\pm$& 0.0201 & 0.3281 &$\pm$& 0.0078 \\
-\hline 
-BMR&DT-t-BMR & 0.2139 &$\pm$& 0.0215 & 0.0941 &$\pm$& 0.0157 & 0.1514 &$\pm$& 0.0390 \\
-&LR-t-BMR & 0.1384 &$\pm$& 0.0044 & 0.1370 &$\pm$& 0.0150 & 0.1915 &$\pm$& 0.0340 \\
-&RF-t-BMR & 0.2052 &$\pm$& 0.0183 & 0.1264 &$\pm$& 0.0156 & 0.3186 &$\pm$& 0.0072\\
-\hline 
-CST&CSLR-t & 0.2031 &$\pm$& 0.0065 & 0.1134 &$\pm$& 0.0151 & 0.1454 &$\pm$& 0.0517 \\
-&CSDT-t & 0.2522 &$\pm$& 0.0980 & 0.1288 &$\pm$& 0.0194 & 0.2754 &$\pm$& 0.0059 \\
-\hline 
-ECSDT&CSB-mv-t & 0.2112 &$\pm$& 0.0125 & 0.1481 &$\pm$& 0.0122 & 0.2927 &$\pm$& 0.0108 \\
-&CSB-wv-t & 0.2112 &$\pm$& 0.0091 & 0.1686 &$\pm$& 0.0125 & 0.2926 &$\pm$& 0.0108 \\
-&CSB-s-t & 0.2072 &$\pm$& 0.0103 & 0.1554 &$\pm$& 0.0121 & 0.2818 &$\pm$& 0.0075 \\
-&CSP-mv-t & 0.2098 &$\pm$& 0.0126 & 0.1480 &$\pm$& 0.0136 & 0.2903 &$\pm$& 0.0108 \\
-&CSP-wv-t & 0.2099 &$\pm$& 0.0054 & 0.1651 &$\pm$& 0.0120 & 0.2905 &$\pm$& 0.0110 \\
-&CSP-s-t & 0.2064 &$\pm$& 0.0069 & 0.1590 &$\pm$& 0.0099 & 0.2809 &$\pm$& 0.0062 \\
-&CSRF-mv-t & 0.2208 &$\pm$& 0.0022 & 0.1081 &$\pm$& 0.0224 & 0.2994 &$\pm$& 0.0226 \\
-&CSRF-wv-t & 0.2175 &$\pm$& 0.0019 & 0.1220 &$\pm$& 0.0234 & 0.2992 &$\pm$& 0.0236 \\
-&CSRF-s-t & 0.2169 &$\pm$& 0.0045 & 0.1304 &$\pm$& 0.0162 & 0.2916 &$\pm$& 0.0236 \\
-&CSRP-mv-t & 0.2691 &$\pm$& 0.0054 & 0.1511 &$\pm$& 0.0110 & 0.4031 &$\pm$& 0.0079 \\
-&CSRP-wv-t & 0.2780 &$\pm$& 0.0041 & \bf{0.1710} &\bf{$\pm$}& \bf{0.0140} & \bf{0.4049} 
-&\bf{$\pm$}& \bf{0.0066}\\
-&CSRP-s-t & 0.2735 &$\pm$& 0.0148 & 0.1622 &$\pm$& 0.0103 & 0.3953 &$\pm$& 0.0141 \\
-      \hline
-      \multicolumn{11}{c}{(those models with the highest F1Score are market as bold)}
-    \end{tabular}
-\caption{Results as measured by F1Score}
-\label{tab:8:results_f1score}
-  \end{table}
-
-\begin{table}[!t]
-     \centering
-    \footnotesize
-    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l  } %sum 7.7
-    \hline
-    \bf{Family} & \bf{Algorithm} &  \multicolumn{3}{c}{\bf{Credit 2}} 
-& \multicolumn{3}{c}{\bf{Marketing}} \\ 
-      \hline
-CI&DT-t &  0.2614 &$\pm$& 0.0083 & 0.2647 &$\pm$& 0.0079\\ 
-&LR-t & 0.0155 &$\pm$& 0.0037 & 0.2702 &$\pm$& 0.0125\\ 
-&RF-t &  0.0887 &$\pm$&0.0061 & 0.2884 &$\pm$& 0.0116\\ 
-&DT-u &  0.3235 &$\pm$&0.0055 & 0.2659 &$\pm$& 0.0061\\ 
-&LR-u &  \bf{0.3890} &\bf{$\pm$}& \bf{0.0053} & 0.3440 &$\pm$& 0.0083\\ 
-&RF-u & 0.3815 &$\pm$&0.0051 & 0.3088 &$\pm$& 0.0065\\ 
-\hline 
-CPS&DT-r &0.3409 &$\pm$&0.0046 & 0.2739 &$\pm$& 0.0076\\ 
-&LR-r &  0.3793 &$\pm$& 0.0049 & 0.3374 &$\pm$& 0.0101\\ 
-&RF-r & 0.3570 &$\pm$& 0.0048 & 0.3103 &$\pm$& 0.0075\\ 
-&DT-o & 0.3258 &$\pm$& 0.0056 & 0.2634 &$\pm$& 0.0089\\ 
-&LR-o & 0.3804 &$\pm$& 0.0044 & \bf{0.3568} &\bf{$\pm$}& \bf{0.0102}\\ 
-&RF-o & 0.3212 &$\pm$& 0.0054 & 0.3083 &$\pm$& 0.0093\\ 
-\hline 
-BMR&DT-t-BMR & 0.3338 &$\pm$& 0.0052 & 0.2433 &$\pm$& 0.0071\\ 
-&LR-t-BMR &  0.3572 &$\pm$&0.0045 & 0.2954 &$\pm$& 0.0079\\ 
-&RF-t-BMR &  0.3551 &$\pm$&0.0053 & 0.2744 &$\pm$& 0.0070\\ 
-\hline 
-CST&CSLR-t & 0.3363 &$\pm$&0.0045 & 0.2339 &$\pm$& 0.0051\\ 
-&CSDT-t & 0.3483 &$\pm$& 0.0046 & 0.2680 &$\pm$& 0.0060\\ 
-\hline 
-ECSDT&CSB-mv-t & 0.3503 &$\pm$& 0.0046 & 0.2758 &$\pm$& 0.0072\\ 
-&CSB-wv-t &  0.3503 &$\pm$&0.0046 & 0.2757 &$\pm$& 0.0072\\ 
-&CSB-s-t &  0.3533 &$\pm$& 0.0046 & 0.2799 &$\pm$& 0.0074\\ 
-&CSP-mv-t &0.3499 &$\pm$& 0.0044 & 0.2749 &$\pm$& 0.0064\\ 
-&CSP-wv-t & 0.3498 &$\pm$&0.0045 & 0.2749 &$\pm$& 0.0064\\ 
-&CSP-s-t &  0.3524 &$\pm$&0.0046 & 0.2778 &$\pm$& 0.0104\\ 
-&CSRF-mv-t & 0.3560 &$\pm$&0.0118 & 0.2780 &$\pm$& 0.0106\\ 
-&CSRF-wv-t & 0.3549 &$\pm$&0.0069 & 0.2552 &$\pm$& 0.0187\\ 
-&CSRF-s-t &  0.3540 &$\pm$&0.0071 & 0.2578 &$\pm$& 0.0186\\ 
-&CSRP-mv-t &0.3743 &$\pm$& 0.0050 & 0.2916 &$\pm$& 0.0062\\ 
-&CSRP-wv-t & 0.3721 &$\pm$& 0.0051 & 0.2781 &$\pm$& 0.0063\\ 
-&CSRP-s-t & 0.3720 &$\pm$& 0.0049 & 0.2922 &$\pm$& 0.0137\\ 
-      \hline
-      \multicolumn{8}{c}{(those models with the highest F1Score are market as bold)}
-    \end{tabular}
-\caption{Continuation of \tablename{~\ref{tab:8:results_f1score}}}
-\label{tab:8:results_f1score2}
-  \end{table}
-
-  Finally, in \tablename{~\ref{tab:8:results_f1score}} the results of the algorithms measured by 
-  F1Score are shown. It is observed that the model with the highest savings is not the same as the 
-  one with the highest F1Score in all of the databases, corroborating the conclusions from 
-  \citep{CorreaBahnsen2013}, as selecting a method by a traditional statistic does not give the 
-  same result as selecting it using a business oriented measure such as financial savings. This can 
-  be  further examined in \mbox{\figurename{~\ref{fig:8:friedman_vs_fscore}}}, where the ranking of 
-  the F1Score and savings are compared. It is observed that the best two algorithms according to 
-  their Friedman rank of F1Score are indeed the best ones measured by the Friedman rank of the 
-  savings. However, this relation does not consistently hold for the other algorithms as the 
-  correlation between the rankings is just 65.10\%. 
+\label{sec:7:experiments}
+\todo{Experiments}

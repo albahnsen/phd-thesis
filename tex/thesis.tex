@@ -118,16 +118,18 @@
 \pagenumbering{arabic}
 
 \include{chapters/chapter01}\cleardoublepage
-\include{chapters/chapter02}\cleardoublepage
+
+\todo{organize references in all chapters}
+
+\part{Classification}\label{part:0}
+  \include{chapters/chapter02}\cleardoublepage
+  \include{chapters/chapter03}\cleardoublepage
 
 \part{Real-world applications}\label{part:1}
-
-  \include{chapters/chapter03}\cleardoublepage
   \include{chapters/chapter04}\cleardoublepage
+  \include{chapters/chapter05}\cleardoublepage
 
 \part{Proposed Cost-Sensitive Methods}\label{part:2}
-
-  \include{chapters/chapter05}\cleardoublepage
   \include{chapters/chapter06}\cleardoublepage
   \include{chapters/chapter07}\cleardoublepage
   \include{chapters/chapter08}\cleardoublepage
@@ -139,7 +141,7 @@
 \def\toclevel@chapter{-1}
 \makeatother
     
-\include{chapters/chapter10}
+\include{frontback/conclusions}
 
 
 % % Back pages ==================================================================
@@ -147,6 +149,7 @@
 \cleardoublepage
 \part{Appendix}
 
+\cleardoublepage\include{frontback/app_costcla}
 \cleardoublepage\include{frontback/notations}
 \cleardoublepage\include{frontback/bibliography}
 		

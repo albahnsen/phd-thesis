@@ -1,432 +1,780 @@
-\chapter{Marketing Analytics}\label{ch:4}
+\chapter{Financial risk modeling}\label{ch:3}
 
 \begin{remark}{Outline}
-In this chapter, we present two different marketing real-world example-dependent 
-cost-sensitive problems, namely, churn modeling and direct marketing. Both problems deal 
-with identifying those customers with certain characteristic with the objective to maximize the 
-results of the different CRM strategies.
-First, we introduce the churn modeling problem in Section \ref{sec:4:churn}. Lastly in Section 
-\ref{sec:4:directmarketing}, the direct marketing problem is presented.
+\todo{fix outline}
+In this chapter, we present the well-known family of \textit{random forests}
+methods. In Section~\ref{sec:4:bias-variance}, we first describe the bias-variance
+decomposition of the prediction error and then present, in
+Section~\ref{sec:4:ensemble}, how aggregating randomized models through
+ensembles reduces the prediction error by decreasing the variance term in this
+decomposition. In Section~\ref{sec:4:random-forests}, we revisit random forests
+and its variants and study how randomness introduced into the decision trees
+reduces prediction errors by decorrelating the decision
+trees in the ensemble. Properties and features of random forests are then outlined
+in Section~\ref{sec:4:features} while their consistency
+is finally explored in Section~\ref{sec:4:consistency}.
 \end{remark}
 
+\section{Credit card fraud detection}
 
-\section{Churn modeling}
-\label{sec:4:churn}
-
-Customer churn predictive modeling deals with predicting the probability of a customer defecting 
-using historical, behavioral and socio-economical information. This tool is of great benefit to 
-subscription based companies allowing them to maximize the results of retention campaigns. The 
-problem of churn predictive modeling has been widely studied by the data mining and machine learning
-communities. It is usually tackled by using classification algorithms in order to learn the 
-different patterns of both the churners and non-churners. Nevertheless, current state-of-the-art 
-classification algorithms are not well aligned with commercial goals, in the sense that, the models 
-miss to include the real financial costs and benefits during the training and evaluation phases. In 
-the case of churn, evaluating a model based on a traditional measure such as accuracy or predictive 
-power, does not yield to the best results when measured by the actual financial cost, ie. 
-investment per subscriber on a loyalty campaign and the financial impact of failing to detect a 
-real churner versus wrongly predicting a non-churner as a churner.
-
-In this section, we present a cost-sensitive framework for customer churn predictive modeling, 
-that we proposed in \citep{CorreaBahnsen2015a}. First, in Section \ref{sec:4:1:intro}, we introduce 
-the problem of chrun modeling. Then in Section \ref{sec:4:1:evaluation}, we present a financial 
-based measure for evaluating the effectiveness of a churn campaign taking into account the available 
-portfolio of offers, their individual financial cost and probability of offer acceptance depending 
-on the customer profile. Finally, in Section \ref{sec:4:1:data}, we describe the real-world churn 
-modeling dataset that will be used during the experiments.
-
-
+	Every year billions of Euros are lost worldwide due to credit card fraud. Thus, leading financial 
+	institutions to continuously improve their fraud detection systems. In recent years, several 
+	studies have proposed the use of machine learning and data mining techniques to address this 
+	problem. However, most studies used some sort of misclassification measure to evaluate the 
+	different solutions, and by doing so, missed to take into account the actual financial costs 
+	associated with the fraud detection process. Moreover, when constructing a credit card fraud 
+	detection model, it is very important how to 	preprocess the transactional data. This is usually 
+	done by aggregating the transactions in order 	to observe the spending behavioral patterns of 
+	the customers. In this work, we expand the transaction aggregation strategy, and also propose a 
+	creating new set 	of features based in analyzing the periodic behavior of the time of a 
+	transaction using the von 	Mises distribution. Then, using a real credit card fraud dataset 
+	provided by a large European card processing company, we compare state-of-the-art credit card 
+	fraud detection models, and evaluate how the 	different sets of features have an impact on the 
+	results. By including the proposed periodic features into the methods, 	the results show an 
+	average increase in the savings of 12.55\%
+	\todo{erase percentage of savings}
+	
 \subsection{Introduction}
-\label{sec:4:1:intro}
 
-The two main objectives of subscription-based companies are to  acquire new subscribers and 
-retain those they already have, mainly because profits are directly linked with the number of 
-subscribers.  In order to maximize the profit, companies must increase the customer base by 
-incrementing sales  while decreasing the number of churners. Furthermore, it is common knowledge 
-that retaining a  customer is about five times less expensive than acquiring a new one 
-\citep{Farris2010}, this creates  pressure to have better and more effective churn campaigns.
-
-A typical churn campaign consists in identifying from the current customer base which ones are 
-more likely to leave the company, and make an offer in order to avoid that behavior.
-With this in mind the companies use intelligence to create and improve retention and collection
-strategies. In the first case, this usually implies an offer that can be either a discount or a 
-free upgrade during certain span of time. In both cases the company has to 	assume a cost for that 
-offer, therefore, accurate prediction of the churners becomes important. The logic of this flow is 
-shown in \figurename{ \ref{fig:ch4:1}}.
-
-	\begin{figure}[htbp]
-	  \centering
-    \includegraphics[width=11.5cm]{ch4_fig1}   %CHANGE TO 12cm
-	  \caption{Flow analysis of a churn campaign \citep{Verbraken2012}}
-	  \label{fig:ch4:1}
-	\end{figure}
-
-\begin{remark}{Flow analysis of a churn campaign}
-The typical churn campaign process starts with the sales that every month increase the customer 
-base, however, monthly there is a group of customers that decide to leave the company for many 
-reasons. Then the objective of a churn model is to identify those customers before they take the 
-decision of defecting.
-
-Using a churn model, those customers more likely to leave are predicted as churners and 
-an offer is made in order to retain them. However, it is known that not all customers will accept 
-the offer, in the case when a customer is planning to defect, it is possible that the offer is not 
-good enough to retain him or that the reason for defecting can not be influenced by an offer.
-Using historical information, it is estimated that a customer will accept the offer with 
-probability $\gamma$.
-On the other hand, there is the case in which the churn model misclassified a non-churner as 
-churner, also known as false positives, in that case the customer will always accept the offer that 
-means and additional cost to the company since those misclassified customers do not have the 
-intentions of leaving.
-
-In the case were the churn model predicts customers as non-churners, there is also the possibility 
-of a misclassification, in this case an actual churner is predicted as non-churner, since 
-these customers do not receive an offer and they will leave the company, these cases are known as 
-false negatives. Lastly, there is the case were the customers are actually non-churners, then 
-there is no need to make a retention offer to these customers since they will continue to be part 
-of the customer base.
-\end{remark}
-
-It can be seen that a churn campaign (or churn model) have three main points. First, avoid false 
-positives since there is a financial cost of making an offer were it is not needed. Second, to the 
-true positives, give the right offer that maximize $\gamma$ while maximizing the profit of the 
-company. And lastly, to decrease the number of false negatives.
-
-From a machine learning perspective, a churn model is a classification algorithm.
-In the sense that using historical information, a prediction of which current customers 
-are more likely to defect, is made. This model is normally created using one of a number of 
-well establish algorithms (Logistic regression, neural networks, random forests, among 
-others) \citep{Ngai2009,KhakAbi2010}. Then, the model is evaluated using measures such as 
-misclassification error, receiver operating characteristic ($ROC$),  Kolmogorov-Smirnov ($KS$) 
-or \mbox{$F_1Score$} statistics \citep{Verbeke2012}. However these measures assume that 
-misclassification errors     carry the same cost, which is not the case in churn modeling, since 
-failing to identify a profitable or unprofitable churner have significant different financial costs
-\citep{Glady2009}. 
+  The use of credit and debit cards has increased significantly   in the last years, unfortunately 
+	so has the fraud. Because of it, billions of Euros are lost every year. According to 
+	the European Central Bank \citep{EuropeanCentralBank2013}, during 2012 the total level of fraud 
+	reached 1.33 billion Euros in the Single Euro Payments Area, which represents an increase of 
+	14.8\% compared with 2011. Moreover, payments across non traditional channels (mobile, internet, 
+	...) accounted for 60\% of the fraud, whereas it was 46\% in 2008. This open new challenges as 
+	new fraud patterns emerge, and current fraud detection systems are not being successful in 
+	preventing fraud. Furthermore, fraudsters constantly change their strategies to avoid being 
+	detected, something that makes traditional fraud detection tools such as expert rules inadequate.
+  
+  The use of machine learning in fraud detection has been an interesting topic in recent years. 
+  Several detection systems based on machine learning techniques has been successfully used 
+	for this problem \citep{Bhattacharyya2011}. When constructing a credit card fraud detection 
+model, 
+	there are several problems that have an important impact during the training phase: Skewness of 	
+	the data , cost-sensitivity of the application, short time response of the system, dimensionality 
+	of the search space and how to preprocess the features
+	\citep{Bolton2002,Gadi2008,Whitrow2008,DalPozzolo2014}.	In this paper, we are interested to 
+	address the cost-sensitivity and the features preprocessing 	issues. 
 	
-In the next section, we propose a new financial based measure for evaluating the effectiveness of 
-a voluntary churn campaign taking into account the available portfolio of offers, their 
-individual 	financial cost and probability of acceptance depending on the customer profile. 
-
-
-\subsection{Evaluation of a churn campaign}
-\label{sec:4:1:evaluation}
+	A credit card fraud detection is by definition a cost-sensitive problem, in the sense that the 
+	cost 	due a false positive is different than the cost of a false negative. ie. When predicting a 	
+	transaction 	as fraudulent when in fact it is not a fraud there is an administrative cost that 	
+	is incurred by 	the financial institution, on the other hand, when failing to detect a fraud, the 
+	amount of that 	transaction is loss \citep{Hand2007a}. Moreover, it is not enough  to assume a 	
+	constant cost 	difference between false positives and false negatives, as the amount of the 	
+	transactions vary 	quite significantly, therefore, its financial impact is not constant but 	
+	depended on each 	transaction.	In \citep{CorreaBahnsen2013}, we propose a new cost-based measure 
+	to evaluate 	credit card fraud detection models, taking into account the different financial 	
+	costs incurred by 	the fraud detection process.
 	
-Traditionally, a churn model is evaluated as a standard binary classification model, 
-using measures such as misclassification error, receiver operating characteristic ($ROC$),  
-Kolmogorov-Smirnov ($KS$) or \mbox{$F_1Score$} statistics \citep{Verbeke2012}.
-However, these measures may not be the most appropriate evaluation criteria when  
-evaluating a churn model, because they tacitly assume that misclassification errors carry the 
-same cost, similarly with the correct classified examples. This assumption does not hold in many 
-real-world applications such as churn modeling, since  when misidentifying a churner the financial 
-losses are quite different than when misclassifying a non-churner as churner \citep{Glady2009}. 
-Furthermore, the accuracy measure also assumes that the class distribution 
-among examples is constant and balanced \citep{Provost1998}, and typically the distributions of a 
-churn data set are skewed \citep{Verbeke2012}.
-
-Different studies have proposed measures to deal with these cost-sensitivity related to
-evaluating a churn model. In \citep{Neslin2006}, a profit-based measure was proposed by starting 
-with the confusion matrix and multiplying it with the expected profit of each case.
-\begin{align}\label{eq:4:profit1}
- Profit_1 = (TP+FP)\bigg[ & \left(\gamma CLV + C_o(1-\gamma)(-C_a)\right)\pi_1\gamma \nonumber \\
- & -C_o-C_a\bigg]-A,
-\end{align}
-with $A$ being the fixed administrative cost of running the campaign, $C_o$ the average cost of the 
-retention offer, $C_a$ the cost of contacting the customer, $\pi_1$ the prior churn rate and $CLV$ 
-the average customer lifetime value.
-Moreover, as discussed in \citep{Verbraken2013}, if the average instead of the total profit is 
-considered and the fixed cost $A$ is discarded since is irrelevant for classifier selection, the 
-profit can be expressed as:
-\begin{align}\label{eq:4:profit2}
- Profit_2 = &TP\left(\gamma(CLV-C_o-C_a)+(1-\gamma)C_a \right) \nonumber \\
- &+FP(-C_o-C_a).
-\end{align}
-
-Nevertheless, equations (\ref{eq:4:profit1}) and (\ref{eq:4:profit2}), assume that every customer 
-has the same $CLV$ and $C_o$, whereas this is not true in practice. In fact, different customers 
-have a very different $CLV$, and not all offers can be made to every customer, neither do they have 
-the same impact across customers. In order to obtain a more business oriented measure, we first 
-analyze the financial impact of the different decisions, ie. false positives, false negatives, true 
-positives and true negatives, for each customer.	In \figurename{ \ref{fig:ch4:2}}, the financial 
-impact of a churn model is shown. Note than we take into account the costs and not the profit in 
-each case.
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=12cm]{ch4_fig2}
-  \caption{Financial impact of the different decisions ie. False positives, false negatives, 
-  true 	positives and true negatives}
-	\label{fig:ch4:2}
-\end{figure}
-
-\begin{remark}{Financial analysis of a churn champaing}
-When a customer is predicted to be a churner, an offer is made with the objective of avoiding 
-the customer defecting. However, if a customer is actually a churner, he may or not accept the 
-offer with a probability $\gamma_i$. If the customer accepts the offer, the financial impact is 
-equal to the cost of the offer ($C_{o_i}$) plus the administrative cost of contacting the 
-customer ($C_a$). On the other hand, if the customer declines the offer, the cost is the 
-expected 	income that the clients would otherwise generate, also called customer lifetime value 
-($CLV_i$), 	plus $C_a$. Lastly, if the customer is not actually a churner, he will be happy to 
-accept the 	offer and the cost will be $C_{o_i}$ plus $C_a$.
+	When constructing a credit card fraud detection model, it is very important to use those features 
+	that will help the algorithm make the best decision. Typical models only use the raw 
+	transactional features, such as the time, amount, place of the transaction. However, this 
+approach 
+	do not take into account the spending behavior of the customer, which is expected to help 
+	discover fraud patterns. A standard way to include these behavioral spending patters was proposed 
+	in \citep{Whitrow2008}, they propose a transaction aggregation strategy in order to take into 
+	account a customer spending behavior. The derivation of the aggregated features consists in 
+	grouping the transactions made during the last given number of hours, first by card or account 
+	number, then by transaction type, merchant group, country or other, followed by calculating
+	the number of transactions or the total amount spent on those transactions.
 	
-In the case that the customer is predicted as non-churner, there are two possible outcomes. 
-Either the customer is not a churner, then the cost is zero, or the customer is a churner and the 
-cost is $CLV_i$. 
-\end{remark}
+	In this paper, we propose an expanded version of the transaction aggregation strategy, by 
+	incorporate a combination criteria when grouping the transaction. ie. instead of aggregating only 
+	by card holder and transaction type, we combine it with country or merchant group, this allow to 
+	have a much richer feature space. Moreover, there is still some information that is not 
+	completely captured by the aggregated features. In particular we are interesting in analyzing the 
+	time of the transaction. The logic behind this, is that a customer is expected to make 
+	transactions at similar hours. We propose a new method for creating features  based in the 
+	periodic behavior of a transaction time, using the von Mises distribution. In particular, the new 
+	features estimate if the time of a new transaction is within the confidence interval of the 
+	previous transaction times. 
+	
+	Furthermore, using a real credit card fraud dataset provided by a large European card processing 
+	company, we compare the different sets of 	features (raw, aggregated and periodic), using 
+	different cost-insensitive and 	cost-sensitive machine learning algorithms. In particular, we 
+	used the cost-insensitive algorithms logistic regression, decision trees and random forest 
+	\citep{Hastie2009}, and the 	cost-sensitive methods 	cost-proportionate sampling 
+	\citep{Elkan2001,Zadrozny2003}, Bayes minimum 	risk 	\citep{CorreaBahnsen2013}, cost-sensitive 
+	logistic regression \citep{CorreaBahnsen2014b} 	and 	cost-sensitive decision trees 
+	\citep{CorreaBahnsen2015}. The results show an average increase in the savings of 12.55\% by 
+using 
+	the proposed periodic features. Additionally, the outcome of this paper is being currently used 
+	to implement a state-of-the-art fraud detection 	system, that will  help to combat 	fraud once 
+	the implementation stage is finished. 
 
-  \begin{table}[htbp]
-	  \centering
-	  \footnotesize
-     \begin{tabular}{c|c|c}
-        \multicolumn{3}{c}{}\\
+	The remainder of the paper is organized as follows. In Section 2, we explain the 
+	background on credit card fraud detection, including our recently proposed example-dependent 
+	cost-sensitive evaluation measures. Then in Section 3, we discuss current 	approaches to create 
+	the features used in fraud detection models, moreover, we present our 	proposed methodology to 
+	create periodic based features. Afterwards, the experimental setup and 	the results are given in 
+	Section 4. Finally, conclusions of the paper are presented in 	\mbox{Section 5}. 
+
+\subsection{Credit card fraud detection evaluation}
+\label{sec:4:frad:eval}
+
+	A credit card fraud detection algorithm, consist in identifying those transactions with a 
+	high probability of being fraud, based on historical fraud patterns. 
+  The use of machine learning in fraud detection has been an interesting topic in recent years. 
+	However, due to the confidentiality of financial information and non availability of public 
+	databases, few researches have had the opportunity to work on developing methods specific 
+	to credit card fraud detection \citep{Bolton2002,DalPozzolo2014}.
+	
+	Nevertheless, different detection systems that are based on machine learning 
+	techniques have been successfully used for this problem, in particular: neural 
+	networks~\citep{Maes2002}, Bayesian learning \citep{Maes2002}, artificial immune systems 
+	\citep{Gadi2008}, association rules \citep{Sanchez2009}, hybrid models \citep{Krivko2010}, 
+	support vector machines~\citep{Bhattacharyya2011}, peer group  analysis \citep{Weston2008}, 
+	random forest~\citep{CorreaBahnsen2013} and online learning \citep{DalPozzolo2014}.
+
+  Most of these studies compare they proposed algorithm with a benchmark algorithm and then make 
+	the comparison using a standard binary classification measure, such as misclassification error, 
+	receiver operating characteristic ($ROC$), Kolmogorov-Smirnov ($KS$) or \mbox{$F_1Score$} 
+	statistics \citep{Bolton2002,Hand2007a,DalPozzolo2014}. Most of these measures are extracted by 
+	using a confusion matrix as shown in \tablename{ \ref{confusion}}. Where the prediction of the 
+	algorithm $c_i$ is a function of  the $k$ features of example $i$, \mbox{$\mathbf{X}_i=[x_i^1, 
+	x_i^2,...,x_i^k]$} and $y_i$ is the true class of the example $i$.
+
+	\begin{table}[b]
+		\caption{Classification confusion matrix}
+		\centering
+    \begin{tabular}{c|c|c}
+      \multicolumn{3}{c}{}\\
+			\multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
+			\multicolumn{1}{c|}{} & $y=1$& $y=0$ \\
+			\hline
+			Predicted Positive 		& \multirow{ 2}{*}{True Positive ($TP$)} & \multirow{ 
+			2}{*}{False Positive ($FP$)} \\
+			$c=1$ & &\\
+			\hline
+			Predicted Negative  	& \multirow{ 2}{*}{False Negative ($FN$)} & \multirow{ 
+			2}{*}{True Positive ($TN$)} \\
+			$c=0$ & &\\
+		\end{tabular}
+		\label{confusion}
+  \end{table}  
+
+	From this table several statistics are extracted. In particular:
+	\begin{itemize}
+		\item Accuracy = $\frac{TP+TN}{TP+TN+FP+FN}$
+		\item Recall = $\frac{TP}{TP+FN}$
+		\item Precision = $\frac{TP}{TP+FP}$
+		\item $F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}$
+	\end{itemize}
+
+	However, these measures may not be the most appropriate evaluation criteria when  evaluating a 
+	fraud detection models, because they tacitly assume that misclassification errors carry the same 
+	cost, similarly with the correct classified examples. This assumption does not hold in many 
+	real-world applications such as fraud detection, since  when wrongly predicting a fraudulent 
+	transaction as legitimate carries a significantly different financial cost than the inverse case.
+	Furthermore, the accuracy measure also assumes that the class distribution among examples is 
+	constant and balanced \citep{Provost1998}, and typically the distributions of a fraud detection 
+	data set are skewed, with a percentage of frauds ranging from 0.005\% to 0.5\% 
+	\citep{Gadi2008,Bhattacharyya2011}.
+
+	In order to take into account the different costs of fraud detection during the evaluation of an 
+	algorithm, we used the cost matrix as defined in \citep{Elkan2001}. In \tablename{  
+	\ref{tab:table_costmat}}, the cost matrix is presented, where the cost associated with two types 
+	of correct classification, namely, true positives $C_{TP_i}$, and true negatives $C_{TN_i}$; and 
+	the two types of misclassification errors, namely, false positives $C_{FP_i}$, and false 
+	negatives  $C_{FN_i}$, are presented.
+
+	\begin{table}[b]
+		\caption{Cost matrix \citep{Elkan2001}}
+		\centering
+		\begin{tabular}{c|c|c}
+		\multicolumn{3}{c}{}\\
 			\multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
 			\multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
 			\hline
-			Predicted Positive 		& $C_{TP_i}=\gamma_iC_{o_i}$ & 
-\multirow{2}{*}{$C_{FP_i}=C_{o_i}+C_a$}\\
-%       Predicted Positive    & \multirow{ 
-% 2}{*}{$C_{TP_i}=\gamma_iC_{o_i}+(1-\gamma_i)(CLV_i+C_a)$} & 
-% \multirow{2}{*}{$C_{FP_i}=C_{o_i}+C_a$}\\
-			$c_i=1$ & $+(1-\gamma_i)(CLV_i+C_a)$ &\\
+			Predicted Positive 		& \multirow{ 2}{*}{$C_{TP_i}$} & \multirow{ 2}{*}{$C_{FP_i}$} 
+			\\
+			$c_i=1$ & &\\
 			\hline
-			Predicted Negative  	& \multirow{ 2}{*}{$C_{FN_i}=CLV_i$} & \multirow{ 
+			Predicted Negative  	& \multirow{ 2}{*}{$C_{FN_i}$} & \multirow{ 
+			2}{*}{$C_{TN_i}$} \\
+			$c_i=0$ & &\\
+			%\hline
+		\end{tabular}
+		\label{tab:table_costmat}
+	\end{table}  
+
+	Hand et al. \citep{Hand2007a} proposed a cost matrix, where in the case of false positive the 
+	associated 	cost is the administrative cost $C_{FP_i}=C_a$ related to analyzing the transaction 
+	and contacting 	the card holder. This cost is the same assigned to a true positive 
+	$C_{TP_i}=C_a$, because in 	this case, 	the card holder will have to be contacted. However, in 
+	the case of a false negative, in which a 	fraud is 	not detected, the cost is defined to be a 
+	hundred times $C_{FN_i}=100C_a$. This same approach was also used in \citep{Gadi2008}.
+
+	Nevertheless, in 	practice, losses due to a specific fraud 	range from few to 
+	thousands of Euros, which means that 	assuming constant cost for false 	negatives is 	
+	unrealistic. In order to address this limitation, in 	\citep{CorreaBahnsen2013}, we 	proposed a 
+	cost matrix that take into account the actual 	example-dependent financial costs. Our 	cost 
+	matrix define the cost of a false negative to be the 	amount $C_{FN_i}=Amt_i$ of the 	transaction 
+	$i$. This cost matrix is a better representation of the 	actual costs, since when a 	fraud is 
+	not detected, the losses of that particular fraud correspond 	to the stolen amount.
+	The costs are summarized in \tablename{ \ref{tab:table_costmat_fraud}}.
+
+	Afterwards, using the example-dependent cost matrix a cost measure is calculated taking into 
+	account the actual costs \mbox{$\mathbf{C}_i=[C_{TP_i},C_{FP_i},C_{FN_i},C_{TN_i}]$} of each 
+	example $i$. Let $\mathcal{S}$ be a set of $N$ examples $i$, $N=\vert \mathcal{S} \vert$, where 
+	each example is represented by the augmented feature vector \mbox{$\mathbf{X}_i'=[\mathbf{X}_i, 
+	\mathbf{C}_i]$}, and labelled using the class label $y_i \in \{0,1\}$. A classifier $f$ which 
+	generates the predicted label $c_i$ for each example $i$, is trained using the set $\mathcal{S}$. 
+	Then the cost of using $f$ on $\mathcal{S}$ is \mbox{calculated by}
+  \begin{align}
+    Cost(f(\mathcal{S})) &= \sum_{i=1}^{N} \bigg( y_i(c_i C_{TP_i} + (1-c_i)C_{FN_i})  \nonumber\\ 
+    & +(1-y_i)(c_i C_{FP_i} + (1-c_i)C_{TN_i}) \bigg). \nonumber \\
+	  &=  \sum_{i=1}^{N} y_i(1-c_i)Amt_i + c_iC_a
+  \end{align} \label{eq:cost}
+
+	\begin{table}[t]
+		\caption{Credit card fraud cost matrix \citep{CorreaBahnsen2013}}
+		\centering
+		\begin{tabular}{c | c | c }
+		\multicolumn{3}{c}{}\\
+			\multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
+			\multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
+			\hline
+			Predicted Positive 		& \multirow{ 2}{*}{$C_{TP_i}=C_a$} & \multirow{ 2}{*}{$C_{FP_i}=C_a$} 
+			\\
+			$c_i=1$ & &\\
+			\hline
+			Predicted Negative  	& \multirow{ 2}{*}{$C_{FN_i}=Amt_i$} & \multirow{ 
 			2}{*}{$C_{TN_i}=0$} \\
 			$c_i=0$ & &\\
 			%\hline
 		\end{tabular}
-		\caption{Proposed churn modeling example-dependent cost matrix}
-    \label{tab:ch4:1}
-  \end{table}
+		\label{tab:table_costmat_fraud}
+	\end{table}
+	  
+	However, as noted in \citep{Whitrow2008}, the total cost may not be easy to interpret. So they 
+	propose a normalized cost measure, by dividing the total cost by the theoretical maximum cost, 
+	which is the cost of misclassifying every example.
+  \begin{align}
+    NCost(f(\mathcal{S})) &= \frac{\sum_{i=1}^{N} y_i(1-c_i)Amt_i + c_iC_a}
+							{\vert \mathcal{S}_0 \vert C_a + \sum_{i=1}^{N}Amt_i\cdot \mathbf{1}_1(y_i)},
+  \end{align} \label{eq:ncost}
+  where, $\mathcal{S}=\{\mathbf{X}_i'|y_i=0,i \in 1..N\}$, and $\mathbf{1}_c(z)$ is an 
+	indicator function that takes the value of one if $z \in c$ and zero if $z \notin c$ .
 
-The different costs are sumarized in \tablename{ \ref{tab:ch4:1}}.	Then using the cost 
-matrix, and the example-dependent cost-sensitive framework as described in Section 
-\ref{sec:2:csmeasures}, an example-dependent cost statistic is calculated as:
-\begin{align}
-  Cost_i &= y_i(c_i C_{TP_i} + (1-c_i)C_{FN_i})& \nonumber \\
-         &  + (1-y_i)(c_i C_{FP_i} + (1-c_i)C_{TN_i})& \nonumber \\
-%          &=y_i(c_i (\gamma_iC_{o_i}+(1-\gamma_i)(CLV_i+C_a))& \nonumber \\
-%          & + (1-c_i)CLV_i)& \nonumber \\
-%          & +  (1-y_i)(c_i (C_{o_i}+C_a) + (1-c_i)(0)) &\nonumber \\
-         &= y_i(c_i\left(\gamma_i(C_{o_i}-CLV_i-C_a)-C_{o_i}\right)+CLV_i)&\nonumber \\
-         & +c_i(C_{o_i}+C_a),&
-	\end{align}
-leading to a total cost of:
-\begin{equation}
-    Cost = \sum_{i=1}^N Cost_i.
-\end{equation}
-Furthermore, using (\ref{eq:savings}), the savings are calculated as:
-\begin{equation}
-  Savings = \frac{Cost_l - Cost}{Cost_l},
-\end{equation} 
-In almost cases the costless class ($Cost_l$) will be the negative class, as typically the 
-distribution of a churn dataset is skewed towards the non-churners \citep{Verbeke2012}. Given that 
-$Cost_l$ can be expressed as $Cost(f_0)$, or simply $Cost$ with $c_i=0$ $\forall i$:
-\begin{equation}
- Cost_l = \sum_{i=1}^{N} y_i CLV_i.
-\end{equation}
-This is consistent with the notion that if no model is used, the total cost would be the 
-sum of the customer lifetime values of the actual churners, which gives the insight 
-that the $Savings$ measure is comparing the financial impact of the campaign of using a 
-classification model against no using a model at all.
+	We propose a similar approach in \citep{CorreaBahnsen2015}. By defining the savings of using an 
+	algorithm as the cost of the algorithm versus the cost of using no algorithm at all. 
+	To do that, we set the cost of using no algorithm as 
+	\begin{equation}
+		Cost_l(\mathcal{S}) = \min \{Cost(f_0(\mathcal{S})), Cost(f_1(\mathcal{S}))\},
+	\end{equation}
+	where $f_0$ refers to a classifier that predicts all the examples in $\mathcal{S}$ as belonging 
+	to the class $c_0$, and similarly $f_1$ 	predicts all the examples in $\mathcal{S}$ as belonging 
+	to the class $c_1$, the cost improvement 	can be expressed as the cost savings as compared with 
+	$Cost_l(\mathcal{S})$. 
+  \begin{equation}\label{eq:savings}
+    Savings(f(\mathcal{S})) = \frac{ Costl(\mathcal{S}) - 
+		Cost(f(\mathcal{S}))}{Cost_l(\mathcal{S})}.
+  \end{equation} 
 
+	For out analysis we decide to use the savings measure instead of the normalized cost, since in 
+	the field of credit card fraud detection it is often see that companies do not use predictive 
+	models, therefore, the savings measure makes more sense in that scenario.
+	Moreover, as discussed in \citep{CorreaBahnsen2013}, it is not enough to evaluate a model using a 
+	cost-sensitive measure, but it should also be trained to take into account the cost-sensitivity 
+	of the problem. In the following Section we make a brief introduction to state-of-the-art 
+	example-dependent cost-sensitive classification algorithms.
 
-\subsubsection{Customer lifetime value}
-
-Lastly, one of the key values to calculate the $Savings$, is the customer lifetime value. Within 
-marketing there exists a common misconception between customer profitability and customer lifetime 
-value. The two terms are usually used in an interchangeable way, 
-creating confusion of what the actual objective of a churn modeling campaign should be. Several 
-studies have proposed models providing a unique definition of both terms 
-\citep{Neslin2006,Pfeifer2004,Milne1999a,VanRaaij2003}. Customer 
-profitability indicates the difference between the income and the cost 
-generated by a customer $i$ during a financial period $t$. It is defined as: 
-\begin{equation}
-	CP_{i,t} = \mu  \cdot s_{i,t},
-\end{equation}
-where  $s_{i,t}$ refers to the consumption of customer $i$ during time period $t$, and $\mu$ refers 
-to the average marginal profit by unit product usage.  
-
-Moreover, we are interested to see what is the expected income that a particular customer will 
-generate in the future, in other words, calculating the expected sum of 
-discount future earnings \citep{Neslin2006}. Therefore, the $CLV_i$ is defined as:
-\begin{equation}
-	CLV_i = \sum_{t=1}^T\frac{\mu \cdot s_{i,t}}{(1+r)^t},
-\end{equation}
-where $r$ is the discount rate, and $T$ the number of time period.
-Typically $T$ should be considered large enough since without prior 
-knowledge a customer is expected to keep being a customer for the foreseeable future. In practice 
-$T$ is set up to be $\infty$ \citep{Glady2009}. Also, for simplicity it can be assumed that 
-$s_{i,t+1}=s_{i,t}\cdot (1+g)$ $\forall {i,t}$, which means that there is a constant growth $g$ in 
-the customer consumption. Given that, the customer lifetime value can be re-written as
-\begin{equation}
- CLV_i = \sum_{t=1}^\infty\frac{ (1+g)^t}{(1+r)^t}\cdot \mu\cdot s_{i,1},
-\end{equation}
-which in the case of $g<r$, this is a geometric series meaning that it can be expressed as
-\begin{equation}
- CLV_i = \frac{\mu\cdot s_{i,1}}{(r-g)}.
-\end{equation}
-
-
-\subsection{Churn modeling database}
-\label{sec:4:1:data}
-
-For the analysis we used a dataset provided by a TV cable provider. 
-The dataset consists of active customers during the first semester of 2014. 	
-The total dataset contains 9,410 individual registries, each one with 45 attributes, 
-including a churn label indicating whenever a customer is a churner.
-This label was created internally in the company, and can be regarded as highly accurate. 
-In the dataset only 455 customers are churners, leading to a churn ratio of 4.83\%.
 	
-\subsubsection{Offer acceptance calculation}
+\subsection{Fraud detection feature engineering}
+\label{sec:4:frad:features}
 
-In practice companies have a set of offers to make to a customer as a part of the retention 
-campaign, they vary from discounts, to upgrades among others. In the particular case of a TV cable 
-provided, the offers include adding a new set of channels, changing the TV receiver to one with new 
-technology (ie. high definition, video recording, 4K),  or to offer a discount on the monthly bill.
-Unsurprisingly, not all offers apply to all clients. For instance a customer that already has all 
-the channels can not be offered a new set of channels. Moreover, an offer usually means an 
-additional cost to the company and not all offers have not the same cost or the same impact in 
-reducing churn.
+	When constructing a credit card fraud detection algorithm, the initial set of features (raw 
+	features) include information regarding individual transactions. It is observed throughout the 
+	literature, that regardless of the study the set of raw features is quite similar. This is 
+	because the data produce during a credit card transaction must comply with international 
+	accounting rules. In \tablename{ \ref{tab:raw_features}}, the typical credit card fraud detection 
+	raw features are summarized.
+	
+	\begin{table}[!t]
+   \caption{Summary of typical raw credit card fraud detection features}
+   \label{tab:raw_features}
+   \centering
+   \begin{tabular}{l l}
+   \hline
+   \textbf{Attribute name} & \textbf{Description}\\
+   \hline
+		Transaction ID & Transaction identification number \\
+   Time & Date and time of the transaction\\
+   Account number & Identification number of the customer\\
+   Card number & Identification of the credit card\\
+   Transaction type & ie. Internet, ATM, POS, ...\\
+	 Entry mode & ie. Chip and pin, magnetic stripe, ...\\
+   Amount & Amount of the transaction in Euros\\
+   Merchant code & Identification of the merchant type\\
+   Merchant group & Merchant group identification\\
+   Country & Country of trx\\
+   Country 2 & Country of residence \\
+   Type of card & ie. Visa debit, Mastercard, American Express...\\
+   Gender & Gender of the card holder\\
+   Age & Card holder age\\
+   Bank & Issuer bank of the card\\
+   Fraud & Indicator whenever or not a transaction was a fraud\\
+   \hline
+   \end{tabular}
+   \end{table}
+	
+	\subsubsection{Customer spending patterns}
+	\label{sec:4:frad:features_agg}
+	
+	Several studies, used only the raw features for doing their analysis 
+	\citep{Brause1999a,Minegishi2011,Panigrahi2009,Sanchez2009}. However, as noted in 
+	\citep{Bolton2001}, a single transaction information is not sufficient to detect a fraudulent 
+	transaction. Moreover, it is also impractical, as using only the raw features leaves behind 
+	important information such as the consumer spending behavior, which is usually used by commercial 
+	fraud detection systems.
+	
+	To deal with this, in \citep{Gadi2008}, a new set of features where proposed such that the 
+	information of the last transaction made with the same credit card is also used to make a 
+	prediction. The objective, is to be able to detect very dissimilar continues transactions within 
+	a	customer purchases. The new set of features include: Time since the last transaction, previous 	
+	amount of the transaction, previous country of the transaction.
+	Nevertheless, these features does not take into account consumer behavior other than the last 
+	transaction made by a client, this leads to having an incomplete profile of the customers.
+	
+	A more compressive way to take into account a customer spending behavior is to derive some 
+	features using a transaction aggregation strategy. This methodology was initially proposed in 
+	\citep{Whitrow2008}.  The derivation of the aggregation features consists in  grouping 
+	the transactions made during the last given number of hours, first by card or account number, 
+	then by transaction type, merchant group, country or other, followed by calculating the number 
+	of transactions or the total amount spent on those 	transactions. This methodology has been used 
+	by a number of studies 
+	\citep{Bhattacharyya2011,Weston2008,Tasoulis2008,CorreaBahnsen2013,Sahin2013,CorreaBahnsen2014,
+DalPozzolo2014}.
+	
+	When aggregating a customer transactions, there is a important question of how much to 
+	accumulate, in the sense that the marginal value of new information may diminish as time passes.
+	\citep{Whitrow2008}, discuss that aggregating 101 transactions is not likely to be
+	more informative that aggregating 100. Indeed, when time passes information loss their value, in 
+	the sense that a customer spending patterns are not expected to remain constant over the years.
+	In particular, Whitrow et al., define a fix time frames to be 24, 60 and 168 hours.
+	
+	The process of aggregating features consists in for each transaction $i$ on the dataset 
+	$\mathcal{S}$, select 	those transactions that were made in the previous $t_p$ hours,
+	\begin{equation}\label{eq:agg_features1}
+		TRX_{agg}(\mathcal{S},i, t_p) = \bigg\{x_l^{amt} \bigg\vert \left(x_l^{id}=x_i^{id}\right) 
+		\wedge \left(hours(x_i^{time},x_l^{time}) < t_p\right) \bigg\}_{l=1}^N,
+	\end{equation}
+	where $N=\vert\mathcal{S}\vert$, $x_i^{time}$ is the time of transaction $i$,  $x_i^{amt}$ is the 
+	amount of transaction $i$, $x_i^{id}$  the customer identification number of transaction $i$, 
+	and $hours(z_1,z_2)$ is 	a function that calculate the number of hours between the dates $z_1$ 
+	and $z_2$. Afterwards the feature number of transactions and amount of transactions in the last 
+	$t_p$ hours are calculated as:
+	\[
+		x_i^{a1} = \vert TRX_{agg}(\mathcal{S},i, t_p) \vert \quad  \text{and} \quad x_i^{a2} = \sum 
+	TRX_{agg}(\mathcal{S},i, t_p).
+	\]
+	
+	Furthermore, we observed that this aggregation is not enough, in the sense that the combination 
+	of 	the different features is not being taken into account. For example, it is not only 
+	interesting 	to see the total transactions, but instead grouped by 	certain criteria, such as: 
+	transactions 	made in the last $t_p$ hours, in the same country 	and of the same transaction 
+	type. For 	calculating those features, first we expand (\ref{eq:agg_features1}):
+	\begin{align}\label{eq:agg_features2}
+		TRX_{agg}(\mathcal{S},i, t_p, cond_1, & cond_2) = \bigg\{ x_l^{amt} \bigg\vert   
+		\left(x_l^{id}=x_i^{id}\right) \wedge  \left(hours(x_i^{time},x_l^{time})< t_p\right) \nonumber 
+		\\ 	&  \wedge \left(x_l^{cond_1} = x_i^{cond_1}\right) \wedge	\left(x_l^{cond_2} = 
+		x_i^{cond_2}\right) \bigg\}_{l=1}^N.
+		\end{align}
+	Then, the features are calculated as:
+	\[ x_i^{a3} = \vert TRX_{agg}(\mathcal{S},i, t_p, country, type) \vert \quad \text{and} \]
+	\[  x_i^{a4} = \sum 	TRX_{agg}(\mathcal{S},i, t_p,country, type).	\]		
+	To further clarify how the aggregated features are calculated we show an example. Consider a set 
+	of transactions made by a client between the first and third of January of 2015, as shown in 
+	\tablename{ 	\ref{tab:agg_features_example1}}. Then we estimate the aggregated features 
+	($x_i^{a1}$, $x_i^{a2}$, $x_i^{a3}$ and $x_i^{a4}$), by setting $t_p=24$. It is observed, how the 
+	different aggregated features give us different information of the customer spending behavior.
+	Moreover, the total number of aggregated features can growth quite quickly, as $t_p$ can have 
+	several values, and the combination of combination criteria can be quite huge as well.
+	In \cite{CorreaBahnsen2013}, we used a total of 280 aggregated features. In particular we set the 
+	different values of $t_p$ to: 1, 3, 6, 12, 18, 24, 72 and 168. Then calculate the aggregated 
+	features 	using (\ref{eq:agg_features1}), and also using (\ref{eq:agg_features2}) with the 
+	following  grouping criteria:	country, type of transaction, entry mode, merchant code and merchant 
+group. 
+		
+	\begin{table}[!t]
+		\centering
+    \footnotesize
+   \begin{tabular}{|c c c c c | c c c c|}
+   \hline
+   \multicolumn{5}{|c|}{\textbf{Raw features}} & \multicolumn{4}{c|}{\textbf{Aggregated features}} 
+		\\  \hline
+   \textbf{TrxId} &\textbf{Time} & \textbf{Type} & \textbf{Country} & 
+	\textbf{Amount} 		& $x_i^{a1}$& $x_i^{a2}$ & $x_i^{a3}$ & $x_i^{a4}$\\
+   \hline
+		1&  01/01/15 18:20& POS & LUX & 250 & 0 & 0  & 0 & 0\\
+		2& 01/01/15 20:35& POS & LUX & 400 & 1 & 250& 1 & 250\\
+		3& 01/01/15 22:30& ATM & LUX & 250 & 2 & 650& 0 & 0\\
+		4&02/01/15 00:50& POS & GER & 50 		& 3 & 900& 0& 0\\
+		5& 02/01/15 19:18& POS & GER & 100 	  & 3 & 700& 1& 50\\
+		6& 02/01/15 23:45& POS & GER & 150 	  & 2 & 150& 2& 150\\
+		7& 03/01/15 06:00& POS & LUX & 10  & 3 & 400& 0& 0\\
+   \hline
+   \end{tabular}
+		\caption{Example calculation of aggregated features. For all aggregated features $t_p=24$.}
+		\label{tab:agg_features_example1}
+  \end{table}
+	
+	\subsubsection{Time features}
+	\label{sec:4:frad:features_time}
+	
+	When using the aggregated features, there is still some information that is not completely 
+	captured by those features. In particular we are interesting in analyzing the time of the 
+	transaction. The logic behind this, is that a customer is expected to make transactions at 
+	similar hours. The issue when dealing with the time of the transaction, 
+	specifically, when analyzing a feature such as the mean of transactions time, is easy 
+	to make the mistake of using the arithmetic mean. Because, as shown in \figurename{ 
+	\ref{fig:von1}}, the arithmetic mean does not takes into account the periodic behavior of the 
+	time feature. For example, the arithmetic mean of transaction time of four transactions made at 
+	2:00, 3:00, 22:00 and 23:00 is 12:30, which is counter intuitive since no transaction was made 
+	close to that time. 
+		
+	We propose to overcome this limitation by modeling the time of the transaction as a periodic 
+	variable, in particular using the von Mises distribution. The von Mises distribution, also known 
+	as the periodic normal distribution, is a distribution of a wrapped normally distribution 
+	variable across a circle \citep{Fisher1996}. In particular we are interested in calculating a 
+	confidence interval 	for the time of a transaction. For doing that, initially we select a set of 
+	transactions made by 	the same client in the last $t_p$ hours,
+	\begin{align}\label{eq:pe_features1}
+		TRX_{vM}(\mathcal{S},i, t_p) = \bigg\{ x_l^{time} \bigg\vert   
+		\left(x_l^{id}=x_i^{id}\right)\wedge  \left(hours(x_i^{time},x_l^{time})< t_p\right) 
+		\bigg\}_{l=1}^N.
+	\end{align}
+	Then, the periodic mean of the set 	of transactions is calculated using 
+	\begin{equation}
+		\mu_{vM}(TRX_{vM}(\mathcal{S},i, t_p)) = 2\cdot \arctan\left(\frac{\phi}{\left(
+		\sqrt{\psi^2 + \phi^2} +	\psi \right)} \right),
+	\end{equation}
+	where $\phi=\sum \sin(TRX_{vM}(\mathcal{S},i, t_p))$ and $\psi=\sum \cos(TRX_{vM}(\mathcal{S},i, 
+	t_p))$. Similarly the standard deviation can be calculated as
+	\begin{equation}
+		\sigma_{vM}(TRX_{vM}(\mathcal{S},i, t_p)) = \sqrt{ ln\left( \frac{1}{
+		\left(\frac{\phi}{N_{vM}} \right)^2  + \left(\frac{\psi}{N_{vM}} \right)^2 } \right) },
+	\end{equation}
+	where $N_{vM}=\vert TRX_{vM}(\mathcal{S},i, t_p) \vert$.
+	Afterwards, using the estimated periodic mean and standard deviation, the probability 
+	distribution function of the time of the set of transactions is calculated as:
+	\begin{equation}
+	 x_i^{time} \sim vonmises\left(\mu_{vM}(TRX_{vM}(\mathcal{S},i, t_p)), 
+	\frac{1}{\sigma_{vM}(TRX_{vM}(\mathcal{S},i, t_p))} \right).
+	\end{equation}
+	
+	  \begin{figure}[!t]
+		\centering
+		\subfloat[Transaction times 
+distribution]{\includegraphics[width=5.5cm]{ch3_fig_1c}\label{fig:von1}}
+		\hfill
+		\subfloat[Fitted von Mises 
+distribution]{\includegraphics[width=5.5cm]{ch3_fig_2c}\label{fig:von2}}
+		\\
+		\subfloat[Expected time of 
+transaction]{\includegraphics[width=5.5cm]{ch3_fig_3c}\label{fig:von3}}
+		\caption{\textbf{Analysis of the time of a transaction using a 24 hour clock and the von Mises 
+		distribution.} It is shown that the arithmetic mean of the time of a set of a transaction (a) 
+		and the 	periodic mean (b), are completely 	different. Because, the arithmetic mean does not 
+		take 		into 	account the periodic behavior of the 	time feature. Moreover, 	by modeling the 
+		time of the 		transaction using the von Mises 	distribution (b), a confidence 	interval (c) 
+		is estimated. Using 		the confidence interval, a 	transaction can be flag as normal 	or	 
+		suspicious, depending 		whether or 	not the time of the 	transaction is within the 	
+		confidence 	interval.}
+		\label{fig_sim2}
+  \end{figure} 
+	
+	In \figurename{ \ref{fig:von2}}, the von Mises distribution calculation is shown.
+	Lastly, using the estimated distribution a new set of features can be develop, ie. a binary 	
+	feature ($x_i^{p1}$) if a new transaction time is within the confidence interval range with 
+	probability 	$\alpha$.	An example is presented in \figurename{ \ref{fig:von3}}. 
+	Furthermore, other features can be calculated, as the confidence interval range can be calculated 
+	for several values of $\alpha$, and also the time period can have an arbitrary size.
 
-Taking into account the cost and the implication of the offers, the problem can be 
-resumed in making each customer the offer that will maximize the acceptance rate and more 
-important reducing the overall cost. 
+	\begin{table}[!t]
+   \caption{Example calculation of periodic features.}
+   \label{tab:agg_features_example2}
+   \centering
+   \begin{tabular}{|c c | c c c c|}
+   \hline
+   \multicolumn{2}{|c|}{\textbf{Raw features}} & \multicolumn{4}{c|}{\textbf{Periodic features}} 
+		\\  \hline
+   \textbf{Id} & \textbf{Time} & \textbf{Arithmetic mean} & \textbf{Periodic mean} & 
+		\textbf{Periodic CI} & $x_i^{p1}$ \\
+   \hline
+		1& 01/01/15 18:20& --- & ---	 &	--- & ---\\
+		2& 01/01/15 20:35& --- & ---	 &---	 & ---\\
+		3& 01/01/15 22:30& 19:27 & 19:27 & 15:45 - 23:10 & True \\
+		4& 02/01/15 00:50& 20:28 & 20:28 & 17:54 - 23:03 & False\\
+		5& 02/01/15 19:18& 16:34 & 22:34 & 18:51 - 00:17 & True\\
+		6& 02/01/15 23:45& 16:19 & 21:07 & 15:21 - 02:52 & True\\
+		7& 03/01/15 06:00& 18:33 & 22:33 & 17:19 - 01:46 & False\\
+   \hline
+   \end{tabular}
+   \end{table}
 
-\begin{figure}[t!]
-  \centering
-   \includegraphics[width=10cm]{ch4_fig3}
-  \caption{Acceptance rate ($\gamma$) of the best offer for each customer profile. As expected, 
-	the higher the churn rate the lower the acceptance rate, as it is more difficult to make a 
-	good offer to a customer which is more likely to defect. }
-  \label{fig:ch4:3}
-\end{figure}
+	Additionally, using the same example as we show used to calculate the aggregated features, 
+	we calculate a feature $x_i^{p1}$, as a binary feature that takes the value of one if the current 
+	time of the transaction is within the confidence interval of the time of the previous 
+	transactions with a confidence of $\alpha=0.9$. The example is show in \tablename{ 
+	\ref{tab:agg_features_example2}}. In this example, it is shown, how the arithmetic and periodic 
+	means differ, as for the last transaction both means are significantly different. Moreover, the 
+	new feature, help to get a felling of when a customer is expected to make transactions.
+	
+	Finally, when calculating the periodic features, is important to use longer time frames $t_p$, 
+	since if the distribution is calculated using only a couple of transactions it may not be as 
+	relevant of a customer behavior patterns, compared against using a full year of transactions.
+	Evidently, if $t_c$ is less than 24 hours, any transaction made afterwards will not be expected 
+	to be within the distribution of previous transactions times. To avoid this we recomend using at 
+	least the previous 7 days of transactional information.
+	Lastly, this approach can also be used to estimate features such as the expected day of the week 
+	of transactions, as some customers may only use their credit cards during the weekend nights, or 
+	during working hours.
+	
+	\subsection{Database}
 
-In order to calculate the acceptance probability $\gamma_i$ a champion-challenger process was made. 
-First, the customers were grouped into clusters according to their behavioral and socio-economical 
-characteristics. In particular the K-means algorithm was used \citep{Marslan2009}.
-Then for a period of two months, randomly selected offers were made to the customers and their 
-response was evaluated. Unfortunately, for confidentiality reasons we can not describe the 
-different clusters, neither the actual offer made to each customer. Nevertheless, in \figurename{ 
-\ref{fig:ch4:3}}, the average churn rate and acceptance rate $\gamma_i$ per cluster is shown. As 
-expected, the higher the churn rate the lower the acceptance rate, as it is more difficult to make a 
-good offer to a customer which is more likely to defect.
+ 	For this paper we used a dataset provided by a large European card processing company. The 
+	dataset consists of fraudulent and legitimate transactions made with credit and debit cards 
+	between January 2012 and June 2013. The total dataset contains 120,000,000 individual 
+	transactions, each one with 27 attributes, including a fraud label indicating whenever a 
+	transaction is identified as fraud. This label was created internally in the card processing 
+	company, and can be regarded as highly accurate. In the dataset only 40,000 transactions were 
+	labeled as fraud, leading to a fraud ratio of 0.025\%. 
 
-
-% 	\subsubsection{Database partitioning}
-% 	From the initial dataset, three different datasets are extracted: training, validation and 
-%   testing. Each one containing 50\%, 25\% and 25\% of the examples, respectively.   
-%   Afterwards, with the objective of having a more balanced dataset, ie. same distribution of 
-% 	churners and not churners, an under-sampling of the churners is made.     
-%   Lastly, we also applied the cost-sensitive re-balancing techniques cost-proportionate 
-% 	rejection-sampling \citep{Zadrozny2003} and cost-proportionate over-sampling \citep{Elkan2001}, 
-% 	described in cost-sensitive classification Section.
-% 	\tablename{ \ref{table_trainandtest}}, summarizes the different datasets, where $N$, $\pi_1$ 
-% and $C_0$ represents the number of customers, the percentage of churners and the total losses if no 
-% model is used, respectively. Moreover, in \figurename{ \ref{fig:ch5:4}}, a comparison of the 
-% churn rate 
-% and the average unitary cost ($C_u=C_0 / N$) of each dataset with respect of the Total set is shown.
-% It is observed that the cost-sensitive sampling procedures have an average unitary cost much higher 
-% than the other sets, also showing why a simple under-sampling procedure of the dataset does not 
-% take into account the costs.
-% 
-%   \begin{table}[t!]
-%     \caption{Description of datasets}
-%     \label{table_trainandtest}
-%     \centering
-%     \begin{tabular}{l c c c } %sum 7.7
-% 		\\ \hline
-% 		Set&	$N$ &	$\pi_1$ & $C_0$ \\
-% 		\hline
-% 		Total&9,410&.0483&580,884\\
-% 		Training ($t$)&3,758&.0505&244,542\\
-% 		Validation&2,824&.0477&174,171\\
-% 		Testing&2,825&.0442&162,171\\
-% 		Under-sampling ($u$)&374&.5080&244,542\\
-% 		CS Rejection-sampling ($r$)&428&.4135&431,428\\
-% 		CS Over-sampling ($o$)&5,767&.03124&2,350,285\\
-% 	  \hline
-% 	  \end{tabular}
-%   \end{table}
-% 
-% 	\begin{figure}[t!]
-% 	  \centering
-%     \includegraphics{ch5_fig4}
-% 	  \caption{Comparison of the distribution of the churn rate and the average unitary cost 
-% 	  ($C_u=C_0 / N$) of each dataset with respect to the Total set.
-% It is observed that the cost-sensitive sampling procedures have an average unitary cost much higher 
-% than the other sets, also showing why a simple under-sampling procedure of the dataset does not 
-% take into account the costs.}
-% 	  \label{fig:ch5:4}
-% 	\end{figure}
-
-
-\section{Direct marketing}
-\label{sec:4:directmarketing}
-
-In direct marketing the objective is to classify those customers who are more likely to have a 
-certain response to a marketing campaign \citep{Ngai2009}. We used a direct marketing dataset 
-\citep{Moro2011} available on the UCI machine learning repository \citep{UCI2013}. The dataset 
-contains 45,000 clients of a Portuguese bank who were contacted by phone between March 2008 and 
-October 2010 and received an offer to open a long-term deposit account with attractive interest 
-rates.  The dataset contains features such as age, job, marital status, education, average yearly 
-balance and current loan status and the label indicating whether or not the client accepted 
-the offer.
-
-This problem is example-dependent cost sensitive, since there are different costs of false 
-positives and false negatives. Specifically, in direct marketing, false positives have the cost 
-of contacting the client, and false negatives have the cost due to the loss of income by failing 
-to contact a client that otherwise would have opened a long-term deposit. 
-  
-\begin{table}[!t]
-  \centering
-  \footnotesize
-  \begin{tabular}{c|c|c}
-    \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
-    \multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
-    \hline
-    Predicted Positive 		& \multirow{ 2}{*}{$C_{TP_i}=C_a$} & \multirow{ 2}{*}{$C_{FP_i}=C_a$} 
-    \\
-    $c_i=1$ & &\\
-    \hline
-    Predicted Negative  	& \multirow{ 2}{*}{$C_{FN_i}=Int_i$} & \multirow{ 2}{*}{$C_{TN_i}=0$} 
-    \\
-    $c_i=0$ & &\\
-    %\hline
-  \end{tabular}
-  \caption{Direct marketing example-dependent cost matrix}
-  \label{tab:4:d_mat}
+	Furthermore, using the methodologies for feature extraction described in Section 
+	\ref{sec:features}, we estimate a total of 293 features. Also,
+	for the experiments, a smaller subset of transactions with a higher fraud ratio, corresponding 
+	to a specific group of transactions, is selected. This dataset contains 236,735 transactions 
+	and a fraud ratio of 1.50\%. In this dataset, the total financial losses due to fraud are 
+	895,154 Euros. This dataset was selected because it is the one where most frauds are being 
+	made. Then, 3 different datasets are extracted: train, validation and test. Each one containing 
+	50\%, 25\% and 25\% of the transactions respectively. Afterwards an under-sampling of the 
+	legitimate transactions is made, in order to have a balanced class distribution. 
+	Additionally, we perform the cost-proportionate rejection-sampling and cost-proportionate 
+	over-sampling procedures presented in Section \ref{sec:cs}.	\mbox{\tablename{ 
+	\ref{tab:datasets}}}, summarizes the different datasets.  It is important to note that the 
+	sampling procedures were only applied to the training dataset since the validation and test 
+	datasets must reflect the real fraud distribution.
+	
+	\begin{table}[t]
+	\caption{Summary of the datasets}
+	\label{tab:datasets}
+	\centering
+	\begin{tabular}{l c c c } %sum 7.7
+		\\
+		\hline
+		\textbf{Set}&	\textbf{Transactions} &	\textbf{\%Frauds} & 
+		\textbf{Cost} \\
+		\hline
+		Total&236,735&1.50&895,154\\
+		Training&94,599&1.51&358,078\\
+		Under-sampled&2,828&50.42&358,078\\
+		CS-Rejection-sampled&94,522&1.43&357,927\\
+		CS-Over-sampled&189,115&1.46&716,006\\
+		Validation&70,910&1.53&274,910\\
+		Testing&71,226&1.45&262,167\\
+		\hline
+	\end{tabular}
 \end{table}
-		
-We used the direct marketing example-dependent cost matrix proposed in \citep{CorreaBahnsen2014}. 
-The cost matrix is shown in \mbox{\tablename{ \ref{tab:4:d_mat}}}, where $C_a$ is the 
-administrative cost of contacting the client, as is credit card fraud,  and $Int_i$ is the expected 
-income when a client opens a long-term deposit. This last term is defined as the long-term deposit 
-amount times the interest rate spread.
+
+
+\section{Credit scoring}
+
+  In order to mitigate the impact of credit risk and make more objective and accurate decisions, 
+  financial institutions use credit scores to predict and control their losses.
+  The objective in credit scoring is to classify which potential customers are likely to default a 
+  contracted financial obligation based on the customer's past financial experience, and with that 
+  information decide whether to approve or decline a loan~\citep{Anderson2007}. This tool has 
+  become a standard practice among financial institutions around the world in order to predict 
+  and control their loans portfolios. When constructing credit scores, it is a common practice to 
+  use standard cost-insensitive binary classification algorithms such as logistic regression, 
+  neural networks, discriminant analysis, genetic programing, decision trees, among 
+  others~\citep{Hand1997,Bahnsen2011}. 
+  
+  Formally, a credit score is a statistical model that allows the estimation of the probability 
+  $\hat p_i=P(y_i=1|X_i)$ of a customer $i$ defaulting a contracted debt. Additionally, since the 
+  objective of credit scoring is to estimate a classifier $c_i$ to decide whether or not to grant a 
+  loan to a customer $i$, a threshold $t$ is defined such that if $\hat p_i <t$, then the loan is 
+  granted, i.e., $c_i(t)=0$, and denied otherwise, i.e., $c_i(t)=1$.
+  
+  There exists different approaches for defining the probability threshold. The sensitivity versus 
+  specificity ($SvsS$) approach is the most widely used among financial institutions 
+  \citep{Anderson2007}, where specificity is the true positive rate $F_0(t)$ for a threshold $t$, 
+  and the sensitivity is one minus the false positive rate $F_1(t)$ given a threshold $t$ 
+  \citep{Hernandez-Orallo2012}. In this method the objective is to fix the threshold at the point 
+  where the sensitivity is equal to the specificity $F_0(t)=1-F_1(t)$, where $F_0(t)$ and $F_1(t)$ 
+  are calculated using:
+  \begin{equation}
+   F_k(t)=\frac{1}{n_k}\vert \{ ( x_i,y_i ) \in D_k \vert \hat p_i \le t \}\vert, \text{ for } 
+   k\in\{0,1\}.
+  \end{equation}
+  Lastly, the $SvsS$ threshold $t_{SvsS}$ is found by using
+  \begin{equation}
+  t_{SvsS}= \argmin_t \vert F_0(t) - (1-F_1(t)) \vert.
+  \end{equation}
+  This process is further clarify in \figurename{ \ref{fig:ch3:4}}.
+  
+  \begin{figure}
+  \centering
+  \centering
+  \includegraphics{ch3_fig_4}
+  \caption{Credit scoring sensitivity versus specificity thresholding procedure.}
+  \label{fig:ch3:4}
+  \end{figure}
+  
+  After the classifier $c_i$ is estimated, there is a need to evaluate its performance. In 
+  practice, many statistical evaluation measures are used to assess theperformance of a credit 
+  scoring model. Measures such as the area under the  receiver operating characteristic curve (AUC),
+  Brier score, Kolmogorov-Smirnoff (K-S) statistic,  $F_1$-Score, and misclassification are among 
+  the most common \citep{Beling2005}. Nevertheless, none of these measures takes into account the 
+  business and economical realities that take place in credit scoring. Costs that the financial 
+  institution had incurred to acquire customers, or the expected profit due to a particular client, 
+  are not considered in the evaluation of the different models. This is explored in detail in the 
+  next section.
+
+  
+  \subsection{Financial evaluation of a credit scorecard }
+  
+  Typically, a credit risk model is evaluated using standard cost-insensitive measures.
+  However, in practice, the cost associated with approving 
+  what is known as a bad customer, i.e., a customer who default his credit loan, is quite 
+  different from the cost associated with declining a good customer,  i.e., a customer who 
+  successfully repay his credit loan. Furthermore, the costs are not constant among customers. 
+  This is because loans have different credit line amounts, terms, and even interest rates. Some 
+  authors have proposed methods that include the misclassification costs in the credit scoring 
+  context \citep{Verbraken2014,Alejo2013,Beling2005,Oliver2009}. However, they assume a constant 
+  misclassification cost, which is not the case in credit scoring.
+  
  
-In order to estimate $Int_i$, first the long-term deposit amount is assumed to be a 20\% of the 
-average yearly balance, and lastly, the interest rate spread is estimated to be 2.463333\%,	which 
-is the average between 2008 and 2010 of the retail banking sector in Portugal as reported by the 
-Portuguese central bank. Given that, the $Int_i$ is equal to $\left( balance * 20\% \right) * 
-2.463333\%$.
-		
-% Subsequently, the dataset is split in training, under-sampling, validation and test. Relevant 
-% information of the datasets is shown in \tablename{ \ref{table_fraud_trainandtest_marketing}}.
-% \footnotetext{Interest rate spread is the difference between the effective lending rate and the 
-% cost of funds.}
-%  
-% 	\begin{table}[!t]
-% 	\caption{Description of datasets of the direct marketing dataset}
-% 	\label{table_fraud_trainandtest_marketing}
-% 	\centering
-% 	\begin{tabular}{|c|c|c|c|} %sum 7.7
-% 		\hline
-% 		Database&	No Trx&	Accept&$Int$\\
-% 		\hline	
-% 		Total& 47,562&	12.56\%&	394,211\\
-% 		\hline
-% 		Train& 19,119&12.64\%&	156,676\\   
-% 		Undersampled&4,819&50.17\%&42,443   \\
-% 		\hline
-% 		Validation& 11,809&12.78\%&97,498   \\
-% 		Test& 11,815&12.23\%&97,594   \\
-% 		\hline
-% 	\end{tabular}
-% 	\end{table}
-% 	
+  Initial approaches to include the different costs have been published in recent years, 
+  particularly the one proposed by Beling et al. \citep{Beling2005,Oliver2009}, in which the costs 
+  of misclassification are assigned for each error. Specifically, setting the cost of a false 
+  positive $C_{FP}$ to the loan's annual interest rate charged to the customer $int_r$, the cost of 
+  a false negative $C_{FN}$ to the loss given default $L_{gd}$, which is the percentage of loss 
+  over the total credit line when the customer defaulted, and setting to zero the costs of true 
+  positive $C_{TP}$ and true negative $C_{TN}$. Using that, they proposed the expected cost (EC) 
+  method to find the probability threshold that minimizes those costs, $t_{ec}= 
+  \frac{C_{FN}}{C_{FN}+C_{FP}} =\frac{L_{gd}}{L_{gd}+int_r}.$ Nevertheless, this approach assumes 
+  a constant cost within examples, which is a strong assumption, since in practice each example 
+  carries a very different cost, given by the different credit limits and conditions of each loan. 
+  Consequently, there is a need for an example-dependent cost matrix that takes into account the 
+  cost of misclassifying each example.
+   
+  In order to take into account the varying costs that each example carries, we proposed in 
+  \citep{CorreaBahnsen2014b}, a cost matrix with example-dependent misclassification costs as 
+  given in \tablename{ \ref{table_costmat2}}. First, we assume that the costs of a correct 
+  classification, $C_{TP_i}$ and $C_{TN_i}$, are zero for every customer $i$. We define $C_{FN_i}$ 
+  to be the losses if the customer $i$ defaults to be proportional to his credit line $Cl_i$. We 
+  define the cost of a false positive per customer $C_{FP_i}$ as the sum of two real financial 
+  costs $r_i$ and $C^a_{FP}$, where $r_i$ is the loss in profit by rejecting what would have been a 
+  good customer. 
+  
+  \begin{table}
+  \caption{Credit scoring example-dependent cost matrix}\label{table_costmat2}
+    \centering
+    \begin{tabular}{c|c|c}
+    %\cline{2-3}
+      \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
+      \multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
+      \hline
+      Predicted Positive& \multirow{ 2}{*}{$C_{TP_i}=0$} & \multirow{2}{*}{$C_{FP_i}=r_i+C^a_{FP}$} 
+      \\
+      $c_i=1$ & &\\
+      \hline
+      Predicted Negative& \multirow{ 2}{*}{$C_{FN_i}=Cl_i \cdot L_{gd}$} & \multirow{
+      2}{*}{$C_{TN_i}=0$} \\
+      $c_i=0$ & &\\
+    \end{tabular}
+  \end{table}
+  
+  The profit per customer $r_i$ is calculated as the present value of the difference between the 
+  financial institution gains and expenses, given the credit line $Cl_i$, the term $l_i$ and the 
+  financial institution lending rate $int_{r_i}$ for customer $i$, and the financial institution 
+  of cost funds $int_{cf}$.
+  \begin{equation}
+    r_i= PV(A(Cl_i,int_{r_i},l_i),int_{cf},l_i)-Cl_i,
+  \end{equation}
+  with $A$ being the customer monthly payment and $PV$ the present value of the monthly payments,
+  which are calculated using the time value of money equations \citep{Lawrence2012},
+  \begin{eqnarray}
+    A(Cl_i,int_{r_i},l_i) &=&  Cl_i \frac{int_{r_i}(1+int_{r_i})^{l_i}}{(1+int_{r_i})^{l_i}-1}, \\
+    PV(A,int_{cf},l_i) &=& \frac{A}{int_{cf}} \left(1-\frac{1}{(1+int_{cf})^{l_i}} \right).
+  \end{eqnarray}
+    
+  The second term $C^a_{FP}$, is related to the assumption that the financial institution will not 
+  keep the money of the declined customer idle. It will instead give a loan to an alternative 
+  customer \citep{Nayak1997}. Since no further information is known about the alternative customer, 
+  it is assumed to have an average credit line $\overline{Cl}$ and an average profit $\overline{r}$.
+  Given that, 
+  \begin{equation}
+    C^a_{FP}=- \overline{r} \cdot \pi_0+\overline{Cl}\cdot L_{gd} \cdot \pi_1,
+  \end{equation}
+  in other words minus the profit of an average alternative customer plus the expected loss, 
+  taking into account that the alternative customer will pay his debt with a probability equal to 
+  the prior negative rate, and similarly will default with probability equal to the prior positive 
+  rate.
+
+  \subsubsection{Calculation of the credit limit}
+  
+  One key parameter of our model is the credit limit. There exists several strategies to calculate 
+  the $Cl_i$ depending on the type of loans, the state of the economy, the current portfolio, 
+  among others \citep{Anderson2007,Lawrence2012}. Nevertheless, given the lack of information 
+  regarding the specific business environments of the considered datasets, we simply define 
+  $Cl_i$ as
+  \begin{equation}\label{eq:cli}
+      Cl_i = \min \bigg\{ k \cdot Inc_i, Cl_{max}, Cl_{max}(debt_i) \bigg\},
+  \end{equation}
+  where $Inc_i$ and $debt_i$ are the monthly income and debt ratio of the customer $i$, 
+  respectively, $k$ is a parameter that defines the maximum $Cl_i$ in times $Inc_i$, and 
+  $Cl_{max}$ the maximum overall credit line. Lastly, the maximum credit line given the current 
+  debt is calculated as the maximum credit limit such that the current debt ratio plus the new 
+  monthly payment does not surpass the customer monthly income. It is calculated as
+  \begin{equation}
+    Cl_{max}(debt_i)=PV\left(Inc_i \cdot P_{m}(debt_i),int_{r_i},l_i\right),
+  \end{equation}
+  and
+  \begin{equation}
+    P_{m}(debt_i)=\min \left\{ \frac{A(k \cdot Inc_i,int_{r_i},l_i)}{Inc_i},\left(1-debt_i 
+    \right) \right\}.
+  \end{equation}
+  
+  
+  \subsection{Databases}
+
+    For this paper we use two different publicly available credit scoring datasets. The first 
+    dataset is the \textbf{2011 Kaggle competition Give Me Some Credit}\footnote{ 
+    http://www.kaggle.com/c/GiveMeSomeCredit/}, in which the objective is to identify those 
+    customers of personal loans that will experience financial distress in the next two years.
+    The second dataset is from the \textbf{2009 Pacific-Asia Knowledge Discovery and Data Mining 
+    conference (PAKDD) competition}\footnote{http://sede.neurotech.com.br:443/PAKDD2009/}.
+    Similarly, this competition had the objective of identifying which credit card applicants
+    were likely to default and by doing so deciding whether or not to approve their applications.
+    The Kaggle Credit and PAKDD Credit datasets contain information regarding the features, and 
+    more importantly about the income of each example, from which an estimated credit limit 
+    $Cl_i$ can be calculated (see Appendix~\ref{app_cli}).
+    
+    The Kaggle Credit dataset contains 112,915 examples, each one with 10 features and the class 
+    label. The proportion of default or positive examples is 6.74\%. 
+    On the other hand, the PAKDD Credit dataset contains 38,969 examples, with 30 features and the 
+    class label, with a proportion of 19.88\% positives. This database comes from a Brazilian 
+    financial institution, and as it can be inferred from the competition description, the data 
+    was obtained around 2004.
+    
+    Since no specific information regarding the datasets is provided, we assume that they belong to 
+    average European and Brazilian financial institutions. This enabled us to find the different 
+    parameters needed to calculate the cost measure described in 
+    Section~\ref{section_cost_matrices}. In Table~\ref{table_parameters}, the different 
+    parameters are shown. In particular, we obtain the average interest rates in Europe during 
+    2013 from the European Central Bank \citep{ECB2014}, and the average interest and exchange 
+    rates in Brazil during 2004 from Trading Economics \citep{Economics2014}. Because the income 
+    is not in the same currency on both datasets, we convert the PAKDD Credit dataset to Euros.
+    Additionally, we use a fixed loan term $l$ for both datasets, considering that in the Kaggle 
+    Credit dataset the class was constructed to predict two years of credit behavior, and 
+    because the PAKDD Credit dataset is related to credit cards the term is fix to two years 
+    \citep{Lawrence2012}. Moreover, we set the loss given default $L_{gd}$ using information from 
+    the Basel II standard\footnote{http://www.bis.org/publ/bcbsca.htm.}, $k$ to 3 since it is the 
+    average personal loan requests related to monthly income, and the maximum credit limit 
+    $Cl_{max}$ to 25,000 Euros.
+    \todo{table databases}
