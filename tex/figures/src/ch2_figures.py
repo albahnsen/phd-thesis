@@ -80,4 +80,14 @@ print TP, FP, FN, TN
 
 
 
-
+# ch3_fig1
+f, ax1 = base_fig()
+# create step classifier
+b = (5-2.1) / (7.8-4)
+a = 2.1 - b*4
+ax1.plot([5.15, 5.63], [b*5.15+a, b*5.63+a], '--', c="black")
+ax1.plot([5.15, 5.15], [b*5.15+a, 0], '--', c="black")
+ax1.plot([5.63, 5.63], [b*5.63+a, b*5.63+a+0.55], '--', c="black")
+ax1.plot([5.63, 7.5], [b*5.63+a+0.55, b*5.63+a+0.55], '--', c="black")
+plt.savefig(path+'ch3_fig1.eps', format='eps', dpi=1000, bbox_inches='tight')#, pad_inches=0)
+plt.show()

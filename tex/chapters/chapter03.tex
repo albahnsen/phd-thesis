@@ -13,6 +13,8 @@ example-dependent cost-sensitive methods cost-proportionate rejection-sampling a
 cost-proportionate over-sampling.
 \end{remark}
 
+\todo{same example as ch2 but different shades of blue and red}
+
 \section{Introduction}
 \label{sec:3:intro}
 
@@ -49,6 +51,38 @@ cost-proportionate over-sampling.
   costs \citep{Elkan2001,Zadrozny2003}.
 
   
+\section{Class-dependent cost-sensitive classification}
+\label{sec:3:class-dependent}
+
+The cost-sensitive literature is mostly focused in class-dependent problems \citep{Elkan2001}, where 
+the cost of misclassification is associated with the class. Ussually, the cost of misclassifying a 
+positive example is denoted by $c_0$ and the one of misclassifying a negative example is denoted by 
+$c_1$. Conceptually, $c_0\ge0$ and $c_1\ge0$, moreover, it is ussually defined that $c_0+c_1=2$ 
+\citep{Flach2011a}, as when $c_0=c_1=1$ represents the case of cost-insensitive classification. 
+Using the previous notation, a class-dependent cost measure is defined as \citep{Wang2014}:
+\begin{equation}
+  Cost_{cd}(f(\mathcal{S})) = c_0 \cdot FP + c_1 \cdot FN,
+\end{equation}
+where $FP$ and $FN$ are the number of false positives and false negatives, respectively.
+
+Following the toy example shown in Section~\ref{sec:2:classification}, we now assume that 
+misclassifying a negative example have a cost of $c_0=0.2$ we calculate the respective cost of 
+the classification algorithms presented in \figurename{~\ref{fig:2:2b}} (Algorithm1) and 
+\figurename{ \ref{fig:2:3}} (Algorithm), and compare the result of the standard measures and the 
+class-dependent cost in the following table:
+\begin{center}
+    \footnotesize
+  \begin{tabular}{l|c|c|c|c|c}
+  Algorithm & Error & Recall & Precision & $F_1Score$ & $Cost_{cd}$ \\
+  \hline
+  Algorithm1 & 11.11\% & 87.8\%& 90\%& 88.8\% & \\ %FP = 4 , FN=5
+  Algorithm1 & 5.3\% & 90.2\%& 94.9\%& 92.5\% & \\ %FP = 2 , FN=4
+  \end{tabular}
+\end{center}
+
+\section{Example-dependent cost-sensitive classification}
+
+
 \section{Binary classification cost characteristic}
 \label{sec:3:cost_characteristic}
 
