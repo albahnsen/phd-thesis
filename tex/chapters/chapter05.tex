@@ -1,17 +1,17 @@
-\chapter{Marketing Analytics}\label{ch:4}
+\chapter{Marketing Analytics}\label{ch:5}
 
 \begin{remark}{Outline}
 In this chapter, we present two different marketing real-world example-dependent 
 cost-sensitive problems, namely, churn modeling and direct marketing. Both problems deal 
 with identifying those customers with certain characteristic with the objective to maximize the 
 results of the different CRM strategies.
-First, we introduce the churn modeling problem in Section \ref{sec:4:churn}. Lastly in Section 
-\ref{sec:4:directmarketing}, the direct marketing problem is presented.
+First, we introduce the churn modeling problem in Section \ref{sec:5:churn}. Lastly in Section 
+\ref{sec:5:directmarketing}, the direct marketing problem is presented.
 \end{remark}
 
 
 \section{Churn modeling}
-\label{sec:4:churn}
+\label{sec:5:churn}
 
 Customer churn predictive modeling deals with predicting the probability of a customer defecting 
 using historical, behavioral and socio-economical information. This tool is of great benefit to 
@@ -27,16 +27,17 @@ investment per subscriber on a loyalty campaign and the financial impact of fail
 real churner versus wrongly predicting a non-churner as a churner.
 
 In this section, we present a cost-sensitive framework for customer churn predictive modeling, 
-that we proposed in \citep{CorreaBahnsen2015a}. First, in Section \ref{sec:4:1:intro}, we introduce 
-the problem of chrun modeling. Then in Section \ref{sec:4:1:evaluation}, we present a financial 
-based measure for evaluating the effectiveness of a churn campaign taking into account the available 
+that we proposed in \citep{CorreaBahnsen2015a}. First, in Section \ref{sec:5:1:intro}, we introduce 
+the problem of chrun modeling. Then in Section \ref{sec:5:1:evaluation}, we present a financial 
+based measure for evaluating the effectiveness of a churn campaign taking into account the 
+available 
 portfolio of offers, their individual financial cost and probability of offer acceptance depending 
-on the customer profile. Finally, in Section \ref{sec:4:1:data}, we describe the real-world churn 
+on the customer profile. Finally, in Section~\ref{sec:5:1:data}, we describe the real-world churn 
 modeling dataset that will be used during the experiments.
 
 
 \subsection{Introduction}
-\label{sec:4:1:intro}
+\label{sec:5:1:intro}
 
 The two main objectives of subscription-based companies are to  acquire new subscribers and 
 retain those they already have, mainly because profits are directly linked with the number of 
@@ -51,13 +52,13 @@ With this in mind the companies use intelligence to create and improve retention
 strategies. In the first case, this usually implies an offer that can be either a discount or a 
 free upgrade during certain span of time. In both cases the company has to 	assume a cost for that 
 offer, therefore, accurate prediction of the churners becomes important. The logic of this flow is 
-shown in \figurename{ \ref{fig:ch4:1}}.
+shown in \figurename{ \ref{fig:ch5:1}}.
 
 	\begin{figure}[htbp]
 	  \centering
-    \includegraphics[width=11.5cm]{ch4_fig1}   %CHANGE TO 12cm
+    \includegraphics[width=11.5cm]{ch5_fig1}   %CHANGE TO 12cm
 	  \caption{Flow analysis of a churn campaign \citep{Verbraken2012}}
-	  \label{fig:ch4:1}
+	  \label{fig:ch5:1}
 	\end{figure}
 
 \begin{remark}{Flow analysis of a churn campaign}
@@ -107,7 +108,7 @@ individual 	financial cost and probability of acceptance depending on the custom
 
 
 \subsection{Evaluation of a churn campaign}
-\label{sec:4:1:evaluation}
+\label{sec:5:1:evaluation}
 	
 Traditionally, a churn model is evaluated as a standard binary classification model, 
 using measures such as misclassification error, receiver operating characteristic ($ROC$),  
@@ -124,7 +125,8 @@ churn data set are skewed \citep{Verbeke2012}.
 Different studies have proposed measures to deal with these cost-sensitivity related to
 evaluating a churn model. In \citep{Neslin2006}, a profit-based measure was proposed by starting 
 with the confusion matrix and multiplying it with the expected profit of each case.
-\begin{align}\label{eq:4:profit1}
+\newpage
+\begin{align}\label{eq:5:profit1}
  Profit_1 = (TP+FP)\bigg[ & \left(\gamma CLV + C_o(1-\gamma)(-C_a)\right)\pi_1\gamma \nonumber \\
  & -C_o-C_a\bigg]-A,
 \end{align}
@@ -134,26 +136,26 @@ the average customer lifetime value.
 Moreover, as discussed in \citep{Verbraken2013}, if the average instead of the total profit is 
 considered and the fixed cost $A$ is discarded since is irrelevant for classifier selection, the 
 profit can be expressed as:
-\begin{align}\label{eq:4:profit2}
+\begin{align}\label{eq:5:profit2}
  Profit_2 = &TP\left(\gamma(CLV-C_o-C_a)+(1-\gamma)C_a \right) \nonumber \\
  &+FP(-C_o-C_a).
 \end{align}
 
-Nevertheless, equations (\ref{eq:4:profit1}) and (\ref{eq:4:profit2}), assume that every customer 
+Nevertheless, equations (\ref{eq:5:profit1}) and (\ref{eq:5:profit2}), assume that every customer 
 has the same $CLV$ and $C_o$, whereas this is not true in practice. In fact, different customers 
 have a very different $CLV$, and not all offers can be made to every customer, neither do they have 
 the same impact across customers. In order to obtain a more business oriented measure, we first 
 analyze the financial impact of the different decisions, ie. false positives, false negatives, true 
-positives and true negatives, for each customer.	In \figurename{ \ref{fig:ch4:2}}, the financial 
+positives and true negatives, for each customer.	In \figurename{ \ref{fig:ch5:2}}, the financial 
 impact of a churn model is shown. Note than we take into account the costs and not the profit in 
 each case.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=12cm]{ch4_fig2}
+  \includegraphics[width=12cm]{ch5_fig2}
   \caption{Financial impact of the different decisions ie. False positives, false negatives, 
   true 	positives and true negatives}
-	\label{fig:ch4:2}
+	\label{fig:ch5:2}
 \end{figure}
 
 \begin{remark}{Financial analysis of a churn champaing}
@@ -192,12 +194,12 @@ cost is $CLV_i$.
 			%\hline
 		\end{tabular}
 		\caption{Proposed churn modeling example-dependent cost matrix}
-    \label{tab:ch4:1}
+    \label{tab:ch5:1}
   \end{table}
 
-The different costs are sumarized in \tablename{ \ref{tab:ch4:1}}.	Then using the cost 
+The different costs are sumarized in \tablename{ \ref{tab:ch5:1}}.	Then using the cost 
 matrix, and the example-dependent cost-sensitive framework as described in Section 
-\ref{sec:2:csmeasures}, an example-dependent cost statistic is calculated as:
+\ref{sec:3:csmeasures}, an example-dependent cost statistic is calculated as:
 \begin{align}
   Cost_i &= y_i(c_i C_{TP_i} + (1-c_i)C_{FN_i})& \nonumber \\
          &  + (1-y_i)(c_i C_{FP_i} + (1-c_i)C_{TN_i})& \nonumber \\
@@ -211,7 +213,7 @@ leading to a total cost of:
 \begin{equation}
     Cost = \sum_{i=1}^N Cost_i.
 \end{equation}
-Furthermore, using (\ref{eq:savings}), the savings are calculated as:
+Furthermore, using (\ref{eq:3:savings}), the savings are calculated as:
 \begin{equation}
   Savings = \frac{Cost_l - Cost}{Cost_l},
 \end{equation} 
@@ -252,7 +254,7 @@ discount future earnings \citep{Neslin2006}. Therefore, the $CLV_i$ is defined a
 where $r$ is the discount rate, and $T$ the number of time period.
 Typically $T$ should be considered large enough since without prior 
 knowledge a customer is expected to keep being a customer for the foreseeable future. In practice 
-$T$ is set up to be $\infty$ \citep{Glady2009}. Also, for simplicity it can be assumed that 
+$T$ is set up to be~$\infty$~\citep{Glady2009}. Also, for simplicity it can be assumed that 
 $s_{i,t+1}=s_{i,t}\cdot (1+g)$ $\forall {i,t}$, which means that there is a constant growth $g$ in 
 the customer consumption. Given that, the customer lifetime value can be re-written as
 \begin{equation}
@@ -265,7 +267,7 @@ which in the case of $g<r$, this is a geometric series meaning that it can be ex
 
 
 \subsection{Churn modeling database}
-\label{sec:4:1:data}
+\label{sec:5:1:data}
 
 For the analysis we used a dataset provided by a TV cable provider. 
 The dataset consists of active customers during the first semester of 2014. 	
@@ -291,11 +293,11 @@ important reducing the overall cost.
 
 \begin{figure}[t!]
   \centering
-   \includegraphics[width=10cm]{ch4_fig3}
+   \includegraphics[width=10cm]{ch5_fig3}
   \caption{Acceptance rate ($\gamma$) of the best offer for each customer profile. As expected, 
 	the higher the churn rate the lower the acceptance rate, as it is more difficult to make a 
 	good offer to a customer which is more likely to defect. }
-  \label{fig:ch4:3}
+  \label{fig:ch5:3}
 \end{figure}
 
 In order to calculate the acceptance probability $\gamma_i$ a champion-challenger process was made. 
@@ -303,10 +305,10 @@ First, the customers were grouped into clusters according to their behavioral an
 characteristics. In particular the K-means algorithm was used \citep{Marslan2009}.
 Then for a period of two months, randomly selected offers were made to the customers and their 
 response was evaluated. Unfortunately, for confidentiality reasons we can not describe the 
-different clusters, neither the actual offer made to each customer. Nevertheless, in \figurename{ 
-\ref{fig:ch4:3}}, the average churn rate and acceptance rate $\gamma_i$ per cluster is shown. As 
-expected, the higher the churn rate the lower the acceptance rate, as it is more difficult to make a 
-good offer to a customer which is more likely to defect.
+different clusters, neither the actual offer made to each customer. Nevertheless, in 
+\figurename{~\ref{fig:ch5:3}}, the average churn rate and acceptance rate $\gamma_i$ per cluster is 
+shown. As expected, the higher the churn rate the lower the acceptance rate, as it is more difficult 
+to make a good offer to a customer which is more likely to defect.
 
 
 % 	\subsubsection{Database partitioning}
@@ -318,11 +320,14 @@ good offer to a customer which is more likely to defect.
 % 	rejection-sampling \citep{Zadrozny2003} and cost-proportionate over-sampling \citep{Elkan2001}, 
 % 	described in cost-sensitive classification Section.
 % 	\tablename{ \ref{table_trainandtest}}, summarizes the different datasets, where $N$, $\pi_1$ 
-% and $C_0$ represents the number of customers, the percentage of churners and the total losses if no 
-% model is used, respectively. Moreover, in \figurename{ \ref{fig:ch5:4}}, a comparison of the 
+% and $C_0$ represents the number of customers, the percentage of churners and the total losses if 
+% no 
+% model is used, respectively. Moreover, in \figurename{ \ref{fig:ch5:5}}, a comparison of the 
 % churn rate 
-% and the average unitary cost ($C_u=C_0 / N$) of each dataset with respect of the Total set is shown.
-% It is observed that the cost-sensitive sampling procedures have an average unitary cost much higher 
+% and the average unitary cost ($C_u=C_0 / N$) of each dataset with respect of the Total set is 
+% shown.
+% It is observed that the cost-sensitive sampling procedures have an average unitary cost much 
+% higher 
 % than the other sets, also showing why a simple under-sampling procedure of the dataset does not 
 % take into account the costs.
 % 
@@ -350,15 +355,16 @@ good offer to a customer which is more likely to defect.
 %     \includegraphics{ch5_fig4}
 % 	  \caption{Comparison of the distribution of the churn rate and the average unitary cost 
 % 	  ($C_u=C_0 / N$) of each dataset with respect to the Total set.
-% It is observed that the cost-sensitive sampling procedures have an average unitary cost much higher 
+% It is observed that the cost-sensitive sampling procedures have an average unitary cost much 
+% higher 
 % than the other sets, also showing why a simple under-sampling procedure of the dataset does not 
 % take into account the costs.}
-% 	  \label{fig:ch5:4}
+% 	  \label{fig:ch5:5}
 % 	\end{figure}
 
 
 \section{Direct marketing}
-\label{sec:4:directmarketing}
+\label{sec:5:directmarketing}
 
 In direct marketing the objective is to classify those customers who are more likely to have a 
 certain response to a marketing campaign \citep{Ngai2009}. We used a direct marketing dataset 
@@ -391,11 +397,11 @@ to contact a client that otherwise would have opened a long-term deposit.
     %\hline
   \end{tabular}
   \caption{Direct marketing example-dependent cost matrix}
-  \label{tab:4:d_mat}
+  \label{tab:5:d_mat}
 \end{table}
 		
 We used the direct marketing example-dependent cost matrix proposed in \citep{CorreaBahnsen2014}. 
-The cost matrix is shown in \mbox{\tablename{ \ref{tab:4:d_mat}}}, where $C_a$ is the 
+The cost matrix is shown in \mbox{\tablename{ \ref{tab:5:d_mat}}}, where $C_a$ is the 
 administrative cost of contacting the client, as is credit card fraud,  and $Int_i$ is the expected 
 income when a client opens a long-term deposit. This last term is defined as the long-term deposit 
 amount times the interest rate spread.
