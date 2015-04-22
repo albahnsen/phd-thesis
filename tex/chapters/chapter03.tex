@@ -13,7 +13,6 @@ example-dependent cost-sensitive methods cost-proportionate rejection-sampling a
 cost-proportionate over-sampling.
 \end{remark}
 
-\todo{same example as ch2 but different shades of blue and red}
 
 \section{Introduction}
 \label{sec:3:intro}
@@ -66,21 +65,45 @@ Using the previous notation, a class-dependent cost measure is defined as \citep
 where $FP$ and $FN$ are the number of false positives and false negatives, respectively.
 
 Following the toy example shown in Section~\ref{sec:2:classification}, we now assume that 
-misclassifying a negative example have a cost of $c_0=0.2$ we calculate the respective cost of 
-the classification algorithms presented in \figurename{~\ref{fig:2:2b}} (Algorithm1) and 
-\figurename{ \ref{fig:2:3}} (Algorithm), and compare the result of the standard measures and the 
-class-dependent cost in the following table:
+misclassifying a negative example have a cost of $c_0=0.2$ and a positive example $c_1=1.8$. 
+Under this scenario, the misclassifying a positive example have a much higher cost than 
+misclassifying a negative one. Taking that into account, in \figurename{~\ref{fig:3:1}, we show an 
+algorithm (Algorithm3), that focus on maximizing the correct classification of the positives, 
+scarifying the correct classification of the negatives. In the following table, we compare the 
+results of the standard measures and the class-dependent cost, of Algorithm3 and the classification 
+algorithms presented in \figurename{~\ref{fig:2:2b}} (Algorithm1) and \figurename{ \ref{fig:2:3}} 
+(Algorithm2):
 \begin{center}
     \footnotesize
   \begin{tabular}{l|c|c|c|c|c}
   Algorithm & Error & Recall & Precision & $F_1Score$ & $Cost_{cd}$ \\
   \hline
-  Algorithm1 & 11.11\% & 87.8\%& 90\%& 88.8\% & \\ %FP = 4 , FN=5
-  Algorithm1 & 5.3\% & 90.2\%& 94.9\%& 92.5\% & \\ %FP = 2 , FN=4
+  Algorithm1 & 11.11\% & 87.8\%& 90\%& 88.8\% & 9.8\\ %FP = 4 , FN=5
+  Algorithm2 & 5.3\% & 90.2\%& 94.9\%& 92.5\% & 7.6\\ %FP = 2 , FN=4
+  Algorithm3 & 7.97\%& 92.68\% &86.36\%& 89.41\% & 6.6 \\
   \end{tabular}
 \end{center}
 
+\begin{figure}[t!]
+  \centering
+  \includegraphics{ch3_fig1}
+  \caption{Class-dependent cost-sensitive classification algorithm. Since the cost of misclassifying 
+positives and negatives is different, the algorithm focus on maximizing the correct classification 
+of the positives, scarifying the correct classification of the negatives.}
+  \label{fig:3:1}
+\end{figure}
+
+It is found, that by focusing on the positives, Algorithm3 arises to a lower cost, even though, the 
+traditional metrics are worst than Algorithm2. In conclusion, it is of highly importance to take 
+into account the cost when evaluating and training a classification model.
+
+
 \section{Example-dependent cost-sensitive classification}
+
+The class-dependent framework introduced in the previous section, is highly restrictive, as 
+assuming that the different costs are constant between classes is not realistic in many real world 
+applications. In fraud detection, fraudulent transactions  can have a financial impact from 
+hundreds or thousands of Euros \cite{Sahin2013}.
 
 
 \section{Binary classification cost characteristic}

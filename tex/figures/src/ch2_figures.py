@@ -91,3 +91,15 @@ ax1.plot([5.63, 5.63], [b*5.63+a, b*5.63+a+0.55], '--', c="black")
 ax1.plot([5.63, 7.5], [b*5.63+a+0.55, b*5.63+a+0.55], '--', c="black")
 plt.savefig(path+'ch3_fig1.eps', format='eps', dpi=1000, bbox_inches='tight')#, pad_inches=0)
 plt.show()
+
+# Cross table 3
+TP = df.Y.sum() - 3
+FP = 6
+FN = 3
+TN = df.shape[0] - TP - FP - FN
+err = (FP+FN)*1.0 / (TP+TN+FP+FN)
+rec = TP*1.0/(TP+FN)
+pre = TP*1.0/(TP+FP)
+f1 = 2.0*(rec*pre)/(rec+pre)
+print TP, FP, FN, TN, err, rec, pre, f1
+print .2*6+1.8*3
