@@ -1,17 +1,18 @@
-        file                      section                                     todo
-   chapter01    Outline and contributions                               add part 1
-   chapter04                    chapter04                              fix outline
-   chapter04  Credit card fraud detection              erase percentage of savings
-   chapter04                    Databases                          table databases
-   chapter06                  Brier score                            To background
-   chapter06                  Experiments                              experiments
-   chapter07           Genetic algorithms                                 DELETE??
-   chapter07                  Experiments                              Experiments
-   chapter08                  Experiments                              Experiments
-    abstract                     abstract                               add part 1
- conclusions                  conclusions                               add part 1
- conclusions                  conclusions                   Section on future work
-   notations                    notations       Finish notations from all chapters
-   notations                    notations  Only notation used thought the chapters
-   notations                    notations                                FP, FN...
-      thesis                       thesis      organize references in all chapters
+        file                                        section                                               todo
+   chapter01                      Outline and contributions                                         add part 1
+   chapter02                                      chapter02                                     change outline
+   chapter03  Class-dependent cost-sensitive classification  Djamila: Algorithms? not sure as I dont use an...
+   chapter04                                      chapter04                                        fix outline
+   chapter04                    Credit card fraud detection                        erase percentage of savings
+   chapter04                                      Databases                                    table databases
+   chapter06                                    Experiments                                        experiments
+   chapter07                             Genetic algorithms                                           DELETE??
+   chapter07                                    Experiments                                        Experiments
+   chapter08                                    Experiments                                        Experiments
+    abstract                                       abstract                                         add part 1
+ conclusions                                    conclusions                                         add part 1
+ conclusions                                    conclusions                             Section on future work
+   notations                                      notations                 Finish notations from all chapters
+   notations                                      notations            Only notation used thought the chapters
+   notations                                      notations                                          FP, FN...
+      thesis                                         thesis                organize references in all chapters
