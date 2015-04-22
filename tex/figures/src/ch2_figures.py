@@ -31,9 +31,9 @@ df = df.drop_duplicates()
 def base_fig():
     f, ax1 = plt.subplots(1, 1, figsize=(4, 2.5))
     df_temp = df.loc[df.Y == 1]
-    ax1.scatter(df_temp["sepal_length"], df_temp["sepal_width"], c=col_pal[2], label="Positive")
+    ax1.scatter(df_temp["sepal_length"], df_temp["sepal_width"], c=col_pal[2], label="Positive",edgecolors='none')
     df_temp = df.loc[df.Y == 0]
-    ax1.scatter(df_temp["sepal_length"], df_temp["sepal_width"], c=col_pal[0], label="Negative")
+    ax1.scatter(df_temp["sepal_length"], df_temp["sepal_width"], c=col_pal[0], label="Negative",edgecolors='none')
     ax1.set_xlabel('Feature 1', fontsize=8)
     ax1.set_ylabel('Feature 2', fontsize=8)
     ax1.set_ylim(2, 4.5)
@@ -103,3 +103,4 @@ pre = TP*1.0/(TP+FP)
 f1 = 2.0*(rec*pre)/(rec+pre)
 print TP, FP, FN, TN, err, rec, pre, f1
 print .2*6+1.8*3
+
