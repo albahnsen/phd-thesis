@@ -3,9 +3,9 @@
 \begin{remark}{Outline}
 In this chapter, we introduce classifications models from a machine learning perspective. 
 Moreover, we present the example-dependent cost-sensitive framework that is the basis of the 
-thesis. In Section~\ref{sec:2:classification}, we give a self contain introduction to 
+thesis. In Section~\ref{sec:3:classification}, we give a self contain introduction to 
 classification, including the most-common algorithms, and the main methods for evaluating the 
-performance of the different algorithm. Then, in Section~\ref{sec:2:cs}, we present the general 
+performance of the different algorithm. Then, in Section~\ref{sec:3:cs}, we present the general 
 framwork of cost-sensitive classification. Within this Section, we first introduce a method for 
 defining the type of cost-sensitivity of a problem. Afterwards, we present the different 
 cost-sensitive performance evaluation measures. Lastly, we show the state-of-the-art 
@@ -14,7 +14,7 @@ cost-proportionate over-sampling.
 \end{remark}
 
 \section{Introduction}
-\label{sec:2:intro}
+\label{sec:3:intro}
 
   Classification, in the context of machine learning, deals with the problem of predicting the class
   of a set of examples given their features. Traditionally, classification methods aim at 
@@ -23,9 +23,9 @@ cost-proportionate over-sampling.
   misclassification errors carry the same cost. This is not the case in many real-world 
   applications. Methods that use different misclassification costs are known as cost-sensitive 
   classifiers. Typical cost-sensitive approaches assume a constant cost for each type of error, in 
-  the sense that, the cost depends on the class and is the same among examples  
-  \citep{Elkan2001,Kim2012}. 
-  Although, this class-dependent approach is not realistic in many real-world applications.
+  the sense that, the cost depends on the class and is the same among examples
+  \citep{Elkan2001,Kim2012}. Although, this class-dependent approach is not realistic in many 
+  real-world applications.
   
   \begin{remark}{Real-world cost sensitive applications}
   For example in credit card fraud detection, failing to detect a fraudulent transaction may have 
@@ -50,7 +50,7 @@ cost-proportionate over-sampling.
 
   
 \section{Binary classification cost characteristic}
-\label{sec:2:cost_characteristic}
+\label{sec:3:cost_characteristic}
 
   In classification problems with two classes $y_i \in \{0,1\}$, the objective is to learn or 
   predict to which class $c_i \in \{0,1\}$ a given example $i$ belongs based on its $k$ features 
@@ -59,8 +59,8 @@ cost-proportionate over-sampling.
   associated with   two types of correct   classification, true positives ($C_{TP_i}$), true 
   negatives ($C_{TN_i}$),   and the two  types of   misclassification errors, false positives 
   ($C_{FP_i}$), false negatives   ($C_{FN_i}$), as   defined in \tablename{ 
-  \ref{tab:2:cost_matrix}}.
-  \label{ntn:ch2:2}
+  \ref{tab:3:cost_matrix}}.
+
   
   \begin{table}[t]
     \centering
@@ -76,7 +76,7 @@ cost-proportionate over-sampling.
       $c_i=0$ & &\\
     \end{tabular}
     \caption{Classification cost matrix}
-    \label{tab:2:cost_matrix}
+    \label{tab:3:cost_matrix}
   \end{table}  
 
   Conceptually, the cost of correct classification should always be lower than the cost of 
@@ -144,7 +144,7 @@ cost-proportionate over-sampling.
   
 
 \subsection{Example-dependent evaluation measures}
-\label{sec:2:csmeasures}
+\label{sec:3:csmeasures}
 
   Common cost-insensitive evaluation measures such as misclassification rate or \mbox{$F_1Score$}, 
   assume the same cost for the different misclassification errors. Using these measures is not 
@@ -161,11 +161,11 @@ cost-proportionate over-sampling.
   C_{TP_i},C_{FP_i},C_{FN_i},C_{TN_i}]$  and labeled using the class   label $y_i   \in \{0,1\}$. 
   A classifier $f$ which generates the   predicted label $c_i$ for each   element $i$ is trained  
   using the set $\mathcal{S}$. Then the cost of   using $f$ on $\mathcal{S}$ is calculated by
-  \begin{equation}\label{eq:2:cost_total}
+  \begin{equation}\label{eq:3:cost_total}
      Cost(f(\mathcal{S})) = \sum_{i=1}^N Cost(f(\mathbf{x}_i^*)),
   \end{equation}
   where
-   \begin{align}\label{eq:2:cost}
+   \begin{align}\label{eq:3:cost}
     Cost(f(\mathbf{x}_i^*)) =& y_i(c_i C_{TP_i} + (1-c_i)C_{FN_i}) + \nonumber \\  
     & (1-y_i)(c_i C_{FP_i} + (1-c_i)C_{TN_i}).
   \end{align}
@@ -174,7 +174,7 @@ cost-proportionate over-sampling.
   \textit{normalized} cost measure was proposed, by dividing the total cost by the theoretical 
   maximum cost, which is the cost of misclassifying every example. The \textit{normalized} cost is 
   calculated using
-  \begin{align}\label{eq:2:ncost}
+  \begin{align}\label{eq:3:ncost}
     Cost_n(f(\mathcal{S})) = \frac{Cost(f(\mathcal{S}))}
     {\sum_{i=1}^N C_{FN_i} \cdot \mathbf{1}_0(y_i) 
     +  C_{FP_i} \cdot \mathbf{1}_1(y_i)  }.
@@ -187,12 +187,12 @@ cost-proportionate over-sampling.
     Cost_l(\mathcal{S}) = \min \{Cost(f_0(\mathcal{S})), Cost(f_1(\mathcal{S}))\},
   \end{equation}
   where 
-  \begin{equation}\label{eq:2:f_a}
+  \begin{equation}\label{eq:3:f_a}
     f_a(\mathcal{S}) = \mathbf{a}, \text{ with } a\in \{0,1\}.
   \end{equation}
 
   The cost improvement can be expressed as the cost savings as compared with $Cost_l(\mathcal{S})$. 
-  \begin{equation}\label{eq:2:savings}
+  \begin{equation}\label{eq:3:savings}
     Savings(f(\mathcal{S})) = \frac{ Cost_l(\mathcal{S}) - Cost(f(\mathcal{S}))}
     {Cost_l(\mathcal{S})}.
   \end{equation} 
