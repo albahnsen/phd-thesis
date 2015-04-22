@@ -1,6 +1,7 @@
 \chapter{Background}\label{ch:2}
 
 \begin{remark}{Outline}
+\todo{change outline}
 In this chapter, we introduce classifications models from a machine learning perspective. 
 Moreover, we present the example-dependent cost-sensitive framework that is the basis of the 
 thesis. In Section~\ref{sec:2:classification}, we give a self contain introduction to 
@@ -102,7 +103,7 @@ energy consumption prediction, spam classification, and others \citep{Kriegel200
 \end{remark}
 
 
-\subsection{Performance measures}
+\section{Performance measures}
 
 When evaluating the performance of a classification algorithm, the first thing to do is to check 
 the number of examples that were misclassified. Since the the true class of the training examples 
@@ -224,6 +225,25 @@ It is not always straightforward  to define the define the right tradeoff betwee
 and false negatives. The best approximation to solve that, is to focus on the actual costs incurred 
 by the different decisions, this is usually solved using cost-sensitive classification methods. A 
 deep analysis of these methods is described in the following Section.
+
+\subsection{Brier score}
+\label{sec:2:brier}
+
+Traditional evaluation measures of binary classification problems, such as Accuracy and 
+$F_1Score$, provide a way to analyze the performance of a model. However, when using the classifier 
+output as a basis for decision making, there is a need of a measure that takes into account not 
+only the misclassification of a classifier $\mathbf{c}$, but also the quality of the estimated 
+probability $\mathbf{\hat p}$ \citep{cohen2004}. The most appropriate  is the Brier score 
+\citep{brier1950}. The Brier score is one of a class of so-called proper scores which are used in 
+evaluating the subjective probability assessment of forecasters \citep{DeGroot1983}. The Brier 
+score is the average squared difference between the forecasters estimated probability of and the 
+true label:
+\begin{equation}
+  BS(f(\mathcal{S})) = \frac{1}{N} \sum_{i=1}^{N} (\hat p_i - y_i)^2.
+\end{equation}
+The main justification of this score, is based on decision theoretic considerations, in the sense 
+that, a forecaster should pay a price proportional to the confidence with which it asserts its 
+decision.
 
 %\subsection{Families of binary classifiers}
 % \subsection{Linear models}

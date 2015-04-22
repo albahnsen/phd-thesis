@@ -49,34 +49,12 @@ that also assesses the real probability of the event \citep{cohen2004}.
 \section{Calibration of probabilities}
 \label{sec:6:prob}
 
-In this section we discussed a measure for evaluating how well calibrated are a set of 
-pobabilities. Furthermore, two methods for calibrating probabilities are explained. First, the 
-method proposed in \citep{Elkan2001} to adjust the probabilities based on the   difference in bad 
-rates  between the training and testing datasets.  Then, the method proposed in 
-\cite{Hernandez-Orallo2012}, in which calibrated probabilities are extracted after modifying the 
-ROC curve using the ROC convex hull methodology, is described.
-  
-  
-\subsection{Brier score}
-\todo{To background?}
-
-Traditional evaluation measures of binary classification problems, such as Accuracy and 
-$F_1Score$, provide a way to analyze the performance of a model. However, when using the classifier 
-output as a basis for decision making, there is a need of a measure that takes into account not 
-only the misclassification of a classifier $\mathbf{c}$, but also the quality of the estimated 
-probability $\mathbf{\hat p}$ \citep{cohen2004}. The most appropriate  is the Brier score 
-\citep{brier1950}. The Brier score is one of a class of so-called proper scores which are used in 
-evaluating the subjective probability assessment of forecasters \citep{DeGroot1983}. The Brier 
-score is the average squared difference between the forecasters estimated probability of and the 
-true label:
-\begin{equation}
-  BS(f(\mathcal{S})) = \frac{1}{N} \sum_{i=1}^{N} (\hat p_i - y_i)^2.
-\end{equation}
-The main justification of this score, is based on decision theoretic considerations, in the sense 
-that, a forecaster should pay a price proportional to the confidence with which it asserts its 
-decision.
-
-
+In this section, two methods for calibrating probabilities are explained. First, the method proposed 
+in \citep{Elkan2001} to adjust the probabilities based on the   difference in bad rates  between the 
+training and testing datasets.  Then, the method proposed in \cite{Hernandez-Orallo2012}, in which 
+calibrated probabilities are extracted after modifying the ROC curve using the ROC convex hull 
+methodology, is described.
+ 
 \subsection{Calibration due to a change in base rates}
 
 One of the reasons why a probability may not be calibrated is because the algorithm is trained 
