@@ -11,35 +11,34 @@ do not accurately represent the business oriented goals. Moreover, we founded, s
 differences in the results, when using tradition cost-insensitive methods against example-dependent 
 cost-sensitive methods.
 
-\todo{add part 1}
-
-First in \chaptername{ \ref{ch:background}}, we laid out the background for general classification 
+First in \partname{~\textsc{\ref{part:1}}}, we laid out the background for general classification 
 methods, and their respective evaluation measures. Moreover, we introduce the problem of 
 cost-sensitive learning, in particular, we define the differences between class-dependent and 
 example-dependent problems. In addition, we present a evaluation measure that takes into account 
 the real financial gains and losses of practical applications.
 
-Then in \partname{~\textsc{\ref{part:1}}}, we analyzed and discussed four real-world 
+Then in \partname{~\textsc{\ref{part:2}}}, we analyzed and discussed four real-world 
 classification problems, that are the focus of this thesis, in particular, credit card fraud 
 detection, credit scoring, churn modeling and direct marketing. In general, we showed why each of 
 the applications is example-dependent cost-sensitive, and we elaborated a framework for the 
 analysis of each problem. The Part is organized in two Chapters. First, in 
-\chaptername{~\ref{ch:3}}, we discussed the applications within financial risk management. Lastly, 
-in \chaptername{~\ref{ch:4}}, the marketing analytics applications.
+\chaptername{~\ref{ch:4}}, we discussed the applications within financial risk management. Lastly, 
+in \chaptername{~\ref{ch:5}}, the marketing analytics applications.
 
 Finally in \partname{~\textsc{\ref{part:2}}}, we introduced our proposed example-dependent 
-cost-sensitive methods. First, in \chaptername{~\ref{ch:5}}, we presented our Bayes minimum risk 
+cost-sensitive methods. First, in \chaptername{~\ref{ch:6}}, we presented our Bayes minimum risk 
 method. This method worked by including comparing the expected financial losses of different 
 outcomes when classifying the examples in the different classes. Then, we focused on introducing the 
-costs to the algorithms during the training phase. In particular in \chaptername{~\ref{ch:6}}, we 
-introduced our method cost-sensitive logistic regression, and in \chaptername{~\ref{ch:7}}, we 
+costs to the algorithms during the training phase. In particular in \chaptername{~\ref{ch:7}}, we 
+introduced our method cost-sensitive logistic regression, and in \chaptername{~\ref{ch:8}}, we 
 showed and discussed our previously proposed cost-sensitive decision trees algorithm. 
 The cost-sensitive decision tree algorithm proved to be highly effective while maintaining the 
 simplicity and interpretability of decision trees. However, this method suffer from high variance, 
-to overcome that limitation, in \chaptername{~\ref{ch:8}}, we proposed framework for 
-ensembles of cost-sensitive decision trees. Lastly, in \chaptername{~\ref{ch:9}}, we presented the 
+to overcome that limitation, in \chaptername{~\ref{ch:9}}, we proposed framework for 
+ensembles of cost-sensitive decision trees. Lastly, in Appendix~\ref{ch:A}, we presented the 
 library \mbox{\textit{CostCla}} that we developed as part of the thesis. This library is an 
-open-source implementation of all the algorithms covered in this manuscript.
+open-source implementation of all the algorithms covered in this manuscript. 
+\todo{Djamila, is Appendix A named here? before conclusions?}
   
 Overall, this thesis showed the importance of using the real example-dependent financial 
 costs associated with real-world applications, since there are significant differences in the 
@@ -47,5 +46,40 @@ results when evaluating a model using a traditional cost-insensitive measure suc
 or F1Score,  than when using the savings, leading to the conclusion of the importance of using the 
 real practical financial costs of each context.
 
-  
-\todo{Section on future work}
+\newpage
+\section{Future research directions}
+
+Due to the time constraints that cover the working plan of this project, there are a
+list of points related to the work that can be further investigated. In the following, we
+address some issues. \todo{copied from Frederik}
+
+\begin{itemize}
+ \item \textbf{Cost-sensitive calibration.} When evaluating how well a set of probabilities are 
+calibrated, for example using the Brier score, the measure does not take into account the cost of 
+each example. Therefore, the calibration methods that attempt to improve those kind of measures, as 
+the ones presented in Section~\ref{sec:6:prob}, also fail to take into account the real 
+cost-sensitive costs related to each application. Future work should include a deep analysis of the 
+impact of the costs during the calibration of probabilities.
+
+  \item \textbf{Staking cost-sensitive decision trees.} Even though we explore the method of 
+staking in Section~\ref{sec:9:staking}, we foreseen that a deeper analysis of the impact of having 
+several layers of example-dependent cost-sensitive methods could enhance the performance of the 
+system.
+
+  \item \textbf{Example-dependent cost-sensitive boosting.} In \chaptername{~\ref{ch:9}}, we 
+only focus our attention to independent ensemble methods, in particular bagging algorithms. 
+However, there is an other branch of ensemble methods, those that are dependent, such as 
+boosting \citep{Schapire1990}, adaboost \citep{Freund1996} or gradient boosting 
+\citep{Friedman2001,Friedman2002}. For some applications these methods have proved to outperform 
+the bagging algorithms \citep{Zhou2012}, therefore, we think that future research should focus 
+creating a framework for example-dependent cost-sensitive boosting algorithm.
+
+  \item \textbf{Online example-dependent cost-sensitive classification.} The methods covered in 
+this thesis are all batch, in the sense that the batch algorithms keeps the system weights constant 
+while calculating the evaluation measures. However in some applications such as fraud detection, the 
+evolving patters due to change in the fraudsters behavior is not capture by using batch methods. 
+Therefore, the need for investigate this problem from an online-learning perspective 
+\citep{Pozzolo2014}. I particular, we think that a first approach may consist in expanding the 
+online class-dependent method proposed in \citep{Wang2014}, into an example-dependent cost-sensitive 
+setting.
+\end{itemize}
