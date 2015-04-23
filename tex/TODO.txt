@@ -8,7 +8,6 @@
    chapter07                             Genetic algorithms                                           DELETE??
    chapter07                                    Experiments                                        Experiments
    chapter08                                    Experiments                                        Experiments
-    abstract                                       abstract                                         add part 1
  conclusions                                    conclusions  Djamila, is Appendix A named here? before conc...
  conclusions                     Future research directions                               copied from Frederik
    notations                                      notations                 Finish notations from all chapters
