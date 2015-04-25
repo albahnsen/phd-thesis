@@ -297,3 +297,63 @@ satisfactory solution is reached.
 \section{Experiments}
 \label{sec:7:results}
 \todo{Experiments}
+
+
+\begin{table}
+    \centering
+    \footnotesize
+    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 
+    0in}c@{\hskip 0in}l  } %sum 7.7
+    \hline
+    \bf{Family} & \bf{Algorithm} & \multicolumn{3}{c}{\bf{Fraud}} & 
+    \multicolumn{3}{c}{\bf{Churn}} & \multicolumn{3}{c}{\bf{Credit 1}} \\ 
+    \hline
+CI&LR-t & 0.0092 &$\pm$& 0.0002 & -0.0001 &$\pm$& 0.0002 & 0.0177 &$\pm$& 0.0126\\ 
+&LR-u & 0.1243 &$\pm$& 0.0387 & 0.0039 &$\pm$& 0.0492 & 0.4118 &$\pm$& 0.0313\\ 
+\hline 
+CPS&LR-r & 0.3077 &$\pm$& 0.0301 & 0.0484 &$\pm$& 0.0375 & 0.3965 &$\pm$& 0.0263\\ 
+&LR-o & 0.2793 &$\pm$& 0.0185 & 0.0316 &$\pm$& 0.0228 & 0.3301 &$\pm$& 0.0109\\ 
+\hline 
+BMR&LR-t-BMR & 0.4552 &$\pm$& 0.0203 & 0.1082 &$\pm$& 0.0316 & 0.2189 &$\pm$& 0.0541\\ 
+\hline 
+CST&CSLR-t & \bf{0.6113} &\bf{$\pm$}& \bf{0.0262} & \bf{0.1118} &\bf{$\pm$}& \bf{0.0484} & 
+\bf{0.4554} &\bf{$\pm$}& \bf{0.1039}\\ 
+\hline
+  \multicolumn{11}{c}{(those models with the highest savings are market as bold)}
+  \end{tabular}
+    \caption{Results of the algorithms measured by savings}
+    \label{tab:7:results_savings}
+  \end{table}
+  
+\begin{table}
+    \centering
+    \footnotesize
+    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l  } %sum 7.7
+    \hline
+    \bf{Family} & \bf{Algorithm} &  \multicolumn{3}{c}{\bf{Credit 2}} 
+& \multicolumn{3}{c}{\bf{Marketing}} \\ 
+    \hline
+CI&LR-t & 0.0039 &$\pm$& 0.0012 & -0.2931 &$\pm$& 0.0602\\ 
+&LR-u & 0.1850 &$\pm$& 0.0231 & 0.2200 &$\pm$& 0.0376\\ 
+\hline 
+CPS&LR-r & 0.2650 &$\pm$& 0.0115 & 0.4210 &$\pm$& 0.0267\\ 
+&LR-o & 0.2554 &$\pm$& 0.0090 & 0.3129 &$\pm$& 0.0277\\ 
+\hline 
+BMR&LR-t-BMR & \bf{0.3148} &\bf{$\pm$}& \bf{0.0094} & \bf{0.4973} &\bf{$\pm$}& \bf{0.0084}\\ 
+\hline 
+CST&CSLR-t & 0.2748 &$\pm$& 0.0069 & 0.4484 &$\pm$& 0.0072\\ 
+\hline 
+  \multicolumn{8}{c}{(those models with the highest savings are market as bold)}
+  \end{tabular}
+    \caption{Continuation of \tablename{~\ref{tab:7:results_savings}}.}
+    \label{tab:7:results_savings2}
+  \end{table}
+
+\begin{figure}[!t]
+  \centering
+  \includegraphics{ch7_fig3}
+  \caption{\textbf{Comparison of the average savings of the algorithms versus the 
+    highest savings.} When the probabilities are calibrated there is a 
+    significant increase in savings.}
+  \label{fig:7:comparison_per_best}
+\end{figure}
