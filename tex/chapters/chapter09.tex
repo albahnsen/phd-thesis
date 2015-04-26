@@ -442,8 +442,14 @@ $combinator$.
 \section{Experiments}
 \label{sec:9:experiments}
 
-  For the experiments we first used three classification algorithms, decision tree ($DT$), logistic 
-  regression ($LR$) and random forest ($RF$). Using the implementation of Scikit-learn 
+For the experiments we used five datasets from four different real world example-dependent 
+cost-sensitive problems: Credit card fraud detection (see Section~\ref{sec:4:fraud}), credit 
+scoring (see Section~\ref{sec:4:creditscoring}), churn modeling (see Section~\ref{sec:5:churn}) and 
+direct marketing (see Section~\ref{sec:5:directmarketing}). The different datasets are summarized 
+in \tablename{~\ref{tab:6:databases}}.
+
+  We first used three classification algorithms, decision tree ($DT$), logistic 
+  regression ($LR$) and random forest ($RF$). Using the implementation of \textit{Scikit-learn} 
   \citep{Pedregosa2011}, each algorithm is trained using the different training sets: training 
   ($t$), under-sampling ($u$), cost-proportionate rejection-sampling  ($r$) \citep{Zadrozny2003}   
   and   cost-proportionate over-sampling ($o$) \citep{Elkan2001}. Afterwards,  we evaluate the 
@@ -456,7 +462,8 @@ $combinator$.
   methods; majority voting ($mv$), cost-sensitive weighted voting ($wv$) and cost-sensitive 
   stacking ($s$). Unless otherwise stated, the random selection of the training set was repeated 50 
   times, and in each time the models were trained and results collected, this allows us to measure 
-  the stability of the results. 
+  the stability of the results. The implementation of the cost-sensitive algorithms is done using 
+  the \textit{CostCla} library, see Appendix~\ref{ch:A}.
   
     The results are shown in \tablename{ \ref{tab:9:results_savings}}. First, when observing  the 
   results of the cost-insensitive methods ($CI$), that is, $DT$, $LR$ and $RF$ algorithms trained 
