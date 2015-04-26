@@ -4,8 +4,7 @@
    chapter04                                      chapter04                                        fix outline
    chapter04                    Credit card fraud detection                        erase percentage of savings
    chapter04                                      Databases                                    table databases
-   chapter07                             Genetic algorithms                                           DELETE??
-   chapter07                                    Experiments                                        Experiments
+   chapter07                             Genetic algorithms  Djamila: this section can: move to background,...
    chapter08                                    Experiments                                        Experiments
  conclusions                                    conclusions  Djamila, is Appendix A named here? before conc...
  conclusions                     Future research directions                               copied from Frederik
