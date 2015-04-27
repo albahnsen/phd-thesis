@@ -1,10 +1,7 @@
 % Notations ====================================================================
 
 \chapter{Notations}
-\todo{Finish notations from all chapters}
-\todo{Only notation used thought the chapters}
-\todo{FP, FN...}
-	
+
 \begin{tabularx}{\textwidth}{ l X }
 $\cal S$ 		& Set of examples \\ 
 $\mathcal{S}_{train}$ 	& Training set\\
@@ -18,9 +15,17 @@ $f(\mathcal{S})$ 	& A classification algorithm 	 \\
 $\mathbf{c}$ 		& Predicted class labels \\  
 $c_i$ 			& Predicted class for example $i$   \\
 $\hat p_i$		& Predicted probability of positive for example $i$  \\
+$TP$          & Number of true positives examples \\
+$TN$          & Number of true negatives examples \\
+$FP$          & Number of false positives examples \\
+$FN$          & Number of false negatives examples \\
+$C_{FP}$    & Cost of a false positive   \\ 
+$C_{FN}$    & Cost of a false negative    \\ 
 $C_{TP_i}$		& Cost of a true positive for example $i$	 \\
 $C_{TN_i}$		& Cost of a true negative for example $i$	 \\	
 $C_{FP_i}$		& Cost of a false positive for example $i$	 \\	
 $C_{FN_i}$		& Cost of a false negative for example $i$	 \\	
 $\mathbf{x}_i^*$ 	& Augmented feature vector of example $i$ \\	
+$\mathbf{1}_c(z)$ & Indicator function that takes the value of one if $z \in c$ and 
+zero if $z \notin c$ \\
 \end{tabularx}
