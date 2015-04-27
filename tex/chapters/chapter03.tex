@@ -5,14 +5,14 @@ In this chapter, we introduce the problem of cost-sensitive classification. Stan
 classification models aim at minimizing the misclassification of examples, in which an example is 
 misclassified if the predicted class is different from the true class. However, this is not the 
 case in many real-world applications.
-In this chapter, first, we give a introduction to cost-sensitive classification in 
+In this chapter, first, we give an introduction to cost-sensitive classification in 
 Section~\ref{sec:3:intro}. Then, in Section~\ref{sec:3:class-dependent}, we present the problem of 
-class-dependent cost-sensitive classification. Then, in Section~\ref{sec:3:cs}, we present the 
-general framework of example-dependent cost-sensitive classification. Within this section, we first 
-introduce a method for defining the type of cost-sensitivity of a problem. Afterwards, we present 
-the different cost-sensitive performance evaluation measures. Lastly, we show the state-of-the-art 
-example-dependent cost-sensitive methods cost-proportionate rejection-sampling and 
-cost-proportionate over-sampling.
+class-dependent cost-sensitive classification. Then, in Section~\ref{sec:3:example-dependent}, we 
+present the general framework of example-dependent cost-sensitive classification. Within this 
+section, we first introduce a method for defining the type of cost-sensitivity of a problem. 
+Afterwards, we present the different cost-sensitive performance evaluation measures. Lastly, we show 
+the state-of-the-art example-dependent cost-sensitive methods cost-proportionate rejection-sampling 
+and cost-proportionate over-sampling.
 \end{remark}
 
 
@@ -56,25 +56,25 @@ cost-proportionate over-sampling.
 \label{sec:3:class-dependent}
 
 The cost-sensitive literature is mostly focused in class-dependent problems \citep{Elkan2001}, where 
-the cost of misclassification is associated with the class. Ussually, the cost of misclassifying a 
-positive example is denoted by $c_0$ and the one of misclassifying a negative example is denoted by 
-$c_1$. Conceptually, $c_0\ge0$ and $c_1\ge0$, moreover, it is ussually defined that $c_0+c_1=2$ 
-\citep{Flach2011a}, as when $c_0=c_1=1$ represents the case of cost-insensitive classification. 
-Using the previous notation, a class-dependent cost measure is defined as \citep{Wang2014}:
+the cost of misclassification is associated with the class. Usually, the cost of misclassifying a 
+positive example is denoted by $C_{FN}$ and the one of misclassifying a negative example is denoted 
+by $C_{FP}$. Conceptually, $C_{FN}\ge0$ and $C_{FP}\ge0$, moreover, it is normally defined that 
+$C_{FN}+C_{FP}=2$ \citep{Flach2011a}, as when $C_{FN}=C_{FP}=1$ represents the case of 
+cost-insensitive classification. Using the previous notation, a class-dependent cost measure is 
+defined as \citep{Wang2014}:
 \begin{equation}
-  Cost_{cd}(f(\mathcal{S})) = c_0 \cdot FP + c_1 \cdot FN,
+  Cost_{cd}(f(\mathcal{S})) = C_{FP} \cdot FP + C_{FN} \cdot FN,
 \end{equation}
 where $FP$ and $FN$ are the number of false positives and false negatives, respectively.
 
 Following the toy example shown in Section~\ref{sec:2:classification}, we now assume that 
-misclassifying a negative example have a cost of $c_0=0.2$ and a positive example $c_1=1.8$. 
-Under this scenario, the misclassifying a positive example have a much higher cost than 
+misclassifying a negative example have a cost of $C_{FN}=0.2$ and a positive example $C_{FP}=1.8$. 
+Under this scenario, misclassifying a positive example have a much higher cost than 
 misclassifying a negative one. Taking that into account, in \figurename{~\ref{fig:3:1}, we show an 
-algorithm (Algorithm3), that focus on maximizing the correct classification of the positives, 
-scarifying the correct classification of the negatives. In the following table, we compare the 
-results of the standard measures and the class-dependent cost, of Algorithm3 and the classification 
-algorithms presented in \figurename{~\ref{fig:2:2b}} (Algorithm1) and \figurename{ \ref{fig:2:3}} 
-(Algorithm2):
+algorithm (Algorithm3), that focus on maximizing the correct classification of the positives.
+In the following table, we compare the results of the standard measures and the class-dependent 
+cost, of Algorithm3 and the classification algorithms presented in \figurename{~\ref{fig:2:2b}} 
+(Algorithm1) and \figurename{ \ref{fig:2:3}} (Algorithm2):
 \begin{center}
     \footnotesize
   \begin{tabular}{l|c|c|c|c|c}
@@ -92,7 +92,7 @@ algorithms presented in \figurename{~\ref{fig:2:2b}} (Algorithm1) and \figurenam
   \includegraphics{ch3_fig1}
   \caption{Class-dependent cost-sensitive classification algorithm. Since the cost of misclassifying 
 positives and negatives is different, the algorithm focus on maximizing the correct classification 
-of the positives, scarifying the correct classification of the negatives.}
+of the positives.}
   \label{fig:3:1}
 \end{figure}
 
@@ -100,8 +100,18 @@ It is found, that by focusing on the positives, Algorithm3 arises to a lower cos
 traditional metrics are worst than Algorithm2. In conclusion, it is of highly importance to take 
 into account the cost when evaluating and training a classification model.
 
-\todo{Djamila: Algorithms? not sure as I dont use any. Maybe just references}
-% references from Wang2014
+\begin{remark}{Class-dependent cost-sensitive algorithms}
+Over the past decades, various algorithms have been proposed for class-dependent cost-sensitive 
+classification in literature. Several authors have used modifications of decision trees that take 
+into account the different class-dependent costs 
+\citep{Draper1994,Ting2002,Ling2004,Li2005,Kretowski2006,Vadera2010,Lomax2013}.
+Similarly, applications of bagging and boosting algorithms have been used for cost-sensitive 
+classification \citep{Nesbitt2010,Street2008,Masnadi-shirazi2011,Fan1999}. Recently, various 
+variations to support vector machines have also been used for this problem
+\citep{Li2010,Masnadi-shirazi2010}. Lastly, online learning algorithms have also been used for 
+cost-sensitive tasks \citep{Wang2014}.
+\end{remark}
+
 
 \section{Example-dependent cost-sensitive classification}
 \label{sec:3:example-dependent}
@@ -115,6 +125,13 @@ In this context, the example-dependent costs can be represented using a 2x2 cost
 classification, true positives ($C_{TP_i}$), true negatives ($C_{TN_i}$),   and the two  types of  
  misclassification errors, false positives ($C_{FP_i}$), false negatives   ($C_{FN_i}$), as   
 defined in \tablename{~\ref{tab:3:cost_matrix}}.
+
+Conceptually, the cost of correct classification should always be lower than the cost of  
+misclassification. These are referred to as the ``reasonableness`` conditions \citep{Elkan2001},   
+and are defined as  $C_{FP_i} > C_{TN_i}$ and $C_{FN_i} > C_{TP_i}$.  Taking into account the 
+``reasonableness`` conditions, a simpler cost matrix   with only one degree of freedom has been 
+defined in \citep{Elkan2001}, by scaling and shifting the initial cost matrix. The simpler
+cost-matrix is shown in \tablename{~\ref{tab:3:sim_cost_mat}.
 
 \begin{table}[t]
     \centering
@@ -133,13 +150,7 @@ defined in \tablename{~\ref{tab:3:cost_matrix}}.
     \label{tab:3:cost_matrix}
 \end{table}  
 
-Conceptually, the cost of correct classification should always be lower than the cost of  
-misclassification. These are referred to as the ``reasonableness`` conditions \citep{Elkan2001},   
-and are defined as  $C_{FP_i} > C_{TN_i}$ and $C_{FN_i} > C_{TP_i}$.  Taking into account the 
-``reasonableness`` conditions, a simpler cost matrix   with only one degree of freedom has been 
-defined in \citep{Elkan2001}, by scaling and shifting the initial cost matrix. The simpler
-cost-matrix is shown in \tablename{~\ref{tab:3:sim_cost_mat}.
-  
+ 
 \begin{table}[t]
   \centering
   \footnotesize    \begin{tabular}{c|c}
