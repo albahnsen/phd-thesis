@@ -32,6 +32,7 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
 	\citep{Bolton2002,Gadi2008,Whitrow2008,DalPozzolo2014}.	We are interested to 
 	address the cost-sensitivity and the features preprocessing 	issues. 
 	
+	\begin{remark}{Cost-sensitive}
 	A credit card fraud detection is by definition a cost-sensitive problem, in the sense that the 
 	cost 	due a false positive is different than the cost of a false negative. ie. When predicting a 	
 	transaction 	as fraudulent when in fact it is not a fraud there is an administrative cost that 	
@@ -42,6 +43,7 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
 	depended on each 	transaction.	In \citep{CorreaBahnsen2013}, we proposed a new cost-based 
   measure to evaluate 	credit card fraud detection models, taking into account the different 
   financial costs incurred by 	the fraud detection process.
+	\end{remark}
 	
 	When constructing a credit card fraud detection model, it is very important to use those features 
 	that will help the algorithm make the best decision. Typical models only use the raw 
@@ -63,8 +65,7 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
   is expected to make transactions at similar hours. We propose a new method for creating features 
   based in the periodic behavior of a transaction time, using the von Mises distribution. In 
   particular, the new features estimate if the time of a new transaction is within the confidence 
-  interval of the previous transaction times \citep{CorreaBahnsen2015c}. 
-	
+  interval of the previous transaction times \citep{CorreaBahnsen2015c}.
 	Furthermore, we present the real credit card fraud dataset provided by a large European 
   card processing company, that we used for the experiments in this thesis.
   
@@ -145,7 +146,6 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
 		\label{tab:4:table_costmat_fraud}
 	\end{table}
 	 
-	\todo{cont here}
 \subsection{Fraud detection feature engineering}
 \label{sec:4:frad:features}
 
@@ -153,13 +153,12 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
 	features) include information regarding individual transactions. It is observed throughout the 
 	literature, that regardless of the study the set of raw features is quite similar. This is 
 	because the data produce during a credit card transaction must comply with international 
-	accounting rules. In \tablename{ \ref{tab:raw_features}}, the typical credit card fraud detection 
-	raw features are summarized.
+	accounting rules. In \tablename{~\ref{tab:4:raw_features}}, the typical credit card fraud 
+  detection raw features are summarized.
 	
 	\begin{table}[!t]
-   \caption{Summary of typical raw credit card fraud detection features}
-   \label{tab:raw_features}
    \centering
+   \footnotesize
    \begin{tabular}{l l}
    \hline
    \textbf{Attribute name} & \textbf{Description}\\
@@ -182,6 +181,8 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
    Fraud & Indicator whenever or not a transaction was a fraud\\
    \hline
    \end{tabular}
+   \caption{Summary of typical raw credit card fraud detection features}
+   \label{tab:4:raw_features}
    \end{table}
 	
 	\subsubsection{Customer spending patterns}
@@ -221,11 +222,11 @@ DalPozzolo2014}.
 	
 	The process of aggregating features consists in for each transaction $i$ on the dataset 
 	$\mathcal{S}$, select 	those transactions that were made in the previous $t_p$ hours,
-	\begin{equation}\label{eq:agg_features1}
-		TRX_{agg}(\mathcal{S},i, t_p) = \bigg\{x_l^{amt} \bigg\vert 
-\left(x_l^{id}=\mathbf{x}_i^{id}\right) 
-		\wedge \left(hours(\mathbf{x}_i^{time},x_l^{time}) < t_p\right) \bigg\}_{l=1}^N,
-	\end{equation}
+	\begin{align}\label{eq:4:agg_features1}
+		TRX_{agg}(\mathcal{S},i, t_p) &= \bigg\{x_l^{amt} \bigg\vert 
+\left(x_l^{id}=\mathbf{x}_i^{id}\right) \nonumber \\
+		&\wedge \left(hours(\mathbf{x}_i^{time},x_l^{time}) < t_p\right) \bigg\}_{l=1}^N,
+	\end{align}
 	where $N=\vert\mathcal{S}\vert$, $\mathbf{x}_i^{time}$ is the time of transaction $i$,  
 $\mathbf{x}_i^{amt}$ is the 
 	amount of transaction $i$, $\mathbf{x}_i^{id}$  the customer identification number of transaction 
@@ -243,12 +244,12 @@ $i$,
 	of 	the different features is not being taken into account. For example, it is not only 
 	interesting 	to see the total transactions, but instead grouped by 	certain criteria, such as: 
 	transactions 	made in the last $t_p$ hours, in the same country 	and of the same transaction 
-	type. For 	calculating those features, first we expand (\ref{eq:agg_features1}):
-	\begin{align}\label{eq:agg_features2}
-		TRX_{agg}(\mathcal{S},i, t_p, cond_1, & cond_2) = \bigg\{ x_l^{amt} \bigg\vert   
-		\left(x_l^{id}=\mathbf{x}_i^{id}\right) \wedge  \left(hours(\mathbf{x}_i^{time},x_l^{time})< 
-t_p\right) \nonumber 
-		\\ 	&  \wedge \left(x_l^{cond_1} = \mathbf{x}_i^{cond_1}\right) \wedge	\left(x_l^{cond_2} = 
+	type. For 	calculating those features, first we expand (\ref{eq:4:agg_features1}):
+	\begin{align}\label{eq:4:agg_features2}
+		TRX_{agg}&(\mathcal{S}  ,i, t_p, cond_1, cond_2) = \bigg\{ x_l^{amt} \bigg\vert \nonumber \\  
+		& \left(x_l^{id}=\mathbf{x}_i^{id}\right) \wedge  \left(hours(\mathbf{x}_i^{time},x_l^{time})< 
+    t_p\right) \wedge \nonumber \\ 	
+    &  \left(x_l^{cond_1} = \mathbf{x}_i^{cond_1}\right) \wedge	\left(x_l^{cond_2} = 
 		\mathbf{x}_i^{cond_2}\right) \bigg\}_{l=1}^N.
 		\end{align}
 	Then, the features are calculated as:
@@ -257,7 +258,7 @@ t_p\right) \nonumber
 	\[  \mathbf{x}_i^{a4} = \sum 	TRX_{agg}(\mathcal{S},i, t_p,country, type).	\]		
 	To further clarify how the aggregated features are calculated we show an example. Consider a set 
 	of transactions made by a client between the first and third of January of 2015, as shown in 
-	\tablename{ 	\ref{tab:agg_features_example1}}. Then we estimate the aggregated features 
+	\tablename{ 	\ref{tab:4:agg_features_example1}}. Then we estimate the aggregated features 
 	($\mathbf{x}_i^{a1}$, $\mathbf{x}_i^{a2}$, $\mathbf{x}_i^{a3}$ and $\mathbf{x}_i^{a4}$), by 
 setting $t_p=24$. It is observed, how the 
 	different aggregated features give us different information of the customer spending behavior.
@@ -265,10 +266,9 @@ setting $t_p=24$. It is observed, how the
 	several values, and the combination of combination criteria can be quite huge as well.
 	In \cite{CorreaBahnsen2013}, we used a total of 280 aggregated features. In particular we set the 
 	different values of $t_p$ to: 1, 3, 6, 12, 18, 24, 72 and 168. Then calculate the aggregated 
-	features 	using (\ref{eq:agg_features1}), and also using (\ref{eq:agg_features2}) with the 
+	features 	using (\ref{eq:4:agg_features1}), and also using (\ref{eq:4:agg_features2}) with the 
 	following  grouping criteria:	country, type of transaction, entry mode, merchant code and 
-merchant 
-group. 
+merchant group. 
 		
 	\begin{table}[!t]
 		\centering
@@ -277,21 +277,21 @@ group.
    \hline
    \multicolumn{5}{|c|}{\textbf{Raw features}} & \multicolumn{4}{c|}{\textbf{Aggregated features}} 
 		\\  \hline
-   \textbf{TrxId} &\textbf{Time} & \textbf{Type} & \textbf{Country} & 
-	\textbf{Amount} 		& $\mathbf{x}_i^{a1}$& $\mathbf{x}_i^{a2}$ & $\mathbf{x}_i^{a3}$ & 
+   \textbf{Id} &\textbf{Time} & \textbf{Type} & \textbf{Country} & 
+	\textbf{Amt} 		& $\mathbf{x}_i^{a1}$& $\mathbf{x}_i^{a2}$ & $\mathbf{x}_i^{a3}$ & 
 $\mathbf{x}_i^{a4}$\\
    \hline
-		1&  01/01/15 18:20& POS & LUX & 250 & 0 & 0  & 0 & 0\\
-		2& 01/01/15 20:45& POS & LUX & 400 & 1 & 250& 1 & 250\\
-		3& 01/01/15 22:40& ATM & LUX & 250 & 2 & 650& 0 & 0\\
-		4&02/01/15 00:50& POS & GER & 50 		& 3 & 900& 0& 0\\
-		5& 02/01/15 19:18& POS & GER & 100 	  & 3 & 700& 1& 50\\
-		6& 02/01/15 23:45& POS & GER & 150 	  & 2 & 150& 2& 150\\
-		7& 03/01/15 06:00& POS & LUX & 10  & 3 & 400& 0& 0\\
+		1&  01/01 18:20& POS & LUX & 250 & 0 & 0  & 0 & 0\\
+		2& 01/01 20:45& POS & LUX & 400 & 1 & 250& 1 & 250\\
+		3& 01/01 22:40& ATM & LUX & 250 & 2 & 650& 0 & 0\\
+		4&02/01 00:50& POS & GER & 50 		& 3 & 900& 0& 0\\
+		5& 02/01 19:18& POS & GER & 100 	  & 3 & 700& 1& 50\\
+		6& 02/01 23:45& POS & GER & 150 	  & 2 & 150& 2& 150\\
+		7& 03/01 06:00& POS & LUX & 10  & 3 & 400& 0& 0\\
    \hline
    \end{tabular}
 		\caption{Example calculation of aggregated features. For all aggregated features $t_p=24$.}
-		\label{tab:agg_features_example1}
+		\label{tab:4:agg_features_example1}
   \end{table}
 	
 	\subsubsection{Time features}
@@ -302,11 +302,11 @@ $\mathbf{x}_i^{a4}$\\
 	transaction. The logic behind this, is that a customer is expected to make transactions at 
 	similar hours. The issue when dealing with the time of the transaction, 
 	specifically, when analyzing a feature such as the mean of transactions time, is easy 
-	to make the mistake of using the arithmetic mean. Because, as shown in \figurename{ 
-	\ref{fig:von1}}, the arithmetic mean does not takes into account the periodic behavior of the 
-	time feature. For example, the arithmetic mean of transaction time of four transactions made at 
-	2:00, 3:00, 22:00 and 23:00 is 12:40, which is counter intuitive since no transaction was made 
-	close to that time. 
+	to make the mistake of using the arithmetic mean. Because, as shown in 
+  \figurename{~\ref{fig:4:von1}}, the arithmetic mean does not takes into account the periodic 
+  behavior of the time feature. For example, the arithmetic mean of transaction time of four 
+  transactions made at 2:00, 3:00, 22:00 and 23:00 is 12:40, which is counter intuitive since no 
+  transaction was made close to that time. 
 		
 	We propose to overcome this limitation by modeling the time of the transaction as a periodic 
 	variable, in particular using the von Mises distribution. The von Mises distribution, also known 
@@ -314,11 +314,10 @@ $\mathbf{x}_i^{a4}$\\
 	variable across a circle \citep{Fisher1996}. In particular we are interested in calculating a 
 	confidence interval 	for the time of a transaction. For doing that, initially we select a set of 
 	transactions made by 	the same client in the last $t_p$ hours,
-	\begin{align}\label{eq:pe_features1}
-		TRX_{vM}(\mathcal{S},i, t_p) = \bigg\{ x_l^{time} \bigg\vert   
-		\left(x_l^{id}=\mathbf{x}_i^{id}\right)\wedge  \left(hours(\mathbf{x}_i^{time},x_l^{time})< 
-t_p\right) 
-		\bigg\}_{l=1}^N.
+	\begin{align}\label{eq:4:pe_features1}
+		TRX_{vM}(\mathcal{S},i, t_p) & = \bigg\{ x_l^{time} \bigg\vert   
+		\left(x_l^{id}=\mathbf{x}_i^{id}\right)\wedge  \nonumber \\ 
+    & \left(hours(\mathbf{x}_i^{time},x_l^{time})< t_p\right) \bigg\}_{l=1}^N.
 	\end{align}
 	Then, the periodic mean of the set 	of transactions is calculated using 
 	\begin{equation}
@@ -342,13 +341,13 @@ t_p\right)
 	  \begin{figure}[!t]
 		\centering
 		\subfloat[Transaction times 
-distribution]{\includegraphics[width=5.5cm]{ch4_fig_1c}\label{fig:von1}}
+distribution]{\includegraphics[width=5.5cm]{ch4_fig_1c}\label{fig:4:von1}}
 		\hfill
 		\subfloat[Fitted von Mises 
-distribution]{\includegraphics[width=5.5cm]{ch4_fig_2c}\label{fig:von2}}
+distribution]{\includegraphics[width=5.5cm]{ch4_fig_2c}\label{fig:4:von2}}
 		\\
 		\subfloat[Expected time of 
-transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:von3}}
+transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:4:von3}}
 		\caption{\textbf{Analysis of the time of a transaction using a 24 hour clock and the von Mises 
 		distribution.} It is shown that the arithmetic mean of the time of a set of a transaction (a) 
 		and the 	periodic mean (b), are completely 	different. Because, the arithmetic mean does not 
@@ -360,44 +359,43 @@ transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:von3}}
 		\label{fig_sim2}
   \end{figure} 
 	
-	In \figurename{ \ref{fig:von2}}, the von Mises distribution calculation is shown.
-	Lastly, using the estimated distribution a new set of features can be develop, ie. a binary 	
-	feature ($\mathbf{x}_i^{p1}$) if a new transaction time is within the confidence interval range 
-with 
-	probability 	$\alpha$.	An example is presented in \figurename{ \ref{fig:von3}}. 
+	In \figurename{ \ref{fig:4:von2}}, the von Mises distribution calculation is shown.	Lastly, using 
+  the estimated distribution a new set of features can be develop, ie. a binary feature 
+  ($\mathbf{x}_i^{p1}$) if a new transaction time is within the confidence interval range with 
+	probability 	$\alpha$.	An example is presented in \figurename{ \ref{fig:4:von3}}. 
 	Furthermore, other features can be calculated, as the confidence interval range can be calculated 
 	for several values of $\alpha$, and also the time period can have an arbitrary size.
 
 	\begin{table}[!t]
-   \caption{Example calculation of periodic features.}
-   \label{tab:agg_features_example2}
    \centering
+   \footnotesize
    \begin{tabular}{|c c | c c c c|}
    \hline
    \multicolumn{2}{|c|}{\textbf{Raw features}} & \multicolumn{4}{c|}{\textbf{Periodic features}} 
 		\\  \hline
-   \textbf{Id} & \textbf{Time} & \textbf{Arithmetic mean} & \textbf{Periodic mean} & 
-		\textbf{Periodic CI} & $\mathbf{x}_i^{p1}$ \\
+   \textbf{Id} & \textbf{Time} & $\mu$ & $\mu_{vM}$ & \textbf{Periodic CI} & $\mathbf{x}_i^{p1}$ \\
    \hline
-		1& 01/01/15 18:20& --- & ---	 &	--- & ---\\
-		2& 01/01/15 20:45& --- & ---	 &---	 & ---\\
-		3& 01/01/15 22:40& 19:27 & 19:27 & 15:45 - 23:10 & True \\
-		4& 02/01/15 00:50& 20:28 & 20:28 & 17:54 - 23:03 & False\\
-		5& 02/01/15 19:18& 16:44 & 22:44 & 18:51 - 00:17 & True\\
-		6& 02/01/15 23:45& 16:19 & 21:07 & 15:21 - 02:52 & True\\
-		7& 03/01/15 06:00& 18:43 & 22:43 & 17:19 - 01:46 & False\\
+		1& 01/01 18:20& --- & ---	 &	--- & ---\\
+		2& 01/01 20:45& --- & ---	 &---	 & ---\\
+		3& 01/01 22:40& 19:27 & 19:27 & 15:45 - 23:10 & True \\
+		4& 02/01 00:50& 20:28 & 20:28 & 17:54 - 23:03 & False\\
+		5& 02/01 19:18& 16:44 & 22:44 & 18:51 - 00:17 & True\\
+		6& 02/01 23:45& 16:19 & 21:07 & 15:21 - 02:52 & True\\
+		7& 03/01 06:00& 18:43 & 22:43 & 17:19 - 01:46 & False\\
    \hline
    \end{tabular}
+   \caption{Example calculation of periodic features.}
+   \label{tab:4:agg_features_example2}
    \end{table}
 
 	Additionally, using the same example as we show used to calculate the aggregated features, 
-	we calculate a feature $\mathbf{x}_i^{p1}$, as a binary feature that takes the value of one if the 
-current 
-	time of the transaction is within the confidence interval of the time of the previous 
-	transactions with a confidence of $\alpha=0.9$. The example is show in \tablename{ 
-	\ref{tab:agg_features_example2}}. In this example, it is shown, how the arithmetic and periodic 
-	means differ, as for the last transaction both means are significantly different. Moreover, the 
-	new feature, help to get a felling of when a customer is expected to make transactions.
+	we calculate a feature $\mathbf{x}_i^{p1}$, as a binary feature that takes the value of one if 
+  the current time of the transaction is within the confidence interval of the time of the previous 
+	transactions with a confidence of $\alpha=0.9$. The example is show in 
+  \tablename{~\ref{tab:4:agg_features_example2}}. In this example, it is shown, how the arithmetic 
+  and periodic means differ, as for the last transaction both means are significantly different. 
+  Moreover, the new feature, help to get a felling of when a customer is expected to make 
+  transactions.
 	
 	Finally, when calculating the periodic features, is important to use longer time frames $t_p$, 
 	since if the distribution is calculated using only a couple of transactions it may not be as 
@@ -411,7 +409,7 @@ current
 	
 	\subsection{Database}
 
- 	For this paper we used a dataset provided by a large European card processing company. The 
+ 	For this thesis we used a dataset provided by a large European card processing company. The 
 	dataset consists of fraudulent and legitimate transactions made with credit and debit cards 
 	between January 2012 and June 2013. The total dataset contains 120,000,000 individual 
 	transactions, each one with 27 attributes, including a fraud label indicating whenever a 
@@ -419,43 +417,7 @@ current
 	company, and can be regarded as highly accurate. In the dataset only 40,000 transactions were 
 	labeled as fraud, leading to a fraud ratio of 0.025\%. 
 
-	Furthermore, using the methodologies for feature extraction described in Section 
-	\ref{sec:features}, we estimate a total of 293 features. Also,
-	for the experiments, a smaller subset of transactions with a higher fraud ratio, corresponding 
-	to a specific group of transactions, is selected. This dataset contains 236,735 transactions 
-	and a fraud ratio of 1.50\%. In this dataset, the total financial losses due to fraud are 
-	895,154 Euros. This dataset was selected because it is the one where most frauds are being 
-	made. Then, 3 different datasets are extracted: train, validation and test. Each one containing 
-	50\%, 25\% and 25\% of the transactions respectively. Afterwards an under-sampling of the 
-	legitimate transactions is made, in order to have a balanced class distribution. 
-	Additionally, we perform the cost-proportionate rejection-sampling and cost-proportionate 
-	over-sampling procedures presented in Section \ref{sec:cs}.	\mbox{\tablename{ 
-	\ref{tab:datasets}}}, summarizes the different datasets.  It is important to note that the 
-	sampling procedures were only applied to the training dataset since the validation and test 
-	datasets must reflect the real fraud distribution.
 	
-	\begin{table}[t]
-	\caption{Summary of the datasets}
-	\label{tab:datasets}
-	\centering
-	\begin{tabular}{l c c c } %sum 7.7
-		\\
-		\hline
-		\textbf{Set}&	\textbf{Transactions} &	\textbf{\%Frauds} & 
-		\textbf{Cost} \\
-		\hline
-		Total&236,735&1.50&895,154\\
-		Training&94,599&1.51&358,078\\
-		Under-sampled&2,828&50.42&358,078\\
-		CS-Rejection-sampled&94,522&1.43&357,927\\
-		CS-Over-sampled&189,115&1.46&716,006\\
-		Validation&70,910&1.53&274,910\\
-		Testing&71,226&1.45&262,167\\
-		\hline
-	\end{tabular}
-\end{table}
-
-
 \section{Credit scoring}
 \label{sec:4:creditscoring}
 
@@ -640,6 +602,21 @@ for }
     class label, with a proportion of 19.88\% positives. This database comes from a Brazilian 
     financial institution, and as it can be inferred from the competition description, the data 
     was obtained around 2004.
+   
+    Since no specific information regarding the datasets is provided, we assume that they belong to 
+    average European and Brazilian financial institutions. This enabled us to find the different 
+    parameters needed to calculate the cost measure. In Table~\ref{tab:4:parameters}, the different 
+    parameters are shown. In particular, we obtain the average interest rates in Europe during 
+    2013 from the European Central Bank \citep{ECB2014}, and the average interest and exchange 
+    rates in Brazil during 2004 from Trading Economics \citep{Economics2014}. Because the income 
+    is not in the same currency on both datasets, we convert the PAKDD Credit dataset to Euros.
+    Additionally, we use a fixed loan term $l$ for both datasets, considering that in the Kaggle 
+    Credit dataset the class was constructed to predict two years of credit behavior, and 
+    because the PAKDD Credit dataset is related to credit cards the term is fix to two years 
+    \citep{Lawrence2012}. Moreover, we set the loss given default $L_{gd}$ using information from 
+    the Basel II standard\footnote{http://www.bis.org/publ/bcbsca.htm.}, $k$ to 3 since it is the 
+    average personal loan requests related to monthly income, and the maximum credit limit 
+    $Cl_{max}$ to 25,000 Euros.
     
 \begin{table}
 \centering
@@ -660,18 +637,3 @@ for }
 \caption{Credit scoring model parameters}
 \label{tab:4:parameters}
 \end{table}
-    
-    Since no specific information regarding the datasets is provided, we assume that they belong to 
-    average European and Brazilian financial institutions. This enabled us to find the different 
-    parameters needed to calculate the cost measure. In Table~\ref{tab:4:parameters}, the different 
-    parameters are shown. In particular, we obtain the average interest rates in Europe during 
-    2013 from the European Central Bank \citep{ECB2014}, and the average interest and exchange 
-    rates in Brazil during 2004 from Trading Economics \citep{Economics2014}. Because the income 
-    is not in the same currency on both datasets, we convert the PAKDD Credit dataset to Euros.
-    Additionally, we use a fixed loan term $l$ for both datasets, considering that in the Kaggle 
-    Credit dataset the class was constructed to predict two years of credit behavior, and 
-    because the PAKDD Credit dataset is related to credit cards the term is fix to two years 
-    \citep{Lawrence2012}. Moreover, we set the loss given default $L_{gd}$ using information from 
-    the Basel II standard\footnote{http://www.bis.org/publ/bcbsca.htm.}, $k$ to 3 since it is the 
-    average personal loan requests related to monthly income, and the maximum credit limit 
-    $Cl_{max}$ to 25,000 Euros.
