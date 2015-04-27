@@ -133,8 +133,9 @@ using
 	receiver operating characteristic ($ROC$), Kolmogorov-Smirnov ($KS$) or \mbox{$F_1Score$} 
 	statistics \citep{Bolton2002,Hand2007a,DalPozzolo2014}. Most of these measures are extracted by 
 	using a confusion matrix as shown in \tablename{ \ref{confusion}}. Where the prediction of the 
-	algorithm $c_i$ is a function of  the $k$ features of example $i$, \mbox{$\mathbf{X}_i=[x_i^1, 
-	x_i^2,...,x_i^k]$} and $y_i$ is the true class of the example $i$.
+	algorithm $c_i$ is a function of  the $k$ features of example $i$, 
+\mbox{$\mathbf{X}_i=[\mathbf{x}_i^1, 
+	\mathbf{x}_i^2,...,\mathbf{x}_i^k]$} and $y_i$ is the true class of the example $i$.
 
 	\begin{table}[b]
 		\caption{Classification confusion matrix}
@@ -359,16 +360,20 @@ DalPozzolo2014}.
 	The process of aggregating features consists in for each transaction $i$ on the dataset 
 	$\mathcal{S}$, select 	those transactions that were made in the previous $t_p$ hours,
 	\begin{equation}\label{eq:agg_features1}
-		TRX_{agg}(\mathcal{S},i, t_p) = \bigg\{x_l^{amt} \bigg\vert \left(x_l^{id}=x_i^{id}\right) 
-		\wedge \left(hours(x_i^{time},x_l^{time}) < t_p\right) \bigg\}_{l=1}^N,
+		TRX_{agg}(\mathcal{S},i, t_p) = \bigg\{x_l^{amt} \bigg\vert 
+\left(x_l^{id}=\mathbf{x}_i^{id}\right) 
+		\wedge \left(hours(\mathbf{x}_i^{time},x_l^{time}) < t_p\right) \bigg\}_{l=1}^N,
 	\end{equation}
-	where $N=\vert\mathcal{S}\vert$, $x_i^{time}$ is the time of transaction $i$,  $x_i^{amt}$ is the 
-	amount of transaction $i$, $x_i^{id}$  the customer identification number of transaction $i$, 
+	where $N=\vert\mathcal{S}\vert$, $\mathbf{x}_i^{time}$ is the time of transaction $i$,  
+$\mathbf{x}_i^{amt}$ is the 
+	amount of transaction $i$, $\mathbf{x}_i^{id}$  the customer identification number of transaction 
+$i$, 
 	and $hours(z_1,z_2)$ is 	a function that calculate the number of hours between the dates $z_1$ 
 	and $z_2$. Afterwards the feature number of transactions and amount of transactions in the last 
 	$t_p$ hours are calculated as:
 	\[
-		x_i^{a1} = \vert TRX_{agg}(\mathcal{S},i, t_p) \vert \quad  \text{and} \quad x_i^{a2} = \sum 
+		\mathbf{x}_i^{a1} = \vert TRX_{agg}(\mathcal{S},i, t_p) \vert \quad  \text{and} \quad 
+\mathbf{x}_i^{a2} = \sum 
 	TRX_{agg}(\mathcal{S},i, t_p).
 	\]
 	
@@ -379,17 +384,20 @@ DalPozzolo2014}.
 	type. For 	calculating those features, first we expand (\ref{eq:agg_features1}):
 	\begin{align}\label{eq:agg_features2}
 		TRX_{agg}(\mathcal{S},i, t_p, cond_1, & cond_2) = \bigg\{ x_l^{amt} \bigg\vert   
-		\left(x_l^{id}=x_i^{id}\right) \wedge  \left(hours(x_i^{time},x_l^{time})< t_p\right) \nonumber 
-		\\ 	&  \wedge \left(x_l^{cond_1} = x_i^{cond_1}\right) \wedge	\left(x_l^{cond_2} = 
-		x_i^{cond_2}\right) \bigg\}_{l=1}^N.
+		\left(x_l^{id}=\mathbf{x}_i^{id}\right) \wedge  \left(hours(\mathbf{x}_i^{time},x_l^{time})< 
+t_p\right) \nonumber 
+		\\ 	&  \wedge \left(x_l^{cond_1} = \mathbf{x}_i^{cond_1}\right) \wedge	\left(x_l^{cond_2} = 
+		\mathbf{x}_i^{cond_2}\right) \bigg\}_{l=1}^N.
 		\end{align}
 	Then, the features are calculated as:
-	\[ x_i^{a3} = \vert TRX_{agg}(\mathcal{S},i, t_p, country, type) \vert \quad \text{and} \]
-	\[  x_i^{a4} = \sum 	TRX_{agg}(\mathcal{S},i, t_p,country, type).	\]		
+	\[ \mathbf{x}_i^{a3} = \vert TRX_{agg}(\mathcal{S},i, t_p, country, type) \vert \quad \text{and} 
+\]
+	\[  \mathbf{x}_i^{a4} = \sum 	TRX_{agg}(\mathcal{S},i, t_p,country, type).	\]		
 	To further clarify how the aggregated features are calculated we show an example. Consider a set 
 	of transactions made by a client between the first and third of January of 2015, as shown in 
 	\tablename{ 	\ref{tab:agg_features_example1}}. Then we estimate the aggregated features 
-	($x_i^{a1}$, $x_i^{a2}$, $x_i^{a3}$ and $x_i^{a4}$), by setting $t_p=24$. It is observed, how the 
+	($\mathbf{x}_i^{a1}$, $\mathbf{x}_i^{a2}$, $\mathbf{x}_i^{a3}$ and $\mathbf{x}_i^{a4}$), by 
+setting $t_p=24$. It is observed, how the 
 	different aggregated features give us different information of the customer spending behavior.
 	Moreover, the total number of aggregated features can growth quite quickly, as $t_p$ can have 
 	several values, and the combination of combination criteria can be quite huge as well.
@@ -408,7 +416,8 @@ group.
    \multicolumn{5}{|c|}{\textbf{Raw features}} & \multicolumn{4}{c|}{\textbf{Aggregated features}} 
 		\\  \hline
    \textbf{TrxId} &\textbf{Time} & \textbf{Type} & \textbf{Country} & 
-	\textbf{Amount} 		& $x_i^{a1}$& $x_i^{a2}$ & $x_i^{a3}$ & $x_i^{a4}$\\
+	\textbf{Amount} 		& $\mathbf{x}_i^{a1}$& $\mathbf{x}_i^{a2}$ & $\mathbf{x}_i^{a3}$ & 
+$\mathbf{x}_i^{a4}$\\
    \hline
 		1&  01/01/15 18:20& POS & LUX & 250 & 0 & 0  & 0 & 0\\
 		2& 01/01/15 20:45& POS & LUX & 400 & 1 & 250& 1 & 250\\
@@ -445,7 +454,8 @@ group.
 	transactions made by 	the same client in the last $t_p$ hours,
 	\begin{align}\label{eq:pe_features1}
 		TRX_{vM}(\mathcal{S},i, t_p) = \bigg\{ x_l^{time} \bigg\vert   
-		\left(x_l^{id}=x_i^{id}\right)\wedge  \left(hours(x_i^{time},x_l^{time})< t_p\right) 
+		\left(x_l^{id}=\mathbf{x}_i^{id}\right)\wedge  \left(hours(\mathbf{x}_i^{time},x_l^{time})< 
+t_p\right) 
 		\bigg\}_{l=1}^N.
 	\end{align}
 	Then, the periodic mean of the set 	of transactions is calculated using 
@@ -463,7 +473,7 @@ group.
 	Afterwards, using the estimated periodic mean and standard deviation, the probability 
 	distribution function of the time of the set of transactions is calculated as:
 	\begin{equation}
-	 x_i^{time} \sim vonmises\left(\mu_{vM}(TRX_{vM}(\mathcal{S},i, t_p)), 
+	 \mathbf{x}_i^{time} \sim vonmises\left(\mu_{vM}(TRX_{vM}(\mathcal{S},i, t_p)), 
 	\frac{1}{\sigma_{vM}(TRX_{vM}(\mathcal{S},i, t_p))} \right).
 	\end{equation}
 	
@@ -490,7 +500,8 @@ transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:von3}}
 	
 	In \figurename{ \ref{fig:von2}}, the von Mises distribution calculation is shown.
 	Lastly, using the estimated distribution a new set of features can be develop, ie. a binary 	
-	feature ($x_i^{p1}$) if a new transaction time is within the confidence interval range with 
+	feature ($\mathbf{x}_i^{p1}$) if a new transaction time is within the confidence interval range 
+with 
 	probability 	$\alpha$.	An example is presented in \figurename{ \ref{fig:von3}}. 
 	Furthermore, other features can be calculated, as the confidence interval range can be calculated 
 	for several values of $\alpha$, and also the time period can have an arbitrary size.
@@ -504,7 +515,7 @@ transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:von3}}
    \multicolumn{2}{|c|}{\textbf{Raw features}} & \multicolumn{4}{c|}{\textbf{Periodic features}} 
 		\\  \hline
    \textbf{Id} & \textbf{Time} & \textbf{Arithmetic mean} & \textbf{Periodic mean} & 
-		\textbf{Periodic CI} & $x_i^{p1}$ \\
+		\textbf{Periodic CI} & $\mathbf{x}_i^{p1}$ \\
    \hline
 		1& 01/01/15 18:20& --- & ---	 &	--- & ---\\
 		2& 01/01/15 20:45& --- & ---	 &---	 & ---\\
@@ -518,7 +529,8 @@ transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:von3}}
    \end{table}
 
 	Additionally, using the same example as we show used to calculate the aggregated features, 
-	we calculate a feature $x_i^{p1}$, as a binary feature that takes the value of one if the current 
+	we calculate a feature $\mathbf{x}_i^{p1}$, as a binary feature that takes the value of one if the 
+current 
 	time of the transaction is within the confidence interval of the time of the previous 
 	transactions with a confidence of $\alpha=0.9$. The example is show in \tablename{ 
 	\ref{tab:agg_features_example2}}. In this example, it is shown, how the arithmetic and periodic 
@@ -597,7 +609,8 @@ transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:von3}}
   others~\citep{Hand1997,Bahnsen2011}. 
   
   Formally, a credit score is a statistical model that allows the estimation of the probability 
-  $\hat p_i=P(y_i=1|X_i)$ of a customer $i$ defaulting a contracted debt. Additionally, since the 
+  $\hat p_i=P(y_i=1|\mathbf{x}_i)$ of a customer $i$ defaulting a contracted debt. Additionally, 
+since the 
   objective of credit scoring is to estimate a classifier $c_i$ to decide whether or not to grant a 
   loan to a customer $i$, a threshold $t$ is defined such that if $\hat p_i <t$, then the loan is 
   granted, i.e., $c_i(t)=0$, and denied otherwise, i.e., $c_i(t)=1$.
@@ -610,7 +623,8 @@ transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:von3}}
   where the sensitivity is equal to the specificity $F_0(t)=1-F_1(t)$, where $F_0(t)$ and $F_1(t)$ 
   are calculated using:
   \begin{equation}
-   F_k(t)=\frac{1}{n_k}\vert \{ ( x_i,y_i ) \in D_k \vert \hat p_i \le t \}\vert, \text{ for } 
+   F_k(t)=\frac{1}{n_k}\vert \{ ( \mathbf{x}_i,y_i ) \in D_k \vert \hat p_i \le t \}\vert, \text{ 
+for } 
    k\in\{0,1\}.
   \end{equation}
   Lastly, the $SvsS$ threshold $t_{SvsS}$ is found by using
@@ -746,7 +760,7 @@ transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:von3}}
   
   \subsection{Databases}
 
-    For this paper we use two different publicly available credit scoring datasets. The first 
+    For this thesis we used two different publicly available credit scoring datasets. The first 
     dataset is the \textbf{2011 Kaggle competition Give Me Some Credit}\footnote{ 
     http://www.kaggle.com/c/GiveMeSomeCredit/}, in which the objective is to identify those 
     customers of personal loans that will experience financial distress in the next two years.
@@ -756,7 +770,7 @@ transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:von3}}
     were likely to default and by doing so deciding whether or not to approve their applications.
     The Kaggle Credit and PAKDD Credit datasets contain information regarding the features, and 
     more importantly about the income of each example, from which an estimated credit limit 
-    $Cl_i$ can be calculated (see Appendix~\ref{app_cli}).
+    $Cl_i$ can be calculated.
     
     The Kaggle Credit dataset contains 112,915 examples, each one with 10 features and the class 
     label. The proportion of default or positive examples is 6.74\%. 
@@ -765,10 +779,29 @@ transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:von3}}
     financial institution, and as it can be inferred from the competition description, the data 
     was obtained around 2004.
     
+\begin{table}
+\centering
+\footnotesize
+\begin{tabular}{lcc}
+\hline
+\multirow{ 2}{*}{Parameter}&Kaggle& PAKDD \\
+  & Credit& Credit \\
+  \hline
+  Interest rate ($int_r$) &  4.79\% & 63.0\% \\
+  Cost of funds ($int_{cf}$) & 2.94\% & 16.5\% \\
+  Term ($l$) in months & 24 & 24 \\
+  Loss given default ($L_{gd}$) &75\% & 75\% \\
+  Times income ($k$) & 3 & 3 \\
+  Maximum credit line ($Cl_{max}$) & 25,000 & 25,000\\
+  \hline
+\end{tabular}
+\caption{Credit scoring model parameters}
+\label{tab:4:parameters}
+\end{table}
+    
     Since no specific information regarding the datasets is provided, we assume that they belong to 
     average European and Brazilian financial institutions. This enabled us to find the different 
-    parameters needed to calculate the cost measure described in 
-    Section~\ref{section_cost_matrices}. In Table~\ref{table_parameters}, the different 
+    parameters needed to calculate the cost measure. In Table~\ref{tab:4:parameters}, the different 
     parameters are shown. In particular, we obtain the average interest rates in Europe during 
     2013 from the European Central Bank \citep{ECB2014}, and the average interest and exchange 
     rates in Brazil during 2004 from Trading Economics \citep{Economics2014}. Because the income 
@@ -780,4 +813,3 @@ transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:von3}}
     the Basel II standard\footnote{http://www.bis.org/publ/bcbsca.htm.}, $k$ to 3 since it is the 
     average personal loan requests related to monthly income, and the maximum credit limit 
     $Cl_{max}$ to 25,000 Euros.
-    \todo{table databases}
