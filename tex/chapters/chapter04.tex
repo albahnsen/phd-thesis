@@ -13,25 +13,6 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
 \section{Credit card fraud detection}
 \label{sec:4:fraud}
 
-	Every year billions of Euros are lost worldwide due to credit card fraud. Thus, leading financial 
-	institutions to continuously improve their fraud detection systems. In recent years, several 
-	studies have proposed the use of machine learning and data mining techniques to address this 
-	problem. However, most studies used some sort of misclassification measure to evaluate the 
-	different solutions, and by doing so, missed to take into account the actual financial costs 
-	associated with the fraud detection process. Moreover, when constructing a credit card fraud 
-	detection model, it is very important how to 	preprocess the transactional data. This is usually 
-	done by aggregating the transactions in order 	to observe the spending behavioral patterns of 
-	the customers. In this work, we expand the transaction aggregation strategy, and also propose a 
-	creating new set 	of features based in analyzing the periodic behavior of the time of a 
-	transaction using the von 	Mises distribution. Then, using a real credit card fraud dataset 
-	provided by a large European card processing company, we compare state-of-the-art credit card 
-	fraud detection models, and evaluate how the 	different sets of features have an impact on the 
-	results. By including the proposed periodic features into the methods, 	the results show an 
-	average increase in the savings of 12.55\%
-	\todo{erase percentage of savings}
-	
-\subsection{Introduction}
-
   The use of credit and debit cards has increased significantly   in the last years, unfortunately 
 	so has the fraud. Because of it, billions of Euros are lost every year. According to 
 	the European Central Bank \citep{EuropeanCentralBank2013}, during 2012 the total level of fraud 
@@ -45,11 +26,10 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
   The use of machine learning in fraud detection has been an interesting topic in recent years. 
   Several detection systems based on machine learning techniques has been successfully used 
 	for this problem \citep{Bhattacharyya2011}. When constructing a credit card fraud detection 
-model, 
-	there are several problems that have an important impact during the training phase: Skewness of 	
-	the data , cost-sensitivity of the application, short time response of the system, dimensionality 
-	of the search space and how to preprocess the features
-	\citep{Bolton2002,Gadi2008,Whitrow2008,DalPozzolo2014}.	In this paper, we are interested to 
+  model, there are several problems that have an important impact during the training phase: 
+  Skewness of 	the data , cost-sensitivity of the application, short time response of the system, 
+  dimensionality of the search space and how to preprocess the features
+	\citep{Bolton2002,Gadi2008,Whitrow2008,DalPozzolo2014}.	We are interested to 
 	address the cost-sensitivity and the features preprocessing 	issues. 
 	
 	A credit card fraud detection is by definition a cost-sensitive problem, in the sense that the 
@@ -59,53 +39,36 @@ model,
 	amount of that 	transaction is loss \citep{Hand2007a}. Moreover, it is not enough  to assume a 	
 	constant cost 	difference between false positives and false negatives, as the amount of the 	
 	transactions vary 	quite significantly, therefore, its financial impact is not constant but 	
-	depended on each 	transaction.	In \citep{CorreaBahnsen2013}, we propose a new cost-based measure 
-	to evaluate 	credit card fraud detection models, taking into account the different financial 	
-	costs incurred by 	the fraud detection process.
+	depended on each 	transaction.	In \citep{CorreaBahnsen2013}, we proposed a new cost-based 
+  measure to evaluate 	credit card fraud detection models, taking into account the different 
+  financial costs incurred by 	the fraud detection process.
 	
 	When constructing a credit card fraud detection model, it is very important to use those features 
 	that will help the algorithm make the best decision. Typical models only use the raw 
-	transactional features, such as the time, amount, place of the transaction. However, this 
-approach 
-	do not take into account the spending behavior of the customer, which is expected to help 
-	discover fraud patterns. A standard way to include these behavioral spending patters was proposed 
-	in \citep{Whitrow2008}, they propose a transaction aggregation strategy in order to take into 
-	account a customer spending behavior. The derivation of the aggregated features consists in 
+  transactional features, such as the time, amount, place of the transaction. However, this 
+  approach do not take into account the spending behavior of the customer, which is expected to 
+  help discover fraud patterns. A standard way to include these behavioral spending patters was 
+  proposed in \citep{Whitrow2008}, they propose a transaction aggregation strategy in order to take 
+  into account a customer spending behavior. The derivation of the aggregated features consists in 
 	grouping the transactions made during the last given number of hours, first by card or account 
 	number, then by transaction type, merchant group, country or other, followed by calculating
 	the number of transactions or the total amount spent on those transactions.
 	
-	In this paper, we propose an expanded version of the transaction aggregation strategy, by 
-	incorporate a combination criteria when grouping the transaction. ie. instead of aggregating only 
-	by card holder and transaction type, we combine it with country or merchant group, this allow to 
-	have a much richer feature space. Moreover, there is still some information that is not 
-	completely captured by the aggregated features. In particular we are interesting in analyzing the 
-	time of the transaction. The logic behind this, is that a customer is expected to make 
-	transactions at similar hours. We propose a new method for creating features  based in the 
-	periodic behavior of a transaction time, using the von Mises distribution. In particular, the new 
-	features estimate if the time of a new transaction is within the confidence interval of the 
-	previous transaction times. 
+	In this section, we present our previously proposed expanded version of the transaction 
+  aggregation strategy, by incorporate a combination criteria when grouping the transaction. ie. 
+  instead of aggregating only by card holder and transaction type, we combine it with country or 
+  merchant group, this allow to have a much richer feature space. Moreover, there is still some 
+  information that is not 	completely captured by the aggregated features. In particular we are 
+  interesting in analyzing the 	time of the transaction. The logic behind this, is that a customer 
+  is expected to make transactions at similar hours. We propose a new method for creating features 
+  based in the periodic behavior of a transaction time, using the von Mises distribution. In 
+  particular, the new features estimate if the time of a new transaction is within the confidence 
+  interval of the previous transaction times \citep{CorreaBahnsen2015c}. 
 	
-	Furthermore, using a real credit card fraud dataset provided by a large European card processing 
-	company, we compare the different sets of 	features (raw, aggregated and periodic), using 
-	different cost-insensitive and 	cost-sensitive machine learning algorithms. In particular, we 
-	used the cost-insensitive algorithms logistic regression, decision trees and random forest 
-	\citep{Hastie2009}, and the 	cost-sensitive methods 	cost-proportionate sampling 
-	\citep{Elkan2001,Zadrozny2003}, Bayes minimum 	risk 	\citep{CorreaBahnsen2013}, cost-sensitive 
-	logistic regression \citep{CorreaBahnsen2014b} 	and 	cost-sensitive decision trees 
-	\citep{CorreaBahnsen2015}. The results show an average increase in the savings of 12.55\% by 
-using 
-	the proposed periodic features. Additionally, the outcome of this paper is being currently used 
-	to implement a state-of-the-art fraud detection 	system, that will  help to combat 	fraud once 
-	the implementation stage is finished. 
-
-	The remainder of the paper is organized as follows. In Section 2, we explain the 
-	background on credit card fraud detection, including our recently proposed example-dependent 
-	cost-sensitive evaluation measures. Then in Section 3, we discuss current 	approaches to create 
-	the features used in fraud detection models, moreover, we present our 	proposed methodology to 
-	create periodic based features. Afterwards, the experimental setup and 	the results are given in 
-	Section 4. Finally, conclusions of the paper are presented in 	\mbox{Section 5}. 
-
+	Furthermore, we present the real credit card fraud dataset provided by a large European 
+  card processing company, that we used for the experiments in this thesis.
+  
+  
 \subsection{Credit card fraud detection evaluation}
 \label{sec:4:frad:eval}
 
@@ -126,39 +89,7 @@ using
   Most of these studies compare they proposed algorithm with a benchmark algorithm and then make 
 	the comparison using a standard binary classification measure, such as misclassification error, 
 	receiver operating characteristic ($ROC$), Kolmogorov-Smirnov ($KS$) or \mbox{$F_1Score$} 
-	statistics \citep{Bolton2002,Hand2007a,DalPozzolo2014}. Most of these measures are extracted by 
-	using a confusion matrix as shown in \tablename{ \ref{confusion}}. Where the prediction of the 
-	algorithm $c_i$ is a function of  the $k$ features of example $i$, 
-\mbox{$\mathbf{X}_i=[\mathbf{x}_i^1, 
-	\mathbf{x}_i^2,...,\mathbf{x}_i^k]$} and $y_i$ is the true class of the example $i$.
-
-	\begin{table}[b]
-		\caption{Classification confusion matrix}
-		\centering
-    \begin{tabular}{c|c|c}
-      \multicolumn{3}{c}{}\\
-			\multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
-			\multicolumn{1}{c|}{} & $y=1$& $y=0$ \\
-			\hline
-			Predicted Positive 		& \multirow{ 2}{*}{True Positive ($TP$)} & \multirow{ 
-			2}{*}{False Positive ($FP$)} \\
-			$c=1$ & &\\
-			\hline
-			Predicted Negative  	& \multirow{ 2}{*}{False Negative ($FN$)} & \multirow{ 
-			2}{*}{True Positive ($TN$)} \\
-			$c=0$ & &\\
-		\end{tabular}
-		\label{confusion}
-  \end{table}  
-
-	From this table several statistics are extracted. In particular:
-	\begin{itemize}
-		\item Accuracy = $\frac{TP+TN}{TP+TN+FP+FN}$
-		\item Recall = $\frac{TP}{TP+FN}$
-		\item Precision = $\frac{TP}{TP+FP}$
-		\item $F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}$
-	\end{itemize}
-
+	statistics \citep{Bolton2002,Hand2007a,DalPozzolo2014}. 
 	However, these measures may not be the most appropriate evaluation criteria when  evaluating a 
 	fraud detection models, because they tacitly assume that misclassification errors carry the same 
 	cost, similarly with the correct classified examples. This assumption does not hold in many 
@@ -170,32 +101,7 @@ using
 	\citep{Gadi2008,Bhattacharyya2011}.
 
 	In order to take into account the different costs of fraud detection during the evaluation of an 
-	algorithm, we used the cost matrix as defined in \citep{Elkan2001}. In \tablename{  
-	\ref{tab:table_costmat}}, the cost matrix is presented, where the cost associated with two types 
-	of correct classification, namely, true positives $C_{TP_i}$, and true negatives $C_{TN_i}$; and 
-	the two types of misclassification errors, namely, false positives $C_{FP_i}$, and false 
-	negatives  $C_{FN_i}$, are presented.
-
-	\begin{table}[b]
-		\caption{Cost matrix \citep{Elkan2001}}
-		\centering
-		\begin{tabular}{c|c|c}
-		\multicolumn{3}{c}{}\\
-			\multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
-			\multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
-			\hline
-			Predicted Positive 		& \multirow{ 2}{*}{$C_{TP_i}$} & \multirow{ 2}{*}{$C_{FP_i}$} 
-			\\
-			$c_i=1$ & &\\
-			\hline
-			Predicted Negative  	& \multirow{ 2}{*}{$C_{FN_i}$} & \multirow{ 
-			2}{*}{$C_{TN_i}$} \\
-			$c_i=0$ & &\\
-			%\hline
-		\end{tabular}
-		\label{tab:table_costmat}
-	\end{table}  
-
+	algorithm, we used the cost matrix as defined in \tablename{~\ref{tab:3:cost_matrix}}.
 	Hand et al. \citep{Hand2007a} proposed a cost matrix, where in the case of false positive the 
 	associated 	cost is the administrative cost $C_{FP_i}=C_a$ related to analyzing the transaction 
 	and contacting 	the card holder. This cost is the same assigned to a true positive 
@@ -210,24 +116,17 @@ using
 	matrix define the cost of a false negative to be the 	amount $C_{FN_i}=Amt_i$ of the 	transaction 
 	$i$. This cost matrix is a better representation of the 	actual costs, since when a 	fraud is 
 	not detected, the losses of that particular fraud correspond 	to the stolen amount.
-	The costs are summarized in \tablename{ \ref{tab:table_costmat_fraud}}.
+	The costs are summarized in \tablename{~\ref{tab:4:table_costmat_fraud}}.
 
-	Afterwards, using the example-dependent cost matrix a cost measure is calculated taking into 
-	account the actual costs \mbox{$\mathbf{C}_i=[C_{TP_i},C_{FP_i},C_{FN_i},C_{TN_i}]$} of each 
-	example $i$. Let $\mathcal{S}$ be a set of $N$ examples $i$, $N=\vert \mathcal{S} \vert$, where 
-	each example is represented by the augmented feature vector \mbox{$\mathbf{X}_i'=[\mathbf{X}_i, 
-	\mathbf{C}_i]$}, and labelled using the class label $y_i \in \{0,1\}$. A classifier $f$ which 
-	generates the predicted label $c_i$ for each example $i$, is trained using the set $\mathcal{S}$. 
-	Then the cost of using $f$ on $\mathcal{S}$ is \mbox{calculated by}
+	Afterwards, using (\ref{eq:3:cost}) a cost measure fro fraud detection is calculated as:
   \begin{align}
-    Cost(f(\mathcal{S})) &= \sum_{i=1}^{N} \bigg( y_i(c_i C_{TP_i} + (1-c_i)C_{FN_i})  \nonumber\\ 
-    & +(1-y_i)(c_i C_{FP_i} + (1-c_i)C_{TN_i}) \bigg). \nonumber \\
-	  &=  \sum_{i=1}^{N} y_i(1-c_i)Amt_i + c_iC_a
+    Cost(f(\mathcal{S})) =  \sum_{i=1}^{N} y_i(1-c_i)Amt_i + c_iC_a,
   \end{align} \label{eq:cost}
+  then, the savings of an algorithm are calculated using (\ref{eq:3:savings}).
 
 	\begin{table}[t]
-		\caption{Credit card fraud cost matrix \citep{CorreaBahnsen2013}}
 		\centering
+		\footnotesize
 		\begin{tabular}{c | c | c }
 		\multicolumn{3}{c}{}\\
 			\multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
@@ -242,43 +141,11 @@ using
 			$c_i=0$ & &\\
 			%\hline
 		\end{tabular}
-		\label{tab:table_costmat_fraud}
+		\caption{Credit card fraud cost matrix \citep{CorreaBahnsen2013}}
+		\label{tab:4:table_costmat_fraud}
 	\end{table}
-	  
-	However, as noted in \citep{Whitrow2008}, the total cost may not be easy to interpret. So they 
-	propose a normalized cost measure, by dividing the total cost by the theoretical maximum cost, 
-	which is the cost of misclassifying every example.
-  \begin{align}
-    NCost(f(\mathcal{S})) &= \frac{\sum_{i=1}^{N} y_i(1-c_i)Amt_i + c_iC_a}
-							{\vert \mathcal{S}_0 \vert C_a + \sum_{i=1}^{N}Amt_i\cdot \mathbf{1}_1(y_i)},
-  \end{align} \label{eq:ncost}
-  where, $\mathcal{S}=\{\mathbf{X}_i'|y_i=0,i \in 1..N\}$, and $\mathbf{1}_c(z)$ is an 
-	indicator function that takes the value of one if $z \in c$ and zero if $z \notin c$ .
-
-	We propose a similar approach in \citep{CorreaBahnsen2015}. By defining the savings of using an 
-	algorithm as the cost of the algorithm versus the cost of using no algorithm at all. 
-	To do that, we set the cost of using no algorithm as 
-	\begin{equation}
-		Cost_l(\mathcal{S}) = \min \{Cost(f_0(\mathcal{S})), Cost(f_1(\mathcal{S}))\},
-	\end{equation}
-	where $f_0$ refers to a classifier that predicts all the examples in $\mathcal{S}$ as belonging 
-	to the class $c_0$, and similarly $f_1$ 	predicts all the examples in $\mathcal{S}$ as belonging 
-	to the class $c_1$, the cost improvement 	can be expressed as the cost savings as compared with 
-	$Cost_l(\mathcal{S})$. 
-  \begin{equation}\label{eq:savings}
-    Savings(f(\mathcal{S})) = \frac{ Costl(\mathcal{S}) - 
-		Cost(f(\mathcal{S}))}{Cost_l(\mathcal{S})}.
-  \end{equation} 
-
-	For out analysis we decide to use the savings measure instead of the normalized cost, since in 
-	the field of credit card fraud detection it is often see that companies do not use predictive 
-	models, therefore, the savings measure makes more sense in that scenario.
-	Moreover, as discussed in \citep{CorreaBahnsen2013}, it is not enough to evaluate a model using a 
-	cost-sensitive measure, but it should also be trained to take into account the cost-sensitivity 
-	of the problem. In the following Section we make a brief introduction to state-of-the-art 
-	example-dependent cost-sensitive classification algorithms.
-
-	
+	 
+	\todo{cont here}
 \subsection{Fraud detection feature engineering}
 \label{sec:4:frad:features}
 
