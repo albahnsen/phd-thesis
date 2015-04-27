@@ -100,9 +100,9 @@ energy consumption prediction, spam classification, and others \citep{Kriegel200
 \label{sec:2:measures}
 
 When evaluating the performance of a classification algorithm, the first thing to do is to check 
-the number of examples that were misclassified. Since the the true class of the training examples 
+the number of examples that were misclassified. Since the true class of the training examples 
 is known. Therefore, evaluating the error of a model is as simply as counting the number of times 
-an example is misclassified and divide it by the number of examples
+an example is misclassified divided by the number of examples
 \begin{equation}\label{eqn:ch2:error}
 Err(f({\cal S})) = \frac{1}{N}  \sum_{i=1}^N \mathbf{1}_{y_i}(c_i),
 \end{equation}
@@ -165,10 +165,10 @@ extracted. In particular:
   \end{center}
   Then using the confusion matrix, the statistics are calculated,
  	\begin{itemize}
-  	\item Error = $\frac{4+9}{36+4+9+68}=11.11\%$
-		\item Recall = $\frac{TP}{TP+FN}=87.8\%$
-		\item Precision = $\frac{TP}{TP+FP}=90\%$
-		\item $F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}=88.8\%$
+  	\item Error = 11.11\%
+		\item Recall = 87.8\%
+		\item Precision = 90\%
+		\item $F_1Score$ = 88.8\%
 	\end{itemize}
 	
 \begin{figure}[t!]
@@ -182,7 +182,7 @@ extracted. In particular:
 There are however, several instances that are misclassified, thats because the simple linear 
 classifier that were used in this example may not be good enough to separate between the positive 
 and negative classes. In order to make a comparison, using the same example toy set, a new 
-algorithm is learn. This time the algorithm made the correct prediction more often as shown in 
+algorithm is learned. This time the algorithm made the correct prediction more often as shown in 
 \figurename{ \ref{fig:2:3}}. Afterwards, the confusion matrix and the different statistics are 
 calculated as follows:
 \begin{center}
@@ -201,24 +201,23 @@ calculated as follows:
 		\end{tabular}
 \end{center}
   \begin{itemize}
-    \item Error = $\frac{4+9}{36+4+9+68}=5.3\%$
-    \item Recall = $\frac{TP}{TP+FN}=90.2\%$
-    \item Precision = $\frac{TP}{TP+FP}=94.9\%$
-    \item $F_1Score = 2\frac{Precision \cdot Recall}{Precision + Recall}=92.5\%$
+    \item Error = 5.3\%
+    \item Recall =90.2\%
+    \item Precision = 94.9\%
+    \item $F_1Score$ = 92.5\%
   \end{itemize}
 It is observed that in this case the FP are reduced more than the FN, this leads to a higher 
 increase in precision  than in recall. There is not a single rule regarding which one is more 
-important to increase, it depends on the applications. For example in applications with a high 
+important than the other, it depends on the applications. For example in applications with a high 
 false negative cost such as failing to identify a tumor in a medical exam, the recall should be the 
 priority, even if that implies having a significant number of false positives. On the other hand, 
 In applications such as spam detection, predicting a normal email as spam, may have a big impact to 
 the customer, therefore, in this example is better to allow some false negatives and focus on the 
 false positives.
 
-It is not always straightforward  to define the define the right tradeoff between false positives 
+It is not always straightforward  to define the right tradeoff between false positives 
 and false negatives. The best approximation to solve that, is to focus on the actual costs incurred 
-by the different decisions, this is usually solved using cost-sensitive classification methods. A 
-deep analysis of these methods is described in the following Section.
+by the different decisions, this is usually solved using cost-sensitive classification methods. 
 
 \subsection{Brier score}
 \label{sec:2:brier}
