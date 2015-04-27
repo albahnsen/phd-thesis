@@ -1,18 +1,13 @@
 \chapter{Financial risk modeling}\label{ch:4}
 
 \begin{remark}{Outline}
-\todo{fix outline}
-In this chapter, we present the well-known family of \textit{random forests}
-methods. In Section~\ref{sec:4:bias-variance}, we first describe the bias-variance
-decomposition of the prediction error and then present, in
-Section~\ref{sec:4:ensemble}, how aggregating randomized models through
-ensembles reduces the prediction error by decreasing the variance term in this
-decomposition. In Section~\ref{sec:4:random-forests}, we revisit random forests
-and its variants and study how randomness introduced into the decision trees
-reduces prediction errors by decorrelating the decision
-trees in the ensemble. Properties and features of random forests are then outlined
-in Section~\ref{sec:4:features} while their consistency
-is finally explored in Section~\ref{sec:4:consistency}.
+In this chapter, we present two different marketing real-world example-dependent 
+cost-sensitive problems, namely, credit card fraud detection and credit scoring. Both problems 
+are example-dependent cost-sensitive, as failing to identify a fraudulent transaction may have a 
+financial impact ranging from tens to twousands of Euros, similarly, approving a customer that does 
+not rapays his loans have a significant impact on a bank profit.
+First, we introduce the credit card fraud detection problem in Section~\ref{sec:4:fraud}. Lastly in 
+Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
 \end{remark}
 
 \section{Credit card fraud detection}
