@@ -1,10 +1,10 @@
 \chapter{Cost-sensitive logistic regression}\label{ch:7}
 
 \begin{remark}{Outline}
-In this chapter, we present a new cost-sensitive logisitic regression. The model consists in a new
-logistic regression cost function, one that takes into account the real costs due to 
+In this chapter, we present the cost-sensitive logistic regression algorithm. The model consists in 
+a new logistic regression cost function, one that takes into account the real costs due to 
 misclassification and correct classification. First, in Section \ref{sec:7:logistic}, we give the 
-background behind logisitic regression. Then, in Section \ref{sec:7:cslr}, we described our 
+background behind logistic regression. Then, in Section \ref{sec:7:cslr}, we described our 
 previously proposed cost-sensitive logistic regression. For this, we do a deep analysis of the 
 logistic regression implicit misclassification costs in Section \ref{sec:7:log_cost_analysis}. Then 
 in Section \ref{sec:7:cscostfunction}, we shown a new version of the logistic regression cost 
@@ -32,7 +32,7 @@ and  $g(\cdot)$ is the logistic sigmoid function, defined as
 \begin{equation}
   g(z)=\frac{1}{(1+e^{-z})} 
 \end{equation}
-In the next Figure, the logistic sigmoid function is shown.
+In the next figure, the logistic sigmoid function is shown.
 \begin{figure}[htbp]
   \centering
   \includegraphics{ch7_fig1}
@@ -156,8 +156,8 @@ values of $y_i$ and the algorithm prediction $h_\theta(\mathbf{x}_i))$:
 
 \item If $y_i=0$ and $h_\theta(\mathbf{x}_i)) \approx 1$, 
 \begin{align*}
- J_i(\theta) &\approx -(0)\log((1)) -(1-(0))\log(1-(1)) \nonumber \\
- &\approx \infty.
+ J_i(\theta) &\approx -(0)\log((1)) -(1-(0))\log(1-(1)) %\nonumber \\
+ \approx \infty.
 \end{align*}
 
 \item If $y_i=1$ and $h_\theta(\mathbf{x}_i)) \approx 0$, 
@@ -206,6 +206,7 @@ In order to incorporate the different real costs, as showed in
 \tablename{~\ref{tab:3:cost_matrix}}, into the logistic regression. We start by analyzing the 
 expected costs that a modified logistic regression cost function should made for each 
 misclassification and correct classification case.
+
 \begin{equation*}
   J^c_i(\theta) = 
   \begin{cases}
@@ -438,7 +439,7 @@ to the cost-sensitivity of the problems, but also to the highly unbalanced distr
 and negatives presented in all the databases. This is the reason why by using an under-sampling 
 procedure, the results are improved by both measures.
 
-\begin{figure}[htbp]
+\begin{figure}[htbp] 
   \centering
   \includegraphics{ch7_fig3}
   \caption{\textbf{Comparison of the average savings and $F_1Score$ of the algorithms versus the 
@@ -446,4 +447,5 @@ procedure, the results are improved by both measures.
   in terms of savings.}
   \label{fig:7:comparison_per_best}
 \end{figure}
-
+\null
+\vfill
