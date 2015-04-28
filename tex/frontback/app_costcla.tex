@@ -39,8 +39,8 @@ loans from bad customers does not have the same economical loss, since customers
 credit lines, therefore, different profit \citep{Verbraken2014}.
 
 
-In this Chapter, we present \textit{CostCla} a cost-sensitive classification library in 
-\textbf{Python}. The library incorporates several cost-sensitive algorithms. Moreover, we show show 
+In this chapter, we present \textit{CostCla} a cost-sensitive classification library in 
+\textbf{Python}. The library incorporates several cost-sensitive algorithms. Moreover, we show 
 the huge differences in profit when using traditional machine learning algorithms versus 
 cost-sensitive algorithms, on several real-world databases.
 
@@ -59,7 +59,7 @@ particular two credit scoring databases, and one direct marketing database.
 
 \section{Usage}
 
-In this Section we provided a quick example of the usage of the \textit{CostCla}  library, and 
+In this section we provided a quick example of the usage of the \textit{CostCla}  library, and 
 compare the results of different algorithms using a credit scoring database.
 
 \vskip0.3cm
@@ -79,6 +79,7 @@ cost_mat_train, cost_mat_test = \
 train_test_split(data.data, data.target, data.cost_mat)
 \end{pythoncode}
 
+\newpage 
 \vskip0.3cm
 \noindent\textbullet\ Random forest
 
@@ -91,7 +92,7 @@ print savings_score(y_test, y_pred, cost_mat_test)
 \end{pythoncode}
 \textbf{0.042197359989}
 
-\newpage
+\vskip0.3cm
 \noindent \textbullet\ Cost-proportionate rejection sampling
 
 \vskip0.3cm
@@ -131,6 +132,7 @@ print savings_score(y_test, y_pred, cost_mat_test)
 \end{pythoncode}
 \textbf{0.289489571352}
 
+\newpage
 \vskip0.3cm
 \noindent \textbullet\ Cost-sensitive random patches
 
@@ -143,7 +145,7 @@ print savings_score(y_test, y_pred, cost_mat_test)
 \end{pythoncode}
 \textbf{0.306607400467}
 
-\newpage
+\vskip0.3cm
 In the \tablename{~\ref{tab:9:1}} we summarized the results of the different 
 algorithms. It is observed that the library follows the same API structure of 
 \textit{Scikit-learn}, therefore, making \textit{CostCla} highly compatible with the most widely 
@@ -152,7 +154,7 @@ used machine learning library in
 http://machinelearningmastery.com/best-programming-language-for-machine-learning/}}. Moreover, the 
 results highlight the importance of using example-dependent cost-sensitive methods when 
 
-\begin{table}[!t]
+\begin{table}[htbp]
     \centering
     \footnotesize
     \begin{tabular}{l|c}
