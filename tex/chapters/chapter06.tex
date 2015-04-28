@@ -5,8 +5,8 @@ In this chapter, we present our previously proposed Bayes minimum risk algorithm
 consists in quantifying tradeoffs between various decisions using probabilities and the costs that 
 accompany such decisions. First, in Section~\ref{sec:6:bmr}, we present the Bayes minimum risk 
 algorithm. Then, in Section~\ref{sec:6:prob}, we discuss the impact of calibrating the probabilities 
-in the model. Finally, in Section~\ref{sec:6:experiments}, we compare the results of the proposed 
-algorithm, against state-of-the-art methods, using the five real-world cost-sensitive databases.
+in the model. Finally, in Section~\ref{sec:6:experiments},  using the five real-world cost-sensitive 
+databases, we compare the results of the proposed algorithm, against state-of-the-art methods.
 \end{remark}
 
 
@@ -156,7 +156,7 @@ represented in the ROC curve as a non convex segment  over the curve.
 
 In order to obtain a set of calibrated probabilities, first the ROC curve must be modified in 
 order to be convex. The way to do that, is to find the convex \mbox{hull 
-\citep{Hernandez-Orallo2012}}, in order to obtain the minimal convex set containing the different 
+\citep{Hernandez-Orallo2012}}, to find the minimal convex set containing the different 
 points of the ROC curve. In \figurename{~\ref{fig:6:ROC_2}}, the convex hull algorithm is applied 
 to the previously evaluated ROC curve. It is shown that the new curve is convex, and includes all 
 the points of the previous ROC curve.
@@ -170,7 +170,7 @@ calibrated  probabilities be the slope of the ROCCH for each group.
 \section{Experiments}
 \label{sec:6:experiments}
 
-In this section, first the sumarized the datasets used for the experiments. Then, the 
+In this section, first the summarized the datasets used for the experiments. Then, the 
 partitioning of the dataset and the algorithms used are shown. Finally, we present the results.
 
 \subsection{Experimental setup}
@@ -181,8 +181,8 @@ scoring (see Section~\ref{sec:4:creditscoring}), churn modeling (see Section~\re
 direct marketing (see Section~\ref{sec:5:directmarketing}).
 
 For each dataset we used a pre-define a cost matrix that we previously proposed in different 
-publications. Additionally,  For each database, 3 different datasets are extracted: train-
-ing, validation and testing. Each one containing 50\%, 25\% and 25\% of the transactions, 
+publications. Additionally,  for each database, 3 different datasets are extracted: training, 
+validation and testing. Each one containing 50\%, 25\% and 25\% of the examples, 
 respectively. Afterwards, because classification algorithms suffer when the label distribution is 
 skewed towards one of the classes \citep{Hastie2009}, an under-sampling of the positive examples is 
 made, in order to have a balanced class distribution. Moreover, we perform the cost-proportionate 
@@ -363,7 +363,7 @@ the previous ones in four cases and has almost the same result in the other set.
 detection  set, the results are quite better, since the savings of the three classification 
 algorithms increase when using this methodology. Moreover, we found that by calibrating the 
 probabilities, the results of the Bayes minimum risk increase. In 
-\figurename{~\ref{fig:6:comparison_family}}, we compare the different families of algorithms, be 
+\figurename{~\ref{fig:6:comparison_family}}, we compare the different families of algorithms, by 
 calculating in each dataset the performance of the methods compared with the best method. First, it 
 is shown the huge difference of using only cost-insensitive methods, compared with any of the 
 cost-sensitive families. Furthermore, the Bayes minimum risk methods outperforms the 
