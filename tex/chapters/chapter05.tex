@@ -128,14 +128,14 @@ with the confusion matrix and multiplying it with the expected profit of each ca
 \newpage
 \begin{align}\label{eq:5:profit1}
  Profit_1 = (TP+FP)\bigg[ & \left(\gamma CLV + C_o(1-\gamma)(-C_a)\right)\pi_1\gamma \nonumber \\
- & -C_o-C_a\bigg]-A,
+ & -C_o-C_a\bigg]-N\cdot C_a,
 \end{align}
-with $A$ being the fixed administrative cost of running the campaign, $C_o$ the average cost of the 
-retention offer, $C_a$ the cost of contacting the customer, $\pi_1$ the prior churn rate and $CLV$ 
-the average customer lifetime value.
+with $N\cdot C_a$ being the fixed administrative cost of running the campaign, $C_o$ the average 
+cost of the retention offer, $C_a$ the cost of contacting the customer, $\pi_1$ the prior churn rate 
+and $CLV$ the average customer lifetime value.
 Moreover, as discussed in \citep{Verbraken2013}, if the average instead of the total profit is 
-considered and the fixed cost $A$ is discarded since is irrelevant for classifier selection, the 
-profit can be expressed as:
+considered and the fixed cost $N\cdot C_a$ is discarded since is irrelevant for classifier 
+selection, the profit can be expressed as:
 \begin{align}\label{eq:5:profit2}
  Profit_2 = &TP\left(\gamma(CLV-C_o-C_a)+(1-\gamma)C_a \right) \nonumber \\
  &+FP(-C_o-C_a).
@@ -158,6 +158,7 @@ each case.
 	\label{fig:ch5:2}
 \end{figure}
 
+\newpage 
 \begin{remark}{Financial analysis of a churn champaing}
 When a customer is predicted to be a churner, an offer is made with the objective of avoiding 
 the customer defecting. However, if a customer is actually a churner, he may or not accept the 
@@ -197,9 +198,10 @@ cost is $CLV_i$.
     \label{tab:ch5:1}
   \end{table}
 
-The different costs are sumarized in \tablename{ \ref{tab:ch5:1}}.	Then using the cost 
+The different costs are summarized in \tablename{ \ref{tab:ch5:1}}.	Then using the cost 
 matrix, and the example-dependent cost-sensitive framework as described in Section 
 \ref{sec:3:csmeasures}, an example-dependent cost statistic is calculated as:
+\newpage
 \begin{align}
   Cost_i &= y_i(c_i C_{TP_i} + (1-c_i)C_{FN_i})& \nonumber \\
          &  + (1-y_i)(c_i C_{FP_i} + (1-c_i)C_{TN_i})& \nonumber \\
@@ -311,58 +313,6 @@ shown. As expected, the higher the churn rate the lower the acceptance rate, as 
 to make a good offer to a customer which is more likely to defect.
 
 
-% 	\subsubsection{Database partitioning}
-% 	From the initial dataset, three different datasets are extracted: training, validation and 
-%   testing. Each one containing 50\%, 25\% and 25\% of the examples, respectively.   
-%   Afterwards, with the objective of having a more balanced dataset, ie. same distribution of 
-% 	churners and not churners, an under-sampling of the churners is made.     
-%   Lastly, we also applied the cost-sensitive re-balancing techniques cost-proportionate 
-% 	rejection-sampling \citep{Zadrozny2003} and cost-proportionate over-sampling \citep{Elkan2001}, 
-% 	described in cost-sensitive classification Section.
-% 	\tablename{ \ref{table_trainandtest}}, summarizes the different datasets, where $N$, $\pi_1$ 
-% and $C_0$ represents the number of customers, the percentage of churners and the total losses if 
-% no 
-% model is used, respectively. Moreover, in \figurename{ \ref{fig:ch5:5}}, a comparison of the 
-% churn rate 
-% and the average unitary cost ($C_u=C_0 / N$) of each dataset with respect of the Total set is 
-% shown.
-% It is observed that the cost-sensitive sampling procedures have an average unitary cost much 
-% higher 
-% than the other sets, also showing why a simple under-sampling procedure of the dataset does not 
-% take into account the costs.
-% 
-%   \begin{table}[t!]
-%     \caption{Description of datasets}
-%     \label{table_trainandtest}
-%     \centering
-%     \begin{tabular}{l c c c } %sum 7.7
-% 		\\ \hline
-% 		Set&	$N$ &	$\pi_1$ & $C_0$ \\
-% 		\hline
-% 		Total&9,410&.0483&580,884\\
-% 		Training ($t$)&3,758&.0505&244,542\\
-% 		Validation&2,824&.0477&174,171\\
-% 		Testing&2,825&.0442&162,171\\
-% 		Under-sampling ($u$)&374&.5080&244,542\\
-% 		CS Rejection-sampling ($r$)&428&.4135&431,428\\
-% 		CS Over-sampling ($o$)&5,767&.03124&2,350,285\\
-% 	  \hline
-% 	  \end{tabular}
-%   \end{table}
-% 
-% 	\begin{figure}[t!]
-% 	  \centering
-%     \includegraphics{ch5_fig4}
-% 	  \caption{Comparison of the distribution of the churn rate and the average unitary cost 
-% 	  ($C_u=C_0 / N$) of each dataset with respect to the Total set.
-% It is observed that the cost-sensitive sampling procedures have an average unitary cost much 
-% higher 
-% than the other sets, also showing why a simple under-sampling procedure of the dataset does not 
-% take into account the costs.}
-% 	  \label{fig:ch5:5}
-% 	\end{figure}
-
-
 \section{Direct marketing}
 \label{sec:5:directmarketing}
 
@@ -380,26 +330,6 @@ positives and false negatives. Specifically, in direct marketing, false positive
 of contacting the client, and false negatives have the cost due to the loss of income by failing 
 to contact a client that otherwise would have opened a long-term deposit. 
   
-\begin{table}[!t]
-  \centering
-  \footnotesize
-  \begin{tabular}{c|c|c}
-    \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
-    \multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
-    \hline
-    Predicted Positive 		& \multirow{ 2}{*}{$C_{TP_i}=C_a$} & \multirow{ 2}{*}{$C_{FP_i}=C_a$} 
-    \\
-    $c_i=1$ & &\\
-    \hline
-    Predicted Negative  	& \multirow{ 2}{*}{$C_{FN_i}=Int_i$} & \multirow{ 2}{*}{$C_{TN_i}=0$} 
-    \\
-    $c_i=0$ & &\\
-    %\hline
-  \end{tabular}
-  \caption{Direct marketing example-dependent cost matrix}
-  \label{tab:5:d_mat}
-\end{table}
-		
 We used the direct marketing example-dependent cost matrix proposed in \citep{CorreaBahnsen2014}. 
 The cost matrix is shown in \mbox{\tablename{ \ref{tab:5:d_mat}}}, where $C_a$ is the 
 administrative cost of contacting the client, as is credit card fraud,  and $Int_i$ is the expected 
@@ -411,28 +341,23 @@ average yearly balance, and lastly, the interest rate spread is estimated to be 
 is the average between 2008 and 2010 of the retail banking sector in Portugal as reported by the 
 Portuguese central bank. Given that, the $Int_i$ is equal to $\left( balance * 20\% \right) * 
 2.463333\%$.
-		
-% Subsequently, the dataset is split in training, under-sampling, validation and test. Relevant 
-% information of the datasets is shown in \tablename{ \ref{table_fraud_trainandtest_marketing}}.
-% \footnotetext{Interest rate spread is the difference between the effective lending rate and the 
-% cost of funds.}
-%  
-% 	\begin{table}[!t]
-% 	\caption{Description of datasets of the direct marketing dataset}
-% 	\label{table_fraud_trainandtest_marketing}
-% 	\centering
-% 	\begin{tabular}{|c|c|c|c|} %sum 7.7
-% 		\hline
-% 		Database&	No Trx&	Accept&$Int$\\
-% 		\hline	
-% 		Total& 47,562&	12.56\%&	394,211\\
-% 		\hline
-% 		Train& 19,119&12.64\%&	156,676\\   
-% 		Undersampled&4,819&50.17\%&42,443   \\
-% 		\hline
-% 		Validation& 11,809&12.78\%&97,498   \\
-% 		Test& 11,815&12.23\%&97,594   \\
-% 		\hline
-% 	\end{tabular}
-% 	\end{table}
-% 	
+
+\begin{table}[!t]
+  \centering
+  \footnotesize
+  \begin{tabular}{c|c|c}
+    \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
+    \multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
+    \hline
+    Predicted Positive    & \multirow{ 2}{*}{$C_{TP_i}=C_a$} & \multirow{ 2}{*}{$C_{FP_i}=C_a$} 
+    \\
+    $c_i=1$ & &\\
+    \hline
+    Predicted Negative    & \multirow{ 2}{*}{$C_{FN_i}=Int_i$} & \multirow{ 2}{*}{$C_{TN_i}=0$} 
+    \\
+    $c_i=0$ & &\\
+    %\hline
+  \end{tabular}
+  \caption{Direct marketing example-dependent cost matrix}
+  \label{tab:5:d_mat}
+\end{table}
