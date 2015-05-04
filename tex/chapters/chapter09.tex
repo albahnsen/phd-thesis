@@ -13,8 +13,6 @@ proposed algorithm, against state-of-the-art methods, using the five real-world 
 databases.
 \end{remark}
 
-\todo{Update with corrections in paper}
-
 \section{Ensemble methods}
 \label{sec:9:ensemble}
 
@@ -36,9 +34,9 @@ stacking~\citep{Zhou2012}.
 As shown in \figurename{~\ref{fig:9:1}, there are three main reasons regarding why ensemble 
 methods perform better than single models: statistical, computational and representational 
 \citep{Dietterich2000a}. First, from a statistical point of view, when the learning set is too 
-small, an algorithm can find several good models withing the search space, that arise to the same 
+small, an algorithm can find several good models within the search space, that arise to the same 
 performance on the training set $\mathcal{S}$. Nevertheless, without a validation set, there is 
-the risk of choosing the wrong model. The second reason is computational; in general, algorithms 
+a risk of choosing the wrong model. The second reason is computational; in general, algorithms 
 rely on some local search optimization and may get stuck in a local optima. Then, an ensemble may 
 solve this by focusing different algorithms to different spaces across the training set. The last 
 reason is representational. In most cases, for a learning set of finite size, the  true function 
@@ -67,19 +65,21 @@ representable functions.
   \newpage
   \begin{remark}{Theoretical performance of an ensemble}
 %   Moreover, i
-  If we assume that each one of the $T$ base classifiers have a probability $\rho$ of 
+  If we assume that each one of the $T$ base classifiers has a probability $\rho$ of 
   being correct, the probability of an ensemble making the correct decision, denoted by $P_c$,
   can be calculated using the binomial \mbox{distribution \citep{Hansen1990}}
   \begin{equation}\label{eq:9:prob}
     P_c = \sum_{j>T/2}^{T} {{T}\choose{j}} \rho^j(1-\rho)^{T-j}.
   \end{equation}
-  Furthermore, as shown in \citep{Lam1997}, if $T\ge3$ then:
-  \begin{itemize}
-    \item If $\rho>0.5$, then $ \lim_{T \to  \infty} P_c=1 $
-    \item If $\rho<0.5$, then $ \lim_{T \to  \infty} P_c=0 $
-    \item If $\rho=0.5$, then $P_c=0.5$ for any $T$.
-  \end{itemize}
-  Leading to the conclusion that $P_c\ge \rho$ if $\rho \ge 0.5$ for any $T$.
+  Furthermore, as shown in \cite{Lam1997}, if $T\ge3$ then:
+  \begin{equation}\label{eq:9:Pc}
+  \lim_{T \to  \infty} P_c= \begin{cases} 
+            1  &\mbox{if } \rho>0.5 \\ 
+            0  &\mbox{if } \rho<0.5 \\ 
+            0.5  &\mbox{if } \rho=0.5 ,
+            \end{cases}
+  \end{equation}
+  leading to the conclusion that $P_c\ge \rho$ if $\rho \ge 0.5$ for any $T$.
   \end{remark}
   
 \subsection{Cost-sensitive ensembles}
@@ -94,7 +94,7 @@ representable functions.
   cost-sensitive learning with decision trees is shown, in particular including other methods that 
   create cost-sensitive ensembles. However, in all the previously presented method, the 
   misclassification costs only dependent on the class, therefore, assuming a constant cost across 
-  examples. Given that, these methods are not  well suited for example-dependent cost-sensitive 
+  examples. Hence, these methods are not  well suited for example-dependent cost-sensitive 
   problems. 
 
       
@@ -154,7 +154,7 @@ each base classifier and selecting the decision with the highest number of votes
 
 This method is an extension of weighted voting. First, in the traditional approach, a 
 similar comparison of the votes of the base classifiers is made, but giving a weight $\alpha_j$ 
-to each classifier $j$ during the voting phase \citep{Zhou2012}
+to each classifier $M_j$ during the voting phase \citep{Zhou2012}
 \begin{align} \label{eq:9:weighted-majority-vote}
   f_{wv}(\mathcal{S},\mathcal{M}, \alpha)
   =\argmax_{c \in \{0,1\}} \sum_{j=1}^T \alpha_j \mathbf{1}_c(M_j(\mathcal{S})),
@@ -168,9 +168,10 @@ classifier $M_j$  in the out of bag set   $\mathcal{S}_j^{oob}=\mathcal{S}-\math
   1-\epsilon(M_{j_1}(\mathcal{S}_{j_1}^{oob}))}.
 \end{equation}
 
-However, as previously discussed, the misclassification measure is not suitable in  many 
-real-world classification problems. We propose a method to calculate the weights $\alpha_j$  taking 
-into account the actual savings of the classifiers. Therefore using (\ref{eq:savings}), we define
+\noindent However, as previously discussed, the misclassification measure is not suitable in  many 
+real-world classification problems. We  herein propose a method to calculate the weights $\alpha_j$ 
+ taking into account the actual savings of the classifiers. Therefore using (\ref{eq:3:savings}), we 
+define
 \begin{equation}
   \alpha_j=\frac{Savings(M_j(\mathcal{S}_j^{oob}))}
   {\sum_{j_1=1}^T Savings(M_{j_1}(\mathcal{S}_j^{oob}))}.
@@ -188,13 +189,13 @@ where the output of the base classifiers  are now considered as the features whi
 class labels.
 
 Even though there is no restriction on which algorithm can be used as a second level learner, 
-it is common to use a lineal model \citep{Zhou2012}, such as 
+it is common to use a linear model \citep{Zhou2012}, such as 
 \begin{align}
   f_s(\mathcal{S},\mathcal{M},\beta) =
   g \left( \sum_{j=1}^T \beta_j M_j(\mathcal{S}) \right),
 \end{align}
-where $\beta=\{\beta_j\}_{j=1}^T$, and $g(z)$ is the sign function 
-\mbox{$g(z)=sign(z)$} in the case of a lineal regression or the sigmoid function, defined 
+where $\beta=\{\beta_j\}_{j=1}^T$, and $g(\cdot)$ is the sign function 
+\mbox{$g(z)=sign(z)$} in the case of a linear regression or the sigmoid function, defined 
 as \mbox{$g(z)=1/(1+e^{-z})$}, in the case of a logistic regression. 
 
 Moreover, following the logic used in \citep{Nesbitt2010}, we propose learning the set of  
@@ -215,7 +216,7 @@ combine the different base classifiers. However, as discussed in \citep{CorreaBa
 this cost function is not convex for all possible cost matrices, therefore, we use genetic 
 algorithms to minimize it.
 
-Similarly to cost-sensitive weighting, this method guaranties that the base classifiers that 
+Similarly to cost-sensitive weighting, this method guarantees that the base classifiers that 
 contribute to a higher increase in savings have more importance in the ensemble. Furthermore, 
 by learning an additional second level cost-sensitive method, the combination is made such that 
 the overall   savings measure is maximized.
@@ -278,7 +279,8 @@ $combinator$.
 \section{Theoretical analysis of the ECSDT}
 \label{sec:9:theoretical}
 
-  Although the above proposed algorithm is simple, there is little work that has formally 
+  Although the above proposed algorithm is simple, there is %little 
+  no work that has formally 
   investigated ensemble performance in terms other than accuracy. In this section, our aim is to 
   prove theoretically that combining individual cost-sensitive classifiers achieves better results 
   in the sense of higher savings.
@@ -300,13 +302,13 @@ $combinator$.
   $a  \in \{0,1\}$.
 
   \begin{lemma}\label{lemma1}
-  Let $H$ be an ensemble of $T$ classifiers $\mathcal{M}=\{M_1, M_2,\dots,M_T\}$, and 
+  Let $H$ be an ensemble of $T>3$ classifiers $\mathcal{M}=\{M_1, M_2,\dots,M_T\}$, and 
   $\mathcal{S}$ a testing set of size $N$. If each one of the base classifiers has a probability 
-  of being correct higher or equal than one half $\rho \ge \frac{1}{2}$, and the 
+  of being correct higher or equal than one half, $\rho \ge \frac{1}{2}$, and the 
   \textit{reasonableness conditions} of the cost matrix are satisfied, then the following holds true
   \begin{align}\label{eq:9:lemma}
-    Cost(H(\mathcal{S}_a)) &\le \overline{Cost} (\mathcal{M}(\mathcal{S}_a)) , a  \in\{0,1\}, 
-  \end{align}
+    Cost(H(\mathcal{S}_a)) &\le \overline{Cost} (\mathcal{M}(\mathcal{S}_a)) , \quad a  \in\{0,1\},  
+ \end{align}
   \end{lemma}
   
   \begin{proof}
@@ -320,9 +322,9 @@ $combinator$.
   \end{align}
   
   \noindent Moreover, we know from (\ref{eq:9:prob}) that the probability of an ensemble 
-  making the right decision, i.e. $y_i=c_i$, for any given  example, is equal to $P_c$. 
+  making the right decision, i.e., $y_i=c_i$, for any given  example, is equal to $P_c$. 
   Therefore, we can use this probability to estimate the expected savings of an ensemble: 
-  \begin{align}
+  \begin{align}\label{eq:21}
     Cost(H(\mathcal{S}_0)) &= \sum_{i=1}^{N_0} P_c C_{TN_i} +(1-P_c)C_{FP_i}.
   \end{align}
   
@@ -330,7 +332,7 @@ $combinator$.
   
   \noindent In the case of $\mathcal{S}_1$, and following the same logic as when $a=0$, the cost of 
   an  ensemble is:
-  \begin{align}
+  \begin{align}\label{eq:22}
     Cost(H(\mathcal{S}_1)) &= \sum_{i=1}^{N_1} P_c C_{TP_i} + (1-P_c)C_{FN_i}.  
   \end{align}
 
@@ -343,7 +345,7 @@ $combinator$.
     Cost(M_j(\mathbf{x}_i^*)).  
   \end{align} 
   
-  \noindent We define set of base classifiers that make a negative prediction as
+  \noindent We define the set of base classifiers that make a negative prediction as
   \begin{align}
     \mathcal{T}_{i0}=\{M_j(\mathbf{x}_i^*) \vert M_j(\mathbf{x}_i^*) = 0, j \in 1,\dots,T\},
   \end{align}
@@ -372,23 +374,24 @@ $combinator$.
   Furthermore, we know from (\ref{eq:9:prob}) that an average base classifier will have a correct 
   classification probability of $\rho$, then $\frac{\vert \mathcal{T}_{i0} \vert}{T}=\rho$, leading 
   to:
-  \begin{align}
+  \begin{align}\label{eq:26}
     \overline{Cost} (\mathcal{M}(\mathcal{S}_0)) =& \sum_{i=1}^{N_0}  
     \rho \cdot C_{TN_i} + (1-\rho) \cdot C_{FP_i} .
   \end{align}
 
   \textbullet\ $a=1:$
  
- \noindent Similarly on the set $\mathcal{S}_1$ the average classifier will have a correct 
+ \noindent Similarly, for the set $\mathcal{S}_1$, the average classifier will have a correct 
   classification probability of $\rho$, then $\frac{\vert \mathcal{T}_{i1} \vert}{T}=\rho$. 
   
   \noindent Therefore,
-  \begin{align}
+  \begin{align}\label{eq:27}
     \overline{Cost} (\mathcal{M}(\mathcal{S}_1)) =& \sum_{i=1}^{N_1}  
     \rho \cdot C_{TP_i} + (1-\rho) \cdot C_{FN_i} .
   \end{align}
  
-  \noindent Finally, putting all together, (\ref{eq:9:lemma}) is rewritten
+  \noindent Finally, putting (\ref{eq:21}), (\ref{eq:22}), (\ref{eq:26}) and (\ref{eq:27}) 
+  together, (\ref{eq:9:lemma}) is rewritten
   
   \noindent for $a=0$ as:
   \begin{align}\label{eq:9:lemma1}
@@ -401,10 +404,10 @@ $combinator$.
     \sum_{i=1}^{N_1}  \rho \cdot C_{TP_i} + (1-\rho) \cdot C_{FN_i}.
   \end{align}
  
-  \noindent Both (\ref{eq:9:lemma1}) and (\ref{eq:9:lemma2}) hold true since if $\rho \ge 
-  \frac{1}{2}$  then $P_c\ge\rho$, and accordingly to the cost matrix \textit{reasonableness 
-  conditions},  described in Section \ref{sec:2:cost_characteristic}, $C_{FP_i} > C_{TN_i}$ and 
-  $C_{FN_i} >   C_{TP_i}$~$\forall i$.
+  \noindent Since $\rho \ge \frac{1}{2}$ , then $P_c\ge\rho$ from (\ref{eq:9:Pc}), and using the 
+  \textit{reasonableness conditions} described in Section \ref{sec:3:example-dependent}, i.e, 
+  $C_{FP_i} > C_{TN_i}$ and   $C_{FN_i} > C_{TP_i}$, we find that (\ref{eq:9:lemma1}) and 
+  (\ref{eq:9:lemma2}) are  True.
   \end{proof}
   
   Lemma \ref{lemma1} separates the costs on sets $\mathcal{S}_0$ and  $\mathcal{S}_1$. We are 
@@ -413,7 +416,7 @@ $combinator$.
   than the expected average savings of the base learners.
   
   \begin{theorem}\label{theorem1}
-  Let $H$ be an ensemble of $T$ classifiers $\mathcal{M}=\{M_1,\dots,M_T\}$, and $\mathcal{S}$ a 
+  Let $H$ be an ensemble of $T>3$ classifiers $\mathcal{M}=\{M_1,\dots,M_T\}$, and $\mathcal{S}$ a 
   testing set of size $ N $, then the expected savings of using $H$ in 
   $\mathcal{S}$ are lower than the average expected savings of the base classifiers, in other words,
   \begin{equation}\label{eq:9:theorem}
@@ -427,7 +430,7 @@ $combinator$.
     Cost(H(\mathcal{S})) \le \overline{Cost} (\mathcal{M}(\mathcal{S})). 
   \end{equation}
 
-  \noindent Afterwards, by applying the definition of cost in (\ref{eq:3:cost}), and grouping the 
+  \noindent Afterwards, by applying the cost definition of (\ref{eq:3:cost}), and grouping the 
   sets of negative and positive examples using (\ref{eq:9:S_a}), (\ref{eq:9:theorem2}) becomes
   \begin{equation}
     \sum_{a\in \{0,1\}} Cost(H(\mathcal{S}_a)) \le \sum_{a\in \{0,1\}} \overline{Cost} (\mathcal{M} 
@@ -587,19 +590,6 @@ ECSDT&CSB-mv-t &  0.2945 &$\pm$& 0.0105 & 0.4837 &$\pm$& 0.0078\\
   results show that these methods arise to the best overall results in three sets, while being 
   quite competitive in the others.
   
-  Subsequently, in order to statistically sort the classifiers we computed the Friedman ranking 
-  (F-Rank)  statistic \citep{Demsar2006}. This rank increases with the cost of the algorithms. 
-  We also calculate the average savings of each algorithm compared with the highest savings in 
-  each set (perBest), as a  measure of how close are the savings of an algorithm to the best 
-result. 
-  In \tablename{~\ref{tab:9:results_ranking}}, the results are shown. It is observed that  the 
-  first six algorithms, according to the F-Rank, belong to the $ECSDT$ family. In particular, the 
-  best three classifiers is the ensemble of cost-sensitive decision trees using the random patches 
-  approach. Giving the best result the one that blends the base classifiers using weighted voting 
-  method. Moreover as shown in  \tablename{~\ref{tab:9:results_best}}, this method ranks on each 
-  dataset \nth{1}, \nth{2}, \nth{2}, \nth{5} and \nth{3}, respectively. For comparison the best 
-  method from an other family is the $RF$ with $BMR$, which ranks \nth{14}, \nth{14}, \nth{8}, 
-  \nth{2} and \nth{9}.
   
     \begin{table}[!t]
      \centering
@@ -659,17 +649,20 @@ result.
     \caption{Savings ranks of best algorithm of each family by database}
     \label{tab:9:results_best}
   \end{table}
- 
-  \begin{figure}[t]
-    \centering
-    \includegraphics{ch9_fig3}
-    \caption{\textbf{Comparison of the savings of the algorithms versus the highest savings in 
-    each database.} The $CSRP-wt$ is very close to the best result in all the databases. 
-    Additionally, even though the $LR-BMR$ is the best algorithm in two databases, the performance 
-    in the other three is very poor.}
-    \label{fig:9:comparison_best}
-  \end{figure} 
-
+  
+  Subsequently, in order to statistically sort the classifiers we computed the Friedman ranking 
+  (F-Rank)  statistic \citep{Demsar2006}. This rank increases with the cost of the algorithms. 
+  We also calculate the average savings of each algorithm compared with the highest savings in 
+each set (perBest), as a  measure of how close are the savings of an algorithm to the best result. 
+  In \tablename{~\ref{tab:9:results_ranking}}, the results are shown. It is observed that  the 
+  first six algorithms, according to the F-Rank, belong to the $ECSDT$ family. In particular, the 
+  best three classifiers is the ensemble of cost-sensitive decision trees using the random patches 
+  approach. Giving the best result the one that blends the base classifiers using weighted voting 
+  method. Moreover as shown in  \tablename{~\ref{tab:9:results_best}}, this method ranks on each 
+  dataset \nth{1}, \nth{2}, \nth{2}, \nth{5} and \nth{3}, respectively. For comparison the best 
+  method from an other family is the $RF$ with $BMR$, which ranks \nth{14}, \nth{14}, \nth{8}, 
+  \nth{2} and \nth{9}.
+  
   Moreover, when analyzing the perBest statistic, it is observed that it follows almost the same 
   order as the F-Rank. Notwithstanding, there are cases in which algorithms ranks are different in 
   the two statistics, for example the $CSDT-t$ algorithm has a lower F-Rank than the $RF-BMR$, 
@@ -680,6 +673,17 @@ result.
   that the $CSRP-wt$ is very close to the best result in all cases. Lastly, it is shown why the 
   F-Rank of the $LR-BMR$ is high, given the fact that is the best model in two databases. The 
   reason  for that, is because the performance on the other sets is very poor.
+  
+  \begin{figure}[t]
+    \centering
+    \includegraphics{ch9_fig3}
+    \caption{\textbf{Comparison of the savings of the algorithms versus the highest savings in 
+    each database.} The $CSRP-wt$ is very close to the best result in all the databases. 
+    Additionally, even though the $LR-BMR$ is the best algorithm in two databases, the performance 
+    in the other three is very poor.}
+    \label{fig:9:comparison_best}
+  \end{figure} 
+
   
 \begin{figure}[!t]
   \centering
@@ -694,6 +698,15 @@ result.
   \label{fig:9:comparison_family}
 \end{figure}
 
+  Furthermore \figurename{~\ref{fig:9:family_rank}}, shows the Friedman ranking of each family of 
+  classifiers. The $ECSDT$ methods are overall better, followed by the $BMR$ and the $CST$ methods. 
+  As expected, the $CI$ family is the one that performs the worst. Nevertheless, there is 
+  a significant variance within the ranks in the $ECSDT$ family, as the best one has a Friedman 
+  ranking of 2.6 and the worst 16. Similar results are found when observing the perBest shown in 
+  \figurename{~\ref{fig:9:family_avgsav}}. However, in the case of the perBest, the $CST$ methods 
+  perform better than the $BMR$. It is important, in both cases it is confirmed that the $ECSDT$ 
+  family of methods is the one that arise to the best results as measured by savings.
+
  \begin{figure}[!t]
   \centering
   \subfloat[Comparison by inducer methodology.]{\includegraphics{ch9_fig6}%
@@ -706,16 +719,7 @@ result.
   combination method compared by Friedman ranking is the cost-sensitive weighted voting.}
   \label{fig:9:rank_ecsdt}
 \end{figure}
- 
-  Furthermore \figurename{~\ref{fig:9:family_rank}}, shows the Friedman ranking of each family of 
-  classifiers. The $ECSDT$ methods are overall better, followed by the $BMR$ and the $CST$ methods. 
-  As expected, the $CI$ family is the one that performs the worst. Nevertheless, there is 
-  a significant variance within the ranks in the $ECSDT$ family, as the best one has a Friedman 
-  ranking of 2.6 and the worst 16. Similar results are found when observing the perBest shown in 
-  \figurename{~\ref{fig:9:family_avgsav}}. However, in the case of the perBest, the $CST$ methods 
-  perform better than the $BMR$. It is important, in both cases it is confirmed that the $ECSDT$ 
-  family of methods is the one that arise to the best results as measured by savings.
-
+  
   We further investigate the different methods that compose the $ECSDT$ family, first by inducer 
   methods and by the combination approach. In \figurename{ \ref{fig:9:rank_ecsdt1}}, the Friedman 
   ranking of the $ECSDT$ methods grouped by inducer algorithm are shown. It is observed that the 
@@ -729,7 +733,7 @@ result.
   classifiers approach. In this case, the best combination method is weighted voting, while 
   majority voting and staking have a similar performance.
 
-  \begin{figure}[b!]
+  \begin{figure}[t!]
   \centering
   \includegraphics{ch9_fig8}
   \caption{\textbf{Comparison of the Friedman ranking of the savings and F1Score sorted by F1Score 
