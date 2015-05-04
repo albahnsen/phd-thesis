@@ -32,7 +32,7 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
 	\citep{Bolton2002,Gadi2008,Whitrow2008,DalPozzolo2014}.	We are interested on 
 	addressing the cost-sensitivity and the features preprocessing 	issues. 
 	
-	\begin{remark}{Cost-sensitive}
+	\begin{remark}{Cost-sensitive fraud detection}
   Credit card fraud detection is by definition a cost-sensitive problem, in the sense that the 
   cost  due to a false positive is different than the cost of a false negative. When predicting a   
   transaction   as fraudulent, when in fact it is not a fraud, there is an administrative cost that 
@@ -151,6 +151,16 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
   accounting rules. In \tablename{~\ref{tab:4:raw_features}}, the typical credit card fraud 
   detection  raw features are summarized.
 	
+\subsubsection{Customer spending patterns}
+\label{sec:4:frad:features_agg}
+  
+  Several studies use only the raw features in carrying  their analysis 
+  \citep{Brause1999a,Minegishi2011,Panigrahi2009,Sanchez2009}. However, as noted in 
+  \citep{Bolton2001}, a single transaction information is not sufficient to detect a fraudulent 
+  transaction. Moreover, it is also impractical, as using only the raw features leaves behind 
+  important information such as the consumer spending behavior, which is usually used by commercial 
+  fraud detection systems \citep{Whitrow2008}.
+  
 	\begin{table}[!t]
    \centering
    \footnotesize
@@ -179,16 +189,6 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
    \caption{Summary of typical raw credit card fraud detection features}
    \label{tab:4:raw_features}
    \end{table}
-	
-	\subsubsection{Customer spending patterns}
-	\label{sec:4:frad:features_agg}
-	
-  Several studies use only the raw features in carrying  their analysis 
-  \citep{Brause1999a,Minegishi2011,Panigrahi2009,Sanchez2009}. However, as noted in 
-  \citep{Bolton2001}, a single transaction information is not sufficient to detect a fraudulent 
-  transaction. Moreover, it is also impractical, as using only the raw features leaves behind 
-  important information such as the consumer spending behavior, which is usually used by commercial 
-  fraud detection systems \citep{Whitrow2008}.
 	
   To deal with this, in \citep{Gadi2008}, a new set of features were proposed such that the 
   information of the last transaction made with the same credit card is also used to make a 
@@ -388,7 +388,7 @@ distribution   a new set of features can be extracted, ie. a binary
 	\begin{table}[!t]
    \centering
    \footnotesize
-   \begin{tabular}{|c c | c c c c|}
+   \begin{tabular}{|c c | c | c c c|}
    \hline
    \multicolumn{2}{|c|}{\textbf{Raw features}} & \textbf{Arithmetic} & 
 \multicolumn{3}{c|}{\textbf{Periodic features}} \\  \hline
@@ -524,7 +524,7 @@ since the
    
   In order to take into account the varying costs that each example carries, we proposed in 
   \citep{CorreaBahnsen2014b}, a cost matrix with example-dependent misclassification costs as 
-  given in \tablename{ \ref{table_costmat2}}. First, we assume that the costs of a correct 
+  given in \tablename{~\ref{tab:4:costmat2}}. First, we assume that the costs of a correct 
   classification, $C_{TP_i}$ and $C_{TN_i}$, are zero for every customer $i$. We define $C_{FN_i}$ 
   to be the losses if the customer $i$ defaults to be proportional to his credit line $Cl_i$. We 
   define the cost of a false positive per customer $C_{FP_i}$ as the sum of two real financial 
@@ -532,8 +532,8 @@ since the
   good customer. 
   
   \begin{table}
-  \caption{Credit scoring example-dependent cost matrix}\label{table_costmat2}
-    \centering
+  \centering
+  \footnotesize
     \begin{tabular}{c|c|c}
     %\cline{2-3}
       \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
@@ -547,6 +547,8 @@ since the
       2}{*}{$C_{TN_i}=0$} \\
       $c_i=0$ & &\\
     \end{tabular}
+  \caption{Credit scoring example-dependent cost matrix}
+  \label{tab:4:costmat2}
   \end{table}
   
   The profit per customer $r_i$ is calculated as the present value of the difference between the 
@@ -622,21 +624,7 @@ since the
     financial institution, and as it can be inferred from the competition description, the data 
     was obtained around 2004.
    
-    Since no specific information regarding the datasets is provided, we assume that they belong to 
-    average European and Brazilian financial institutions. This enabled us to find the different 
-    parameters needed to calculate the cost measure. In Table~\ref{tab:4:parameters}, the different 
-    parameters are shown. In particular, we obtain the average interest rates in Europe during 
-    2013 from the European Central Bank \citep{ECB2014}, and the average interest and exchange 
-    rates in Brazil during 2004 from Trading Economics \citep{Economics2014}. Because the income 
-    is not in the same currency on both datasets, we convert the PAKDD Credit dataset to Euros.
-    Additionally, we use a fixed loan term $l$ for both datasets, considering that in the Kaggle 
-    Credit dataset the class was constructed to predict two years of credit behavior, and 
-    because the PAKDD Credit dataset is related to credit cards the term is fix to two years 
-    \citep{Lawrence2012}. Moreover, we set the loss given default $L_{gd}$ using information from 
-    the Basel II standard\footnote{http://www.bis.org/publ/bcbsca.htm.}, $q$ to 3 since it is the 
-    average personal loan requests related to monthly income, and the maximum credit limit 
-    $Cl_{max}$ to 25,000 Euros.
-    
+   
 \begin{table}
 \centering
 \footnotesize
@@ -656,3 +644,18 @@ since the
 \caption{Credit scoring model parameters}
 \label{tab:4:parameters}
 \end{table}
+
+    Since no specific information regarding the datasets is provided, we assume that they belong to 
+    average European and Brazilian financial institutions. This enabled us to find the different 
+    parameters needed to calculate the cost measure. In Table~\ref{tab:4:parameters}, the different 
+    parameters are shown. In particular, we obtain the average interest rates in Europe during 
+    2013 from the European Central Bank \citep{ECB2014}, and the average interest and exchange 
+    rates in Brazil during 2004 from Trading Economics \citep{Economics2014}. Because the income 
+    is not in the same currency on both datasets, we convert the PAKDD Credit dataset to Euros.
+    Additionally, we use a fixed loan term $l$ for both datasets, considering that in the Kaggle 
+    Credit dataset the class was constructed to predict two years of credit behavior, and 
+    because the PAKDD Credit dataset is related to credit cards the term is fix to two years 
+    \citep{Lawrence2012}. Moreover, we set the loss given default $L_{gd}$ using information from 
+    the Basel II standard\footnote{http://www.bis.org/publ/bcbsca.htm.}, $q$ to 3 since it is the 
+    average personal loan requests related to monthly income, and the maximum credit limit 
+    $Cl_{max}$ to 25,000 Euros.
