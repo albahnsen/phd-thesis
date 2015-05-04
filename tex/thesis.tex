@@ -93,6 +93,9 @@
 % Fix Hyphenation problems.
 \sloppy
 
+% Part number allways in big size
+\AtBeginDocument{\renewcommand{\thepart}{\Roman{part}}}
+
 % -----------------------------------------------------------------------------
 
 \begin{document}
@@ -113,6 +116,14 @@
 \pagestyle{scrheadings}
 \cleardoublepage\include{frontback/toc}
 
+\cleardoublepage\include{frontback/notations}
+\cleardoublepage\include{frontback/acronyms}
+
+\addcontentsline{toc}{chapter}{\tocEntry{List of Tables}}
+\listoftables \cleardoublepage
+\addcontentsline{toc}{chapter}{\tocEntry{List of Figures}}
+\addtocontents{toc}{\protect\vspace{\beforebibskip}}
+\listoffigures \cleardoublepage
 
 % Content =====================================================================
 \pagenumbering{arabic}
@@ -131,26 +142,17 @@
   \include{chapters/chapter06}\cleardoublepage
   \include{chapters/chapter07}\cleardoublepage
   \include{chapters/chapter08}\cleardoublepage
+\addtocontents{toc}{\protect\vspace{\beforebibskip}}
   \include{chapters/chapter09}\cleardoublepage
 
-\addtocontents{toc}{\protect\vspace*{\baselineskip}\protect}
-\cleardoublepage
-\makeatletter
-\def\toclevel@chapter{-1}
-\makeatother
-    
-\include{frontback/conclusions}
-
+\addtocontents{toc}{\protect\vspace{\beforebibskip}}
+\include{frontback/conclusions}\cleardoublepage
 
 % % Back pages ==================================================================
 \appendix
-\cleardoublepage
-\part{Appendix}
-
 \cleardoublepage\include{frontback/app_costcla}
-\cleardoublepage\include{frontback/notations}
-\cleardoublepage\include{frontback/acronyms}
+
 \cleardoublepage\include{frontback/bibliography}
-		
+
 
 \end{document}

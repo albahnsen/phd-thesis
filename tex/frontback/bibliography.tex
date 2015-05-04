@@ -1,28 +1,15 @@
-% Bibliography ================================================================
-
-\chapter{References}
-
-\begingroup
-    \def\chapter*#1{}
-    \bibliographystyle{myabbrvnat}
-    \renewcommand{\bibname}{}
-    \label{app:bibliography}
-    \bibliography{/home/al/DriveAl/Various/Bibtex/library}
-\endgroup
-
-
 %********************************************************************
 % Bibliography
 %*******************************************************
 % work-around to have small caps also here in the headline
-% \manualmark
-% \markboth{\spacedlowsmallcaps{\bibname}}{\spacedlowsmallcaps{\bibname}} % work-around to have small
-% %\phantomsection 
-% \refstepcounter{dummy}
-% \addtocontents{toc}{\protect\vspace{\beforebibskip}} % to have the bib a bit from the rest in the 
-% 
-% \addcontentsline{toc}{chapter}{\tocEntry{\bibname}}
-% \bibliographystyle{myabbrvnat}
-% \label{app:bibliography} 
-% % \bibliography{bibliography}
-% \bibliography{/home/al/DriveAl/Various/Bibtex/library}
+\manualmark
+\markboth{\spacedlowsmallcaps{\bibname}}{\spacedlowsmallcaps{\bibname}} % work-around to have small
+%\phantomsection 
+\refstepcounter{dummy}
+\addtocontents{toc}{\protect\vspace{\beforebibskip}} % to have the bib a bit from the rest in the 
+
+\addcontentsline{toc}{chapter}{\tocEntry{\bibname}}
+\bibliographystyle{myabbrvnat}
+\label{app:bibliography} 
+% \bibliography{bibliography}
+\bibliography{/home/al/DriveAl/Various/Bibtex/library}
