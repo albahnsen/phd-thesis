@@ -12,118 +12,112 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
 
 \section{Credit card fraud detection}
 \label{sec:4:fraud}
-\todo{Update with corrections in paper}
 
   The use of credit and debit cards has increased significantly   in the last years, unfortunately 
 	so has the fraud. Because of it, billions of Euros are lost every year. According to 
 	the European Central Bank \citep{EuropeanCentralBank2013}, during 2012 the total level of fraud 
 	reached 1.33 billion Euros in the Single Euro Payments Area, which represents an increase of 
 	14.8\% compared with 2011. Moreover, payments across non traditional channels (mobile, internet, 
-	...) accounted for 60\% of the fraud, whereas it was 46\% in 2008. This open new challenges as 
+	...) accounted for 60\% of the fraud, whereas it was 46\% in 2008. This opens new challenges as 
 	new fraud patterns emerge, and current fraud detection systems are not being successful in 
 	preventing fraud. Furthermore, fraudsters constantly change their strategies to avoid being 
 	detected, something that makes traditional fraud detection tools such as expert rules inadequate.
   
-  The use of machine learning in fraud detection has been an interesting topic in recent years. 
+  The use of machine learning in fraud detection have been an interesting topic in recent years. 
   Several detection systems based on machine learning techniques has been successfully used 
 	for this problem \citep{Bhattacharyya2011}. When constructing a credit card fraud detection 
   model, there are several problems that have an important impact during the training phase: 
   Skewness of 	the data , cost-sensitivity of the application, short time response of the system, 
   dimensionality of the search space and how to preprocess the features
-	\citep{Bolton2002,Gadi2008,Whitrow2008,DalPozzolo2014}.	We are interested to 
-	address the cost-sensitivity and the features preprocessing 	issues. 
+	\citep{Bolton2002,Gadi2008,Whitrow2008,DalPozzolo2014}.	We are interested on 
+	addressing the cost-sensitivity and the features preprocessing 	issues. 
 	
 	\begin{remark}{Cost-sensitive}
-	Credit card fraud detection is by definition a cost-sensitive problem, in the sense that the 
-	cost 	due a false positive is different than the cost of a false negative. ie. When predicting a 	
-	transaction 	as fraudulent when in fact it is not a fraud there is an administrative cost that 	
-	is incurred by 	the financial institution, on the other hand, when failing to detect a fraud, the 
-	amount of that 	transaction is loss \citep{Hand2007a}. Moreover, it is not enough  to assume a 	
-	constant cost 	difference between false positives and false negatives, as the amount of the 	
-	transactions vary 	quite significantly, therefore, its financial impact is not constant but 	
-	depended on each 	transaction.	In \citep{CorreaBahnsen2013}, we proposed a new cost-based 
-  measure to evaluate 	credit card fraud detection models, taking into account the different 
-  financial costs incurred by 	the fraud detection process.
+  Credit card fraud detection is by definition a cost-sensitive problem, in the sense that the 
+  cost  due to a false positive is different than the cost of a false negative. When predicting a   
+  transaction   as fraudulent, when in fact it is not a fraud, there is an administrative cost that 
+  is incurred by  the financial institution. On the other hand, when failing to detect a fraud, the 
+  amount of that  transaction is lost \citep{Hand2007a}. Moreover, it is not enough  to assume a  
+  constant cost   difference between false positives and false negatives, as the amount of the  
+  transactions vary   quite significantly; therefore, its financial impact is not constant but  
+  depends on each   transaction.  In \citep{CorreaBahnsen2013}, we proposed a new cost-based 
+  measure to evaluate   credit card fraud detection models, taking into account the different 
+  financial costs incurred by   the fraud detection process.
 	\end{remark}
 	
-	When constructing a credit card fraud detection model, it is very important to use those features 
-	that will help the algorithm make the best decision. Typical models only use the raw 
-  transactional features, such as the time, amount, place of the transaction. However, this 
-  approach do not take into account the spending behavior of the customer, which is expected to 
-  help discover fraud patterns. A standard way to include these behavioral spending patters was 
-  proposed in \citep{Whitrow2008}, they propose a transaction aggregation strategy in order to take 
-  into account a customer spending behavior. The derivation of the aggregated features consists in 
-	grouping the transactions made during the last given number of hours, first by card or account 
-	number, then by transaction type, merchant group, country or other, followed by calculating
-	the number of transactions or the total amount spent on those transactions.
+  When constructing a credit card fraud detection model, it is very important to use those features 
+  that will help the algorithm make the best decision. Typical models only use raw transactional 
+  features, such as time, amount, place of the transaction. However, this approach does not take 
+  into account the spending behavior of the customer, which is expected to help discover fraud 
+  patterns \citep{Gadi2008}. A standard way to include these behavioral spending patters was 
+  proposed in \citep{Whitrow2008}, where Whitrow et al. proposed a transaction aggregation strategy 
+  in order to take   into account a customer spending behavior. The derivation of the aggregated 
+  features consists in grouping the transactions made during the last given number of hours, first 
+  by card or account number, then by transaction type, merchant group, country or other, followed 
+  by calculating  the number of transactions or the total amount spent on those transactions.
 	
 	In this section, we present our previously proposed expanded version of the transaction 
-  aggregation strategy, by incorporate a combination criteria when grouping the transaction. ie. 
-  instead of aggregating only by card holder and transaction type, we combine it with country or 
-  merchant group, this allow to have a much richer feature space. Moreover, there is still some 
-  information that is not 	completely captured by the aggregated features. In particular we are 
-  interesting in analyzing the 	time of the transaction. The logic behind this, is that a customer 
-  is expected to make transactions at similar hours. We proposed a method for creating features 
-  based in the periodic behavior of a transaction time, using the von Mises distribution. In 
-  particular, the new features estimate if the time of a new transaction is within the confidence 
-  interval of the previous transaction times \citep{CorreaBahnsen2015c}.
-	Furthermore, we present the real credit card fraud dataset provided by a large European 
-  card processing company, that we used for the experiments in this thesis.
+  aggregation strategy, by  incorporating a combination criteria when grouping transactions, i.e., 
+  then instead of aggregating only  by card holder and transaction type, we combine it with 
+  country or merchant group. This allows to have a much richer feature space. Moreover, we are 
+  interested in analyzing the impact of adding the time of a transaction. The logic behind it, is 
+  that a customer is expected to make transactions at similar hours. We, hence, propose a new 
+  method for creating features  based on the  periodic behavior of a transaction time, using the 
+  von Mises distribution. In particular, these new time features should estimate if the time of a 
+  new transaction is within the confidence interval of the  previous transaction time
+  \citep{CorreaBahnsen2015c}. Furthermore, we present the real credit card fraud dataset provided 
+  by a large European card processing company, that we used for the experiments in this thesis.
   
   
 \subsection{Credit card fraud detection evaluation}
 \label{sec:4:frad:eval}
 
-	A credit card fraud detection algorithm, consist in identifying those transactions with a 
-	high probability of being fraud, based on historical fraud patterns. 
-  The use of machine learning in fraud detection has been an interesting topic in recent years. 
-	However, due to the confidentiality of financial information and non availability of public 
-	databases, few researches have had the opportunity to work on developing methods specific 
-	to credit card fraud detection \citep{Bolton2002,DalPozzolo2014}.
-	
-	Nevertheless, different detection systems that are based on machine learning 
-	techniques have been successfully used for this problem, in particular: neural 
-	networks~\citep{Maes2002}, Bayesian learning \citep{Maes2002}, artificial immune systems 
-	\citep{Gadi2008}, association rules \citep{Sanchez2009}, hybrid models \citep{Krivko2010}, 
-	support vector machines~\citep{Bhattacharyya2011}, peer group  analysis \citep{Weston2008}, 
-	random forest~\citep{CorreaBahnsen2013} and online learning \citep{DalPozzolo2014}.
-
-  Most of these studies compare they proposed algorithm with a benchmark algorithm and then make 
-	the comparison using a standard binary classification measure, such as misclassification error, 
-	receiver operating characteristic ($ROC$), Kolmogorov-Smirnov ($KS$) or \mbox{$F_1Score$} 
-	statistics \citep{Bolton2002,Hand2007a,DalPozzolo2014}. 
-	However, these measures may not be the most appropriate evaluation criteria when  evaluating a 
-	fraud detection models, because they tacitly assume that misclassification errors carry the same 
-	cost, similarly with the correct classified examples. This assumption does not hold in many 
-	real-world applications such as fraud detection, since  when wrongly predicting a fraudulent 
-	transaction as legitimate carries a significantly different financial cost than the inverse case.
-	Furthermore, the accuracy measure also assumes that the class distribution among examples is 
-	constant and balanced \citep{Provost1998}, and typically the distributions of a fraud detection 
-	data set are skewed, with a percentage of frauds ranging from 0.005\% to 0.5\% 
-	\citep{Gadi2008,Bhattacharyya2011}.
-
+  A credit card fraud detection algorithm consists in identifying those transactions with a 
+  high probability of being fraud, based on historical fraud patterns. The use of machine learning 
+  in fraud detection has been an interesting topic in recent years. Different detection systems 
+  that are based on machine learning  techniques have been successfully   used for this problem, in 
+  particular: neural networks~\citep{Maes2002}, Bayesian learning \citep{Maes2002}, artificial 
+  immune systems \citep{Gadi2008}, association rules \citep{Sanchez2009}, hybrid models 
+  \citep{Krivko2010}, support vector machines~\citep{Bhattacharyya2011}, peer group  analysis 
+  \citep{Weston2008}, random forest~\citep{CorreaBahnsen2013} and online learning 
+  \citep{DalPozzolo2014}.
+ 
+  Most of these studies compare their proposed algorithm with a benchmark algorithm and then make 
+  the comparison using a standard binary classification measure, such as misclassification error, 
+  receiver operating characteristic ($ROC$), Kolmogorov-Smirnov ($KS$) or \mbox{$F_1Score$} 
+  statistics \citep{Bolton2002,Hand2007a,DalPozzolo2014}. 
+  However, these measures may not be the most appropriate evaluation criteria when  evaluating a 
+  fraud detection models, because they tacitly assume that misclassification errors carry the same 
+  cost, similarly with the correct classified transactions. This assumption does not hold in 
+  practice, since  when wrongly predicting a fraudulent transaction as legitimate carries a 
+  significantly different financial cost than the inverse case. Furthermore, the accuracy measure 
+  also assumes that the class distribution among transactions is constant and balanced 
+  \citep{Provost1998}, and typically the distributions of a fraud detection data set are skewed, 
+  with a percentage of frauds ranging from 0.005\% to 0.5\% \citep{Gadi2008,Bhattacharyya2011}.
+  
 	In order to take into account the different costs of fraud detection during the evaluation of an 
-	algorithm, we used the cost matrix as defined in \tablename{~\ref{tab:3:cost_matrix}}.
-	Hand et al. \citep{Hand2007a} proposed a cost matrix, where in the case of false positive the 
-	associated 	cost is the administrative cost $C_{FP_i}=C_a$ related to analyzing the transaction 
-	and contacting 	the card holder. This cost is the same assigned to a true positive 
-	$C_{TP_i}=C_a$, because in 	this case, 	the card holder will have to be contacted. However, in 
-	the case of a false negative, in which a 	fraud is 	not detected, the cost is defined to be a 
-	hundred times $C_{FN_i}=100C_a$. This same approach was also used in \citep{Gadi2008}.
+	algorithm, we may use the cost matrix as defined in \tablename{~\ref{tab:3:cost_matrix}}.
+  Hand et al. \citep{Hand2007a} proposed a cost matrix, where in the case of false positive the 
+  associated  cost is the administrative cost $C_{FP_i}=C_a$ related to analyzing the transaction 
+  and contacting  the card holder. This cost is the same assigned to a true positive 
+  $C_{TP_i}=C_a$, because in  this case,  the card holder will have to be contacted. However, in 
+  the case of a false negative, in which a  fraud is  not detected, the cost is defined to be a 
+  hundred times larger, i.e. $C_{FN_i}=100C_a$. This same approach was also used in 
+  \citep{Gadi2008}.
 
-	Nevertheless, in 	practice, losses due to a specific fraud 	range from few to 
-	thousands of Euros, which means that 	assuming constant cost for false 	negatives is 	
-	unrealistic. In order to address this limitation, in 	\citep{CorreaBahnsen2013}, we 	proposed a 
-	cost matrix that take into account the actual 	example-dependent financial costs. Our 	cost 
-	matrix define the cost of a false negative to be the 	amount $C_{FN_i}=Amt_i$ of the 	transaction 
-	$i$. This cost matrix is a better representation of the 	actual costs, since when a 	fraud is 
-	not detected, the losses of that particular fraud correspond 	to the stolen amount.
-	The costs are summarized in \tablename{~\ref{tab:4:table_costmat_fraud}}.
+  Nevertheless, in  practice, losses due to a specific fraud  range from few to 
+  thousands of Euros, which means that  assuming constant cost for false  negatives is  
+  unrealistic. In order to address this limitation, in  \citep{CorreaBahnsen2013}, we   proposed a 
+  cost matrix that takes into account the actual  example-dependent financial costs. Our  cost 
+  matrix defines the cost of a false negative to be the   amount $C_{FN_i}=Amt_i$ of the  
+  transaction $i$. We argue that this cost matrix is a better representation of the   actual costs, 
+  since when a  fraud is not detected, the losses of that particular fraud correspond   to the 
+  stolen amount. The costs are summarized in \tablename{~\ref{tab:4:table_costmat_fraud}}.
 
 	Afterwards, using (\ref{eq:3:cost}) a cost measure for fraud detection is calculated as:
-  \begin{align}
-    Cost(f(\mathcal{S})) =  \sum_{i=1}^{N} y_i(1-c_i)Amt_i + c_iC_a,
-  \end{align} \label{eq:cost}
+  \begin{align} \label{eq:4:cost}
+    Cost(f(\mathcal{S})) = \sum_{i=1}^{N} y_i(1-c_i)Amt_i + c_iC_a
+  \end{align}
   then, the savings of an algorithm are calculated using (\ref{eq:3:savings}).
 
 	\begin{table}[t]
@@ -147,15 +141,15 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
 		\label{tab:4:table_costmat_fraud}
 	\end{table}
 	 
-\subsection{Fraud detection feature engineering}
+\subsection{Feature engineering for fraud detection}
 \label{sec:4:frad:features}
 
-	When constructing a credit card fraud detection algorithm, the initial set of features (raw 
-	features) include information regarding individual transactions. It is observed throughout the 
-	literature, that regardless of the study the set of raw features is quite similar. This is 
-	because the data produce during a credit card transaction must comply with international 
-	accounting rules. In \tablename{~\ref{tab:4:raw_features}}, the typical credit card fraud 
-  detection raw features are summarized.
+  When constructing a credit card fraud detection algorithm, the initial set of features (raw 
+  features) include information regarding individual transactions. It is observed throughout the 
+  literature, that regardless of the study, the set of raw features is quite similar. This is 
+  because the data collected during a credit card transaction must comply with international 
+  accounting rules. In \tablename{~\ref{tab:4:raw_features}}, the typical credit card fraud 
+  detection  raw features are summarized.
 	
 	\begin{table}[!t]
    \centering
@@ -189,20 +183,20 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
 	\subsubsection{Customer spending patterns}
 	\label{sec:4:frad:features_agg}
 	
-	Several studies, used only the raw features for doing their analysis 
-	\citep{Brause1999a,Minegishi2011,Panigrahi2009,Sanchez2009}. However, as noted in 
-	\citep{Bolton2001}, a single transaction information is not sufficient to detect a fraudulent 
-	transaction. Moreover, it is also impractical, as using only the raw features leaves behind 
-	important information such as the consumer spending behavior, which is usually used by commercial 
-	fraud detection systems.
+  Several studies use only the raw features in carrying  their analysis 
+  \citep{Brause1999a,Minegishi2011,Panigrahi2009,Sanchez2009}. However, as noted in 
+  \citep{Bolton2001}, a single transaction information is not sufficient to detect a fraudulent 
+  transaction. Moreover, it is also impractical, as using only the raw features leaves behind 
+  important information such as the consumer spending behavior, which is usually used by commercial 
+  fraud detection systems \citep{Whitrow2008}.
 	
-	To deal with this, in \citep{Gadi2008}, a new set of features where proposed such that the 
-	information of the last transaction made with the same credit card is also used to make a 
-	prediction. The objective, is to be able to detect very dissimilar continues transactions within 
-	a	customer purchases. The new set of features include: Time since the last transaction, previous 	
-	amount of the transaction, previous country of the transaction.
-	Nevertheless, these features does not take into account consumer behavior other than the last 
-	transaction made by a client, this leads to having an incomplete profile of the customers.
+  To deal with this, in \citep{Gadi2008}, a new set of features were proposed such that the 
+  information of the last transaction made with the same credit card is also used to make a 
+  prediction. The objective, is to be able to detect very dissimilar continuous transactions within 
+  the purchases of a customer. The new set of features include: time since the last transaction, 
+  previous  amount of the transaction, previous country of the transaction. Nevertheless, these 
+  features does not take into account consumer behavior other than the last transaction made by a 
+  client, this leads to having an incomplete profile of customers.
 	
 	A more compressive way to take into account a customer spending behavior is to derive some 
 	features using a transaction aggregation strategy. This methodology was initially proposed in 
@@ -214,35 +208,41 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
 	\citep{Bhattacharyya2011,Weston2008,Tasoulis2008,CorreaBahnsen2013,Sahin2013,CorreaBahnsen2014,
 DalPozzolo2014}.
 	
-	When aggregating a customer transactions, there is a important question of how much to 
-	accumulate, in the sense that the marginal value of new information may diminish as time passes.
-	\citep{Whitrow2008}, discuss that aggregating 101 transactions is not likely to be
-	more informative that aggregating 100. Indeed, when time passes information loss their value, in 
-	the sense that a customer spending patterns are not expected to remain constant over the years.
-	In particular, Whitrow et al., define a fix time frames to be 24, 60 and 168 hours.
-	
-	The process of aggregating features consists in for each transaction $i$ on the dataset 
-	$\mathcal{S}$, select 	those transactions that were made in the previous $t_p$ hours,
+  When aggregating a customer transactions, there is an important question on how much to 
+  accumulate, in the sense that the marginal value of new information may diminish as time passes.
+  \cite{Whitrow2008}, discuss that aggregating 101 transactions is not likely to be
+  more informative than aggregating 100 transactions. Indeed, when time passes, information lose 
+  their value, in the sense that a customer spending patterns are not expected to remain constant 
+  over the years. In particular, Whitrow et al. define a fixed time frame to be 24, 60 or 168 
+  hours.
+  
+  The process of aggregating features consists in  selecting those transactions that were made in 
+  the previous $t_p$ hours, for each transaction $i$ in the dataset $\mathcal{S}$,
 	\begin{align}\label{eq:4:agg_features1}
 		TRX_{agg}(\mathcal{S},i, t_p) &= \bigg\{x_l^{amt} \bigg\vert 
 \left(x_l^{id}=x_i^{id}\right) \nonumber \\
 		&\wedge \left(hours(x_i^{time},x_l^{time}) < t_p\right) \bigg\}_{l=1}^N,
 	\end{align}
-	where $N=\vert\mathcal{S}\vert$, $x_i^{time}$ is the time of transaction $i$,  $x_i^{amt}$ is the 
-  amount of transaction $i$, $x_i^{id}$  the customer identification number of   transaction $i$, 
-	and $hours(z_1,z_2)$ is 	a function that calculate the number of hours between the dates $z_1$ 
-	and $z_2$. Afterwards the feature number of transactions and amount of transactions in the last 
-	$t_p$ hours are calculated as:
-	\[
-		x_i^{a1} = \vert TRX_{agg}(\mathcal{S},i, t_p) \vert \quad  \text{and} \quad 
-		x_i^{a2} = \sum TRX_{agg}(\mathcal{S},i, t_p).
-	\]
+  where $N=\vert\mathcal{S}\vert$, $\vert \cdot \vert$ being the cardinality of a set, $x_i^{time}$ 
+  is the time of transaction $i$,  $x_i^{amt}$ is the amount of transaction $i$, $x_i^{id}$  the 
+  customer identification number of transaction $i$, and $hours(t_1,t_2)$ is  a function that 
+  calculates the number of hours between the times $t_1$  and $t_2$. Afterwards the feature number 
+  of transactions and amount of transactions in the last $t_p$ hours are calculated as:
+  \begin{equation}\label{eq:4:agg1a}
+    x_i^{a1} = \vert TRX_{agg}(\mathcal{S},i, t_p) \vert ,
+  \end{equation}
+  and   
+  \begin{equation}\label{eq:4:agg1b}
+  x_i^{a2} = \sum_{x^{amt} \in   TRX_{agg}(\mathcal{S},i, t_p)} x^{ amt},
+  \end{equation}
+  respectively.
 	
-	Furthermore, we observed that this aggregation is not enough, in the sense that the combination 
-	of 	the different features is not being taken into account. For example, it is not only 
-	interesting 	to see the total transactions, but instead grouped by 	certain criteria, such as: 
-	transactions 	made in the last $t_p$ hours, in the same country 	and of the same transaction 
-	type. For 	calculating those features, first we expand (\ref{eq:4:agg_features1}):
+  We note that this aggregation is not enough, in the sense that the combination 
+  of  different features is not being taken into account. For example, it is not only 
+  interesting   to see the total transactions, but also group them following a certain criteria, 
+  such as: transactions   made in the last $t_p$ hours, in the same country   and of the same 
+  transaction type. For   calculating such features, first we expand (\ref{eq:4:agg_features1}) as 
+  follows
 	\begin{align}\label{eq:4:agg_features2}
 		TRX_{agg}&(\mathcal{S}  ,i, t_p, cond_1, cond_2) = \bigg\{ x_l^{amt} \bigg\vert \nonumber \\  
 		& \left(x_l^{id}=x_i^{id}\right) \wedge  \left(hours(x_i^{time},x_l^{time})<  t_p\right) 
@@ -250,22 +250,29 @@ DalPozzolo2014}.
     &  \left(x_l^{cond_1} = x_i^{cond_1}\right) \wedge	\left(x_l^{cond_2} = 
 		x_i^{cond_2}\right) \bigg\}_{l=1}^N.
 		\end{align}
-	Then, the features are calculated as:
-	\[ x_i^{a3} = \vert TRX_{agg}(\mathcal{S},i, t_p, country, type) \vert \quad \text{and} \]
-	\[ x_i^{a4} = \sum 	TRX_{agg}(\mathcal{S},i, t_p,country, type).	\]		
-	To further clarify how the aggregated features are calculated we show an example. Consider a set 
-	of transactions made by a client between the first and third of January of 2015, as shown in 
-	\tablename{ 	\ref{tab:4:agg_features_example1}}. Then we estimate the aggregated features 
-	($x_i^{a1}$, $x_i^{a2}$, $x_i^{a3}$ and $x_i^{a4}$), by setting $t_p=24$. It is observed, how the 
-	different aggregated features give us different information of the customer spending behavior.
-	Moreover, the total number of aggregated features can growth quite quickly, as $t_p$ can have 
-	several values, and the combination of combination criteria can be quite huge as well. In 
-  \citep{CorreaBahnsen2013}, we used a total of 280 aggregated features. In particular we set the 
-	different values of $t_p$ to: 1, 3, 6, 12, 18, 24, 72 and 168. Then calculate the aggregated 
-	features 	using (\ref{eq:4:agg_features1}), and also using (\ref{eq:4:agg_features2}) with the 
-	following  grouping criteria:	country, type of transaction, entry mode, merchant code and 
-merchant group. 
-		
+  where, $cond_1$ and $cond_2$, could be either of the features of a transaction listed in 
+  \tablename{~\ref{tab:4:raw_features}}. Then, the features are calculated as:
+  \begin{equation}\label{eq:4:agg2a}
+     x_i^{a3} = \vert TRX_{agg}(\mathcal{S},i, t_p, country, type) \vert ,
+  \end{equation}
+  and   
+  \begin{equation}\label{eq:4:agg2b}
+  x_i^{a4} = \sum_{x^{amt} \in   TRX_{agg}(\mathcal{S},i, t_p,country, type)} x^{ amt}.
+  \end{equation}
+
+  To further clarify how the aggregated features are calculated we show an example. Consider a set 
+  of transactions made by a client between the first and third of January of 2015, as shown in 
+  \tablename{~\ref{tab:4:agg_features_example1}}. Then we estimate the aggregated features 
+  ($x_i^{a1}$, $x_i^{a2}$, $x_i^{a3}$ and $x_i^{a4}$) by setting $t_p=24$ hours. The 
+  different aggregated features give us different information of the customer spending   behavior. 
+  Moreover, the total number of aggregated features can grow quite quickly, as $t_p$   can have   
+  several values, and the combination of combination criteria can be quite large as well.
+  In \cite{CorreaBahnsen2013}, we used a total of 280 aggregated features. In particular we set the 
+  different values of $t_p$ to: 1, 3, 6, 12, 18, 24, 72 and 168 hours. Then calculate the 
+  aggregated features   using (\ref{eq:4:agg_features1}), and also using (\ref{eq:4:agg_features2}) 
+  with the following  grouping criteria:  country, type of transaction, entry mode, merchant code 
+  and merchant group.
+  
 	\begin{table}[!t]
 		\centering
     \footnotesize
@@ -293,83 +300,100 @@ $\mathbf{x}_i^{a4}$\\
 	\subsubsection{Time features}
 	\label{sec:4:frad:features_time}
 	
-	When using the aggregated features, there is still some information that is not completely 
-	captured by those features. In particular we are interesting in analyzing the time of the 
-	transaction. The logic behind this, is that a customer is expected to make transactions at 
-	similar hours. The issue when dealing with the time of the transaction, 
-	specifically, when analyzing a feature such as the mean of transactions time, is easy 
-	to make the mistake of using the arithmetic mean. Because, as shown in 
-  \figurename{~\ref{fig:4:von1}}, the arithmetic mean does not takes into account the periodic 
-  behavior of the time feature. For example, the arithmetic mean of transaction time of four 
-  transactions made at 2:00, 3:00, 22:00 and 23:00 is 12:40, which is counter intuitive since no 
-  transaction was made close to that time. 
-		
-	We propose to overcome this limitation by modeling the time of the transaction as a periodic 
-	variable, in particular using the von Mises distribution. The von Mises distribution, also known 
-	as the periodic normal distribution, is a distribution of a wrapped normally distribution 
-	variable across a circle \citep{Fisher1996}. In particular we are interested in calculating a 
-	confidence interval 	for the time of a transaction. For doing that, initially we select a set of 
-	transactions made by 	the same client in the last $t_p$ hours,
-	\begin{align}\label{eq:4:pe_features1}
-		TRX_{vM}(\mathcal{S},i, t_p) & = \bigg\{ x_l^{time} \bigg\vert   
-		\left(x_l^{id}=x_i^{id}\right)\wedge  \nonumber \\ 
-    & \left(hours(x_i^{time},x_l^{time})< t_p\right) \bigg\}_{l=1}^N.
-	\end{align}
-	Then, the periodic mean of the set 	of transactions is calculated using 
-	\begin{equation}
-		\mu_{vM}(TRX_{vM}(\mathcal{S},i, t_p)) = 2\cdot \arctan\left(\frac{\phi}{\left(
-		\sqrt{\psi^2 + \phi^2} +	\psi \right)} \right),
-	\end{equation}
-	where $\phi=\sum \sin(TRX_{vM}(\mathcal{S},i, t_p))$ and $\psi=\sum \cos(TRX_{vM}(\mathcal{S},i, 
-	t_p))$. Similarly the standard deviation can be calculated as
-	\begin{equation}
-		\sigma_{vM}(TRX_{vM}(\mathcal{S},i, t_p)) = \sqrt{ ln\left( \frac{1}{
-		\left(\frac{\phi}{N_{vM}} \right)^2  + \left(\frac{\psi}{N_{vM}} \right)^2 } \right) },
-	\end{equation}
-	where $N_{vM}=\vert TRX_{vM}(\mathcal{S},i, t_p) \vert$.
-	Afterwards, using the estimated periodic mean and standard deviation, the probability 
-	distribution function of the time of the set of transactions is calculated as:
-	\begin{equation}
-	 x_i^{time} \sim vonmises\left(\mu_{vM}(TRX_{vM}(\mathcal{S},i, t_p)), 
-	\frac{1}{\sigma_{vM}(TRX_{vM}(\mathcal{S},i, t_p))} \right).
-	\end{equation}
-	
-	  \begin{figure}[!t]
-		\centering
-		\subfloat[Transaction times 
-distribution]{\includegraphics[width=5.5cm]{ch4_fig_1c}\label{fig:4:von1}}
-		\hfill
-		\subfloat[Fitted von Mises 
-distribution]{\includegraphics[width=5.5cm]{ch4_fig_2c}\label{fig:4:von2}}
-		\\
-		\subfloat[Expected time of 
-transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:4:von3}}
-		\caption{\textbf{Analysis of the time of a transaction using a 24 hour clock and the von Mises 
-		distribution.} It is shown that the arithmetic mean of the time of a set of a transaction (a) 
-		and the 	periodic mean (b), are completely 	different. Because, the arithmetic mean does not 
-		take 		into 	account the periodic behavior of the 	time feature. Moreover, 	by modeling the 
-		time of the 		transaction using the von Mises 	distribution (b), a confidence 	interval (c) 
-		is estimated. Using 		the confidence interval, a 	transaction can be flag as normal 	or	 
-		suspicious, depending 		whether or 	not the time of the 	transaction is within the 	
-		confidence 	interval.}
-		\label{fig_sim2}
+  When using the aggregated features, there is still some information that is not completely 
+  captured by those features. In particular we are interesting in analyzing the time of the 
+  transaction. The logic behind this, is that a customer is expected to make transactions at 
+  similar hours. The issue when dealing with the time of the transaction, 
+  specifically, when analyzing a feature such as the mean of transactions time, is that it is easy 
+  to make the mistake of using the arithmetic mean. Indeed the arithmetic mean is not a correct 
+  way to average time, because as shown in \figurename{~\ref{fig:4:von1}}, it does not take into 
+  account the periodic behavior of the time feature. For example, the arithmetic mean of 
+  transaction time of four transactions made at 2:00, 3:00, 22:00 and 23:00 is 12:30, which is 
+  counter intuitive since no transaction was made close to that time.
+
+  \begin{figure}[!t]
+  \centering
+  \includegraphics{ch4_fig_1c}
+  \caption{Analysis of the time of a transaction using a 24 hour clock. The arithmetic mean of the 
+  transactions time (dashed line) do not accurately represents the actual times distribution.}
+  \label{fig:4:von1}
+  \end{figure} 
+  
+  We propose to overcome this limitation by modeling the time of the transaction as a periodic 
+  variable, in particular using the von Mises distribution. The von Mises distribution, also known 
+  as the periodic normal distribution, is a distribution of a wrapped normal distributed 
+  variable across a circle \citep{Fisher1996}. The von Mises distribution of a set of examples 
+  $D=\{t_1,t_2,\cdots,t_N\}$ is defined as
+  \begin{equation}
+  D \sim vonmises\left( \mu_{vM} , \frac{1}{\sigma_{vM}} \right),
+  \end{equation}
+  where $\mu_{vM}$ and $\sigma_{vM}$ are the periodic mean and periodic standard deviation, 
+  respectively, and are defined as
+  \begin{equation}
+    \mu_{vM}(D) =  2\cdot \arctan\left(\frac{\phi}{\left(
+    \sqrt{\psi^2 + \phi^2} +  \psi \right)} \right),
+  \end{equation}
+  and
+  \begin{equation}
+    \sigma_{vM}(D) = \sqrt{ ln\left( \frac{1}{
+    \left(\frac{\phi}{N} \right)^2  + \left(\frac{\psi}{N} \right)^2 } \right) },
+  \end{equation}
+  respectively. Where $\phi=\sum_{t_j \in D} \sin(t_j)$ and $\psi=\sum_{t_j \in D }\cos(t_j)$ 
+  \citep{Bishop2006}. 
+  
+  In particular we are interested in calculating a confidence interval ($CI$)   for the time of a 
+  transaction. For doing that, initially we select a set of transactions made by  the same client 
+  in the last $t_p$ hours,
+  \begin{align}\label{eq:4:pe_features1}
+    TRX_{vM}(\mathcal{S},i, t_p) & = \bigg\{ x_l^{time} \bigg\vert   
+    \left(x_l^{id}=x_i^{id}\right)\wedge \nonumber \\
+    &\left(hours(x_i^{time},x_l^{time})< t_p\right)    \bigg\}_{l=1}^N.
+  \end{align}
+  Afterwards, the probability distribution function of the time of the set of transactions is 
+  calculated as:
+  \begin{equation}
+   x_i^{time} \sim vonmises\left(\mu_{vM}(TRX_{vM}(\mathcal{S},i, t_p)), 
+  \frac{1}{\sigma_{vM}(TRX_{vM}(\mathcal{S},i, t_p))} \right).
+  \end{equation}
+  
+  
+  In \figurename{~\ref{fig:4:von2}}, the von Mises distribution calculation is shown. It is 
+observed that the arithmetic mean is quite different from the periodic  mean, the latter being a 
+more realistic representation of the actual transaction times. Then, using the estimated 
+distribution   a new set of features can be extracted, ie. a binary  
+  feature ($x_i^{p1}$) if a new transaction time is within the confidence interval range with 
+  probability   $\alpha$. An example is presented in \figurename{~\ref{fig:4:von3}}. 
+  Furthermore, other features can be calculated, as the confidence interval range can be calculated 
+  for several values of $\alpha$, and also the time period can have an arbitrary size.
+
+  \begin{figure}[!t]
+  \centering
+  \includegraphics{ch4_fig_2c}
+  \caption{Fitted von Mises distribution including the periodic mean (dashed line) and the 
+    probability distribution (purple area).}
+  \label{fig:4:von2}
+  \end{figure} 
+  
+  \begin{figure}[!t]
+  \centering
+  \includegraphics{ch4_fig_3c}
+  \caption{Expected time of a transaction (green area). Using     the confidence interval, a  
+  transaction can be flag normal   or   suspicious, depending     whether or  not the time of 
+  the   transaction is within the   confidence  interval.}
+  \label{fig:4:von3}
   \end{figure} 
 	
-	In \figurename{ \ref{fig:4:von2}}, the von Mises distribution calculation is shown.	Lastly, using 
-  the estimated distribution a new set of features can be develop, ie. a binary feature 
-  ($x_i^{p1}$) if a new transaction time is within the confidence interval range with 
-	probability 	$\alpha$.	An example is presented in \figurename{ \ref{fig:4:von3}}. 
-	Furthermore, other features can be calculated, as the confidence interval range can be calculated 
-	for several values of $\alpha$, and also the time period can have an arbitrary size.
+
 
 	\begin{table}[!t]
    \centering
    \footnotesize
    \begin{tabular}{|c c | c c c c|}
    \hline
-   \multicolumn{2}{|c|}{\textbf{Raw features}} & \multicolumn{4}{c|}{\textbf{Periodic features}} 
-		\\  \hline
-   \textbf{Id} & \textbf{Time} & $\mu$ & $\mu_{vM}$ & \textbf{Periodic CI} & $x_i^{p1}$ \\
+   \multicolumn{2}{|c|}{\textbf{Raw features}} & \textbf{Arithmetic} & 
+\multicolumn{3}{c|}{\textbf{Periodic features}} \\  \hline
+   \textbf{Id} & \textbf{Time} & \textbf{mean} & \textbf{mean} & 
+    \textbf{Confidence interval} & $x_i^{p1}$ \\
    \hline
 		1& 01/01 18:20& --- & ---	 &	--- & ---\\
 		2& 01/01 20:45& --- & ---	 &---	 & ---\\
@@ -384,24 +408,24 @@ transaction]{\includegraphics[width=5.5cm]{ch4_fig_3c}\label{fig:4:von3}}
    \label{tab:4:agg_features_example2}
    \end{table}
 
-	Additionally, using the same example as we show used to calculate the aggregated features, 
-	we calculate a feature $x_i^{p1}$, as a binary feature that takes the value of one if 
-  the current time of the transaction is within the confidence interval of the time of the previous 
-	transactions with a confidence of $\alpha=0.9$. The example is show in 
-  \tablename{~\ref{tab:4:agg_features_example2}}. In this example, it is shown, how the arithmetic 
-  and periodic means differ, as for the last transaction both means are significantly different. 
-  Moreover, the new feature, help to get a feeling of when a customer is expected to make 
-  transactions.
-	
-	Finally, when calculating the periodic features, is important to use longer time frames $t_p$, 
-	since if the distribution is calculated using only a couple of transactions it may not be as 
-	relevant of a customer behavior patterns, compared against using a full year of transactions.
-	Evidently, if $t_c$ is less than 24 hours, any transaction made afterwards will not be expected 
-	to be within the distribution of previous transactions times. To avoid this we recommend using at 
-	least the previous 7 days of transactional information.
-	Lastly, this approach can also be used to estimate features such as the expected day of the week 
-	of transactions, as some customers may only use their credit cards during the weekend nights, or 
-	during working hours.
+Additionally, following the same example presented on 
+\tablename{~\ref{tab:4:agg_features_example1}}, we calculate a feature $x_i^{p1}$, as a binary 
+feature that takes the value of one if the current  time of the transaction is within the 
+confidence interval of the time of the previous  transactions with a confidence of $\alpha=0.9$. 
+The example is show in \tablename{~\ref{tab:4:agg_features_example2}}. In this example, it is 
+shown, how the arithmetic and periodic   means differ, as for the last transaction both means are 
+significantly different. Moreover, the  new feature, help to get a felling of when a customer is 
+expected to make transactions.
+  
+  Finally, when calculating the periodic features, it is important to use longer time frames $t_p$, 
+  since if the distribution is calculated using only a couple of transactions it may not be as 
+  relevant of a customer behavior patterns, compared against using a full year of transactions.
+  Evidently, if $t_c$ is less than 24 hours, any transaction made afterwards will not be expected 
+  to be within the distribution of previous transactions times. To avoid this we recommend using at 
+  least the previous 7 days of transactional information, therefore, having a better understanding 
+  of its behavioral patterns. Lastly, this approach can also be used to estimate features such as 
+  the expected day of the week  of transactions, as some customers may only use their credit cards 
+  during the weekend nights, or during working hours.
 	
 	\subsection{Database}
 
