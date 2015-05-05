@@ -147,9 +147,9 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
   When constructing a credit card fraud detection algorithm, the initial set of features (raw 
   features) include information regarding individual transactions. It is observed throughout the 
   literature, that regardless of the study, the set of raw features is quite similar. This is 
-  because the data collected during a credit card transaction must comply with international 
-  accounting rules. In \tablename{~\ref{tab:4:raw_features}}, the typical credit card fraud 
-  detection  raw features are summarized.
+  because the data collected during a credit card transaction must comply the international 
+  financial   reporting standards \citep{Aicpa2011}. In \tablename{~\ref{tab:4:raw_features}}, the 
+  typical credit card fraud detection  raw features are summarized.
 	
 \subsubsection{Customer spending patterns}
 \label{sec:4:frad:features_agg}
@@ -157,9 +157,9 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
   Several studies use only the raw features in carrying  their analysis 
   \citep{Brause1999a,Minegishi2011,Panigrahi2009,Sanchez2009}. However, as noted in 
   \citep{Bolton2001}, a single transaction information is not sufficient to detect a fraudulent 
-  transaction. Moreover, it is also impractical, as using only the raw features leaves behind 
-  important information such as the consumer spending behavior, which is usually used by commercial 
-  fraud detection systems \citep{Whitrow2008}.
+  transaction, since as using only the raw features leaves behind important information such as 
+  the consumer spending behavior, which is usually used by commercial fraud detection systems  
+  \citep{Whitrow2008}.
   
 	\begin{table}[!t]
    \centering
@@ -219,7 +219,7 @@ DalPozzolo2014}.
   The process of aggregating features consists in  selecting those transactions that were made in 
   the previous $t_p$ hours, for each transaction $i$ in the dataset $\mathcal{S}$,
 	\begin{align}\label{eq:4:agg_features1}
-		TRX_{agg}(\mathcal{S},i, t_p) &= \bigg\{x_l^{amt} \bigg\vert 
+	\mathcal{S}_{agg} \equiv	TRX_{agg}(\mathcal{S},& i, t_p) = \bigg\{x_l^{amt} \bigg\vert 
 \left(x_l^{id}=x_i^{id}\right) \nonumber \\
 		&\wedge \left(hours(x_i^{time},x_l^{time}) < t_p\right) \bigg\}_{l=1}^N,
 	\end{align}
@@ -229,11 +229,11 @@ DalPozzolo2014}.
   calculates the number of hours between the times $t_1$  and $t_2$. Afterwards the feature number 
   of transactions and amount of transactions in the last $t_p$ hours are calculated as:
   \begin{equation}\label{eq:4:agg1a}
-    x_i^{a1} = \vert TRX_{agg}(\mathcal{S},i, t_p) \vert ,
+    x_i^{a1} = \vert \mathcal{S}_{agg} \vert ,
   \end{equation}
   and   
   \begin{equation}\label{eq:4:agg1b}
-  x_i^{a2} = \sum_{x^{amt} \in   TRX_{agg}(\mathcal{S},i, t_p)} x^{ amt},
+  x_i^{a2} = \sum_{x^{amt} \in   \mathcal{S}_{agg} } x^{ amt},
   \end{equation}
   respectively.
 	
@@ -244,7 +244,8 @@ DalPozzolo2014}.
   transaction type. For   calculating such features, first we expand (\ref{eq:4:agg_features1}) as 
   follows
 	\begin{align}\label{eq:4:agg_features2}
-		TRX_{agg}&(\mathcal{S}  ,i, t_p, cond_1, cond_2) = \bigg\{ x_l^{amt} \bigg\vert \nonumber \\  
+		\mathcal{S}_{agg2} \equiv & TRX_{agg}(\mathcal{S}  ,i, t_p, cond_1, cond_2) = \bigg\{ x_l^{amt} 
+\bigg\vert \nonumber \\  
 		& \left(x_l^{id}=x_i^{id}\right) \wedge  \left(hours(x_i^{time},x_l^{time})<  t_p\right) 
     \wedge \nonumber \\ 	
     &  \left(x_l^{cond_1} = x_i^{cond_1}\right) \wedge	\left(x_l^{cond_2} = 
@@ -253,11 +254,11 @@ DalPozzolo2014}.
   where, $cond_1$ and $cond_2$, could be either of the features of a transaction listed in 
   \tablename{~\ref{tab:4:raw_features}}. Then, the features are calculated as:
   \begin{equation}\label{eq:4:agg2a}
-     x_i^{a3} = \vert TRX_{agg}(\mathcal{S},i, t_p, country, type) \vert ,
+     x_i^{a3} = \vert \mathcal{S}_{agg2} \vert ,
   \end{equation}
   and   
   \begin{equation}\label{eq:4:agg2b}
-  x_i^{a4} = \sum_{x^{amt} \in   TRX_{agg}(\mathcal{S},i, t_p,country, type)} x^{ amt}.
+  x_i^{a4} = \sum_{x^{amt} \in   \mathcal{S}_{agg2}} x^{ amt}.
   \end{equation}
 
   To further clarify how the aggregated features are calculated we show an example. Consider a set 
@@ -345,15 +346,15 @@ $\mathbf{x}_i^{a4}$\\
   transaction. For doing that, initially we select a set of transactions made by  the same client 
   in the last $t_p$ hours,
   \begin{align}\label{eq:4:pe_features1}
-    TRX_{vM}(\mathcal{S},i, t_p) & = \bigg\{ x_l^{time} \bigg\vert   
+    \mathcal{S}_{per} \equiv TRX_{vM}(\mathcal{S},i, t_p) & = \bigg\{ x_l^{time} \bigg\vert   
     \left(x_l^{id}=x_i^{id}\right)\wedge \nonumber \\
     &\left(hours(x_i^{time},x_l^{time})< t_p\right)    \bigg\}_{l=1}^N.
   \end{align}
   Afterwards, the probability distribution function of the time of the set of transactions is 
   calculated as:
   \begin{equation}
-   x_i^{time} \sim vonmises\left(\mu_{vM}(TRX_{vM}(\mathcal{S},i, t_p)), 
-  \frac{1}{\sigma_{vM}(TRX_{vM}(\mathcal{S},i, t_p))} \right).
+   x_i^{time} \sim vonmises\left(\mu_{vM}(\mathcal{S}_{per}), 
+  \frac{1}{\sigma_{vM}(\mathcal{S}_{per})} \right).
   \end{equation}
   
   
