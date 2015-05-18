@@ -79,7 +79,10 @@ representable functions.
             0.5  &\mbox{if } \rho=0.5 ,
             \end{cases}
   \end{equation}
-  leading to the conclusion that $P_c\ge \rho$ if $\rho \ge 0.5$ for any $T$.
+	leading to the conclusion that 
+	\begin{equation}\label{eq:9:Pc2}
+  \rho \ge 0.5 \quad \text{and} \quad T\ge3 \quad \Rightarrow \quad P_c\ge \rho.
+  \end{equation}
   \end{remark}
   
 \subsection{Cost-sensitive ensembles}
@@ -90,12 +93,11 @@ representable functions.
   decision rules. In \citep{Street2008}, a bagging algorithm with adaptive costs was proposed. In 
   his doctoral thesis, Nesbitt \citep{Nesbitt2010}, proposed a method for cost-sensitive 
   tree-stacking. In this method different decision trees are learned, and then combined in a way 
-  that a cost function is minimized. Lastly in \citep{Lomax2013}, a survey of application of 
+  that a cost function is minimize. Lastly in \citep{Lomax2013}, a survey of application of 
   cost-sensitive learning with decision trees is shown, in particular including other methods that 
-  create cost-sensitive ensembles. However, in all the previously presented method, the 
-  misclassification costs only dependent on the class, therefore, assuming a constant cost across 
-  examples. Hence, these methods are not  well suited for example-dependent cost-sensitive 
-  problems. 
+  create cost-sensitive ensembles. However, in all these methods, the  misclassification costs only 
+  dependent on the class, therefore, assuming a constant cost across  examples. As a consequence, 
+  these methods are not  well suited for example-dependent cost-sensitive  problems. 
 
       
 \section{Ensembles of cost-sensitive decision trees}
@@ -302,7 +304,7 @@ $combinator$.
   $a  \in \{0,1\}$.
 
   \begin{lemma}\label{lemma1}
-  Let $H$ be an ensemble of $T>3$ classifiers $\mathcal{M}=\{M_1, M_2,\dots,M_T\}$, and 
+  Let $H$ be an ensemble of $T\ge3$ classifiers $\mathcal{M}=\{M_1, M_2,\dots,M_T\}$, and 
   $\mathcal{S}$ a testing set of size $N$. If each one of the base classifiers has a probability 
   of being correct higher or equal than one half, $\rho \ge \frac{1}{2}$, and the 
   \textit{reasonableness conditions} of the cost matrix are satisfied, then the following holds true
@@ -311,7 +313,7 @@ $combinator$.
  \end{align}
   \end{lemma}
   
-  \begin{proof}
+  \noindent\begin{proof}
   First, we decompose the total cost of the ensemble by applying equations (\ref{eq:3:cost_total}) 
   and (\ref{eq:3:cost}). Additionally, we separate the analysis for $a=0$ and $a=1$:
 
@@ -390,21 +392,22 @@ $combinator$.
     \rho \cdot C_{TP_i} + (1-\rho) \cdot C_{FN_i} .
   \end{align}
  
-  \noindent Finally, putting (\ref{eq:21}), (\ref{eq:22}), (\ref{eq:26}) and (\ref{eq:27}) 
-  together, (\ref{eq:9:lemma}) is rewritten
+	\noindent Finally, by replacing in (\ref{eq:9:lemma}) the expected savings of an  ensemble with 
+  (\ref{eq:21}) for $a=0$ and (\ref{eq:22}) for $a=1$, and the average cost of the base learners 
+  with  (\ref{eq:26}) for $a=0$ and (\ref{eq:27}) for $a=1$, (\ref{eq:9:lemma}) is rewritten as:
   
-  \noindent for $a=0$ as:
+  \noindent for $a=0$:
   \begin{align}\label{eq:9:lemma1}
     \sum_{i=1}^{N_0} P_c C_{TN_i} +(1-P_c)C_{FP_i} \le 
     \sum_{i=1}^{N_0} \rho \cdot C_{TN_i} + (1-\rho) \cdot C_{FP_i},
   \end{align}
-  and for $a=1$ as:
+  for $a=1$:
   \begin{align}\label{eq:9:lemma2}
     \sum_{i=1}^{N_1} P_c C_{TP_i} + (1-P_c)C_{FN_i} \le 
     \sum_{i=1}^{N_1}  \rho \cdot C_{TP_i} + (1-\rho) \cdot C_{FN_i}.
   \end{align}
  
-  \noindent Since $\rho \ge \frac{1}{2}$ , then $P_c\ge\rho$ from (\ref{eq:9:Pc}), and using the 
+  \noindent Since $\rho \ge \frac{1}{2}$ , then $P_c\ge\rho$ from (\ref{eq:9:Pc2}), and using the 
   \textit{reasonableness conditions} described in Section \ref{sec:3:example-dependent}, i.e, 
   $C_{FP_i} > C_{TN_i}$ and   $C_{FN_i} > C_{TP_i}$, we find that (\ref{eq:9:lemma1}) and 
   (\ref{eq:9:lemma2}) are  True.
@@ -416,7 +419,7 @@ $combinator$.
   than the expected average savings of the base learners.
   
   \begin{theorem}\label{theorem1}
-  Let $H$ be an ensemble of $T>3$ classifiers $\mathcal{M}=\{M_1,\dots,M_T\}$, and $\mathcal{S}$ a 
+  Let $H$ be an ensemble of $T\ge3$ classifiers $\mathcal{M}=\{M_1,\dots,M_T\}$, and $\mathcal{S}$ a 
   testing set of size $ N $, then the expected savings of using $H$ in 
   $\mathcal{S}$ are lower than the average expected savings of the base classifiers, in other words,
   \begin{equation}\label{eq:9:theorem}
