@@ -31,6 +31,13 @@ particular: bagging \citep{Breiman1996},   pasting~\citep{Breiman1999}, random f
 are trained, they are typically   combined using either   majority voting,  weighted  voting    or  
 stacking~\citep{Zhou2012}.
 
+\begin{figure}[t!]
+\includegraphics[scale=.4]{ch9_fig1}
+\caption{Main reasons regarding why ensemble methods perform better than 
+  single models: statistical, computational and representational \citep{Dietterich2000a}.}
+\label{fig:9:1}
+\end{figure} 
+
 As shown in \figurename{~\ref{fig:9:1}, there are three main reasons regarding why ensemble 
 methods perform better than single models: statistical, computational and representational 
 \citep{Dietterich2000a}. First, from a statistical point of view, when the learning set is too 
@@ -44,12 +51,7 @@ $f$ cannot be represented by any of the candidate models. By combining several  
 ensemble, it may be possible to obtain a model with a larger coverage across the  space of 
 representable functions.
   
-\begin{figure}[t!]
-\includegraphics[scale=.5]{ch9_fig1}
-\caption{Main reasons regarding why ensemble methods perform better than 
-  single models: statistical, computational and representational \citep{Dietterich2000a}.}
-\label{fig:9:1}
-\end{figure} 
+
   
   The most typical form of an ensemble is made by combining $T$ different base classifiers.
   Each  base classifier $M(\mathcal{S}_j)$ is trained by applying algorithm $M$ to a random subset 
@@ -62,7 +64,7 @@ representable functions.
     \mathbf{1}_c(M_j(\mathcal{S})).
   \end{align}
 
-  \newpage
+
   \begin{remark}{Theoretical performance of an ensemble}
 %   Moreover, i
   If we assume that each one of the $T$ base classifiers has a probability $\rho$ of 
@@ -276,8 +278,7 @@ $combinator$.
 \end{algorithmic}
 }
 \end{algorithm}
-
-\newpage 
+ 
 \section{Theoretical analysis of the ECSDT}
 \label{sec:9:theoretical}
 
@@ -445,7 +446,8 @@ $combinator$.
   $\mathcal{S}_1$,  implies that it is also lower on the sum of the cost on both sets, 
   therefore, proving Theorem~\ref{theorem1}.
   \end{proof}
-  
+ 
+\newpage
 \section{Experiments}
 \label{sec:9:experiments}
 
@@ -652,6 +654,16 @@ ECSDT&CSB-mv-t &  0.2945 &$\pm$& 0.0105 & 0.4837 &$\pm$& 0.0078\\
     \caption{Savings ranks of best algorithm of each family by database}
     \label{tab:9:results_best}
   \end{table}
+
+  \begin{figure}[t]
+    \centering
+    \includegraphics{ch9_fig3}
+    \caption{\textbf{Comparison of the savings of the algorithms versus the highest savings in 
+    each database.} The $CSRP-wt$ is very close to the best result in all the databases. 
+    Additionally, even though the $LR-BMR$ is the best algorithm in two databases, the performance 
+    in the other three is very poor.}
+    \label{fig:9:comparison_best}
+  \end{figure} 
   
   Subsequently, in order to statistically sort the classifiers we computed the Friedman ranking 
   (F-Rank)  statistic \citep{Demsar2006}. This rank increases with the cost of the algorithms. 
@@ -665,29 +677,7 @@ each set (perBest), as a  measure of how close are the savings of an algorithm t
   dataset \nth{1}, \nth{2}, \nth{2}, \nth{5} and \nth{3}, respectively. For comparison the best 
   method from an other family is the $RF$ with $BMR$, which ranks \nth{14}, \nth{14}, \nth{8}, 
   \nth{2} and \nth{9}.
-  
-  Moreover, when analyzing the perBest statistic, it is observed that it follows almost the same 
-  order as the F-Rank. Notwithstanding, there are cases in which algorithms ranks are different in 
-  the two statistics, for example the $CSDT-t$ algorithm has a lower F-Rank than the $RF-BMR$, 
-  but the perBest if better. This happens because, the F-Rank does not take into account the 
-  difference in savings within algorithms. This can be further investigated in \figurename{ 
-  \ref{fig:9:comparison_best}}. Even that ranks of the $BMR$ models are better than the $CSDT$, the 
-  latter is on average closer to the best performance method in each set. Moreover, it is confirmed 
-  that the $CSRP-wt$ is very close to the best result in all cases. Lastly, it is shown why the 
-  F-Rank of the $LR-BMR$ is high, given the fact that is the best model in two databases. The 
-  reason  for that, is because the performance on the other sets is very poor.
-  
-  \begin{figure}[t]
-    \centering
-    \includegraphics{ch9_fig3}
-    \caption{\textbf{Comparison of the savings of the algorithms versus the highest savings in 
-    each database.} The $CSRP-wt$ is very close to the best result in all the databases. 
-    Additionally, even though the $LR-BMR$ is the best algorithm in two databases, the performance 
-    in the other three is very poor.}
-    \label{fig:9:comparison_best}
-  \end{figure} 
-
-  
+   
 \begin{figure}[!t]
   \centering
   \subfloat[Comparison of the Friedman ranking.]{\includegraphics{ch9_fig4}%
@@ -701,16 +691,18 @@ each set (perBest), as a  measure of how close are the savings of an algorithm t
   \label{fig:9:comparison_family}
 \end{figure}
 
-  Furthermore \figurename{~\ref{fig:9:family_rank}}, shows the Friedman ranking of each family of 
-  classifiers. The $ECSDT$ methods are overall better, followed by the $BMR$ and the $CST$ methods. 
-  As expected, the $CI$ family is the one that performs the worst. Nevertheless, there is 
-  a significant variance within the ranks in the $ECSDT$ family, as the best one has a Friedman 
-  ranking of 2.6 and the worst 16. Similar results are found when observing the perBest shown in 
-  \figurename{~\ref{fig:9:family_avgsav}}. However, in the case of the perBest, the $CST$ methods 
-  perform better than the $BMR$. It is important, in both cases it is confirmed that the $ECSDT$ 
-  family of methods is the one that arise to the best results as measured by savings.
+  Moreover, when analyzing the perBest statistic, it is observed that it follows almost the same 
+  order as the F-Rank. Notwithstanding, there are cases in which algorithms ranks are different in 
+  the two statistics, for example the $CSDT-t$ algorithm has a lower F-Rank than the $RF-BMR$, 
+  but the perBest if better. This happens because, the F-Rank does not take into account the 
+  difference in savings within algorithms. This can be further investigated in \figurename{ 
+  \ref{fig:9:comparison_best}}. Even that ranks of the $BMR$ models are better than the $CSDT$, the 
+  latter is on average closer to the best performance method in each set. Moreover, it is confirmed 
+  that the $CSRP-wt$ is very close to the best result in all cases. Lastly, it is shown why the 
+  F-Rank of the $LR-BMR$ is high, given the fact that is the best model in two databases. The 
+  reason  for that, is because the performance on the other sets is very poor.
 
- \begin{figure}[!t]
+   \begin{figure}[!t]
   \centering
   \subfloat[Comparison by inducer methodology.]{\includegraphics{ch9_fig6}%
     \label{fig:9:rank_ecsdt1}}
@@ -722,6 +714,26 @@ each set (perBest), as a  measure of how close are the savings of an algorithm t
   combination method compared by Friedman ranking is the cost-sensitive weighted voting.}
   \label{fig:9:rank_ecsdt}
 \end{figure}
+
+  Furthermore \figurename{~\ref{fig:9:family_rank}}, shows the Friedman ranking of each family of 
+  classifiers. The $ECSDT$ methods are overall better, followed by the $BMR$ and the $CST$ methods. 
+  As expected, the $CI$ family is the one that performs the worst. Nevertheless, there is 
+  a significant variance within the ranks in the $ECSDT$ family, as the best one has a Friedman 
+  ranking of 2.6 and the worst 16. Similar results are found when observing the perBest shown in 
+  \figurename{~\ref{fig:9:family_avgsav}}. However, in the case of the perBest, the $CST$ methods 
+  perform better than the $BMR$. It is important, in both cases it is confirmed that the $ECSDT$ 
+  family of methods is the one that arise to the best results as measured by savings.
+  
+  \begin{figure}[t!]
+  \centering
+  \includegraphics{ch9_fig8}
+  \caption{\textbf{Comparison of the Friedman ranking of the savings and F1Score sorted by F1Score 
+  ranking.} The best two algorithms according to their Friedman rank of F1Score are indeed the 
+  best ones measured by the Friedman rank of the savings. However, this relation does not 
+  consistently hold for the other algorithms as the correlation between the rankings is just 
+  65.10\%.}
+  \label{fig:9:friedman_vs_fscore}
+  \end{figure}
   
   We further investigate the different methods that compose the $ECSDT$ family, first by inducer 
   methods and by the combination approach. In \figurename{ \ref{fig:9:rank_ecsdt1}}, the Friedman 
@@ -735,17 +747,6 @@ each set (perBest), as a  measure of how close are the savings of an algorithm t
   \ref{fig:9:rank_ecsdt2}}, a similar analysis is made taking into account the combination of base 
   classifiers approach. In this case, the best combination method is weighted voting, while 
   majority voting and staking have a similar performance.
-
-  \begin{figure}[t!]
-  \centering
-  \includegraphics{ch9_fig8}
-  \caption{\textbf{Comparison of the Friedman ranking of the savings and F1Score sorted by F1Score 
-  ranking.} The best two algorithms according to their Friedman rank of F1Score are indeed the 
-  best ones measured by the Friedman rank of the savings. However, this relation does not 
-  consistently hold for the other algorithms as the correlation between the rankings is just 
-  65.10\%.}
-  \label{fig:9:friedman_vs_fscore}
-  \end{figure}
 
 \begin{table}[!t]
      \centering

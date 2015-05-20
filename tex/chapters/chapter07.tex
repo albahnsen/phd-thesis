@@ -433,13 +433,7 @@ measured by $F_1Score$, it only arises to 74.7\% of the best model. This, leads 
 of the importance of using a cost-sensitive measure such as the savings, when evaluating real-world 
 example-dependent cost-sensitive problems. 
 
-Moreover, it is observed that the standard logistic regression trained using the training set, is 
-the model that performs the worst measured by both savings and $F_1Score$. This is related not only 
-to the cost-sensitivity of the problems, but also to the highly unbalanced distribution of positive 
-and negatives presented in all the databases. This is the reason why by using an under-sampling 
-procedure, the results are improved by both measures.
-
-\begin{figure}[htbp] 
+\begin{figure}[t!] 
   \centering
   \includegraphics{ch7_fig3}
   \caption{\textbf{Comparison of the average savings and $F_1Score$ of the algorithms versus the 
@@ -447,5 +441,9 @@ procedure, the results are improved by both measures.
   in terms of savings.}
   \label{fig:7:comparison_per_best}
 \end{figure}
-\null
-\vfill
+
+Moreover, it is observed that the standard logistic regression trained using the training set, is 
+the model that performs the worst measured by both savings and $F_1Score$. This is related not only 
+to the cost-sensitivity of the problems, but also to the highly unbalanced distribution of positive 
+and negatives presented in all the databases. This is the reason why by using an under-sampling 
+procedure, the results are improved by both measures.

@@ -108,6 +108,7 @@ rule, each leaf is further selected and it is subdivides into smaller leafs, unt
 stopping criteria is meet. In Algorithm \ref{alg:8:tree_grow}, the pseudocode of the tree 
 growing procedure is presented.
 
+\newpage
 \begin{algorithm}\label{alg:8:tree_grow}
 Pseudocode of the tree growing procedure.
 \textnormal{
@@ -199,6 +200,7 @@ $Z_\alpha$.
 PC_{eb} = \frac{Err_{UB}(EB(Tree,branch),\mathcal{S})-Err_{UB}(Tree,\mathcal{S}) }
     {\vert Tree\vert-\vert EB(Tree,branch)\vert}
 \end{equation} 
+\newpage
 where 
 \begin{align}
     Err_{UB}(Tree,&\mathcal{S})= Err(Tree,\mathcal{S}) & \nonumber \\
@@ -380,30 +382,6 @@ savings not the accuracy or $F_1Score$. There is a small increase in savings whe
 $DT$ with cost-sensitive pruning. Nevertheless, in the case of the $CSDT$ algorithm, there is 
 no change when using any pruning procedure, neither in savings or $F_1Score$.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[scale=0.8]{ch8_fig2}
-  \caption{Results of the $DT$ and the $CSDT$. For both algorithms, the results are 
-  calculated with and without both types of pruning  criteria.}
-\label{fig:8:2}
-\end{figure}
-\begin{figure}[t]
-  \centering
-  \includegraphics[scale=0.8]{ch8_fig3}
-  \caption{Average savings on the three datasets of the different cost-sensitive and standard 
-  decision tree,  estimated using the different training sets: training, under-sampling, 
-  cost-proportionate rejection-sampling  and cost-proportionate over-sampling.}
-  \label{fig:8:3}
-\end{figure}
-
-In addition, we also evaluate the algorithms on the different sets, under-sampling, 
-rejection-sampling and over-sampling. The results are shown in \tablename{~\ref{tab:8:1}}. 
-Moreover, in \figurename{~\ref{fig:8:3}}, the average results of the different algorithms measured 
-by savings is shown. The best results are found when using the training set. When using the 
-under-sampling set there is a decrease in savings of the $CSDT$ algorithm. Lastly, in the case of 
-the cost-proportionate sampling sets, there is a small increase in savings when using the $CSDT$ 
-algorithm. 
-
 \begin{table}
   \centering
   \footnotesize
@@ -453,7 +431,29 @@ algorithm.
   \label{tab:8:1}
 \end{table}
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=0.8]{ch8_fig2}
+  \caption{Results of the $DT$ and the $CSDT$. For both algorithms, the results are 
+  calculated with and without both types of pruning  criteria.}
+\label{fig:8:2}
+\end{figure}
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=0.8]{ch8_fig3}
+  \caption{Average savings on the three datasets of the different cost-sensitive and standard 
+  decision tree,  estimated using the different training sets: training, under-sampling, 
+  cost-proportionate rejection-sampling  and cost-proportionate over-sampling.}
+  \label{fig:8:3}
+\end{figure}
 
+In addition, we also evaluate the algorithms on the different sets, under-sampling, 
+rejection-sampling and over-sampling. The results are shown in \tablename{~\ref{tab:8:1}}. 
+Moreover, in \figurename{~\ref{fig:8:3}}, the average results of the different algorithms measured 
+by savings is shown. The best results are found when using the training set. When using the 
+under-sampling set there is a decrease in savings of the $CSDT$ algorithm. Lastly, in the case of 
+the cost-proportionate sampling sets, there is a small increase in savings when using the $CSDT$ 
+algorithm. 
  
 \begin{figure}
   \centering
