@@ -5,13 +5,14 @@ In this chapter, we introduce the problem of cost-sensitive classification. Stan
 classification models aim at minimizing the misclassification of examples, in which an example is 
 misclassified if the predicted class is different from the true class. However, this is not the 
 case in many real-world applications.
-In this chapter, first, we give an introduction to cost-sensitive classification in 
-Section~\ref{sec:3:intro}. Then, in Section~\ref{sec:3:class-dependent}, we present the problem of 
+In this chapter, first, we introduce cost-sensitive classification in Section~\ref{sec:3:intro}. 
+Then, in Section~\ref{sec:3:class-dependent}, we present the problem of 
 class-dependent cost-sensitive classification. Then, in Section~\ref{sec:3:example-dependent}, we 
 present the general framework of example-dependent cost-sensitive classification. Within this 
 section, we first introduce a method for defining the type of cost-sensitivity of a problem. 
-Afterwards, we present the different cost-sensitive performance evaluation measures. Lastly, we show 
-the state-of-the-art example-dependent cost-sensitive methods cost-proportionate rejection-sampling 
+Afterwards, we present the different cost-sensitive performance evaluation measures. Lastly, we 
+present state-of-the-art example-dependent cost-sensitive methods, namely,  cost-proportionate 
+rejection-sampling 
 and cost-proportionate over-sampling.
 \end{remark}
 
@@ -19,18 +20,16 @@ and cost-proportionate over-sampling.
 \section{Introduction}
 \label{sec:3:intro}
 
-  Classification, in the context of machine learning, deals with the problem of predicting the class
-  of a set of examples given their features. Traditionally, classification methods aim at 
-  minimizing the misclassification of examples, in which an example is misclassified if the 
-  predicted class is different from the true class. Such a traditional framework assumes that all 
-  misclassification errors carry the same cost. This is not the case in many real-world 
-  applications. Methods that use different misclassification costs are known as cost-sensitive 
-  classifiers. Typical cost-sensitive approaches assume a constant cost for each type of error, in 
-  the sense that, the cost depends on the class and is the same among examples
-  \citep{Elkan2001,Kim2012}. Although, this class-dependent approach is not realistic in many 
-  real-world applications.
+  Classification methods are used to predict the class of different examples given their features.
+  Standard methods aim at maximizing the accuracy of the predictions, in which an example is 
+  correctly classified if the predicted class is the same as true class. This traditional 
+  approach assumes that all correctly classified and misclassification examples carry the same cost. 
+  This however, is not the case in   many real-world applications.   Methods that use different 
+  misclassification costs are known as cost-sensitive  classifiers. Typical cost-sensitive 
+  approaches assume a constant cost for each type of error, in  the sense that, the cost depends on 
+  the class and is the same among examples \citep{Elkan2001,Kim2012}. Although, this class-dependent 
+  approach is not realistic in many   real-world applications.
   
-  \begin{remark}{Real-world example-dependent cost-sensitive applications}
   For example in credit card fraud detection, failing to detect a fraudulent transaction may have 
   an economical impact from a few to thousands of Euros, depending on the particular transaction 
   and card holder \citep{Sahin2013}. In churn modeling, a model is used for predicting which
@@ -40,10 +39,9 @@ and cost-proportionate over-sampling.
   accept an offer when in fact he will, has a different impact than the other way around 
   \citep{Zadrozny2003}. Also in credit scoring, where declining good customers has a non constant 
   impact since not all  customers generate the same profit \citep{Verbraken2014}. Lastly, in the 
-  case of intrusion   detection, classifying a benign connection as malicious have a different cost 
+  case of intrusion   detection, classifying a benign connection as malicious has a different cost 
   than when a   malicious connection is accepted \citep{Ma2011}.
-  \end{remark}
-
+  
   In order to deal with these specific types of cost-sensitive problems, called example-dependent
   cost-sensitive, some methods have been proposed recently. However, the literature on 
   example-dependent cost-sensitive methods is limited, mostly because there is a lack of publicly 
@@ -63,17 +61,27 @@ $C_{FN}+C_{FP}=2$ \citep{Flach2011a}, as when $C_{FN}=C_{FP}=1$ represents the c
 cost-insensitive classification. Using the previous notation, a class-dependent cost measure is 
 defined as \citep{Wang2014}:
 \begin{equation}
-  Cost_{cd}(f(\mathcal{S})) = C_{FP} \cdot FP + C_{FN} \cdot FN,
+  Cost_{cd}(f(\mathcal{S})) = C_{FP} \cdot FP + C_{FN} \cdot FN.
 \end{equation}
-where $FP$ and $FN$ are the number of false positives and false negatives, respectively.
+%where $FP$ and $FN$ are the number of false positives and false negatives, respectively.
 
-Following the toy example shown in Section~\ref{sec:2:classification}, we now assume that 
-misclassifying a negative example have a cost of $C_{FN}=0.2$ and a positive example $C_{FP}=1.8$. 
-Under this scenario, misclassifying a positive example have a much higher cost than 
-misclassifying a negative one. Taking that into account, in \figurename{~\ref{fig:3:1}, we show an 
-algorithm (Algorithm3), that focus on maximizing the correct classification of the positives.
+Over the past decades, various algorithms have been proposed for class-dependent cost-sensitive 
+classification in literature. Several authors have used modifications of the decision trees that 
+take into account the different class-dependent costs 
+\citep{Draper1994,Ting2002,Ling2004,Li2005,Kretowski2006,Vadera2010,Lomax2013}.
+Similarly, applications of bagging and boosting algorithms have been used for cost-sensitive 
+classification \citep{Nesbitt2010,Street2008,Masnadi-shirazi2011,Fan1999}. Recently, various 
+variations to support vector machines have also been used for this problem
+\citep{Li2010,Masnadi-shirazi2010}. Lastly, online learning algorithms have also been used for 
+cost-sensitive tasks \citep{Wang2014}.
+
+Following the example shown in Section~\ref{sec:2:classification}, we now assume that 
+misclassifying a negative example has a cost of $C_{FN}=0.2$ and for a positive example, the cost 
+is  $C_{FP}=1.8$. Under this scenario, misclassifying a positive example has a much higher cost 
+than misclassifying a negative one. Taking that into account, in \figurename{~\ref{fig:3:1}, we show 
+an algorithm (Algorithm3), that focused on maximizing the correct classification of the positives.
 In the following table, we compare the results of the standard measures and the class-dependent 
-cost, of Algorithm3 and the classification algorithms presented in \figurename{~\ref{fig:2:2b}} 
+cost, of Algorithm3 and the classification algorithms presented in \figurename{~\ref{fig:2:2}} 
 (Algorithm1) and \figurename{ \ref{fig:2:3}} (Algorithm2):
 \begin{center}
     \footnotesize
@@ -96,35 +104,23 @@ of the positives.}
   \label{fig:3:1}
 \end{figure}
 
-It is found, that by focusing on the positives, Algorithm3 arises to a lower cost, even though, the 
-traditional metrics are worst than Algorithm2. In conclusion, it is of highly importance to take 
-into account the cost when evaluating and training a classification model.
-
-\begin{remark}{Class-dependent cost-sensitive algorithms}
-Over the past decades, various algorithms have been proposed for class-dependent cost-sensitive 
-classification in literature. Several authors have used modifications of decision trees that take 
-into account the different class-dependent costs 
-\citep{Draper1994,Ting2002,Ling2004,Li2005,Kretowski2006,Vadera2010,Lomax2013}.
-Similarly, applications of bagging and boosting algorithms have been used for cost-sensitive 
-classification \citep{Nesbitt2010,Street2008,Masnadi-shirazi2011,Fan1999}. Recently, various 
-variations to support vector machines have also been used for this problem
-\citep{Li2010,Masnadi-shirazi2010}. Lastly, online learning algorithms have also been used for 
-cost-sensitive tasks \citep{Wang2014}.
-\end{remark}
+It is found, that by focusing on the positives, Algorithm3 arises to a lower cost, even though the 
+traditional metrics are worse for Algorithm3 than for Algorithm2. In conclusion, it is of highly 
+importance to take into account the cost when evaluating and training a classification model.
 
 
 \section{Example-dependent cost-sensitive classification}
 \label{sec:3:example-dependent}
 
-The class-dependent framework introduced in the previous section, is highly restrictive, as 
+The class-dependent framework introduced in the previous section is highly restrictive, as 
 assuming that the different costs are constant between classes is not realistic in many real world 
 applications. In fraud detection, fraudulent transactions  can have a financial impact from 
 hundreds or thousands of Euros \cite{Sahin2013}. 
 In this context, the example-dependent costs can be represented using a 2x2 cost matrix 
 \citep{Elkan2001}, that introduces the costs associated with   two types of correct   
-classification, true positives ($C_{TP_i}$), true negatives ($C_{TN_i}$),   and the two  types of  
- misclassification errors, false positives ($C_{FP_i}$), false negatives   ($C_{FN_i}$), as   
-defined in \tablename{~\ref{tab:3:cost_matrix}}.
+classification, cost of true positives ($C_{TP_i}$), cost of true negatives ($C_{TN_i}$),   and the 
+two  types of   misclassification errors, cost of false positives ($C_{FP_i}$), cost of false 
+negatives   ($C_{FN_i}$), as   defined in \tablename{~\ref{tab:3:cost_matrix}}.
 
 Conceptually, the cost of correct classification should always be lower than the cost of  
 misclassification. These are referred to as the ``reasonableness`` conditions \citep{Elkan2001},   
@@ -162,25 +158,25 @@ cost-matrix is shown in \tablename{~\ref{tab:3:sim_cost_mat}.
   2}{*}{$C^*_{TP_i}=\frac{(C_{TP_i}-C_{TN_i})}{(C_{FP_i}-C_{TN_i})}$} \\
   \\ 
   \end{tabular}
-  \caption{Simpler classification cost matrix \citep{Elkan2001}}
+  \caption{Simplified classification cost matrix \citep{Elkan2001}}
   \label{tab:3:sim_cost_mat}
 \end{table}  
+
 
 \subsection{Example-dependent evaluation measures}
 \label{sec:3:csmeasures}
 
-  Common cost-insensitive evaluation measures such as misclassification rate or \mbox{$F_1Score$}, 
+  Common cost-insensitive evaluation measures, such as misclassification rate or \mbox{$F_1Score$}, 
   assume the same cost for the different misclassification errors. Using these measures is not 
   suitable for example-dependent cost-sensitive binary classification problems. Indeed, two 
-  classifiers with equal misclassification rate but different numbers of false positives and 
+  classifiers with equal misclassification rates but different numbers of false positives and 
   false negatives do not have the same impact on cost since \mbox{$C_{FP_i}\ne C_{FN_i}$};
-  therefore there is a need for a measure that takes into account the actual costs 
-  $\{C_{TP_i},C_{FP_i},C_{FN_i},C_{TN_i}\}$ of each example $i$, as introduced in the previous 
-  Section.
-  \label{ntn:ch2:3}
-
-  Let $\mathcal{S}$ be a set of $N$ examples $i$, $N=\vert S \vert$, where each example is 
-  represented by  the augmented feature vector $\mathbf{x}_i^*=[\mathbf{x}_i, 
+  therefore, there is a need for a measure that takes into account the actual costs 
+  $\{C_{TP_i},C_{FP_i},C_{FN_i},C_{TN_i}\}$ of each example $i$, as introduced in 
+  Section~\ref{sec:3:example-dependent}.
+  
+  Let $\mathcal{S}$ be a set of $N$ examples $i$, $N=\vert \mathcal{S} \vert$, where each example 
+  is represented by  the augmented feature vector $\mathbf{x}_i^*=[\mathbf{x}_i, 
   C_{TP_i},C_{FP_i},C_{FN_i},C_{TN_i}]$  and labeled using the class   label $y_i   \in \{0,1\}$. 
   A classifier $f$ which generates the   predicted label $c_i$ for each   element $i$ is trained  
   using the set $\mathcal{S}$. Then the cost of   using $f$ on $\mathcal{S}$ is calculated by
@@ -203,7 +199,7 @@ cost-matrix is shown in \tablename{~\ref{tab:3:sim_cost_mat}.
     +  C_{FP_i} \cdot \mathbf{1}_1(y_i)  }.
   \end{align} 
 
-  We proposed similar approach in \citep{CorreaBahnsen2014b}, where the savings of using an 
+  We propose similar approach in \citep{CorreaBahnsen2014b}, where the savings of using an 
   algorithm  are defined as the cost of the algorithm versus the cost of using no algorithm at all. 
   To do that, the cost of the costless class is defined as 
   \begin{equation}
@@ -211,7 +207,7 @@ cost-matrix is shown in \tablename{~\ref{tab:3:sim_cost_mat}.
   \end{equation}
   where 
   \begin{equation}\label{eq:3:f_a}
-    f_a(\mathcal{S}) = \mathbf{a}, \text{ with } a\in \{0,1\}.
+    f_a(\mathcal{S}) = \{a\}, \text{ with } a\in \{0,1\}.
   \end{equation}
 
   The cost improvement can be expressed as the cost savings as compared with $Cost_l(\mathcal{S})$. 
@@ -223,13 +219,13 @@ cost-matrix is shown in \tablename{~\ref{tab:3:sim_cost_mat}.
 \begin{figure}[t!]
   \centering
   \includegraphics{ch3_fig2}
-  \caption{Toy example with example-dependent costs. Examples with the highest cost darker, and 
+  \caption{Example with example-dependent costs. Examples with the highest cost darker, and 
 the   ones with the lowest cost lighter.}
   \label{fig:3:2}
 \end{figure}
 
-In order to illustrate this concept, we used the same toy example shown in 
-Section~\ref{sec:2:classification}. However, now we add the variation in the costs, by showing the 
+In order to illustrate this concept, we use the same example shown in 
+Section~\ref{sec:2:classification}. However, now we add the variation in the costs by showing the 
 examples with the highest cost darker, and the ones with the lowest cost lighter. The new example 
 is shown in \figurename{~\ref{fig:3:2}}. Moreover, in the following table we summarize the 
 different example-dependent costs:
@@ -252,12 +248,11 @@ several times more expensive than the other cases.}
   \label{fig:3:3}
 \end{figure}
 
-Taking into account the example-dependent costs, in \figurename{~\ref{fig:3:3}} (Algorithm4), we the 
-cost when evaluating and training a classification model. show a new algorithm that focus first on 
-correctly classify the dark examples, as the cost of misclassification in this cases is several 
-times more expensive than the other cases.
+Taking into account the example-dependent costs, in \figurename{~\ref{fig:3:3}} (Algorithm4), we 
+show a new algorithm that gives a higher importance on correctly classify the dark examples, as the 
+cost of misclassification in this cases is several times more expensive than the other cases.
 Furthermore, in the following table, we compare the results of the standard measures and the 
-example-dependent savings, of Algorithm4 and the classification algorithms presented in 
+example-dependent savings of Algorithm4 and the classification algorithms presented in 
 \figurename{~\ref{fig:2:2b}} (Algorithm1), \figurename{ \ref{fig:2:3}} (Algorithm2) and 
 \figurename{~\ref{fig:3:1}} (Algorithm3):
 \begin{center}
@@ -273,10 +268,11 @@ example-dependent savings, of Algorithm4 and the classification algorithms prese
 \end{center}
 \vspace{0.3cm}
 
-With these examples, we have shown the impact that the costs have on the algorithms. Moreover, we 
-highlight the importance of using the different costs when evaluating the different models. Is 
-worth mentioning, how distinct are the results if the costs are ignored and an algorithm is 
-trained and evaluated not taking into account the different costs present in most real-world 
+With these examples, we illustrate the impact that the costs have on the algorithms. 
+Moreover, we highlight the importance of using the different costs when evaluating the different 
+models. It is worth mentioning how distinct are the results if the costs are ignored and an 
+algorithm is trained and evaluated not taking into account the different costs present in most 
+real-world 
 applications.
 
   
@@ -292,29 +288,31 @@ applications.
   is not constant and still the problem is cost-insensitive or class-dependent cost-sensitive. 
   For example, if the costs of correct classification are zero, $C_{TP_i}=C_{TN_i}=0$, 
   and the costs of misclassification are $C_{FP_i}=a_0\cdot z_i$ and $C_{FN_i}=a_1\cdot z_i$,
-  where $a_0$, $a_1$, are constant and $z_i$ a random variable. This is an example of a cost 
+  where $a_0$ and $a_1$, are constants and $z_i$ is a random variable. This is an example of a cost 
   matrix that is not constant. However, $C^*_{FN_i}$ and $C^*_{TP_i}$ are constant, i.e. 
   $C^*_{FN_i}=(a_1\cdot z_i)/(a_0\cdot z_i)=a_1/a_0$ and $C^*_{TP_i}=0$ $\forall i$. In 
   this case the problem is cost-insensitive if $a_0=a_1$, or class-dependent cost-sensitive if 
   $a_0 \ne a_1$, even given the fact that the cost matrix is not constant.
 
   Nevertheless, using only the simpler cost matrix is not enough to define when a problem is 
-  example-dependent cost-sensitive. To achieve this, we proposed in \citep{CorreaBahnsen2015}, 
-  the classification problem cost characteristic as:
+  example-dependent cost-sensitive. To achieve this, we defined the following cost characteristic 
+for a given binary classification problem as:
   \begin{equation}
     b_i = C^*_{FN_i}-C^*_{TP_i},
   \end{equation}
   and define its mean and standard deviation as $\mu_b$ and $\sigma_b$, respectively.
 
-  Using $\mu_b$ and $\sigma_b$, we analyze different binary classification problems. In the case 
-  of a cost-insensitive classification problem, for every example $i$ \mbox{$C_{FP_i}=C_{FN_i}$}
-  and $C_{TP_i}=C_{TN_i}$, leading to $b_i=1$ $\forall i$ or more generally $\mu_b=1$ and 
-  $\sigma_b=0$. For class-dependent cost-sensitive problems, the costs are not equal but 
-  constants \mbox{$C_{FP_i}\ne C_{FN_i}$} or \mbox{$C_{TP_i}\ne C_{TN_i}$}, leading to $b_i \ne 
-  1$ $\forall i$, or $\mu_b \ne 1$ and $\sigma_b=0$. Lastly, in the case of example-dependent 
-  cost-sensitive problems, the cost difference is non constant or $\sigma_b \ne 0$.
-
-  In summary a binary classification problem is defined according to the following conditions:
+  Using $\mu_b$ and $\sigma_b$, we analyze different binary classification problems. 
+%   
+%   In the case 
+%   of a cost-insensitive classification problem, for every example $i$ \mbox{$C_{FP_i}=C_{FN_i}$}
+%   and $C_{TP_i}=C_{TN_i}$, leading to $b_i=1$ $\forall i$ or more generally $\mu_b=1$ and 
+%   $\sigma_b=0$. For class-dependent cost-sensitive problems, the costs are not equal but 
+%   constants \mbox{$C_{FP_i}\ne C_{FN_i}$} or \mbox{$C_{TP_i}\ne C_{TN_i}$}, leading to $b_i \ne 
+%   1$ $\forall i$, or $\mu_b \ne 1$ and $\sigma_b=0$. Lastly, in the case of example-dependent 
+%   cost-sensitive problems, the cost difference is non constant or $\sigma_b \ne 0$.
+%   In summary 
+  A binary classification problem is defined according to the following conditions:
   \begin{center}
     \footnotesize
     \begin{tabular}{c | c | l}
@@ -343,7 +341,7 @@ applications.
   rejection-sampling approach consists in selecting a random subset $\mathcal{S}_{r}$  by 
   randomly  selecting examples from $\mathcal{S}$, and accepting each example $i$ with 
   probability $w_i/ \max\limits_{1,\dots, N}\{w_i\}$, where $w_i$ is defined as the expected 
-  misclassification error of example $i$:
+  misclassification error of example~$i$:
   \begin{equation}\label{eq_pred1}
     w_i = y_i\cdot C_{FN_i}+(1-y_i)\cdot C_{FP_i}.
   \end{equation}
@@ -353,13 +351,12 @@ applications.
   in over-fitting  \citep{Drummond2003}. Furthermore, none of these methods uses the full cost 
   matrix but only the  misclassification costs.
 
-  The second approach, consists in using the predicted probability $\hat p_i$, estimated using a 
+  The second approach consists in using the predicted probability $\hat p_i$, estimated using a 
   given classifier $f$, and   modify the threshold $t$  such that the savings are maximized. 
   This method is called cost-sensitive thresholding \citep{Sheng2006}. The idea behind this 
-approach 
-  is to adaptively modify the probability threshold of an algorithm $f_t$ in order to maximized the 
-  savings of the algorithm on a given set $Savings(f^t(\mathcal{S}))$. The threshold is calculated 
-  using the following equation
+  approach is to adaptively modify the probability threshold of an algorithm $f^t$ in order to 
+  maximize the savings $Savings(f^t(\mathcal{S}))$ of the algorithm $f^t$ on a given set 
+  $\mathcal{S}$. The threshold   is calculated  using the following equation
   \begin{equation}
    t_{thresholding} = \argmax_t Savings(f^t(\mathcal{S})).
   \end{equation}
