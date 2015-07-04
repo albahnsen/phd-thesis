@@ -1,8 +1,10 @@
 \chapter{Introduction}\label{ch:1}
 
+\section{Motivation and context}
+
   Classification, in the context of machine learning, deals with the problem of 
   predicting the class of a set of examples given their features. Traditionally, classification 
-  methods aim at minimizing the misclassification of examples, in which an example is 
+  methods aim at minimizing the misclassification of examples in which an example is 
   misclassified if the predicted class is different from the true class. Such a traditional 
   framework assumes that all misclassification errors carry the same cost. This is not the case in 
   many real-world applications. Methods that use different misclassification costs are known as 
@@ -23,7 +25,7 @@
   credit lines, therefore, different profit \citep{Verbraken2014}.
   
   Methods that use different misclassification costs are known as cost-sensitive classifiers. In 
-  particular we are interested in methods that are example-dependent cost-sensitive, in the sense 
+  particular, we are interested in methods that are example-dependent cost-sensitive, in the sense 
   that the costs vary among examples and not only among classes \citep{Elkan2001}. However, the 
   literature on example-dependent cost-sensitive methods is limited, mostly because there is a 
   lack of publicly available datasets that fit the problem \citep{MacAodha2013}.
@@ -41,11 +43,17 @@
   the normalized misclassification cost of the example. On the other hand, the over-sampling 
   method consists in creating a new set, by making $n$ copies of each example, where $n$ is related 
   to the normalized misclassification cost of the example.
-  In \citep{CorreaBahnsen2013,CorreaBahnsen2014}, we proposed a direct cost approach to make the 
-  classification decision based on the expected costs. This method is called Bayes minimum risk, and 
-  has been successfully applied to detect credit card fraud. The method   
-  consists in quantifying tradeoffs between various decisions using probabilities and the costs   
-  that accompany such decisions. 
+  These methods however, fail to introduce the example-dependent cost to the training of the 
+  different algorithms, and only rely on modifying the prior distribution of the training data.
+  
+  Thought this PhD project, we investigate and developed different example-dependent 
+  cost-sensitive classification algorithms, that not only focus on modifying the underling training 
+  distribution but also introduce the different real financial costs during the training of the 
+  algorithms. In particular, in \citep{CorreaBahnsen2013,CorreaBahnsen2014}, we proposed a direct 
+  cost approach to make the classification decision based on the expected costs. This method is 
+  called Bayes minimum risk, and has been successfully applied to detect credit card fraud. The 
+  method consists in quantifying tradeoffs between various decisions using probabilities and the 
+  costs that accompany such decisions. 
   
   Moreover, in \citep{CorreaBahnsen2014b}, we proposed a new cost-sensitive logistic regression. 
   The   method consists in introducing example-dependent costs into a logistic regression, by 
@@ -74,7 +82,7 @@
   
   The results show that by taking into account the real financial costs of the different 
   real-world applications, our  proposed example-dependent cost-sensitive decision tree is a better 
-  choice for these and many other applications. This is because, our algorithm is focusing on 
+  choice for these applications. This is because, our decision tree algorithm focus on 
   solving the actual business problems,  and not proxies as standard classification models do. We 
   foresee that our approach should open the door to developing more business focused algorithms, 
   and  that ultimately, the use of the actual financial costs during training will become a common 
@@ -83,40 +91,39 @@
 
   Finally, our results show the importance of using the real example-dependent financial costs 
   associated with real-world applications, since there are significant differences in the 
-  results when evaluating a model using a traditional cost-insensitive measure such as the 
-  accuracy or F1Score,  than when using the savings, leading to the conclusion of the 
-  importance of using the real practical financial costs of each context.
+  results when evaluating a model using the actual financial savings, than when using 
+  traditional cost-insensitive measures such as the accuracy or F1Score. Leading to the 
+  conclusion of the importance of using the real practical financial costs of each context.
 
 \section{Outline and contributions}
 
-\partname{~\textsc{\ref{part:1}}} of this manuscript is focused in giving the general concepts of 
+\partname{~\textsc{\ref{part:1}}} of this manuscript is focused on giving the general concepts of 
 classification and cost-sensitive classification. In particular, in \chaptername{~\ref{ch:2}}, we 
-give a self-contain background on classification. Then, in \chaptername{~\ref{ch:3}}, we present 
-the cost-sensitive problem. Moreover, in this chapter, we define what is the different between 
+give a background on classification. Then, in \chaptername{~\ref{ch:3}}, we present 
+the cost-sensitive problem. Moreover, in this chapter, we define the difference between 
 cost-insensitive, class-dependent cost-sensitive and example-dependent cost-sensitive 
 classification problems. Lastly, we give an introduction of the different evaluation measures 
 that are used throughout this thesis.
 
-\partname{~\textsc{\ref{part:2}}} is dedicated to explain the particularities of the four 
+\partname{~\textsc{\ref{part:2}}} is dedicated to explaining the particularities of the four 
 real-world classification problems that are the focus of this thesis, in particular, credit card 
 fraud detection, credit scoring, churn modeling and direct marketing. In general, we show why each 
 of the applications is example-dependent cost-sensitive, and we elaborate a framework for the 
 analysis of each problem. The part is organized in two chapters. First, in 
-\chaptername{~\ref{ch:4}}, we discussed the applications within financial risk management, lastly, 
+\chaptername{~\ref{ch:4}}, we discuss the applications within financial risk management. Lastly, 
 in  \chaptername{~\ref{ch:5}}, the marketing analytics applications.
 
-\partname{~\textsc{\ref{part:3}}} is focused in introducing our proposed example-dependent 
+\partname{~\textsc{\ref{part:3}}} is focused on introducing our proposed example-dependent 
 cost-sensitive methods. First, in \chaptername{~\ref{ch:6}}, we present our Bayes minimum risk 
 method. Then, in \chaptername{~\ref{ch:7}}, we introduce our method cost-sensitive logistic 
-regression. Afterwards, in \chaptername{~\ref{ch:8}}, we show and discuss our previously proposed 
+regression. Afterwards, in \chaptername{~\ref{ch:8}}, we show and discuss our proposed 
 cost-sensitive decision trees algorithm. Additionally, in \chaptername{~\ref{ch:9}}, we explain our 
-proposed framework for ensembles of cost-sensitive decision trees. Lastly, in the 
-Appendix~\ref{ch:A}, we present the library \mbox{\textit{CostCla}} that we develop as part of 
-the thesis. This library is an open-source implementation of all the algorithms covered in this 
-manuscript. \todo{Djamila, is Appendix A named here? before conclusions?}
+proposed framework for ensembles of cost-sensitive decision trees. 
 
 \chaptername{ \ref{ch:10}} concludes the thesis, and elaborates on possible lines for future 
-research.
+research. Lastly, in the Appendix~\ref{ch:A}, we present the library \mbox{\textit{CostCla}} that we 
+developed as part of the thesis. This library is an open-source implementation of all the algorithms 
+covered in this manuscript.
 
 \section{Publications}
 
@@ -140,18 +147,18 @@ In Proceedings of IEEE International Conference on Machine Learning and Applicat
 
 \item \citep{CorreaBahnsen2015} \textit{Example-Dependent Cost-Sensitive Decision Trees},
 Alejandro Correa Bahnsen, Djamila Aouada and Bj\"orn Ottersten.
-In Expert Systems with Applications, in press, 2015.
+In Expert Systems with Applications, 42(19):6609-6619, 2015.
 
 \item \citep{CorreaBahnsen2015a} \textit{A novel cost-sensitive framework for customer churn 
 predictive modeling}, Alejandro Correa Bahnsen, Djamila Aouada and Bj\"orn Ottersten.
-In Decision Analytics, in press, 2015.
+In Decision Analytics, 2(1):5, 2015.
 
 \item \citep{CorreaBahnsen2015b} \textit{Ensembles of Example-Dependent Cost-Sensitive Decision 
 Trees}, Alejandro Correa Bahnsen, Djamila Aouada and Bj\"orn Ottersten.
-In IEEE Transactions on Knowledge and Data Engineering, 2015.
+Submitted to IEEE Transactions on Knowledge and Data Engineering, 2015.
 
 \item \citep{CorreaBahnsen2015c} \textit{Feature Engineering in Credit Card Fraud Detection},
-Alejandro Correa Bahnsen, Djamila Aouada and Bj\"orn Ottersten. In Expert Systems with 
+Alejandro Correa Bahnsen, Djamila Aouada and Bj\"orn Ottersten. Submitted to Expert Systems with 
 Applications, 2015.
 
 \end{itemize}
