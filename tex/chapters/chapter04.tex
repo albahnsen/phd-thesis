@@ -14,25 +14,25 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
 \label{sec:4:fraud}
 
   The use of credit and debit cards has increased significantly   in the last years, unfortunately 
-	so has the fraud. Because of it, billions of Euros are lost every year. According to 
-	the European Central Bank \citep{EuropeanCentralBank2013}, during 2012 the total level of fraud 
-	reached 1.33 billion Euros in the Single Euro Payments Area, which represents an increase of 
-	14.8\% compared with 2011. Moreover, payments across non traditional channels (mobile, internet, 
-	...) accounted for 60\% of the fraud, whereas it was 46\% in 2008. This opens new challenges as 
-	new fraud patterns emerge, and current fraud detection systems are not being successful in 
-	preventing fraud. Furthermore, fraudsters constantly change their strategies to avoid being 
-	detected, something that makes traditional fraud detection tools such as expert rules inadequate.
+  so has the fraud. Because of it, billions of Euros are lost every year. According to 
+  the European Central Bank \citep{EuropeanCentralBank2013}, during 2012 the total level of fraud 
+  reached 1.33 billion Euros in the Single Euro Payments Area, which represents an increase of 
+  14.8\% compared with 2011. Moreover, payments across non traditional channels (mobile, internet, 
+  ...) accounted for 60\% of the fraud, whereas it was 46\% in 2008. This opens new challenges as 
+  new fraud patterns emerge, and current fraud detection systems are not being successful in 
+  preventing fraud. Furthermore, fraudsters constantly change their strategies to avoid being 
+  detected, something that makes traditional fraud detection tools such as expert rules inadequate.
   
-  The use of machine learning in fraud detection have been an interesting topic in recent years. 
-  Several detection systems based on machine learning techniques has been successfully used 
-	for this problem \citep{Bhattacharyya2011}. When constructing a credit card fraud detection 
-  model, there are several problems that have an important impact during the training phase: 
-  Skewness of 	the data , cost-sensitivity of the application, short time response of the system, 
-  dimensionality of the search space and how to preprocess the features
-	\citep{Bolton2002,Gadi2008,Whitrow2008,DalPozzolo2014}.	We are interested on 
-	addressing the cost-sensitivity and the features preprocessing 	issues. 
-	
-	\begin{remark}{Cost-sensitive fraud detection}
+  The use of machine learning in fraud detection has been an interesting topic in recent years. 
+  Several detection systems based on machine learning techniques have been successfully used 
+  for this problem \citep{Bhattacharyya2011}. When constructing a credit card fraud detection 
+model, 
+  there are several problems that have an important impact during the training phase: Skewness of   
+  the data , cost-sensitivity of the application, short time response of the system, dimensionality 
+  of the search space and how to preprocess the features
+  \citep{Bolton2002,Gadi2008,Whitrow2008,DalPozzolo2014,VanVlasselaer2015a}.  In this paper, focus 
+  on addressing the cost-sensitivity and the features preprocessing   issues. 
+  
   Credit card fraud detection is by definition a cost-sensitive problem, in the sense that the 
   cost  due to a false positive is different than the cost of a false negative. When predicting a   
   transaction   as fraudulent, when in fact it is not a fraud, there is an administrative cost that 
@@ -43,8 +43,7 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
   depends on each   transaction.  In \citep{CorreaBahnsen2013}, we proposed a new cost-based 
   measure to evaluate   credit card fraud detection models, taking into account the different 
   financial costs incurred by   the fraud detection process.
-	\end{remark}
-	
+  
   When constructing a credit card fraud detection model, it is very important to use those features 
   that will help the algorithm make the best decision. Typical models only use raw transactional 
   features, such as time, amount, place of the transaction. However, this approach does not take 
@@ -56,7 +55,7 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
   by card or account number, then by transaction type, merchant group, country or other, followed 
   by calculating  the number of transactions or the total amount spent on those transactions.
 	
-	In this section, we present our previously proposed expanded version of the transaction 
+	In this section, we present our propose expanded version of the transaction 
   aggregation strategy, by  incorporating a combination criteria when grouping transactions, i.e., 
   then instead of aggregating only  by card holder and transaction type, we combine it with 
   country or merchant group. This allows to have a much richer feature space. Moreover, we are 
@@ -79,8 +78,9 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
   particular: neural networks~\citep{Maes2002}, Bayesian learning \citep{Maes2002}, artificial 
   immune systems \citep{Gadi2008}, association rules \citep{Sanchez2009}, hybrid models 
   \citep{Krivko2010}, support vector machines~\citep{Bhattacharyya2011}, peer group  analysis 
-  \citep{Weston2008}, random forest~\citep{CorreaBahnsen2013} and online learning 
-  \citep{DalPozzolo2014}.
+  \citep{Weston2008}, random forest~\citep{CorreaBahnsen2013}, online learning   
+\citep{DalPozzolo2014}, discriminant analysis \citep{Mahmoudi2015} and social network analysis 
+\citep{VanVlasselaer2015a}.
  
   Most of these studies compare their proposed algorithm with a benchmark algorithm and then make 
   the comparison using a standard binary classification measure, such as misclassification error, 
@@ -183,7 +183,6 @@ Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented.
    Gender & Gender of the card holder\\
    Age & Card holder age\\
    Bank & Issuer bank of the card\\
-   Fraud & Indicator whenever or not a transaction was a fraud\\
    \hline
    \end{tabular}
    \caption{Summary of typical raw credit card fraud detection features}
@@ -384,7 +383,14 @@ distribution   a new set of features can be extracted, ie. a binary
   \label{fig:4:von3}
   \end{figure} 
 	
-
+Additionally, following the same example presented on 
+\tablename{~\ref{tab:4:agg_features_example1}}, we calculate a feature $x_i^{p1}$, as a binary 
+feature that takes the value of one if the current  time of the transaction is within the 
+confidence interval of the time of the previous  transactions with a confidence of $\alpha=0.9$. 
+The example is show in \tablename{~\ref{tab:4:agg_features_example2}}. In this example, it is 
+shown, how the arithmetic and periodic   means differ, as for the last transaction both means are 
+significantly different. Moreover, the  new feature, help to get a felling of when a customer is 
+expected to make transactions.
 
 	\begin{table}[!t]
    \centering
@@ -408,15 +414,6 @@ distribution   a new set of features can be extracted, ie. a binary
    \caption{Example calculation of periodic features.}
    \label{tab:4:agg_features_example2}
    \end{table}
-
-Additionally, following the same example presented on 
-\tablename{~\ref{tab:4:agg_features_example1}}, we calculate a feature $x_i^{p1}$, as a binary 
-feature that takes the value of one if the current  time of the transaction is within the 
-confidence interval of the time of the previous  transactions with a confidence of $\alpha=0.9$. 
-The example is show in \tablename{~\ref{tab:4:agg_features_example2}}. In this example, it is 
-shown, how the arithmetic and periodic   means differ, as for the last transaction both means are 
-significantly different. Moreover, the  new feature, help to get a felling of when a customer is 
-expected to make transactions.
   
   Finally, when calculating the periodic features, it is important to use longer time frames $t_p$, 
   since if the distribution is calculated using only a couple of transactions it may not be as 
