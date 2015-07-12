@@ -7,14 +7,14 @@ profit of the company. Moreover, the different costs due to misclassification va
 Particularly, we focused on four different real-world applications: credit card fraud 
 detection, credit scoring, churn modeling and direct marketing. In all cases, evaluating a 
 classification algorithm using traditional statistics such as misclassification rate or $F_1Score$, 
-do not accurately represent the business oriented goals. Moreover, we founded, significant 
-differences in the results, when using tradition cost-insensitive methods against example-dependent 
-cost-sensitive methods.
+do not accurately represent the business oriented goals. Moreover, we found, significant 
+differences in the results, when using traditionally cost-insensitive methods against 
+example-dependent cost-sensitive methods.
 
 First in \partname{~\textsc{\ref{part:1}}}, we laid out the background for general classification 
-methods, and their respective evaluation measures. Moreover, we introduce the problem of 
-cost-sensitive learning, in particular, we define the differences between class-dependent and 
-example-dependent problems. In addition, we present a evaluation measure that takes into account 
+methods, and their respective evaluation measures. Moreover, we introduced the problem of 
+cost-sensitive learning. In particular, we define the differences between class-dependent and 
+example-dependent problems. In addition, we present an evaluation measure that takes into account 
 the real financial gains and losses of practical applications.
 
 Then in \partname{~\textsc{\ref{part:2}}}, we analyzed and discussed four real-world 
@@ -30,34 +30,34 @@ examples in the different classes. Then, we focused on introducing the costs to 
 during the training phase. In particular, we presented the cost-sensitive logistic regression and  
 cost-sensitive decision trees algorithms. The cost-sensitive decision tree algorithm proved to be 
 highly effective while maintaining the simplicity and interpretability of decision trees. However, 
-this method suffer from high variance, to overcome that limitation, we proposed framework for 
-ensembles of cost-sensitive decision trees. We have shown theoretically and experimentally that 
-that the method ensembles of cost-sensitive decision trees ranks the best and outperforms 
+this method suffered from high variance. To overcome this limitation, we proposed framework for 
+ensembles of cost-sensitive decision trees. We have shown theoretically and experimentally
+that the method of ensembles of cost-sensitive decision trees ranks the best and outperforms 
 state-of-the-art example-dependent cost-sensitive methodologies, when measured by financial savings.
-Lastly, in Appendix~\ref{ch:A}, we presented the library \mbox{\textit{CostCla}} that we developed 
-as part of the thesis. This library is an open-source implementation of all the algorithms covered 
-in this manuscript. 
 
-Finally, this thesis showed the importance of using the real example-dependent financial costs 
+This thesis showed the importance of using the real example-dependent financial costs 
 associated with real-world applications. In particular, we found significant differences in the 
 results when evaluating a model using a  traditional cost-insensitive measure such as the 
-accuracy or F1Score,  than when using the savings, leading to the conclusion of the 
-importance of using the real practical financial costs of each context.
+accuracy or $F1Score$,  than when using the savings, leading to the conclusion of the 
+importance of using the real practical financial costs of each context. Lastly, in 
+Appendix~\ref{ch:A}, we presented the library \mbox{\textit{CostCla}} that we developed 
+as part of the thesis. This library is an open-source implementation of all the algorithms covered 
+in this manuscript. 
 
 
 \section{Future research directions}
 
-We foresee that the framework we developed though this thesis should open the door to developing 
-more business focused algorithms, and that ultimately, the use of the actual financial costs during 
-training will become a common practice. There are a list of points related to the work that can be 
-further investigated. In the following, we address some issues. 
+We foresee that the framework we developed through this thesis should open the door to 
+developing more business focused algorithms, and that ultimately, the use of the actual financial 
+costs during training will become a common practice. There is a list of points related to this work 
+that can be further investigated. In the following, we address some issues. 
 
 \begin{itemize}
- \item \textbf{Multi-class example-dependent cost-sensitive classification.} This thesis was 
+ \item \textbf{Multi-class example-dependent cost-sensitive classification.} This thesis  
 focused on binary cost-sensitive classification problems. Nevertheless, we understand 
-that not all the cost-sensitive applications are two-class problems. Some studies have start to 
+that not all the cost-sensitive applications are two-class problems. Some studies have started to 
 look into Multi-class class-dependent cost-sensitive classification \citep{Zhou2010}. Therefore, we 
-expect that an interesting line of future work should include the expanding of our framework to 
+expect that an interesting line of future work should include expanding our framework to 
 multi-class problems.
 
  \item \textbf{Cost-sensitive calibration.} When evaluating how well a set of probabilities are 
@@ -68,7 +68,7 @@ cost-sensitive costs related to each application. Future work should include a d
 impact of the costs during the calibration of probabilities.
 
   \item \textbf{Staking cost-sensitive decision trees.} Even though we explore the method of 
-staking in Section~\ref{sec:9:staking}, we foreseen that a deeper analysis of the impact of having 
+staking in Section~\ref{sec:9:staking}, we foresee that a deeper analysis of the impact of having 
 several layers of example-dependent cost-sensitive methods could enhance the performance of the 
 system.
 
@@ -77,18 +77,18 @@ only focused our attention to independent ensemble methods, in particular baggin
 However, there is an other branch of ensemble methods, those that are dependent, such as 
 boosting \citep{Schapire1990}, adaboost \citep{Freund1996} or gradient boosting 
 \citep{Friedman2001,Friedman2002}. For some applications these methods have proved to outperform 
-the bagging algorithms \citep{Zhou2012}, therefore, we think that future research should focus 
+the bagging algorithms \citep{Zhou2012}, therefore, we think that future research should focus on 
 creating a framework for example-dependent cost-sensitive boosting algorithms.
 
   \item \textbf{Online example-dependent cost-sensitive classification.} The methods covered in 
-this thesis are all batch, in the sense that the batch algorithms keeps the system weights constant 
-while calculating the evaluation measures. However in some applications such as fraud detection, the 
-evolving patters due to change in the fraudsters behavior is not capture by using batch methods. 
-Therefore, the need for investigate this problem from an online-learning perspective 
+this thesis are all batch methods, in the sense that the batch algorithms keep the system weights 
+constant while calculating the evaluation measures. However, in some applications such as fraud 
+detection, the evolving patterns due to change in the fraudsters behavior are not captured by using 
+batch methods. Therefore, the need for investigate this problem from an online-learning perspective 
 \citep{Pozzolo2014}. In particular, we think that a first approach may consist in expanding the 
 online class-dependent method proposed in \citep{Wang2014}, into an example-dependent cost-sensitive 
 setting.
 
-  \item temp. \todo{add reinforcement learning in fraud detection}
+%   \item temp. \todo{add reinforcement learning in fraud detection}
 \end{itemize}
 
