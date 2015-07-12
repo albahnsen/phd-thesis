@@ -1,7 +1,7 @@
 \chapter{Bayes minimum risk}\label{ch:6}
 
 \begin{remark}{Outline}
-In this chapter, we present our previously proposed Bayes minimum risk algorithm. The method 
+In this chapter, we present our propose Bayes minimum risk algorithm. The method 
 consists in quantifying tradeoffs between various decisions using probabilities and the costs that 
 accompany such decisions. First, in Section~\ref{sec:6:bmr}, we present the Bayes minimum risk 
 algorithm. Then, in Section~\ref{sec:6:prob}, we discuss the impact of calibrating the probabilities 
@@ -39,15 +39,13 @@ probability for example $i$. Subsequently, if
 then  the example $i$ is classified as negative. This means that the risk associated with the 
 decision $c_i$ is lower than the risk associated with classifying it as positive. 
 
-\begin{remark}{Characteristics of probability estimates}
-When using the output of a binary classifier as a basis for decision making, there is a 
-need for a probability that not only separates well between positive and negative examples, but 
-that also assesses the real probability of the event \citep{cohen2004}.
-\end{remark}
-
 
 \section{Calibration of probabilities}
 \label{sec:6:prob}
+
+When using the output of a binary classifier as a basis for decision making, there is a 
+need for a probability that not only separates well between positive and negative examples, but 
+that also assesses the real probability of the event \citep{cohen2004}.
 
 In this section, two methods for calibrating probabilities are explained. First, the method proposed 
 in \citep{Elkan2001} to adjust the probabilities based on the   difference in bad rates  between the 
@@ -76,14 +74,14 @@ is given as follows:
 %   is no change in the example probability within the positive and negative
 %   subpopulations density functions.
   
-\subsection{Calibrated using the ROC convex hull}
+\subsection{Calibration using the ROC convex hull}
 
 In order to illustrate the ROC convex hull approach proposed in \citep{Hernandez-Orallo2012},
 let us consider the set of probabilities given in \figurename{~\ref{tab:6:example_prob}}.
-Their corresponding  ROC curve of that set of probabilities is shown in 
-\figurename{~\ref{fig:6:ROC_1}}.  It can be seen that this set of probabilities is not calibrated, 
-since at 0.1 there is a positive example  followed by 2 negative examples. That inconsistency is 
-represented in the ROC curve as a non convex segment  over the curve.
+Their corresponding  ROC curve  is shown in \figurename{~\ref{fig:6:ROC_1}}.  It can be seen that 
+this set of probabilities is not calibrated, since when $fpr=0.1$ there is a positive example  
+followed by 2 negative examples. This inconsistency is represented in the ROC curve as a non convex 
+segment  over the curve.
   
 \begin{figure}[!t]
 \hskip 0.5cm
@@ -156,10 +154,10 @@ represented in the ROC curve as a non convex segment  over the curve.
 
 In order to obtain a set of calibrated probabilities, first the ROC curve must be modified in 
 order to be convex. The way to do that, is to find the convex \mbox{hull 
-\citep{Hernandez-Orallo2012}}, to find the minimal convex set containing the different 
+\citep{Hernandez-Orallo2012}} to find the minimal convex set containing the different 
 points of the ROC curve. In \figurename{~\ref{fig:6:ROC_2}}, the convex hull algorithm is applied 
-to the previously evaluated ROC curve. It is shown that the new curve is convex, and includes all 
-the points of the previous ROC curve.
+to the previously evaluated ROC curve shown in \figurename{~\ref{fig:6:ROC_1}}. It is shown that 
+the new curve is convex, and includes all the points of the previous ROC curve.
 
 Now that there is a new convex ROC curve or ROCCH, the calibrated probabilities can be extracted 
 as shown in  \figurename{~\ref{fig:6:cal_prob}}. The procedure to extract the new probabilities is 
@@ -170,7 +168,7 @@ calibrated  probabilities be the slope of the ROCCH for each group.
 \section{Experiments}
 \label{sec:6:experiments}
 
-In this section, first the summarized the datasets used for the experiments. Then, the 
+In this section, first we present the datasets used for the experiments. Then, the 
 partitioning of the dataset and the algorithms used are shown. Finally, we present the results.
 
 \subsection{Experimental setup}
@@ -180,8 +178,9 @@ cost-sensitive problems: Credit card fraud detection (see Section~\ref{sec:4:fra
 scoring (see Section~\ref{sec:4:creditscoring}), churn modeling (see Section~\ref{sec:5:churn}) and 
 direct marketing (see Section~\ref{sec:5:directmarketing}).
 
-For each dataset we used a pre-define a cost matrix that we previously proposed in different 
-publications. Additionally,  for each database, 3 different datasets are extracted: training, 
+For each dataset we used a pre-define cost matrix that we previously proposed in 
+Chapter~\ref{ch:4} and Chapter~\ref{ch:5}. Additionally,  for each database, 3 different 
+datasets are extracted: training, 
 validation and testing. Each one containing 50\%, 25\% and 25\% of the examples, 
 respectively. Afterwards, because classification algorithms suffer when the label distribution is 
 skewed towards one of the classes \citep{Hastie2009}, an under-sampling of the positive examples is 
@@ -196,8 +195,7 @@ training dataset since the validation and test datasets must reflect the real di
   \footnotesize
   \begin{tabular}{l l c c c } %sum 7.7
     \hline
-    \textbf{Database}& \textbf{Set}&  \textbf{\# Obs} ($N$) & \textbf{\%Pos} ($\pi_1$)& 
-    \textbf{Cost} \\
+    \textbf{Database}& \textbf{Set}&  $N$ & $\pi_1$ & Cost (Euros) \\
     \hline
     Fraud &Total&236,735&1.50&895,154\\
     Detection&  Training ($t$)&94,599&1.51&358,078\\
@@ -240,7 +238,8 @@ training dataset since the validation and test datasets must reflect the real di
     &Testing&11,231&13.04&19,048\\
     \hline
   \end{tabular}
-  \caption{Summary of the datasets}
+  \caption{Summary of the datasets. Where $N$ is the number of examples and $\pi_1$ is the 
+  percentage of positives examples.}
   \label{tab:6:databases}
 \end{table}
  
@@ -248,7 +247,8 @@ training dataset since the validation and test datasets must reflect the real di
 \subsection{Results}
 
 
-  For the experiments we first used three classification algorithms, decision tree ($DT$), logistic 
+  For the experiments, we first used three classification algorithms, decision tree ($DT$), 
+logistic 
   regression ($LR$) and random forest ($RF$). Using the implementation of \textit{Scikit-learn} 
   \citep{Pedregosa2011}, each algorithm is trained using the different training sets: training 
   ($t$), under-sampling ($u$), cost-proportionate rejection-sampling  ($r$) \citep{Zadrozny2003}   
@@ -290,7 +290,7 @@ BMR&LR-t-BMR-cal & 0.0897 &$\pm$& 0.0203 & \bf{0.1082} &\bf{$\pm$}& \bf{0.0316} 
 &RF-t-BMR-cal & \bf{0.6414} &\bf{$\pm$}& \bf{0.0154} & 0.0856 &$\pm$& 0.0354 & 0.4924 &$\pm$& 
 0.0087\\  
 \hline
-  \multicolumn{11}{c}{(those models with the highest savings are market as bold)}
+  \multicolumn{11}{c}{(Models with the highest savings are marked in bold)}
   \end{tabular}
     \caption{Results of the algorithms measured by savings}
     \label{tab:6:results_savings}
@@ -300,8 +300,8 @@ The results are shown in \tablename{ \ref{tab:6:results_savings}}. First, when o
 results of the cost-insensitive methods ($CI$), that is, $DT$, $LR$ and $RF$ algorithms trained 
 on the $t$ and $u$ sets, the $RF$ algorithm produces the best result by savings in three out of 
 the five sets, followed by the $LR-u$. It is also clear that the results on the $t$ dataset are 
-not as good as the ones on the $u$, this is highly related to the unbalanced distribution of the 
-positives and negatives in all the databases.  
+not as good as the ones on the $u$ dataset, this is highly related to the unbalanced distribution 
+of the positives and negatives in all the databases.  
   
 \begin{table}[!t]
     \centering
@@ -334,7 +334,7 @@ BMR&LR-t-BMR-cal & \bf{0.3148} &\bf{$\pm$}& \bf{0.0094} & \bf{0.4973} &\bf{$\pm$
 &RF-t-BMR-cal & 0.3133 &$\pm$& 0.0094 & 0.4807 &$\pm$& 0.0093\\ 
 
 \hline 
-  \multicolumn{8}{c}{(those models with the highest savings are market as bold)}
+  \multicolumn{8}{c}{(Models with the highest savings are marked in bold)}
   \end{tabular}
     \caption{Continuation of \tablename{~\ref{tab:6:results_savings}}.}
     \label{tab:6:results_savings2}
@@ -342,11 +342,11 @@ BMR&LR-t-BMR-cal & \bf{0.3148} &\bf{$\pm$}& \bf{0.0094} & \bf{0.4973} &\bf{$\pm$
   
 In the case of cost-proportionate sampling methods ($CPS$), specifically the 
 cost-proportionate rejection sampling ($r$) and cost-proportionate over 
-sampling ($o$). It is observed than in four cases the savings increases quite 
+sampling ($o$), it is observed that in four cases the savings increase quite 
 significantly. It is on the fraud detection database where these methods do not outperform the 
 algorithms trained on the under-sampled set. This may be related to the fact that in this 
 database the initial percentage of positives is 1.5\% which is similar to the percentage in the 
-$r$ and   $o$ sets. However it is 50.42\% in the $u$ set, which may help explain why this method 
+$r$ and   $o$ sets. However, it is 50.42\% in the $u$ set, which may help explain why this method 
 performs much better as measured by savings.
 
 \begin{figure}[!t]
@@ -357,17 +357,6 @@ performs much better as measured by savings.
     significant increase in savings.}
   \label{fig:6:comparison_family}
 \end{figure}
-
-Afterwards, in the case of the $BMR$ algorithms, the results show that this method outperforms 
-the previous ones in four cases and has almost the same result in the other set. In the fraud 
-detection  set, the results are quite better, since the savings of the three classification 
-algorithms increase when using this methodology. Moreover, we found that by calibrating the 
-probabilities, the results of the Bayes minimum risk increase. In 
-\figurename{~\ref{fig:6:comparison_family}}, we compare the different families of algorithms, by 
-calculating in each dataset the performance of the methods compared with the best method. First, it 
-is shown the huge difference of using only cost-insensitive methods, compared with any of the 
-cost-sensitive families. Furthermore, the Bayes minimum risk methods outperforms the 
-cost-proportionate sampling methods.
 
   \begin{table}[!t]
     \centering
@@ -408,22 +397,18 @@ BMR&LR-t-BMR-cal & 0.0148 &$\pm$& 0.0007 & \bf{0.0444} &\bf{$\pm$}& \bf{0.0025} 
     \label{tab:6:results_brier}
 \end{table}
 
-Moreover, we evaluate the Brier score of the different algorithms. The objective of this, is 
-because as mention in  \citep{cohen2004}, when using the output of a binary classifier as a basis 
-for decision making, there is a need for a probability that not only separates well between positive 
-and negative examples, but that also assesses the real probability of the event. The results are 
-shown in \tablename{~\ref{tab:6:results_brier}}. First of all, as expected, the logistic regression 
-models are very well calibrated regardless of the dataset used for train them. This is because, the 
-logistic regression algorithm is intended to estimate the most reliable probabilities as we will 
-discuss in \chaptername{~\ref{ch:7}}.
+Afterwards, in the case of the $BMR$ algorithms, the results show that this method outperforms 
+the previous ones in four cases and has almost the same result in the other set. In the fraud 
+detection  set, the results are better, since the savings of the three classification 
+algorithms increase when using this methodology. Moreover, we found that by calibrating the 
+probabilities, the results of the Bayes minimum risk increase. In 
+\figurename{~\ref{fig:6:comparison_family}}, we compare the different families of algorithms, by 
+calculating in each dataset the performance of the methods compared with the best method. First, it 
+is shown the huge difference of using only cost-insensitive methods, compared with any of the 
+cost-sensitive families. Furthermore, the Bayes minimum risk methods outperforms the 
+cost-proportionate sampling methods.
 
-When comparing the results of the Bayes minimum risk with and without calibration, it is clear that 
-the calibration of the probabilities lead to a lower Brier score as shown in 
-\figurename{~\ref{fig:6:comparison_family_brier}}. Interestingly, the results of Brier score 
-and the savings are highly correlated, confirming the intuition behind the need to calibrate the 
-probabilities before using the Bayes minimum risk method.
-
-\begin{table}[htbp]
+\begin{table}[t]
     \centering
     \footnotesize
     \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l  } %sum 7.7
@@ -458,7 +443,24 @@ BMR&LR-t-BMR-cal & \bf{0.1505} &\bf{$\pm$}& \bf{0.0016} & \bf{0.0952} &\bf{$\pm$
     \caption{Continuation of \tablename{~\ref{tab:6:results_brier}}.}
     \label{tab:6:results_savings2}
   \end{table}
+
   
+Moreover, we evaluate the Brier score of the different algorithms. The objective of this, is 
+because as mention in  \citep{cohen2004}, when using the output of a binary classifier as a basis 
+for decision making, there is a need for a probability that not only separates well between 
+positive 
+and negative examples, but that also assesses the real probability of the event. The results are 
+shown in \tablename{~\ref{tab:6:results_brier}}. First of all, as expected, the logistic regression 
+models are very well calibrated regardless of the dataset used for train them. This is because, the 
+logistic regression algorithm is intended to estimate the most reliable probabilities as we will 
+discuss in \chaptername{~\ref{ch:7}}.
+
+When comparing the results of the Bayes minimum risk with and without calibration, it is clear that 
+the calibration of the probabilities lead to a lower Brier score as shown in 
+\figurename{~\ref{fig:6:comparison_family_brier}}. Interestingly, the results of Brier score 
+and the savings are highly correlated, confirming the intuition behind the need to calibrate the 
+probabilities before using the Bayes minimum risk method.
+
 \begin{figure}[!t]
   \centering
   \includegraphics{ch6_fig4}
@@ -468,8 +470,7 @@ indeed the ones with the best Brier score.}
   \label{fig:6:comparison_family_brier}
 \end{figure}
 
-\null
-\vfill
+
   
   
   
