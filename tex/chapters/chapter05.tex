@@ -5,8 +5,10 @@ In this chapter, we present two different marketing real-world example-dependent
 cost-sensitive problems, namely, churn modeling and direct marketing. Both problems deal 
 with identifying those customers with certain characteristic with the objective to maximize the 
 results of the different CRM strategies.
-First, we introduce the churn modeling problem in Section \ref{sec:5:churn}. Lastly in Section 
-\ref{sec:5:directmarketing}, the direct marketing problem is presented.
+First, we introduce the churn modeling problem and present the propose financial evaluation 
+measure for a churn campaign in Section \ref{sec:5:churn}. Lastly in Section 
+\ref{sec:5:directmarketing}, the direct marketing problem is presented including the propose 
+example-dependent cost-sensitive cost matrix for evaluating this problem.
 \end{remark}
 
 
@@ -22,12 +24,12 @@ different patterns of both the churners and non-churners. Nevertheless, current 
 classification algorithms are not well aligned with commercial goals, in the sense that, the models 
 miss to include the real financial costs and benefits during the training and evaluation phases. In 
 the case of churn, evaluating a model based on a traditional measure such as accuracy or predictive 
-power, does not yield to the best results when measured by the actual financial cost, ie. 
+power, does not yield to the best results when measured by the actual financial cost, i.e., 
 investment per subscriber on a loyalty campaign and the financial impact of failing to detect a 
 real churner versus wrongly predicting a non-churner as a churner.
 
-In this section, we present a cost-sensitive framework for customer churn predictive modeling, 
-that we proposed in \citep{CorreaBahnsen2015a}. First, in Section \ref{sec:5:1:intro}, we introduce 
+In this section, we propose a cost-sensitive framework for customer churn predictive 
+modeling. First, in Section \ref{sec:5:1:intro}, we introduce 
 the problem of chrun modeling. Then in Section \ref{sec:5:1:evaluation}, we present a financial 
 based measure for evaluating the effectiveness of a churn campaign taking into account the 
 available 
@@ -36,7 +38,7 @@ on the customer profile. Finally, in Section~\ref{sec:5:1:data}, we describe the
 modeling dataset that will be used during the experiments.
 
 
-\subsection{Introduction}
+\subsection{Flow analysis of a churn campaign}
 \label{sec:5:1:intro}
 
 The two main objectives of subscription-based companies are to  acquire new subscribers and 
@@ -54,16 +56,7 @@ free upgrade during certain span of time. In both cases the company has to 	assu
 offer, therefore, accurate prediction of the churners becomes important. The logic of this flow is 
 shown in \figurename{ \ref{fig:ch5:1}}.
 
-	\begin{figure}[htbp]
-	  \centering
-    \includegraphics[width=11.5cm]{ch5_fig1}   %CHANGE TO 12cm
-	  \caption{Flow analysis of a churn campaign \citep{Verbraken2012}}
-	  \label{fig:ch5:1}
-	\end{figure}
-
-	\newpage
-\begin{remark}{Flow analysis of a churn campaign}
-The typical churn campaign process starts with the sales that every month increase the customer 
+The churn campaign process starts with the sales that every month increase the customer 
 base, however, monthly there is a group of customers that decide to leave the company for many 
 reasons. Then the objective of a churn model is to identify those customers before they take the 
 decision of defecting.
@@ -79,41 +72,32 @@ churner, also known as false positives, in that case the customer will always ac
 means and additional cost to the company since those misclassified customers do not have the 
 intentions of leaving.
 
+  \begin{figure}[t]
+    \centering
+    \includegraphics[width=11.5cm]{ch5_fig1}   %CHANGE TO 12cm
+    \caption{Flow analysis of a churn campaign \citep{Verbraken2012}}
+    \label{fig:ch5:1}
+  \end{figure}
+  
 In the case were the churn model predicts customers as non-churners, there is also the possibility 
 of a misclassification, in this case an actual churner is predicted as non-churner, since 
 these customers do not receive an offer and they will leave the company, these cases are known as 
 false negatives. Lastly, there is the case were the customers are actually non-churners, then 
 there is no need to make a retention offer to these customers since they will continue to be part 
 of the customer base.
-\end{remark}
 
-It can be seen that a churn campaign (or churn model) have three main points. First, avoid false 
-positives since there is a financial cost of making an offer were it is not needed. Second, to the 
-true positives, give the right offer that maximize $\gamma$ while maximizing the profit of the 
-company. And lastly, to decrease the number of false negatives.
+It can be seen that a churn campaign (or churn model) has three main points. First, avoid false 
+positives since there is a financial cost of making an offer where it is not needed. Second, find 
+the right offer to give to those customers identified as churners. And lastly, to decrease 
+the number of false negatives.
 
 From a machine learning perspective, a churn model is a classification algorithm.
 In the sense that using historical information, a prediction of which current customers 
 are more likely to defect, is made. This model is normally created using one of a number of 
-well establish algorithms (Logistic regression, neural networks, random forests, among 
+well established algorithms (Logistic regression, neural networks, random forests, among 
 others) \citep{Ngai2009,KhakAbi2010}. Then, the model is evaluated using measures such as 
 misclassification error, receiver operating characteristic ($ROC$),  Kolmogorov-Smirnov ($KS$) 
-or \mbox{$F_1Score$} statistics \citep{Verbeke2012}. However these measures assume that 
-misclassification errors     carry the same cost, which is not the case in churn modeling, since 
-failing to identify a profitable or unprofitable churner have significant different financial costs
-\citep{Glady2009}. 
-	
-In the next section, we propose a new financial based measure for evaluating the effectiveness of 
-a voluntary churn campaign taking into account the available portfolio of offers, their 
-individual 	financial cost and probability of acceptance depending on the customer profile. 
-
-
-\subsection{Evaluation of a churn campaign}
-\label{sec:5:1:evaluation}
-	
-Traditionally, a churn model is evaluated as a standard binary classification model, 
-using measures such as misclassification error, receiver operating characteristic ($ROC$),  
-Kolmogorov-Smirnov ($KS$) or \mbox{$F_1Score$} statistics \citep{Verbeke2012}.
+or \mbox{$F_1Score$} statistics \citep{Verbeke2012}. 
 However, these measures may not be the most appropriate evaluation criteria when  
 evaluating a churn model, because they tacitly assume that misclassification errors carry the 
 same cost, similarly with the correct classified examples. This assumption does not hold in many 
@@ -122,45 +106,51 @@ losses are quite different than when misclassifying a non-churner as churner \ci
 Furthermore, the accuracy measure also assumes that the class distribution 
 among examples is constant and balanced \citep{Provost1998}, and typically the distributions of a 
 churn data set are skewed \citep{Verbeke2012}.
+	
+In the next section, we propose a new financial based measure for evaluating the effectiveness of 
+a voluntary churn campaign taking into account the available portfolio of offers, their 
+individual 	financial cost and probability of acceptance depending on the customer profile. 
 
+
+\subsection{Propose evaluation measure of a churn campaign}
+\label{sec:5:1:evaluation}
+	
 Different studies have proposed measures to deal with these cost-sensitivity related to
 evaluating a churn model. In \citep{Neslin2006}, a profit-based measure was proposed by starting 
 with the confusion matrix and multiplying it with the expected profit of each case.
-\newpage
+
 \begin{align}\label{eq:5:profit1}
  Profit_1 = (TP+FP)\bigg[ & \left(\gamma CLV + C_o(1-\gamma)(-C_a)\right)\pi_1\gamma \nonumber \\
  & -C_o-C_a\bigg]-N\cdot C_a,
 \end{align}
-with $N\cdot C_a$ being the fixed administrative cost of running the campaign, $C_o$ the average 
+with $C_a$ being the fixed administrative cost of running the campaign, $C_o$ the average 
 cost of the retention offer, $C_a$ the cost of contacting the customer, $\pi_1$ the prior churn rate 
-and $CLV$ the average customer lifetime value.
-Moreover, as discussed in \citep{Verbraken2013}, if the average instead of the total profit is 
-considered and the fixed cost $N\cdot C_a$ is discarded since is irrelevant for classifier 
-selection, the profit can be expressed as:
+and $CLV$ the average customer lifetime value or the present value of the expected profit that a 
+customer will generate. Moreover, as discussed in \citep{Verbraken2013}, if the average instead of 
+the total profit is considered and the fixed cost $N\cdot C_a$ is discarded since it is irrelevant 
+for the classifier selection, the profit can be expressed as:
 \begin{align}\label{eq:5:profit2}
  Profit_2 = &TP\left(\gamma(CLV-C_o-C_a)+(1-\gamma)C_a \right) \nonumber \\
  &+FP(-C_o-C_a).
 \end{align}
 
-Nevertheless, equations (\ref{eq:5:profit1}) and (\ref{eq:5:profit2}), assume that every customer 
+Nevertheless, equations (\ref{eq:5:profit1}) and (\ref{eq:5:profit2}) assume that every customer 
 has the same $CLV$ and $C_o$, whereas this is not true in practice. In fact, different customers 
 have a very different $CLV$, and not all offers can be made to every customer, neither do they have 
 the same impact across customers. In order to obtain a more business oriented measure, we first 
-analyze the financial impact of the different decisions, ie. false positives, false negatives, true 
-positives and true negatives, for each customer.	In \figurename{ \ref{fig:ch5:2}}, the financial 
-impact of a churn model is shown. Note than we take into account the costs and not the profit in 
-each case.
+analyze the financial impact of the different decisions, i.e., false positives, false negatives, 
+true positives and true negatives, for each customer.	
 
-\begin{figure}[htbp]
+\begin{figure}[t]
   \centering
   \includegraphics[width=12cm]{ch5_fig2}
-  \caption{Financial impact of the different decisions ie. False positives, false negatives, 
+  \caption{Financial impact of the different decisions, i.e., False positives, false negatives, 
   true 	positives and true negatives}
 	\label{fig:ch5:2}
 \end{figure}
 
-\newpage 
-\begin{remark}{Financial analysis of a churn champaign}
+In \figurename{ \ref{fig:ch5:2}}, the financial impact of a churn model is shown. Note than we take 
+into account the costs and not the profit in each case.
 When a customer is predicted to be a churner, an offer is made with the objective of avoiding 
 the customer defecting. However, if a customer is actually a churner, he may or not accept the 
 offer with a probability $\gamma_i$. If the customer accepts the offer, the financial impact is 
@@ -173,9 +163,9 @@ accept the 	offer and the cost will be $C_{o_i}$ plus $C_a$.
 In the case that the customer is predicted as non-churner, there are two possible outcomes. 
 Either the customer is not a churner, then the cost is zero, or the customer is a churner and the 
 cost is $CLV_i$. 
-\end{remark}
 
-  \begin{table}[htbp]
+
+  \begin{table}[b]
 	  \centering
 	  \footnotesize
      \begin{tabular}{c|c|c}
@@ -220,7 +210,7 @@ Furthermore, using (\ref{eq:3:savings}), the savings are calculated as:
 \begin{equation}
   Savings = \frac{Cost_l - Cost}{Cost_l},
 \end{equation} 
-In almost cases the costless class ($Cost_l$) will be the negative class, as typically the 
+In almost all cases the costless class ($Cost_l$) will be the negative class, as typically the 
 distribution of a churn dataset is skewed towards the non-churners \citep{Verbeke2012}. Given that 
 $Cost_l$ can be expressed as $Cost(f_0)$, or simply $Cost$ with $c_i=0$ $\forall i$:
 \begin{equation}
@@ -228,13 +218,13 @@ $Cost_l$ can be expressed as $Cost(f_0)$, or simply $Cost$ with $c_i=0$ $\forall
 \end{equation}
 This is consistent with the notion that if no model is used, the total cost would be the 
 sum of the customer lifetime values of the actual churners, which gives the insight 
-that the $Savings$ measure is comparing the financial impact of the campaign of using a 
-classification model against no using a model at all.
+that the $Savings$ measure consists in comparing the financial impact of the campaign of using a 
+classification model against not using a model at all.
 
 
 \subsubsection{Customer lifetime value}
 
-Lastly, one of the key values to calculate the $Savings$, is the customer lifetime value. Within 
+Lastly, one of the key values to calculate the $Savings$ is the customer lifetime value. Within 
 marketing there exists a common misconception between customer profitability and customer lifetime 
 value. The two terms are usually used in an interchangeable way, 
 creating confusion of what the actual objective of a churn modeling campaign should be. Several 
@@ -257,13 +247,13 @@ discount future earnings \citep{Neslin2006}. Therefore, the $CLV_i$ is defined a
 where $r$ is the discount rate, and $T$ the number of time period.
 Typically $T$ should be considered large enough since without prior 
 knowledge a customer is expected to keep being a customer for the foreseeable future. In practice 
-$T$ is set up to be~$\infty$~\citep{Glady2009}. Also, for simplicity it can be assumed that 
+$T$ is set up to be infinity~\citep{Glady2009}. Also, for simplicity, it can be assumed that 
 $s_{i,t+1}=s_{i,t}\cdot (1+g)$ $\forall {i,t}$, which means that there is a constant growth $g$ in 
 the customer consumption. Given that, the customer lifetime value can be re-written as
 \begin{equation}
  CLV_i = \sum_{t=1}^\infty\frac{ (1+g)^t}{(1+r)^t}\cdot \mu\cdot s_{i,1},
 \end{equation}
-which in the case of $g<r$, this is a geometric series meaning that it can be expressed as
+which in the case of $g<r$, this is a geometric series and can be expressed as
 \begin{equation}
  CLV_i = \frac{\mu\cdot s_{i,1}}{(r-g)}.
 \end{equation}
@@ -272,7 +262,7 @@ which in the case of $g<r$, this is a geometric series meaning that it can be ex
 \subsection{Churn modeling database}
 \label{sec:5:1:data}
 
-For the analysis we used a dataset provided by a TV cable provider. 
+For our experiments we use a dataset provided by a TV cable provider. 
 The dataset consists of active customers during the first semester of 2014. 	
 The total dataset contains 9,410 individual registries, each one with 45 attributes, 
 including a churn label indicating whenever a customer is a churner.
@@ -281,18 +271,18 @@ In the dataset only 455 customers are churners, leading to a churn ratio of 4.83
 	
 \subsubsection{Offer acceptance calculation}
 
-In practice companies have a set of offers to make to a customer as a part of the retention 
-campaign, they vary from discounts, to upgrades among others. In the particular case of a TV cable 
-provided, the offers include adding a new set of channels, changing the TV receiver to one with new 
-technology (ie. high definition, video recording, 4K),  or to offer a discount on the monthly bill.
-Unsurprisingly, not all offers apply to all clients. For instance a customer that already has all 
-the channels can not be offered a new set of channels. Moreover, an offer usually means an 
-additional cost to the company and not all offers have not the same cost or the same impact in 
+In practice companies have a set of offers to make to a customer as part of the retention 
+campaign. They vary from discounts to upgrades, among others. In the particular case of a TV cable 
+provider, the offers include adding a new set of channels, changing the TV receiver to one with new 
+technology (i.e., high definition, video recording, 4K),  or to offer a discount on the monthly 
+bill. Unsurprisingly, not all offers apply to all clients. For instance, a customer that already 
+has all  the channels can not be offered a new set of channels. Moreover, an offer usually means an 
+additional cost to the company and not all offers have the same cost or the same impact in 
 reducing churn.
 
 Taking into account the cost and the implication of the offers, the problem can be 
-resumed in making each customer the offer that will maximize the acceptance rate and more 
-important reducing the overall cost. 
+summarized in making each customer the offer that will maximize the acceptance rate and more 
+importantly reduce the overall cost. 
 
 \begin{figure}[t!]
   \centering
@@ -308,10 +298,10 @@ First, the customers were grouped into clusters according to their behavioral an
 characteristics. In particular the K-means algorithm was used \citep{Marslan2009}.
 Then for a period of two months, randomly selected offers were made to the customers and their 
 response was evaluated. Unfortunately, for confidentiality reasons we can not describe the 
-different clusters, neither the actual offer made to each customer. Nevertheless, in 
+different clusters, or the actual offer made to each customer. Nevertheless, in 
 \figurename{~\ref{fig:ch5:3}}, the average churn rate and acceptance rate $\gamma_i$ per cluster is 
 shown. As expected, the higher the churn rate the lower the acceptance rate, as it is more difficult 
-to make a good offer to a customer which is more likely to defect.
+to make a good offer to a customer that is more likely to defect.
 
 
 \section{Direct marketing}
@@ -331,19 +321,7 @@ positives and false negatives. Specifically, in direct marketing, false positive
 of contacting the client, and false negatives have the cost due to the loss of income by failing 
 to contact a client that otherwise would have opened a long-term deposit. 
   
-We used the direct marketing example-dependent cost matrix proposed in \citep{CorreaBahnsen2014}. 
-The cost matrix is shown in \mbox{\tablename{ \ref{tab:5:d_mat}}}, where $C_a$ is the 
-administrative cost of contacting the client, as is credit card fraud,  and $Int_i$ is the expected 
-income when a client opens a long-term deposit. This last term is defined as the long-term deposit 
-amount times the interest rate spread.
- 
-In order to estimate $Int_i$, first the long-term deposit amount is assumed to be a 20\% of the 
-average yearly balance, and lastly, the interest rate spread is estimated to be 2.463333\%,	which 
-is the average between 2008 and 2010 of the retail banking sector in Portugal as reported by the 
-Portuguese central bank. Given that, the $Int_i$ is equal to $\left( balance * 20\% \right) * 
-2.463333\%$.
-
-\begin{table}[!t]
+\begin{table}[b]
   \centering
   \footnotesize
   \begin{tabular}{c|c|c}
@@ -362,3 +340,14 @@ Portuguese central bank. Given that, the $Int_i$ is equal to $\left( balance * 2
   \caption{Direct marketing example-dependent cost matrix}
   \label{tab:5:d_mat}
 \end{table}
+
+We propose a direct marketing example-dependent cost matrix as shown in \mbox{\tablename{ 
+\ref{tab:5:d_mat}}}. Where $C_a$ is the administrative cost of contacting the client, as is credit 
+card fraud,  and $Int_i$ is the expected income when a client opens a long-term deposit. This last 
+term is defined as the long-term deposit amount times the interest rate spread.
+ 
+In order to estimate $Int_i$, first the long-term deposit amount is assumed to be a 20\% of the 
+average yearly balance, and lastly, the interest rate spread is estimated to be 2.463\%,  which 
+is the average between 2008 and 2010 of the retail banking sector in Portugal as reported by the 
+Portuguese central bank. Given that, the $Int_i$ is equal to $\left( balance * 20\% \right) * 
+2.463\%$.
