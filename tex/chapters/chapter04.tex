@@ -429,7 +429,7 @@ when a customer is expected to make transactions.
 	
 	\subsection{Database}
 
- 	For this thesis we used a dataset provided by a large European card processing company. The 
+ 	For this thesis we use a dataset provided by a large European card processing company. The 
 	dataset consists of fraudulent and legitimate transactions made with credit and debit cards 
 	between January 2012 and June 2013. The total dataset contains 120,000,000 individual 
 	transactions, each one with 27 attributes, including a fraud label indicating whenever a 
@@ -441,6 +441,8 @@ when a customer is expected to make transactions.
 \section{Credit scoring}
 \label{sec:4:creditscoring}
 
+  In this section, we consider the second financial risk management application, namely, credit 
+  scoring.
   In order to mitigate the impact of credit risk and make more objective and accurate decisions, 
   financial institutions use credit scores to predict and control their losses.
   The objective in credit scoring is to classify which potential customers are likely to default a 
@@ -474,7 +476,7 @@ since the
   \begin{equation}
   t_{SvsS}= \argmin_t \vert F_0(t) - (1-F_1(t)) \vert.
   \end{equation}
-  This process is further clarify in \figurename{ \ref{fig:ch4:4}}.
+  This process is further clarified in \figurename{ \ref{fig:ch4:4}}.
   
   \begin{figure}
   \centering
@@ -499,9 +501,9 @@ since the
   
   Typically, a credit risk model is evaluated using standard cost-insensitive measures.
   However, in practice, the cost associated with approving 
-  what is known as a bad customer, i.e., a customer who default his credit loan, is quite 
+  what is known as a bad customer, i.e., a customer who defaulted his credit loan, is quite 
   different from the cost associated with declining a good customer,  i.e., a customer who 
-  successfully repay his credit loan. Furthermore, the costs are not constant among customers. 
+  successfully repaid his credit loan. Furthermore, the costs are not constant among customers. 
   This is because loans have different credit line amounts, terms, and even interest rates. Some 
   authors have proposed methods that include the misclassification costs in the credit scoring 
   context \citep{Verbraken2014,Alejo2013,Beling2005,Oliver2009}. However, they assume a constant 
@@ -518,15 +520,18 @@ since the
   method to find the probability threshold that minimizes those costs, $t_{ec}= 
   \frac{C_{FN}}{C_{FN}+C_{FP}} =\frac{L_{gd}}{L_{gd}+int_r}.$ Nevertheless, this approach assumes 
   a constant cost within examples, which is a strong assumption, since in practice each example 
-  carries a very different cost, given by the different credit limits and conditions of each loan. 
+  carries a very different cost given by the different credit limits and conditions of each loan. 
   Consequently, there is a need for an example-dependent cost matrix that takes into account the 
   cost of misclassifying each example.
-   
-  In order to take into account the varying costs that each example carries, we proposed in 
-  \citep{CorreaBahnsen2014b}, a cost matrix with example-dependent misclassification costs as 
+  
+  
+  \subsubsection{Example-dependent cost-sensitive evaluation measure}
+  
+  In order to take into account the varying costs that each example carries, we propose 
+  a cost matrix with example-dependent misclassification costs as 
   given in \tablename{~\ref{tab:4:costmat2}}. First, we assume that the costs of a correct 
   classification, $C_{TP_i}$ and $C_{TN_i}$, are zero for every customer $i$. We define $C_{FN_i}$ 
-  to be the losses if the customer $i$ defaults to be proportional to his credit line $Cl_i$. We 
+   the losses if the customer $i$ defaults to be proportional to his credit line $Cl_i$. We 
   define the cost of a false positive per customer $C_{FP_i}$ as the sum of two real financial 
   costs $r_i$ and $C^a_{FP}$, where $r_i$ is the loss in profit by rejecting what would have been a 
   good customer. 
@@ -561,15 +566,18 @@ since the
   with $A$ being the customer monthly payment and $PV$ the present value of the monthly payments,
   which are calculated using the time value of money equations \citep{Lawrence2012},
   \begin{eqnarray}
-    A(Cl_i,int_{r_i},l_i) &=&  Cl_i \frac{int_{r_i}(1+int_{r_i})^{l_i}}{(1+int_{r_i})^{l_i}-1}, \\
+    A(Cl_i,int_{r_i},l_i) &=&  Cl_i \frac{int_{r_i}(1+int_{r_i})^{l_i}}{(1+int_{r_i})^{l_i}-1},
+  \end{eqnarray}
+  and 
+  \begin{eqnarray}
     PV(A,int_{cf},l_i) &=& \frac{A}{int_{cf}} \left(1-\frac{1}{(1+int_{cf})^{l_i}} \right).
   \end{eqnarray}
     
-  The second term $C^a_{FP}$, is related to the assumption that the financial institution will not 
+  The second term $C^a_{FP}$ is related to the assumption that the financial institution will not 
   keep the money of the declined customer idle. It will instead give a loan to an alternative 
   customer \citep{Nayak1997}. Since no further information is known about the alternative customer, 
   it is assumed to have an average credit line $\overline{Cl}$ and an average profit $\overline{r}$.
-  Given that, 
+  Given that, the false positive cost for an alternative customer becomes 
   \begin{equation}
     C^a_{FP}=- \overline{r} \cdot \pi_0+\overline{Cl}\cdot L_{gd} \cdot \pi_1,
   \end{equation}
@@ -589,10 +597,10 @@ since the
       Cl_i = \min \bigg\{ q \cdot Inc_i, Cl_{max}, Cl_{max}(debt_i) \bigg\},
   \end{equation}
   where $Inc_i$ and $debt_i$ are the monthly income and debt ratio of the customer $i$, 
-  respectively, $q$ is a parameter that defines the maximum $Cl_i$ in times $Inc_i$, and 
-  $Cl_{max}$ the maximum overall credit line. Lastly, the maximum credit line given the current 
-  debt is calculated as the maximum credit limit such that the current debt ratio plus the new 
-  monthly payment does not surpass the customer monthly income. It is calculated as
+  respectively, $q$ is a parameter that defines the maximum $Cl_i$ as a function of the $Inc_i$, 
+  and  $Cl_{max}$ the maximum overall credit line. Lastly, the maximum credit line given the 
+  current debt is calculated as the maximum credit limit such that the current debt ratio plus the 
+  new  monthly payment does not surpass the customer monthly income. It is calculated as
   \begin{equation}
     Cl_{max}(debt_i)=PV\left(Inc_i \cdot P_{m}(debt_i),int_{r_i},l_i\right),
   \end{equation}
@@ -605,7 +613,7 @@ since the
   
   \subsection{Databases}
 
-    For this thesis we used two different publicly available credit scoring datasets. The first 
+    For this thesis we use two different publicly available credit scoring datasets. The first 
     dataset is the \textbf{2011 Kaggle competition Give Me Some Credit}\footnote{ 
     http://www.kaggle.com/c/GiveMeSomeCredit/}, in which the objective is to identify those 
     customers of personal loans that will experience financial distress in the next two years.
@@ -646,15 +654,15 @@ since the
 \end{table}
 
     Since no specific information regarding the datasets is provided, we assume that they belong to 
-    average European and Brazilian financial institutions. This enabled us to find the different 
+    average European and Brazilian financial institutions. This enable us to find the different 
     parameters needed to calculate the cost measure. In Table~\ref{tab:4:parameters}, the different 
-    parameters are shown. In particular, we obtain the average interest rates in Europe during 
+    parameters are shown. In particular, we obtained the average interest rates in Europe during 
     2013 from the European Central Bank \citep{ECB2014}, and the average interest and exchange 
     rates in Brazil during 2004 from Trading Economics \citep{Economics2014}. Because the income 
     is not in the same currency on both datasets, we convert the PAKDD Credit dataset to Euros.
     Additionally, we use a fixed loan term $l$ for both datasets, considering that in the Kaggle 
     Credit dataset the class was constructed to predict two years of credit behavior, and 
-    because the PAKDD Credit dataset is related to credit cards the term is fix to two years 
+    because the PAKDD Credit dataset is related to credit cards the term is fixed to two years 
     \citep{Lawrence2012}. Moreover, we set the loss given default $L_{gd}$ using information from 
     the Basel II standard\footnote{http://www.bis.org/publ/bcbsca.htm.}, $q$ to 3 since it is the 
     average personal loan requests related to monthly income, and the maximum credit limit 
