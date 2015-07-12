@@ -1,18 +1,20 @@
 \chapter{Cost-sensitive logistic regression}\label{ch:7}
 
 \begin{remark}{Outline}
-In this chapter, we present the cost-sensitive logistic regression algorithm. The model consists in 
+In this chapter, we propose cost-sensitive logistic regression algorithm. The model consists in 
 a new logistic regression cost function, one that takes into account the real costs due to 
 misclassification and correct classification. First, in Section \ref{sec:7:logistic}, we give the 
-background behind logistic regression. Then, in Section \ref{sec:7:cslr}, we described our 
-previously proposed cost-sensitive logistic regression. For this, we do a deep analysis of the 
+background behind logistic regression. Then, in Section \ref{sec:7:cslr}, we describe the 
+cost-sensitive logistic regression. For this, we carry a deep analysis of the 
 logistic regression implicit misclassification costs in Section \ref{sec:7:log_cost_analysis}. Then 
 in Section \ref{sec:7:cscostfunction}, we shown a new version of the logistic regression cost 
-function, one that takes into account the real costs due to misclassification and correct 
-classification. Afterwards, in Section \ref{sec:7:ga}, we give a brief introduction to genetic 
-algorithms, since is the model used to estimate the parameters of our proposed cost-sensitive 
-logistic regression. Finally, in Section \ref{sec:7:results}, we compare the results of the proposed 
-algorithm, against state-of-the-art methods, using the five real-world cost-sensitive databases.
+function. 
+%Afterwards, in Section \ref{sec:7:ga}, we give a brief introduction to genetic 
+%algorithms, since is the model used to estimate the parameters of our proposed cost-sensitive 
+%logistic regression. 
+Finally, in Section \ref{sec:7:results}, we compare the results of the proposed 
+algorithm against state-of-the-art methods, using the five real-world cost-sensitive databases 
+presented in \partname{~\textsc{\ref{part:2}}}.
 \end{remark}
 
 
@@ -27,12 +29,13 @@ evaluated as
   \hat p_i = P(y=1 \vert \mathbf{x}_i) = h_{\theta}(\mathbf{x}_i) = 
   g\bigg(\sum_{j=1}^{k}{\theta^jx_i^j}\bigg),
 \end{equation}
-where $h_\theta(\mathbf{x}_i)$ refers to the hypothesis of $i$ given the parameters $\theta$,  
-and  $g(\cdot)$ is the logistic sigmoid function, defined as
+where $h_\theta(\mathbf{x}_i)$ refers to the hypothesis of $i$ given the parameters $\theta$, the 
+feature vector $\mathbf{x}_i$ for example $i$ and  $g(\cdot)$ is the logistic sigmoid function 
+defined as
 \begin{equation}
-  g(z)=\frac{1}{(1+e^{-z})} 
+  g(z)=\frac{1}{(1+e^{-z})} .
 \end{equation}
-In the next figure, the logistic sigmoid function is shown.
+In \figurename{~\ref{fig:ch7:1}}, the logistic sigmoid function is shown.
 \begin{figure}[htbp]
   \centering
   \includegraphics{ch7_fig1}
@@ -41,7 +44,7 @@ In the next figure, the logistic sigmoid function is shown.
 \end{figure}
 
 The problem then becomes on finding the right parameters that minimize a given cost function.   
-Usually, in the case of logistic regression the cost function $J(\theta)$ refers to the negative   
+Usually, in the case of logistic regression, the cost function $J(\theta)$ refers to the negative   
 logarithm of the likelihood, such that
 \begin{equation}
   J(\theta)=\frac{1}{N}\sum_{i=1}^{N} J_i(\theta),
@@ -50,24 +53,24 @@ where
 \begin{align}\label{eq:7:lrcost}
   J_i(\theta) =  -y_i\log(h_\theta(\mathbf{x}_i)) -(1-y_i)\log(1-h_\theta(\mathbf{x}_i)).
 \end{align}
-Therefore, the parameters are found using the following equation
+Therefore, the parameters are estimated using the following equation
 \begin{align}
-  \theta = \argmin_\theta J(\theta).
+  \hat \theta = \argmin_\theta J(\theta).
 \end{align}
 
-\begin{remark}{Logistic regression estimation}
+%Logistic regression estimation
 There are several methods used to estimate the logistic regression, in particular, maximum 
 likelihood \citep{Hastie2009}, Newton, coordinate descent \citep{Murphy2012} and dual coordinate 
-descent \citep{Yu2011}. Nevertheless, all these methods rely on the assumption of convexity of the
-negative logarithm of the likelihood function. In the next section we analyze the convexity of the 
+descent \citep{Yu2011}. Nevertheless, all these methods rely on the assumption of convexity of the 
+logistic regression cost function $J(\theta)$. In the next section we analyze the convexity of the 
 logistic regression.
-\end{remark}
 
-\subsection{Convexity analysis}
 
-A function $f(\mathbf{x})$ which is twice-differentiable is convex if and only if its hessian 
+\subsection{Convexity analysis of the logistic regression}
+
+A function $f(\cdot)$ which is twice-differentiable is convex if and only if its hessian 
 matrix (matrix of second-order partial derivatives) is positive semi-definite \citep{Boyd2010}.
-Therefore, with the objective of evaluating the convexity of the logistic function, first the first 
+Therefore, with the objective of evaluating the convexity of the logistic function, the first 
 order partial derivatives are calculated as follows:
 
 \begin{equation}
@@ -87,11 +90,6 @@ order partial derivatives are calculated as follows:
 
 Then, using the first order partial derivatives, the Hessian ($H$) can be generalized as
 \begin{equation}
-  \partialb{j1}{j2}=\frac{1}{N}\sum_{i=1}^{N}
-  \left[\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)x_i^{(j1)}x_i^{(j2)}\right],
-\end{equation}
-where, $j1$ and $j2$ $\in \{1\cdots k\}$. Which is the same as
-\begin{equation}
 H=\left[ \begin{array}{cccc}
   \partialb{1}{1} & \partialb{1}{2} & \cdots & \partialb{1}{k} \\[0.1in]  
   \partialb{2}{1} & \partialb{2}{2} & \cdots & \partialb{2}{k} \\[0.1in]  
@@ -99,32 +97,42 @@ H=\left[ \begin{array}{cccc}
   \partialb{k}{1} & \partialb{k}{2} & \cdots & \partialb{k}{k}  
 \end{array} \right]
 \end{equation}
+where each element of the matrix is calculated using
+
+\begin{equation}
+  \partialb{j1}{j2}=\frac{1}{N}\sum_{i=1}^{N}
+  \left[\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)x_i^{(j1)}x_i^{(j2)}\right],
+\end{equation}
+where $j1$ and $j2$ $\in \{1,\cdots,k\}$. 
 
 For the cost function to be convex the Hessian matrix	must be positive-semidefinite, and
 a function is positive-semidefinite if:  
 \begin{equation}
-  z^T\left[\nabla_x^2f(x)\right]z \ge 0 \quad  \forall z
+  z^T\left[\nabla_x^2f(x)\right]z \ge 0 \quad  \forall z,
 \end{equation}
-Applied to J($\theta$), it is necessary to proof
+where $\nabla^2f(\cdot)$ is the second order derivate of $f(\cdot)$. Then, applied to J($\theta$), 
+we need to prove that
 \begin{equation}\label{eq:7:pos1}
-  z^T\left[H \right]z \ge 0 \quad  \forall z
+  z^T\left[H \right]z \ge 0 \quad  \forall z.
 \end{equation}
-Moreover, $H$ can be rewritten, using only the internal part of the sum, since it do not 
+
+\noindent {\bf Proof: }
+$H$ can be rewritten, using only the internal part of the sum, since it does not 
 dependent on $\theta$
 \begin{equation}
  H = \frac{1}{N}\sum_{i=1}^{N} \left[ 
 \bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)\mathbf{x}_i^T \mathbf{x} \right]. 
 \end{equation}
-Then, (\ref{eq:7:pos1}) becomes
+Then, 
 \begin{align}
-  z^T \left[\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)\mathbf{x}_i^T 
+  z^THz = z^T \left[\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)\mathbf{x}_i^T 
 \mathbf{x}\right] z,
 \end{align}
 which can be rewritten as
 \begin{align}
-  (1-h_\theta(\mathbf{x}_i))h_\theta(\mathbf{x}_i)\left(\mathbf{x}_i^Tz\right)^2 \ge 0.
+  z^THz = (1-h_\theta(\mathbf{x}_i))h_\theta(\mathbf{x}_i)\left(\mathbf{x}_i^Tz\right)^2.
 \end{align}
-Therefore, proving that $J(\theta)$ is convex, as $\left(\mathbf{x}_i^Tz\right)^2 
+Therefore,  $J(\theta)$ is convex, as $\left(\mathbf{x}_i^Tz\right)^2 
 \ge 0$ and \\ $\left((1-h_\theta(\mathbf{x}_i))h_\theta(\mathbf{x}_i)\right)\ge 0$ because $0\ge 
 h_\theta(\mathbf{x}_i) \ge 1$.
 
@@ -336,7 +344,7 @@ BMR&LR-t-BMR & 0.4552 &$\pm$& 0.0203 & 0.1082 &$\pm$& 0.0316 & 0.2189 &$\pm$& 0.
 CST&CSLR-t & \bf{0.6113} &\bf{$\pm$}& \bf{0.0262} & \bf{0.1118} &\bf{$\pm$}& \bf{0.0484} & 
 \bf{0.4554} &\bf{$\pm$}& \bf{0.1039}\\ 
 \hline
-  \multicolumn{11}{c}{(those models with the highest savings are market as bold)}
+  \multicolumn{11}{c}{(Models with the highest savings are marked in bold)}
   \end{tabular}
     \caption{Results of the algorithms measured by savings}
     \label{tab:7:results_savings}
@@ -360,7 +368,7 @@ BMR&LR-t-BMR & \bf{0.3148} &\bf{$\pm$}& \bf{0.0094} & \bf{0.4973} &\bf{$\pm$}& \
 \hline 
 CST&CSLR-t & 0.2748 &$\pm$& 0.0069 & 0.4484 &$\pm$& 0.0072\\ 
 \hline 
-  \multicolumn{8}{c}{(those models with the highest savings are market as bold)}
+  \multicolumn{8}{c}{(Models with the highest savings are marked in bold)}
   \end{tabular}
     \caption{Continuation of \tablename{~\ref{tab:7:results_savings}}.}
     \label{tab:7:results_savings2}
