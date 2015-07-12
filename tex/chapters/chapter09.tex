@@ -1,9 +1,10 @@
 \chapter{Ensembles of cost-sensitive decision trees}\label{ch:9}
 
 \begin{remark}{Outline}
-In this chapter, we introduce the framework of ensembles of example-dependent cost-sensitive 
-decision-trees, by training example-dependent cost-sensitive decision trees using four different 
-random inducer methods and then blending them using three different combination approaches.
+In this chapter, we propose our framework of ensembles of example-dependent cost-sensitive 
+decision-trees. The algorithms are based in training example-dependent cost-sensitive decision 
+trees using four different random inducer methods and then blending them using three different 
+combination approaches.
 First, in Section \ref{sec:9:ensemble}, we give the background behind ensemble learning. Then, in 
 Section \ref{sec:9:ecsdt}, we present our previously proposed ensembles of cost-sensitive 
 decision-trees framework. Moreover, in Section \ref{sec:9:theoretical}, we prove theoretically that 
@@ -65,8 +66,9 @@ representable functions.
   \end{align}
 
 
-  \begin{remark}{Theoretical performance of an ensemble}
+%   \begin{remark}{Theoretical performance of an ensemble}
 %   Moreover, i
+\subsection{Theoretical performance of an ensemble}
   If we assume that each one of the $T$ base classifiers has a probability $\rho$ of 
   being correct, the probability of an ensemble making the correct decision, denoted by $P_c$,
   can be calculated using the binomial \mbox{distribution \citep{Hansen1990}}
@@ -85,7 +87,7 @@ representable functions.
 	\begin{equation}\label{eq:9:Pc2}
   \rho \ge 0.5 \quad \text{and} \quad T\ge3 \quad \Rightarrow \quad P_c\ge \rho.
   \end{equation}
-  \end{remark}
+%   \end{remark}
   
 \subsection{Cost-sensitive ensembles}
 
@@ -105,13 +107,13 @@ representable functions.
 \section{Ensembles of cost-sensitive decision trees}
 \label{sec:9:ecsdt}
 
-In this section we shown our previously proposed framework of ensembles of  example-dependent 
-cost-sensitive  decision-trees \citep{CorreaBahnsen2015b}, by training example-dependent 
-cost-sensitive decision trees using four different  random inducer methods and then blending them 
-using three different combination approaches. Moreover, we propose two new cost-sensitive 
-combination approaches, cost-sensitive weighted  voting and cost-sensitive stacking. The latter 
-being an extension of our previously proposed cost-sensitive logistic regression 
-\citep{CorreaBahnsen2014b}. 
+In this section we present our framework of ensembles of  example-dependent 
+cost-sensitive  decision-trees. The algorithms are based in training example-dependent 
+cost-sensitive decision trees, see Chapter~\ref{ch:8}, using four different  random inducer methods 
+and then blending them using three different combination approaches. Moreover, we propose two new 
+cost-sensitive combination approaches, cost-sensitive weighted  voting and cost-sensitive stacking. 
+The latter being an extension of our proposed cost-sensitive logistic regression, see 
+Chapter~\ref{ch:7}. 
 
 The remainder of the section is organized as follows: First, we introduce the different random 
 inducers used to create the base classifiers. Then, we present the combination methods. Finally, we 
@@ -203,10 +205,10 @@ where $\beta=\{\beta_j\}_{j=1}^T$, and $g(\cdot)$ is the sign function
 as \mbox{$g(z)=1/(1+e^{-z})$}, in the case of a logistic regression. 
 
 Moreover, following the logic used in \citep{Nesbitt2010}, we propose learning the set of  
-parameters $\beta$  using our proposed cost-sensitive logistic regression ($CSLR$) 
-\citep{CorreaBahnsen2014b}. The $CSLR$ algorithm consists in introducing example-dependent costs 
-into a logistic regression, by changing the objective function of the model to one that is 
-cost-sensitive. For the specific case of cost-sensitive stacking, we define the cost function as: 
+parameters $\beta$  using our cost-sensitive logistic regression ($CSLR$), see Chapter~\ref{ch:7}. 
+The $CSLR$ algorithm consists in introducing example-dependent costs into a logistic regression, by 
+changing the objective function of the model to one that is cost-sensitive. For the specific case of 
+cost-sensitive stacking, we define the cost function as: 
 \begin{align}
   &J(\mathcal{S},\mathcal{M},\beta)= 
   \sum_{i=1}^{N} \bigg[ y_i\bigg( 
@@ -216,7 +218,7 @@ cost-sensitive. For the specific case of cost-sensitive stacking, we define the 
     +C_{TN_i} \bigg) \bigg].
 \end{align}
 Then, the parameters $\beta$ that minimize the logistic cost function are used in order to 
-combine the different base classifiers. However, as discussed in \citep{CorreaBahnsen2014b}, 
+combine the different base classifiers. However, as discussed in Chapter~\ref{ch:7}, 
 this cost function is not convex for all possible cost matrices, therefore, we use genetic 
 algorithms to minimize it.
 
@@ -451,27 +453,27 @@ $combinator$.
 \section{Experiments}
 \label{sec:9:experiments}
 
-For the experiments we used five datasets from four different real world example-dependent 
+For the experiments we use five datasets from four different real world example-dependent 
 cost-sensitive problems: Credit card fraud detection (see Section~\ref{sec:4:fraud}), credit 
 scoring (see Section~\ref{sec:4:creditscoring}), churn modeling (see Section~\ref{sec:5:churn}) and 
 direct marketing (see Section~\ref{sec:5:directmarketing}). The different datasets are summarized 
 in \tablename{~\ref{tab:6:databases}}.
 
-  We first used three classification algorithms, decision tree ($DT$), logistic 
+  We first use three classification algorithms, decision tree ($DT$), logistic 
   regression ($LR$) and random forest ($RF$). Using the implementation of \textit{Scikit-learn} 
   \citep{Pedregosa2011}, each algorithm is trained using the different training sets: training 
   ($t$), under-sampling ($u$), cost-proportionate rejection-sampling  ($r$) \citep{Zadrozny2003}   
   and   cost-proportionate over-sampling ($o$) \citep{Elkan2001}. Afterwards,  we evaluate the 
-  results of  the algorithms using $BMR$ \citep{CorreaBahnsen2014}. Then, the cost-sensitive 
-  logistic  regression ($CSLR$) \citep{CorreaBahnsen2014b} and cost-sensitive decision tree 
-  ($CSDT$) \citep{CorreaBahnsen2015} were also evaluated. Lastly, we calculate the 
-  proposed ensembles of cost-sensitive decision trees algorithms. In particular, using each of the 
-  random inducer methods, bagging ($CSB$), pasting ($CSP$), random forests ($CSRF$) and random 
-  patches ($CSRP$), and then blending the base classifiers using each one of the combination 
-  methods; majority voting ($mv$), cost-sensitive weighted voting ($wv$) and cost-sensitive 
-  stacking ($s$). Unless otherwise stated, the random selection of the training set was repeated 50 
-  times, and in each time the models were trained and results collected, this allows us to measure 
-  the stability of the results. The implementation of the cost-sensitive algorithms is done using 
+  results of  the algorithms using $BMR$, see Chapter~\ref{ch:6}. Then, the cost-sensitive 
+  logistic  regression ($CSLR$), see Chapter\ref{ch:7}, and cost-sensitive decision tree ($CSDT$), 
+  see Chapter~\ref{ch:8}, are also evaluated. Lastly, we calculate the propose ensembles of 
+  cost-sensitive decision trees algorithms. In particular, using each of the random inducer 
+  methods, bagging ($CSB$), pasting ($CSP$), random forests ($CSRF$) and random patches ($CSRP$), 
+  and then blending the base classifiers using each one of the combination methods; majority 
+  voting ($mv$), cost-sensitive weighted voting ($wv$) and cost-sensitive stacking ($s$). Unless 
+  otherwise stated, the random selection of the training set was repeated 50 times, and in each 
+  time the models were trained and results collected, this allows us to measure the stability of 
+  the results. The implementation of the cost-sensitive algorithms is done using 
   the \textit{CostCla} library, see Appendix~\ref{ch:A}.
   
     The results are shown in \tablename{ \ref{tab:9:results_savings}}. First, when observing  the 
@@ -848,10 +850,10 @@ ECSDT&CSB-mv-t & 0.3503 &$\pm$& 0.0046 & 0.2758 &$\pm$& 0.0072\\
 
   Finally, in \tablename{~\ref{tab:9:results_f1score}} the results of the algorithms measured by 
   F1Score are shown. It is observed that the model with the highest savings is not the same as the 
-  one with the highest F1Score in all of the databases, corroborating the conclusions from 
-  \citep{CorreaBahnsen2013}, as selecting a method by a traditional statistic does not give the 
-  same result as selecting it using a business oriented measure such as financial savings. This can 
-  be  further examined in \mbox{\figurename{~\ref{fig:9:friedman_vs_fscore}}}, where the ranking of 
+  one with the highest F1Score in all of the databases as selecting a method by a traditional 
+  statistic does not give the same result as selecting it using a business oriented measure such 
+  as financial savings. This can be  further examined in 
+  \mbox{\figurename{~\ref{fig:9:friedman_vs_fscore}}}, where the ranking of 
   the F1Score and savings are compared. It is observed that the best two algorithms according to 
   their Friedman rank of F1Score are indeed the best ones measured by the Friedman rank of the 
   savings. However, this relation does not consistently hold for the other algorithms as the 
