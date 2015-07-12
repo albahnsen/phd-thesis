@@ -17,20 +17,29 @@ accepting   loans from bad customers does not have the same economical loss, sin
 different   credit lines, therefore, different profit.
 
 Accordingly, the goal of this thesis is to provide an in-depth analysis of example-dependent 
-cost-sensitive classification. The first part, we give the  general concepts of classification 
+cost-sensitive classification. In the first part, we give the  general concepts of classification 
 and cost-sensitive classification, and we present the cost-sensitive problem. The second part of 
 this manuscript is dedicated to explain the particularities of the four real-world classification 
 problems that are the focus of this thesis, in particular, credit card fraud detection, credit 
-scoring, churn modeling and direct marketing. In general, we show why each of the applications is 
-example-dependent cost-sensitive, and we elaborate a framework for the analysis of each problem. In 
-the third part of this work, we introduce our previously proposed example-dependent cost-sensitive 
-methods, namely, Bayes minimum risk, cost-sensitive logistic regression, cost-sensitive decision 
-trees algorithm and ensemble of cost-sensitive decision trees. Moreover, we present the library 
-\mbox{\textit{CostCla}} that we develop as part of the thesis. This library is an open-source 
+scoring, churn modeling and direct marketing. In general, we show why each of these applications is 
+example-dependent cost-sensitive, and we elaborate a framework for the analysis of each problem. 
+
+Afterwards, in the third part of this work, we propose four example-dependent cost-sensitive 
+methods. First, we present the Bayes minimum risk algorithm which consist in quantifying tradeoffs 
+between various decisions using probabilities and the costs that accompany such decisions. Then, we 
+introduce the cost-sensitive logistic regression technique, this algorithm is based in a new 
+logistic regression cost function, one that takes into account the real costs due to 
+misclassification and correct classification. Subsequently, we show the cost-sensitive decision 
+trees algorithm which is based in incorporating the different example-dependent costs into a new 
+cost-based impurity measure and a new cost-based pruning criteria. Lastly, we introduce the 
+framework of ensembles of example-dependent cost-sensitive decision-trees, by training 
+example-dependent cost-sensitive decision trees using four different random inducer methods and then 
+blending them using three different combination approaches. Moreover, we present the library 
+\mbox{\textit{CostCla}} developed as part of the thesis. This library is an open-source 
 implementation of all the algorithms covered in this manuscript.
 
-Finally, the results will show the importance of using the real example-dependent financial 
-costs associated with real-world applications, since there are significant differences in the 
-results when evaluating a model using a traditional cost-insensitive measure such as the accuracy 
-or F1Score,  than when using the savings, leading to the conclusion of the importance of using the 
-real practical financial costs of each context.
+Finally, the experimental results show the importance of using the real example-dependent financial 
+costs associated with real-world applications. We found that there are significant differences 
+in the results when evaluating a model using a traditional cost-insensitive measure such as the 
+accuracy or F1Score, than when using the financial savings. Moreover, the results show that the 
+proposed algorithms have better results for all databases, in the sense of higher savings.
