@@ -1,4 +1,3 @@
-        file                     section                                               todo
-   chapter07          Genetic algorithms  Djamila: this section can: move to background,...
- app_costcla                       Usage                           complete, add time spend
- conclusions  Future research directions      add reinforcement learning in fraud detection
+Empty DataFrame
+Columns: [file, section, todo]
+Index: []
