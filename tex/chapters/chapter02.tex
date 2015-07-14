@@ -175,20 +175,14 @@ extracted. In particular:
     $c=0$ & &\\
   \end{tabular}
   \end{center}
-  Then using the confusion matrix, the statistics are calculated,
- 	\begin{itemize}
-  	\item Error = 11.11\%
-		\item Recall = 87.8\%
-		\item Precision = 90\%
-		\item $F_1Score$ = 88.8\%
-	\end{itemize}
+  Then using the confusion matrix, the different statistics are calculated as: Error = 
+11.11\%, Recall = 87.8\%, Precision = 90\% and $F_1Score$ = 88.8\%.
 	
 There are, however, several instances that are misclassified, that is because the simple linear 
 classifier that was used in this example may not be good enough to separate between the positive 
 and negative classes. In order to make a comparison, using the same example, a new 
 algorithm is learned. This time the algorithm made the correct prediction more often as shown in 
-\figurename{ \ref{fig:2:3}}. Afterwards, the confusion matrix and the different statistics are 
-calculated as follows:
+\figurename{ \ref{fig:2:3}}. Afterwards, the confusion matrix is calculated as follows:
 
 \begin{figure}[t!]
   \centering
@@ -214,12 +208,8 @@ calculated as follows:
 			$c=0$ & &\\
 		\end{tabular}
 \end{center}
-  \begin{itemize}
-    \item Error = 5.3\%
-    \item Recall =90.2\%
-    \item Precision = 94.9\%
-    \item $F_1Score$ = 92.5\%
-  \end{itemize}
+Then the different statistics are calculated as: Error = 5.3\%, Recall = 90.2\%, Precision = 
+94.9\% and $F_1Score$ = 92.5\%.
 It is observed that in this case the FP are reduced more than the FN, this leads to a higher 
 increase in precision  than in recall. There is not a single rule regarding which one is more 
 important than the other, it depends on the applications. For example in applications with a high 
