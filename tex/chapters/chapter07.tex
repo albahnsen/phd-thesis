@@ -62,79 +62,8 @@ Therefore, the parameters are estimated using the following equation
 There are several methods used to estimate the logistic regression, in particular, maximum 
 likelihood \citep{Hastie2009}, Newton, coordinate descent \citep{Murphy2012} and dual coordinate 
 descent \citep{Yu2011}. Nevertheless, all these methods rely on the assumption of convexity of the 
-logistic regression cost function $J(\theta)$. In the next section we analyze the convexity of the 
-logistic regression.
-
-
-\subsection{Convexity analysis of the logistic regression}
-
-A function $f(\cdot)$ which is twice-differentiable is convex if and only if its hessian 
-matrix (matrix of second-order partial derivatives) is positive semi-definite \citep{Boyd2010}.
-Therefore, with the objective of evaluating the convexity of the logistic function, the first 
-order partial derivatives are calculated as follows:
-
-\begin{equation}
-\left[ \begin{array}{c}
-  \frac{\partial J(\theta)}{\partial \theta_1} \\[0.1in]	
-  \frac{\partial J(\theta)}{\partial \theta_2} \\[0.1in]	
-  \ldots \\[0.1in]	
-  \frac{\partial J(\theta)}{\partial \theta_k}
-\end{array} \right] =
-\left[ \begin{array}{c}
-  \frac{1}{N}\sum_{i=1}^{N}\left[x_i^{(1)}\left(h_\theta(\mathbf{x}_i)-y_i\right)\right]\\[0.1in]
-  \frac{1}{N}\sum_{i=1}^{N}\left[x_i^{(2)}\left(h_\theta(\mathbf{x}_i)-y_i\right)\right]\\[0.1in]
-  \ldots \\[0.1in]	
-  \frac{1}{N}\sum_{i=1}^{N}\left[x_i^{(k)}\left(h_\theta(\mathbf{x}_i)-y_i\right)\right]\\[0.1in]	
-\end{array} \right]
-\end{equation}
-
-Then, using the first order partial derivatives, the Hessian ($H$) can be generalized as
-\begin{equation}
-H=\left[ \begin{array}{cccc}
-  \partialb{1}{1} & \partialb{1}{2} & \cdots & \partialb{1}{k} \\[0.1in]  
-  \partialb{2}{1} & \partialb{2}{2} & \cdots & \partialb{2}{k} \\[0.1in]  
-  \cdots & \cdots & \cdots & \cdots \\[0.1in]  
-  \partialb{k}{1} & \partialb{k}{2} & \cdots & \partialb{k}{k}  
-\end{array} \right]
-\end{equation}
-where each element of the matrix is calculated using
-
-\begin{equation}
-  \partialb{j1}{j2}=\frac{1}{N}\sum_{i=1}^{N}
-  \left[\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)x_i^{(j1)}x_i^{(j2)}\right],
-\end{equation}
-where $j1$ and $j2$ $\in \{1,\cdots,k\}$. 
-
-For the cost function to be convex the Hessian matrix	must be positive-semidefinite, and
-a function is positive-semidefinite if:  
-\begin{equation}
-  z^T\left[\nabla_x^2f(x)\right]z \ge 0 \quad  \forall z,
-\end{equation}
-where $\nabla^2f(\cdot)$ is the second order derivate of $f(\cdot)$. Then, applied to J($\theta$), 
-we need to prove that
-\begin{equation}\label{eq:7:pos1}
-  z^T\left[H \right]z \ge 0 \quad  \forall z.
-\end{equation}
-
-\noindent {\bf Proof: }
-$H$ can be rewritten, using only the internal part of the sum, since it does not 
-dependent on $\theta$
-\begin{equation}
- H = \frac{1}{N}\sum_{i=1}^{N} \left[ 
-\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)\mathbf{x}_i^T \mathbf{x} \right]. 
-\end{equation}
-Then, 
-\begin{align}
-  z^THz = z^T \left[\bigg(1-h_\theta(\mathbf{x}_i)\bigg)h_\theta(\mathbf{x}_i)\mathbf{x}_i^T 
-\mathbf{x}\right] z,
-\end{align}
-which can be rewritten as
-\begin{align}
-  z^THz = (1-h_\theta(\mathbf{x}_i))h_\theta(\mathbf{x}_i)\left(\mathbf{x}_i^Tz\right)^2.
-\end{align}
-Therefore,  $J(\theta)$ is convex, as $\left(\mathbf{x}_i^Tz\right)^2 
-\ge 0$ and \\ $\left((1-h_\theta(\mathbf{x}_i))h_\theta(\mathbf{x}_i)\right)\ge 0$ because $0\ge 
-h_\theta(\mathbf{x}_i) \ge 1$.
+logistic regression cost function $J(\theta)$. In the next Appendix~\ref{ch:B} we analyze 
+the convexity of the logistic regression.
 
 
 \section{Cost-sensitive logistic regression}
@@ -229,7 +158,6 @@ misclassification and correct classification case.
 Then, as we already have the real costs, we create a new cost-sensitive logistic regression cost 
 function, by including the different costs into the logistic function,
 
-\newpage
 \begin{align}\label{eq:CSLR}
   J^c(\theta)=\frac{1}{N} \sum_{i=1}^{N} \bigg( y_i(h_\theta(\mathbf{x}_i) C_{TP_i} + 
   (1-h_\theta(\mathbf{x}_i))C_{FN_i})  \nonumber\\ 
@@ -240,90 +168,18 @@ Since this  new cost function is not convex, we estimate the parameters $\theta$
 algorithms, as this optimization heuristic does not require the underlying function to be 
 differentiable or convex \citep{Haupt2004}. 
 
-Genetic algorithms, is an optimization technique that attempts to replicate natural evolution 
+  Genetic algorithms, is an optimization technique that attempts to replicate natural evolution 
 processes in which the individuals with the considered best characteristics to adapt to the 
 environment are more likely to reproduce and survive. These advantageous individuals mate between 
 them, producing descendants similarly characterized, so favorable characteristics are preserved and 
 unfavorable ones destroyed, leading to the progressive evolution of the species. The model aims 
 to improve the solution to a problem by keeping the best combination of input variables 
 \citep{Haupt2004}. 
-% The 
-% flow diagram presented in \figurename{~\ref{fig:7:geneticalgorithms}} describes the process. It 
-% starts with the definition of the problem to optimize, generating an objective function to evaluate 
-% the possible candidate solutions (chromosomes), i.e., the objective function is the way of 
-% determining which individual produces the best outcome. 
-% 
-% The next step is to generate an initial random population of n individuals called chromosomes that 
-% are symbolized by binary strings, where each binary position of the chromosome is called a gene and 
-% denotes a specific characteristic (input variable). Therefore the combination of all the different 
-% characteristics encoded in the string represents an individual who is a candidate for the solution.
-% Each chromosome is evaluated in the objective function and the best individuals are selected to 
-% survive for mating (parents), while the worse ones are discarded to make room for new descendants.  
-% There are many ways of pairing the selected chromosomes \citep{Haupt2004}. In this paper, a 
-% weighted 
-% cost pairing is used, which consists of assigning a selection probability according to each 
-% chromosome cost. That is, a chromosome with the higher cost has a greater probability of mating 
-% because cost maximization is desired.
-% 
-% \begin{figure}[t]
-%   \centering
-%   \includegraphics[width=8cm]{ch7_fig2}  
-%   \caption{Genetic algorithms \citep{Haupt2004}}
-%   \label{fig:7:geneticalgorithms}
-% \end{figure}
-%   
-% After selecting the parent chromosomes with the chosen pairing method, the next step is to create a 
-% second generation of individuals, based on the information of the parents. There are several ways 
-% of 
-% mating. In this paper, two parents create one child. 
-% In order to transfer the parents binary information to the child, there are also different kinds 
-% of approaches such as the one-point crossover. The one-point crossover technique consists in 
-% selecting one random point on the parents string. The child is created in the following way: First, 
-% the parent1 transfers its binary code from the first gene to the crossover point. Then the parent2 
-% transfers its binary code from the crossover point to the last gene of the chromosome. New parents 
-% are randomly selected for each new child and the process continues until the chromosome population 
-% grows back to the original size n. 
-% 
-% Once the breeding process is completed, random mutation is used to alter a certain percentage of 
-% the 
-% genes of the chromosomes. The purpose of mutation is to introduce diversity into the population, 
-% allowing the algorithm to avoid local minima by generating new gene combinations in the 
-% chromosomes. 
-% The most common mutation procedure is the one called single point mutation. It is implemented by 
-% generating a random variable that indicates the position of the gene that will be modified, from 
-% the 
-% population of chromosomes. Generally, mutation is not allowed in the best solution chromosomes 
-% because these elite individuals are destined to propagate unchanged. In genetic algorithm this 
-% is called elitism.
-% 
-% Finally, after mutation is done the new generation of chromosomes is evaluated with the objective 
-% function and used in the next iteration of the described algorithm.
-% The algorithm iterates until a maximum number of chromosome generations are created or a 
-% satisfactory solution is reached.
-
 
 \section{Experiments}
 \label{sec:7:results}
 
-For the experiments we use five datasets from four different real world example-dependent 
-cost-sensitive problems: Credit card fraud detection (see Section~\ref{sec:4:fraud}), credit 
-scoring (see Section~\ref{sec:4:creditscoring}), churn modeling (see Section~\ref{sec:5:churn}) and 
-direct marketing (see Section~\ref{sec:5:directmarketing}). The different datasets are summarized 
-in \tablename{~\ref{tab:6:databases}}.
-
-In particular, we are interested in comparing the results of the different logistic regression 
-models. First we train a logisitc regression ($LR$) using the training ($t$), under-sampled 
-($u$), cost-proportionate rejection-sampling  ($r$) \citep{Zadrozny2003}  and  cost-proportionate 
-over-sampling ($o$) \citep{Elkan2001} datasets. Afterwards,  we evaluate the results of  the 
-algorithms using $BMR$, see Chapter~\ref{ch:6}. Lastly, we calculate the cost-sensitive 
-logistic  regression ($CSLR$). We use the logistic regression implementation of
-\textit{Scikit-learn} \citep{Pedregosa2011}, and the \textit{CostCla} library, see 
-Appendix~\ref{ch:A}, for the cost-sensitive algorithms. Unless otherwise stated, the random 
-selection of the training set was repeated 50 times, and in each time the models were trained and 
-results collected, this allows us to measure the stability of the results.
-
-
-\begin{table}
+\begin{table}[b]
     \centering
     \footnotesize
     \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 
@@ -348,7 +204,6 @@ CST&CSLR-t & \bf{0.6113} &\bf{$\pm$}& \bf{0.0262} & \bf{0.1118} &\bf{$\pm$}& \bf
     \caption{Results of the algorithms measured by savings}
     \label{tab:7:results_savings}
   \end{table}
-  
 \begin{table}
     \centering
     \footnotesize
@@ -373,6 +228,23 @@ CST&CSLR-t & 0.2748 &$\pm$& 0.0069 & 0.4484 &$\pm$& 0.0072\\
     \label{tab:7:results_savings2}
   \end{table}
 
+For the experiments we use five datasets from four different real world example-dependent 
+cost-sensitive problems: Credit card fraud detection (see Section~\ref{sec:4:fraud}), credit 
+scoring (see Section~\ref{sec:4:creditscoring}), churn modeling (see Section~\ref{sec:5:churn}) and 
+direct marketing (see Section~\ref{sec:5:directmarketing}). The different datasets are summarized 
+in \tablename{~\ref{tab:6:databases}}.
+
+In particular, we are interested in comparing the results of the different logistic regression 
+models. First we train a logisitc regression ($LR$) using the training ($t$), under-sampled 
+($u$), cost-proportionate rejection-sampling  ($r$) \citep{Zadrozny2003}  and  cost-proportionate 
+over-sampling ($o$) \citep{Elkan2001} datasets. Afterwards,  we evaluate the results of  the 
+algorithms using $BMR$, see Chapter~\ref{ch:6}. Lastly, we calculate the cost-sensitive 
+logistic  regression ($CSLR$). We use the logistic regression implementation of
+\textit{Scikit-learn} \citep{Pedregosa2011}, and the \textit{CostCla} library, see 
+Appendix~\ref{ch:A}, for the cost-sensitive algorithms. Unless otherwise stated, the random 
+selection of the training set was repeated 50 times, and in each time the models were trained and 
+results collected, this allows us to measure the stability of the results.
+  
 In \tablename{~\ref{tab:7:results_savings}}, we show the results of each algorithm in the different 
 databases measured by savings. Firstly, the proposed $CSLR$ has the highest savings in the 
 fraud, churn and credit 1 databases, moreover, in the credit 2 and marketing databases, it 
@@ -441,7 +313,7 @@ measured by $F_1Score$, it only yield to 74.7\% of the best model. This leads to
 of the importance of using a cost-sensitive measure such as savings when evaluating real-world 
 example-dependent cost-sensitive problems. 
 
-\begin{figure}[t!] 
+\begin{figure} 
   \centering
   \includegraphics{ch7_fig3}
   \caption{\textbf{Comparison of the average savings and $F_1Score$ of the algorithms versus the 
