@@ -168,87 +168,13 @@ calibrated  probabilities be the slope of the ROCCH for each group.
 \section{Experiments}
 \label{sec:6:experiments}
 
-In this section, first we present the datasets used for the experiments. Then, the 
-partitioning of the dataset and the algorithms used are shown. Finally, we present the results.
-
-\subsection{Experimental setup}
-
-For the experiments we used five datasets from four different real world example-dependent 
+For the experiments we use five datasets from four different real world example-dependent 
 cost-sensitive problems: Credit card fraud detection (see Section~\ref{sec:4:fraud}), credit 
 scoring (see Section~\ref{sec:4:creditscoring}), churn modeling (see Section~\ref{sec:5:churn}) and 
-direct marketing (see Section~\ref{sec:5:directmarketing}).
+direct marketing (see Section~\ref{sec:5:directmarketing}). The different datasets are summarized 
+in \tablename{~\ref{tab:4:databases}} and \tablename{~\ref{tab:5:databases}}.
 
-For each dataset we used a pre-define cost matrix that we previously proposed in 
-Chapter~\ref{ch:4} and Chapter~\ref{ch:5}. Additionally,  for each database, 3 different 
-datasets are extracted: training, 
-validation and testing. Each one containing 50\%, 25\% and 25\% of the examples, 
-respectively. Afterwards, because classification algorithms suffer when the label distribution is 
-skewed towards one of the classes \citep{Hastie2009}, an under-sampling of the positive examples is 
-made, in order to have a balanced class distribution. Moreover, we perform the cost-proportionate 
-rejection-sampling and cost proportionate over-sampling procedures, that we previously described in 
-Section~\ref{sec:3:costsampling}. \tablename{~\ref{tab:6:databases}}, summarizes the 
-different datasets. It is important to note that the sampling procedures were only applied to the 
-training dataset since the validation and test datasets must reflect the real distribution.
-
-\begin{table}
-  \centering
-  \footnotesize
-  \begin{tabular}{l l c c c } %sum 7.7
-    \hline
-    \textbf{Database}& \textbf{Set}&  $N$ & $\pi_1$ & Cost (Euros) \\
-    \hline
-    Fraud &Total&236,735&1.50&895,154\\
-    Detection&  Training ($t$)&94,599&1.51&358,078\\
-    &Under-sampled ($u$)&2,828&50.42&358,078\\
-    &Rejection-sampled ($r$)&94,522&1.43&357,927\\
-    &Over-sampled ($o$)&189,115&1.46&716,006\\
-    &Validation&70,910&1.53&274,910\\
-    &Testing&71,226&1.45&262,167\\
-    \hline
-    Credit  & Total&112,915&6.74&83,740,181\\
-    Scoring 1 & Training ($t$)&45,264&6.75&33,360,130\\
-    &Under-sampled ($u$)&6,038&50.58&33,360,130\\
-    &Rejection-sampled ($r$)&5,271&43.81&29,009,564\\
-    &Over-sampled ($o$)&66,123&36.16&296,515,655\\
-    &Validation&33,919&6.68&24,786,997\\
-    &Testing&33,732&6.81&25,593,055\\
-    \hline
-    Credit &Total&38,969&19.88&3,117,960\\
-    Scoring 2&Training ($t$)&15,353&19.97&1,221,174\\
-    &Under-sampled ($u$)&6,188&49.56&1,221,174\\
-    &Rejection-sampled ($r$)&2,776&35.77&631,595\\
-    &Over-sampled ($o$)&33,805&33.93&6,798,282\\
-    &Validation&11,833&20.36&991,795\\
-    &Testing&11,783&19.30&904,991\\
-    \hline
-    Churn&Total&9,410&4.83&580,884\\
-    Modeling&Training ($t$)&3,758&5.05&244,542\\
-    &Under-sampled ($u$) &374&50.80&244,542\\
-    &Rejection-sampled ($r$)&428&41.35&431,428\\
-    &Over-sampled ($o$) &5,767&31.24&2,350,285\\
-    &Validation&2,824&4.77&174,171\\
-    &Testing&2,825&4.42&162,171\\
-    \hline
-    Direct &Total&37,931&12.62&59,507\\
-    Marketing&Training ($t$)&15,346&12.55&24,304\\
-    &Under-sampled ($u$)&3,806&50.60&24,304\\
-    &Rejection-sampled ($r$)&1,644&52.43&20,621\\
-    &Over-sampled ($o$)&22,625&40.69&207,978\\
-    &Validation&11,354&12.30&16,154\\
-    &Testing&11,231&13.04&19,048\\
-    \hline
-  \end{tabular}
-  \caption{Summary of the datasets. Where $N$ is the number of examples and $\pi_1$ is the 
-  percentage of positives examples.}
-  \label{tab:6:databases}
-\end{table}
- 
-
-\subsection{Results}
-
-
-  For the experiments, we first used three classification algorithms, decision tree ($DT$), 
-logistic 
+For the experiments, we first used three classification algorithms, decision tree ($DT$), logistic 
   regression ($LR$) and random forest ($RF$). Using the implementation of \textit{Scikit-learn} 
   \citep{Pedregosa2011}, each algorithm is trained using the different training sets: training 
   ($t$), under-sampling ($u$), cost-proportionate rejection-sampling  ($r$) \citep{Zadrozny2003}   

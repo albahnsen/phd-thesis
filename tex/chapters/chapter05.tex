@@ -351,3 +351,52 @@ average yearly balance, and lastly, the interest rate spread is estimated to be 
 is the average between 2008 and 2010 of the retail banking sector in Portugal as reported by the 
 Portuguese central bank. Given that, the $Int_i$ is equal to $\left( balance * 20\% \right) * 
 2.463\%$.
+
+
+\subsection{Summary of the datasets}
+
+For each dataset we used a pre-define cost matrix as shown in Section~\ref{sec:5:churn} and 
+Section~\ref{sec:5:directmarketing}. Additionally,  for each database, 3 different 
+datasets are extracted: training, validation and testing. Each one containing 50\%, 25\% and 25\% 
+of the examples, respectively. Afterwards, because classification algorithms suffer when the label 
+distribution is skewed towards one of the classes \citep{Hastie2009}, an under-sampling of the 
+positive examples is made, in order to have a balanced class distribution. Moreover, we perform the 
+cost-proportionate rejection-sampling and cost proportionate over-sampling procedures, that we 
+previously described in Section~\ref{sec:3:costsampling}. \tablename{~\ref{tab:5:databases}}, 
+summarizes the different datasets. It is important to note that the sampling procedures were only 
+applied to the training dataset since the validation and test datasets must reflect the real 
+distribution.
+\newpage
+
+\begin{table}[ht!]
+  \centering
+  \footnotesize
+  \begin{tabular}{l l c c c } %sum 7.7
+    \hline
+    \textbf{Database}& \textbf{Set}&  $N$ & $\pi_1$ & Cost (Euros) \\
+    \hline
+    Churn&Total&9,410&4.83&580,884\\
+    Modeling&Training ($t$)&3,758&5.05&244,542\\
+    &Under-sampled ($u$) &374&50.80&244,542\\
+    &Rejection-sampled ($r$)&428&41.35&431,428\\
+    &Over-sampled ($o$) &5,767&31.24&2,350,285\\
+    &Validation&2,824&4.77&174,171\\
+    &Testing&2,825&4.42&162,171\\
+    \hline
+    Direct &Total&37,931&12.62&59,507\\
+    Marketing&Training ($t$)&15,346&12.55&24,304\\
+    &Under-sampled ($u$)&3,806&50.60&24,304\\
+    &Rejection-sampled ($r$)&1,644&52.43&20,621\\
+    &Over-sampled ($o$)&22,625&40.69&207,978\\
+    &Validation&11,354&12.30&16,154\\
+    &Testing&11,231&13.04&19,048\\
+    \hline
+  \end{tabular}
+  \caption{Summary of the datasets. Where $N$ is the number of examples and $\pi_1$ is the 
+  percentage of positives examples.}
+  \label{tab:5:databases}
+\end{table}
+ 
+ \makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
