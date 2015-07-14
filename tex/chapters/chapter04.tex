@@ -324,12 +324,17 @@ $\mathbf{x}_i^{a4}$\\
   We propose to overcome this limitation by modeling the time of the transaction as a periodic 
   variable, in particular using the von Mises distribution \citep{Fisher1996}. The von Mises 
   distribution, also known   as the periodic normal distribution, is a distribution of a wrapped 
-  normal distributed  variable across a circle. The von Mises distribution of a set of examples 
-  $D=\{t_1,t_2,\cdots,t_N\}$ is defined as
+  normal distributed  variable across a circle. The von Mises probability distribution of a 
+  set of examples $D=\{t_1,t_2,\cdots,t_N\}$ for a given angle $t_x$ is given by
   \begin{equation}
-  D \sim vonmises\left( \mu_{vM} , \frac{1}{\sigma_{vM}} \right),
+    f\left(t_x\vert \mu_{vM} , \sigma_{vM} \right) = \frac{e^{\frac{1}{\sigma_{vM}} \cos(t_x - 
+\mu_{vM})}}{2 \pi I_0\left(\frac{1}{\sigma_{vM}}\right)}
   \end{equation}
-  where $\mu_{vM}$ and $\sigma_{vM}$ are the periodic mean and periodic standard deviation, 
+%   \begin{equation}
+%   D \sim vonmises\left( \mu_{vM} , \frac{1}{\sigma_{vM}} \right),
+%   \end{equation}
+  where  $I_0(\kappa)$ is the modified Bessel function of order 0, 
+and   $\mu_{vM}$, $\sigma_{vM}$ are the periodic mean and periodic standard deviation, 
   respectively, and are defined as
   \begin{equation}
     \mu_{vM}(D) =  2\cdot \arctan\left(\frac{\phi}{\left(
