@@ -13,12 +13,40 @@ Finally, in Section \ref{sec:9:experiments}, we compare the results of the propo
 against state-of-the-art methods, using the five real-world cost-sensitive databases.
 \end{remark}
 
-\section{Ensemble methods}
-\label{sec:9:ensemble}
+\section{Introduction}
+\label{sec:9:intro}
 
 Ensemble learning is a widely studied topic in the machine learning community. The main idea behind 
 the ensemble methodology is to combine several individual base classifiers in   order to have a 
-classifier that outperforms each of them \citep{Rokach2009}. Nowadays,   ensemble methods are  one 
+classifier that outperforms each of them \citep{Rokach2009}.
+
+In the context of cost-sensitive classification, some authors have proposed methods for using 
+ensemble techniques. In \citep{Masnadi-shirazi2011}, the authors proposed a framework for 
+cost-sensitive boosting that is expected to minimized the losses by using optimal cost-sensitive 
+decision rules. In \citep{Street2008}, a bagging algorithm with adaptive costs was proposed. In 
+his doctoral thesis, Nesbitt \citep{Nesbitt2010}, proposed a method for cost-sensitive 
+tree-stacking. In this method different decision trees are learned, and then combined in a way 
+that a cost function is minimize. Lastly in \citep{Lomax2013}, a survey of application of 
+cost-sensitive learning with decision trees is shown, in particular including other methods that 
+create cost-sensitive ensembles. However, in all these methods, the  misclassification costs only 
+dependent on the class, therefore, assuming a constant cost across  examples. As a consequence, 
+these methods are not  well suited for example-dependent cost-sensitive  problems. 
+
+In this chapter, we propose a framework of ensembles of example-dependent cost-sensitive 
+decision-trees. The algorithms are based in training example-dependent cost-sensitive decision 
+trees using four different random inducer methods and then blending them using three different 
+combination approaches. Moreover, we propose two new cost-sensitive combination approaches, 
+cost-sensitive weighted voting and cost-sensitive stacking. The latter being an extension of our 
+previously proposed cost-sensitive logistic regression. We evaluate the proposed framework using 
+five different databases from four real-world problems. In particular, credit card fraud detection, 
+churn modeling, credit scoring and direct marketing. The results show that the proposed method 
+outperforms state-of-the-art example-dependent cost-sensitive methods in three databases, and have 
+a similar result in the other two.
+
+\section{Ensemble methods}
+\label{sec:9:ensemble}
+
+Nowadays,   ensemble methods are  one 
 of the most popular and well studied machine learning techniques   \citep{Zhou2012}, and it can be 
 noted that since 2009 all the first-place and   second-place winners of the KDD-Cup 
 competition\footnote{\url{https://www.sigkdd.org/kddcup/}}   used  ensemble methods. The core 
@@ -88,20 +116,6 @@ representable functions.
   \end{equation}
 %   \end{remark}
   
-\subsection{Cost-sensitive ensembles}
-
-  In the context of cost-sensitive classification, some authors have proposed methods for using 
-  ensemble techniques. In \citep{Masnadi-shirazi2011}, the authors proposed a framework for 
-  cost-sensitive boosting that is expected to minimized the losses by using optimal cost-sensitive 
-  decision rules. In \citep{Street2008}, a bagging algorithm with adaptive costs was proposed. In 
-  his doctoral thesis, Nesbitt \citep{Nesbitt2010}, proposed a method for cost-sensitive 
-  tree-stacking. In this method different decision trees are learned, and then combined in a way 
-  that a cost function is minimize. Lastly in \citep{Lomax2013}, a survey of application of 
-  cost-sensitive learning with decision trees is shown, in particular including other methods that 
-  create cost-sensitive ensembles. However, in all these methods, the  misclassification costs only 
-  dependent on the class, therefore, assuming a constant cost across  examples. As a consequence, 
-  these methods are not  well suited for example-dependent cost-sensitive  problems. 
-
       
 \section{Ensembles of cost-sensitive decision trees}
 \label{sec:9:ecsdt}
@@ -448,7 +462,6 @@ $combinator$.
   therefore, proving Theorem~\ref{theorem1}.
   \end{proof}
  
-\newpage
 \section{Experiments}
 \label{sec:9:experiments}
 
