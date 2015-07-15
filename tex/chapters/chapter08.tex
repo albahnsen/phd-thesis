@@ -12,8 +12,9 @@ compare the results of the proposed algorithm against state-of-the-art methods u
 real-world cost-sensitive databases.
 \end{remark}
 
-\section{Decision trees}
-\label{sec:8:dt}
+
+\section{Introduction}
+\label{sec:8:intro}
 
 Decision trees are one of the most widely used machine learning algorithms \citep{Lior2008}. 
 The technique is considered to be white box, in the sense that is easy to interpret, and has a 
@@ -21,6 +22,30 @@ very low computational cost, while maintaining a good performance as compared wi
 techniques \citep{Hastie2009}. There are two types of decision tree depending on the objective of 
 the model. They work either for classification or regression. In this section we focus on
 binary classification decision tree.
+
+Standard decision tree algorithms focus on inducing trees that maximize accuracy. However this is 
+not optimal when the misclassification costs are unequal \citep{Elkan2001}. This has led to many 
+studies that develop algorithms that aim to introduce the cost-sensitivity into the algorithms 
+\citep{Lomax2013}. These studies have focused on introducing the class-dependent costs  
+\citep{Draper1994,Ting2002,Ling2004,Li2005,Kretowski2006,Vadera2010}, which is not optimal for 
+some applications. For example in credit card fraud detection, it is true that false positives 
+have a different cost than false negatives, nevertheless, false negatives may vary significantly, 
+which makes class-dependent cost-sensitive methods not suitable for this problem.
+
+In this chapter, we propose the cost-sensitive decision tree algorithm. The algorithm is 
+based on incorporating the different example-dependent costs into a new cost-based impurity measure 
+and a new cost-based pruning criteria. Then, we evaluate the proposed example-dependent 
+cost-sensitive decision tree using three different databases. In particular, a credit card fraud 
+detection, a credit scoring and a direct marketing databases. The results show that the proposed 
+method outperforms state-of-the-art example-dependent cost-sensitive methods. Furthermore, when 
+compared against a standard decision tree, our method builds significantly smaller trees in only a 
+fifth of the time.
+
+\section{Decision trees}
+\label{sec:8:dt}
+
+There are two types of decision tree depending on the objective of the model. They work either for 
+classification or regression. In this section we focus on binary classification decision tree.
 
 \subsection{Construction of classification trees}
 
@@ -108,7 +133,6 @@ rule, each leaf is further selected and it is subdivides into smaller leafs, unt
 stopping criteria is meet. In Algorithm \ref{alg:8:tree_grow}, the pseudocode of the tree 
 growing procedure is presented.
 
-\newpage
 \begin{algorithm}\label{alg:8:tree_grow}
 Pseudocode of the tree growing procedure.
 \textnormal{
@@ -200,7 +224,6 @@ $Z_\alpha$.
 PC_{eb} = \frac{Err_{UB}(EB(Tree,branch),\mathcal{S})-Err_{UB}(Tree,\mathcal{S}) }
     {\vert Tree\vert-\vert EB(Tree,branch)\vert}
 \end{equation} 
-\newpage
 where 
 \begin{align}
     Err_{UB}(Tree,&\mathcal{S})= Err(Tree,\mathcal{S}) & \nonumber \\
@@ -282,16 +305,7 @@ created  a error based pruning is applied \citep{Rokach2010}.
 
 \section{Example-Dependent Cost-sensitive Decision Trees}
 \label{sec:8:csdt}
-
-Standard decision tree algorithms focus on inducing trees that maximize accuracy. However this is 
-	not optimal when the misclassification costs are unequal \citep{Elkan2001}. This has led to many 
-	studies that develop algorithms that aim to introduce the cost-sensitivity into the algorithms 
-	\citep{Lomax2013}. These studies have focused on introducing the class-dependent costs  
-	\citep{Draper1994,Ting2002,Ling2004,Li2005,Kretowski2006,Vadera2010}, which is not optimal for 
-	some applications. For example in credit card fraud detection, it is true that false positives 
-	have a different cost than false negatives, nevertheless, false negatives may vary significantly, 
-	which makes class-dependent cost-sensitive methods not suitable for this problem.
-      
+     
   In this section, we first propose a new method to introduce the costs into the decision tree 
 	induction stage, by creating new-cost based impurity measures. Afterwards, we propose a new 
 	pruning method based on minimizing the cost as pruning criteria.
@@ -353,35 +367,6 @@ Standard decision tree algorithms focus on inducing trees that maximize accuracy
 \section{Experiments}
 \label{sec:8:experiments}
 
-In this section we present the experimental results. First, we evaluate the performance of the 
-proposed $CSDT$ algorithm and compare it against a classical decision tree ($DT$). We evaluate 
-the different trees using them without pruning ($not p$), with error based pruning ($err p$), 
-and also with the proposed cost-sensitive pruning technique ($cost p$). The different algorithms 
-are trained using the training ($t$), under-sampling ($u$), cost-proportionate rejection-sampling 
-($r$), and cost-proportionate over-sampling ($o$) datasets. We use the decision trees 
-implementation of \textit{Scikit-learn} \citep{Pedregosa2011}, and the \textit{CostCla} library, see 
-Appendix~\ref{ch:A}, for the cost-sensitive algorithms.
-
-For the experiments we use three datasets from three different real world example-dependent 
-cost-sensitive problems: Credit card fraud detection (see Section~\ref{sec:4:fraud}), credit 
-scoring (see Section~\ref{sec:4:creditscoring}) and direct marketing (see 
-Section~\ref{sec:5:directmarketing}). The different datasets are summarized 
-in \tablename{~\ref{tab:4:databases}} and \tablename{~\ref{tab:5:databases}}.
-
-We evaluate a decision tree constructed using the Gini impurity measure, with and without the 
-pruning defined in (\ref{eq:8:pruning}). We also apply    the cost-based pruning procedure given 
-in (\ref{eq:8:cost_pruning}). Lastly, we compared against     the proposed $CSDT$ constructed 
-using the cost-based impurity measure defined in (\ref{eq:8:cost_impurity}), using the two 
-pruning procedures.
-
-In \figurename{~\ref{fig:8:2}}, the results using the three databases are shown. In particular we 
-first evaluate the impact of the algorithms when trained using the training set. There is a clear 
-difference between the savings of the $DT$ and the $CSDT$ algorithms. However, that difference 
-is not observable on the $F_1Score$ results. Since the $CSDT$ is focused on maximizing the 
-savings not the accuracy or $F_1Score$. There is a small increase in savings when using the 
-$DT$ with cost-sensitive pruning. Nevertheless, in the case of the $CSDT$ algorithm, there is 
-no change when using any pruning procedure, neither in savings or $F_1Score$.
-
 \begin{table}
   \centering
   \footnotesize
@@ -431,6 +416,15 @@ no change when using any pruning procedure, neither in savings or $F_1Score$.
   \label{tab:8:1}
 \end{table}
 
+In this section we present the experimental results. First, we evaluate the performance of the 
+proposed $CSDT$ algorithm and compare it against a classical decision tree ($DT$). We evaluate 
+the different trees using them without pruning ($not p$), with error based pruning ($err p$), 
+and also with the proposed cost-sensitive pruning technique ($cost p$). The different algorithms 
+are trained using the training ($t$), under-sampling ($u$), cost-proportionate rejection-sampling 
+($r$), and cost-proportionate over-sampling ($o$) datasets. We use the decision trees 
+implementation of \textit{Scikit-learn} \citep{Pedregosa2011}, and the \textit{CostCla} library, 
+see Appendix~\ref{ch:A}, for the cost-sensitive algorithms.
+
 \begin{figure}[t]
   \centering
   \includegraphics[scale=0.8]{ch8_fig2}
@@ -447,6 +441,26 @@ no change when using any pruning procedure, neither in savings or $F_1Score$.
   \label{fig:8:3}
 \end{figure}
 
+For the experiments we use three datasets from three different real world example-dependent 
+cost-sensitive problems: Credit card fraud detection (see Section~\ref{sec:4:fraud}), credit 
+scoring (see Section~\ref{sec:4:creditscoring}) and direct marketing (see 
+Section~\ref{sec:5:directmarketing}). The different datasets are summarized 
+in \tablename{~\ref{tab:4:databases}} and \tablename{~\ref{tab:5:databases}}.
+
+We evaluate a decision tree constructed using the Gini impurity measure, with and without the 
+pruning defined in (\ref{eq:8:pruning}). We also apply    the cost-based pruning procedure given 
+in (\ref{eq:8:cost_pruning}). Lastly, we compared against     the proposed $CSDT$ constructed 
+using the cost-based impurity measure defined in (\ref{eq:8:cost_impurity}), using the two 
+pruning procedures.
+
+In \figurename{~\ref{fig:8:2}}, the results using the three databases are shown. In particular we 
+first evaluate the impact of the algorithms when trained using the training set. There is a clear 
+difference between the savings of the $DT$ and the $CSDT$ algorithms. However, that difference 
+is not observable on the $F_1Score$ results. Since the $CSDT$ is focused on maximizing the 
+savings not the accuracy or $F_1Score$. There is a small increase in savings when using the 
+$DT$ with cost-sensitive pruning. Nevertheless, in the case of the $CSDT$ algorithm, there is 
+no change when using any pruning procedure, neither in savings or $F_1Score$.
+
 In addition, we also evaluate the algorithms on the different sets, under-sampling, 
 rejection-sampling and over-sampling. The results are shown in \tablename{~\ref{tab:8:1}}. 
 Moreover, in \figurename{~\ref{fig:8:3}}, the average results of the different algorithms measured 
@@ -462,21 +476,8 @@ algorithm.
   standard decision tree, estimated using the different training sets.}
   \label{fig:8:4}
 \end{figure}
-  
-Finally, we also analyze the different models taking into account the complexity and the 
-training time. In particular we evaluate the size of each $Tree$. In \tablename{~\ref{tab:8:2}}, 
-and \figurename{~\ref{fig:8:4}}, the results are shown. The $CSDT$ algorithm creates significantly 
-smaller trees, which leads to a lower training time. In particular this is a result of using the 
-non weighted gain, the $CSDT$ only accepts splitting rules that contribute to the overall reduction 
-of the cost, which is not the case if instead the weighted gain was used. Even that the $DT$ 
-with cost pruning, produce a good result measured by savings, it is the one that takes the 
-longer to estimate. Since the algorithm first creates a big decision tree using the $Gini$ 
-impurity, and then attempt to find a smaller tree taking into account the cost. Measured by 
-training time, the $CSDT$ is by all means faster to train than the $DT$ algorithm, leading to 
-an algorithm that not only gives better results measured by savings but also one that can be 
-trained much quicker than the standard $DT$.
 
-\begin{table}[htbp]
+\begin{table}
   \centering
   \footnotesize
   \begin{tabular}{|c|l|c c|c c|c c|}
@@ -522,3 +523,17 @@ trained much quicker than the standard $DT$.
   databases.}
   \label{tab:8:2}
 \end{table}
+
+  
+Finally, we also analyze the different models taking into account the complexity and the 
+training time. In particular we evaluate the size of each $Tree$. In \tablename{~\ref{tab:8:2}}, 
+and \figurename{~\ref{fig:8:4}}, the results are shown. The $CSDT$ algorithm creates significantly 
+smaller trees, which leads to a lower training time. In particular this is a result of using the 
+non weighted gain, the $CSDT$ only accepts splitting rules that contribute to the overall reduction 
+of the cost, which is not the case if instead the weighted gain was used. Even that the $DT$ 
+with cost pruning, produce a good result measured by savings, it is the one that takes the 
+longer to estimate. Since the algorithm first creates a big decision tree using the $Gini$ 
+impurity, and then attempt to find a smaller tree taking into account the cost. Measured by 
+training time, the $CSDT$ is by all means faster to train than the $DT$ algorithm, leading to 
+an algorithm that not only gives better results measured by savings but also one that can be 
+trained much quicker than the standard $DT$.
