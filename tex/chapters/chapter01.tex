@@ -87,8 +87,8 @@ framework. This is an extension of the previously proposed methods, in which the
   
   Moreover, we evaluated the different methods using five different databases from four real-world 
   problems. In particular, credit card fraud detection, churn modeling, credit scoring and direct 
-marketing. The results show that the proposed method outperforms state-of-the-art example-dependent  
-  cost-sensitive methods. Furthermore, our source code, as used for the experiments, is publicly 
+marketing. The results show that the proposed methods outperforms state-of-the-art example-dependent 
+   cost-sensitive methods. Furthermore, our source code, as used for the experiments, is publicly 
   available as part of the \textit{CostSensitiveClassification}\footnote{
   \url{https://github.com/albahnsen/CostSensitiveClassification}} library.
   
@@ -101,11 +101,11 @@ marketing. The results show that the proposed method outperforms state-of-the-ar
   practice. Moreover, by creating many different decision trees and combining them using a 
   cost-sensitive ensemble framework, the best results are found.
 
-  Finally, our results show the importance of using the real example-dependent financial costs 
-  associated with real-world applications, since there are significant differences in the 
+  Finally, our results show that there are significant differences in the 
   results when evaluating a model using the actual financial savings, than when using 
   traditional cost-insensitive measures such as the accuracy or F1Score. This leads to the 
-  conclusion of the importance of using the real practical financial costs of each context.
+  conclusion of the importance of using the real example-dependent financial costs 
+  associated with real-world applications
 
 
 \section{Publications}
@@ -144,6 +144,11 @@ Submitted to IEEE Transactions on Knowledge and Data Engineering, 2015.
 Alejandro Correa Bahnsen, Djamila Aouada and Bj\"orn Ottersten. Submitted to Expert Systems with 
 Applications, 2015.
 
+\item \citep{CorreaBahnsen2015d} \textit{Detecting Credit Card Fraud using Periodic Features}, 
+Alejandro Correa Bahnsen, Djamila Aouada and Bj\"orn Ottersten.
+Submitted to the IEEE International Conference on Machine Learning and Applications, 2015.
+
+
 \end{itemize}
 
 
@@ -169,13 +174,10 @@ Second, in \chaptername{~\ref{ch:5}}, we analyze marketing analytics application
 cost-sensitive methods. First, in \chaptername{~\ref{ch:6}}, we present the Bayes minimum risk 
 method. Then, we introduce the cost-sensitive logistic regression algorithm in 
 \chaptername{~\ref{ch:7}}. Afterwards, in \chaptername{~\ref{ch:8}}, we show and discuss the 
-cost-sensitive decision trees algorithm. Lastly
-
-Additionally, in \chaptername{~\ref{ch:9}}, we 
-explain our 
-proposed framework for ensembles of cost-sensitive decision trees. 
+cost-sensitive decision trees algorithm. Lastly, in \chaptername{~\ref{ch:9}}, we present our 
+framework for ensembles of cost-sensitive decision trees. 
 
 \chaptername{ \ref{ch:10}} concludes the thesis, and elaborates on possible lines for future 
-research. Lastly, in the Appendix~\ref{ch:A}, we present the library \mbox{\textit{CostCla}} that 
-we developed as part of the thesis. This library is an open-source implementation of all the 
+research. Lastly, in the Appendix~\ref{ch:A}, we present the library \mbox{\textit{CostCla}}  
+developed as part of the thesis. This library is an open-source implementation of all the 
 algorithms covered in this manuscript.
