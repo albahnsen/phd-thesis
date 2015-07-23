@@ -22,19 +22,19 @@ and cost-proportionate over-sampling.
 
   Classification methods are used to predict the class of different examples given their features.
   Standard methods aim at maximizing the accuracy of the predictions, in which an example is 
-  correctly classified if the predicted class is the same as true class. This traditional 
-  approach assumes that all correctly classified and misclassification examples carry the same cost. 
-  This however, is not the case in   many real-world applications.   Methods that use different 
+  correctly classified if the predicted class is the same the as true class. This traditional 
+  approach assumes that all correctly classified and misclassified examples carry the same cost. 
+  This, however, is not the case in   many real-world applications.   Methods that use different 
   misclassification costs are known as cost-sensitive  classifiers. Typical cost-sensitive 
   approaches assume a constant cost for each type of error, in  the sense that, the cost depends on 
-  the class and is the same among examples \citep{Elkan2001,Kim2012}. Although, this class-dependent 
-  approach is not realistic in many   real-world applications.
+  the class and is the same among examples \citep{Elkan2001,Kim2012}. Nevertheless, this 
+  class-dependent approach is not realistic in many   real-world applications.
   
   For example in credit card fraud detection, failing to detect a fraudulent transaction may have 
   an economical impact from a few to thousands of Euros, depending on the particular transaction 
   and card holder \citep{Sahin2013}. In churn modeling, a model is used for predicting which
   customers are more likely to abandon a service provider. In this context, failing to identify a 
-  profitable or unprofitable churner have a significant different financial impact 
+  profitable or unprofitable churner has a significant different financial impact 
   \citep{Glady2009}. Similarly, in direct marketing, wrongly predicting that a customer will not 
   accept an offer when in fact he will, has a different impact than the other way around 
   \citep{Zadrozny2003}. Also in credit scoring, where declining good customers has a non constant 
@@ -53,11 +53,12 @@ and cost-proportionate over-sampling.
 \section{Class-dependent cost-sensitive classification}
 \label{sec:3:class-dependent}
 
-The cost-sensitive literature is mostly focused in class-dependent problems \citep{Elkan2001}, where 
+The literature in cost-sensitive classification is mostly focused in class-dependent problems 
+\citep{Elkan2001}, where 
 the cost of misclassification is associated with the class. Usually, the cost of misclassifying a 
 positive example is denoted by $C_{FN}$ and the one of misclassifying a negative example is denoted 
-by $C_{FP}$. Conceptually, $C_{FN}\ge0$ and $C_{FP}\ge0$, moreover, it is normally defined that 
-$C_{FN}+C_{FP}=2$ \citep{Flach2011a}, as when $C_{FN}=C_{FP}=1$ represents the case of 
+by $C_{FP}$. Conceptually, $C_{FN}\ge0$ and $C_{FP}\ge0$; moreover, they are normally defined such
+that $C_{FN}+C_{FP}=2$ \citep{Flach2011a}, as when $C_{FN}=C_{FP}=1$ represents the case of 
 cost-insensitive classification. Using the previous notation, a class-dependent cost measure is 
 defined as \citep{Wang2014}:
 \begin{equation}

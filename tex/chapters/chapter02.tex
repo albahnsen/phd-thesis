@@ -24,14 +24,14 @@ or features, are the transaction attributes like place, amount and time of the t
 
 Then, during the training process, a classification algorithm finds the patterns and relationships 
 between the values of the features and the values of the target class. Different algorithms use 
-different methods and techniques to estimate the relationships. Afterwards, these relationships are 
-summarized in a model that is able to make predictions on new sets of data.
+different methods and techniques to estimate these relationships. Afterwards, these relationships 
+are summarized in a model that is able to make predictions on new sets of data.
 
 In general, there are two types of classification models: binary and multi-class. In binary 
-classification problems the objective is to classify examples between two classes, usually refereed 
-as the negative and positive classes. On the other hand, multi-class problems are not bound to two 
-classes but instead the algorithms attempt to classify examples among a number of classes. In this 
-work we focus on binary classification problems.
+classification problems, the objective is to classify examples between two classes, usually 
+referred to as the negative and positive classes. On the other hand, multi-class problems are not 
+bound to two classes but instead aim to classify examples among a number of classes. In this work we 
+focus on binary classification problems.
 
 Binary classification algorithms are widely used across a variety of domains. For example in the 
 medical field, models have been used for making predictions about tumors, probability 
@@ -47,10 +47,10 @@ classification, and others \citep{Kriegel2007}.
 Formally, a binary classification algorithm deals with the problem	of predicting the class $y_i$ 
 of a set $\mathcal{S}$ of examples or instances $i$, given their $k$ features \mbox{$\mathbf{x}_i 
 \in \mathbb{R}^k$}. The objective is to construct a function $f(\cal{S})$ that makes a prediction 
-$c_i$ of the class of each of the $N$ examples using its feature vector $\mathbf{x}_i$, where 
+$c_i$ of the class of each $i$ of the $N$ examples using its feature vector $\mathbf{x}_i$, where 
 $N=\vert \mathcal{S} \vert$. Moreover, some algorithms allow to not only estimate the prediction, 
 but also its confidence, in the form of the probability $\hat p_i$ of belonging to the positive 
-class, i.e. $c_i = 1$. The way for going from $\hat p_i$ to $c_i$ is simply by defining a 
+class, i.e. $c_i = 1$. The way for finding from $\hat p_i$ to $c_i$ is simply by defining a 
 probability threshold $t$, and applying the following formula
 \begin{equation}\label{eq_pred}
   c_i = 
@@ -59,10 +59,9 @@ probability threshold $t$, and applying the following formula
     \phantom{-}1 \phantom{-}\mbox{otherwise,}
   \end{cases}
 \end{equation}
-Usually, $t=\frac{1}{2}$ \citep{Hastie2009}, as an example with probability of being positive 
-higher than 50\% is classified as positive, and negative otherwise. If $t \ne \frac{1}{2}$, the 
-function that generates the predicted class labels $\mathbf{c}$ is denoted as $f^t$, where 
-$\mathbf{c}=\{c_i\}_{i=1}^{N}$.
+Usually $t=\frac{1}{2}$ \citep{Hastie2009}. However, if $t \ne \frac{1}{2}$, the 
+function that generates the predicted class labels $\mathbf{c}=\{c_i\}_{i=1}^{N}$ is denoted as 
+$f^t$.
 
 \begin{figure}
 	\centering
@@ -89,7 +88,7 @@ $\mathbf{c}$ of a set of testing examples $\mathcal{S}_{test}$.
 There exists several algorithms that can be used for classification tasks. In general a 
 classification algorithm is learned with the objective of finding patterns that separate between 
 the different classes \citep{Hastie2009}. In order to clarify this intuition, in \figurename{ 
-\ref{fig:2:2}} an example of a classification algorithm is shown. Let us suppose a set of 
+\ref{fig:2:2}} an example of a classification algorithm is shown. Let us consider a set of 
 examples, where the red points represent the positive examples and the blue ones the negative 
 examples. The objective of a classifier is to find the best way to separate between the positive and 
 negative examples. Then, the output of a classifier learned using the set of training examples is 
@@ -104,7 +103,7 @@ evaluating the performance of a classification algorithm.
 \label{sec:2:measures}
 
 When evaluating the performance of a classification algorithm, the first thing to do is to check 
-the number of examples that were misclassified. Since the true class of the examples 
+the number of examples that were misclassified, since the true class of the examples 
 is known. Therefore, evaluating the error of a model is as simple as counting the number of times 
 an example is misclassified divided by the number of examples
 \begin{equation}\label{eqn:ch2:error}
@@ -114,8 +113,8 @@ where $\mathbf{1}_q(z)$ is an indicator function that is calculated as:
 \begin{equation}
    \mathbf{1}_q(z) = 
   \begin{cases}
-    \phantom{-}1 \phantom{-} \mbox{if} \phantom{-} z \in q\\
-    \phantom{-}0 \phantom{-} \mbox{if} \phantom{-} z \notin q.
+    \phantom{-}1 \phantom{-} \mbox{if} \phantom{-} z = q\\
+    \phantom{-}0 \phantom{-} \mbox{if} \phantom{-} z \neq q.
   \end{cases}
 \end{equation}
 Moreover the accuracy is defined as the percentage of times the algorithm 
@@ -164,15 +163,15 @@ extracted. In particular:
     \footnotesize
   \begin{tabular}{c|c|c}
     \multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
-    \multicolumn{1}{c|}{} & $y=1$& $y=0$ \\
+    \multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
     \hline
     Predicted Positive    & \multirow{ 2}{*}{36} & \multirow{ 
     2}{*}{4} \\
-    $c=1$ & &\\
+    $c_i=1$ & &\\
     \hline
     Predicted Negative    & \multirow{ 2}{*}{5} & \multirow{ 
     2}{*}{68} \\
-    $c=0$ & &\\
+    $c_i=0$ & &\\
   \end{tabular}
   \end{center}
   Then using the confusion matrix, the different statistics are calculated as: Error = 
@@ -197,22 +196,22 @@ algorithm is learned. This time the algorithm made the correct prediction more o
 		\footnotesize
     \begin{tabular}{c|c|c}
 			\multicolumn{1}{c|}{}  & Actual Positive& Actual Negative \\
-			\multicolumn{1}{c|}{} & $y=1$& $y=0$ \\
+			\multicolumn{1}{c|}{} & $y_i=1$& $y_i=0$ \\
 			\hline
 			Predicted Positive 		& \multirow{ 2}{*}{37} & \multirow{ 
 			2}{*}{2} \\
-			$c=1$ & &\\
+			$c_i=1$ & &\\
 			\hline
 			Predicted Negative  	& \multirow{ 2}{*}{4} & \multirow{ 
 			2}{*}{70} \\
-			$c=0$ & &\\
+			$c_i=0$ & &\\
 		\end{tabular}
 \end{center}
 Then the different statistics are calculated as: Error = 5.3\%, Recall = 90.2\%, Precision = 
 94.9\% and $F_1Score$ = 92.5\%.
 It is observed that in this case the FP are reduced more than the FN, this leads to a higher 
 increase in precision  than in recall. There is not a single rule regarding which one is more 
-important than the other, it depends on the applications. For example in applications with a high 
+important than the other, it depends on the application. For example in applications with a high 
 false negative cost such as failing to identify a tumor in a medical exam, the recall should be the 
 priority, even if that implies having a significant number of false positives. On the other hand, 
 In applications such as spam detection, predicting a normal email as spam it may have a large 
