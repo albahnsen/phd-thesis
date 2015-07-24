@@ -13,14 +13,11 @@ measures that are normally used for analyzing the performance of classification 
 
 In machine learning, classification refers to the attempt of identifying to which of a set of 
 classes a new example belongs, based on learning from examples whose class membership is known. 
-The most important point about classification is that for each example only one known class is 
-possible, making this a discrete problem. 
-
 A classification task begins with a training set in which the class of a set of examples is known. 
 For example, a classification model that predicts credit card fraud is developed by analyzing 
 many observed credit transactions over a period of time. The class in this case is a variable which 
-indicates for each example whether or not the transaction was or not a fraud. Also, the predictors 
-or features, are the transaction attributes like place, amount and time of the transaction.
+indicates for each example whether or not the transaction was or not a fraud. Also, the features, 
+are the transaction attributes like place, amount and time of the transaction.
 
 Then, during the training process, a classification algorithm finds the patterns and relationships 
 between the values of the features and the values of the target class. Different algorithms use 
@@ -47,11 +44,11 @@ classification, and others \citep{Kriegel2007}.
 Formally, a binary classification algorithm deals with the problem	of predicting the class $y_i$ 
 of a set $\mathcal{S}$ of examples or instances $i$, given their $k$ features \mbox{$\mathbf{x}_i 
 \in \mathbb{R}^k$}. The objective is to construct a function $f(\cal{S})$ that makes a prediction 
-$c_i$ of the class of each $i$ of the $N$ examples using its feature vector $\mathbf{x}_i$, where 
-$N=\vert \mathcal{S} \vert$. Moreover, some algorithms allow to not only estimate the prediction, 
-but also its confidence, in the form of the probability $\hat p_i$ of belonging to the positive 
-class, i.e. $c_i = 1$. The way for finding from $\hat p_i$ to $c_i$ is simply by defining a 
-probability threshold $t$, and applying the following formula
+$c_i$ of the class of each example $i$ from $\cal{S}$ using its feature vector $\mathbf{x}_i$, 
+where $\vert \mathcal{S} \vert= N$. Moreover, some algorithms allow to not only estimate the 
+prediction, but also its confidence, in the form of the probability $\hat p_i$ of belonging to the 
+positive class, i.e. $c_i = 1$. The way for finding from $\hat p_i$ to $c_i$ is simply by defining 
+a probability threshold $t$, and applying the following formula
 \begin{equation}\label{eq_pred}
   c_i = 
   \begin{cases}
@@ -60,7 +57,7 @@ probability threshold $t$, and applying the following formula
   \end{cases}
 \end{equation}
 Usually $t=\frac{1}{2}$ \citep{Hastie2009}. However, if $t \ne \frac{1}{2}$, the 
-function that generates the predicted class labels $\mathbf{c}=\{c_i\}_{i=1}^{N}$ is denoted as 
+function that generates the predicted class labels $\mathbf{c}=[c_i]$ is denoted as 
 $f^t$.
 
 \begin{figure}
@@ -73,7 +70,7 @@ $f^t$.
 In \figurename{ \ref{fig:2:1}}, the process of training and prediction in a classification 
 algorithm are summarized. First, during the training phase, using a training set 
 $\mathcal{S}_{train}$, an algorithm is trained to predict $\mathbf{y}$, where
-$\mathbf{y}=\{y_i\}_{i=1}^{N}$. Then the algorithm is used to estimate the classes 
+$\mathbf{y}=[y_i]$. Then the algorithm is used to estimate the classes 
 $\mathbf{c}$ of a set of testing examples $\mathcal{S}_{test}$.
 
 \begin{figure}[!t]
