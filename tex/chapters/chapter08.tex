@@ -1,7 +1,8 @@
 \chapter{Cost-sensitive decision trees}\label{ch:8}
 
 \begin{remark}{Outline}
-In this chapter, we propose the cost-sensitive decision tree algorithm. The algorithm is 
+In this chapter, we propose the example-dependent cost-sensitive decision tree algorithm. This 
+algorithm is 
 based on incorporating the different example-dependent costs into a new cost-based impurity measure 
 and a new cost-based pruning criteria. First, in Section~\ref{sec:8:dt}, we give the background 
 behind the decision tree algorithm. Then, in Section~\ref{sec:8:csdt}, we introduce the 
@@ -32,9 +33,9 @@ some applications. For example in credit card fraud detection, it is true that f
 have a different cost than false negatives, nevertheless, false negatives may vary significantly, 
 which makes class-dependent cost-sensitive methods not suitable for this problem.
 
-In this chapter, we propose the cost-sensitive decision tree algorithm. The algorithm is 
+In this chapter, we propose a cost-sensitive decision tree algorithm. The algorithm is 
 based on incorporating the different example-dependent costs into a new cost-based impurity measure 
-and a new cost-based pruning criteria. Then, we evaluate the proposed example-dependent 
+and a new cost-based pruning criteria. We evaluate the proposed example-dependent 
 cost-sensitive decision tree using three different databases. In particular, a credit card fraud 
 detection, a credit scoring and a direct marketing databases. The results show that the proposed 
 method outperforms state-of-the-art example-dependent cost-sensitive methods. Furthermore, when 
