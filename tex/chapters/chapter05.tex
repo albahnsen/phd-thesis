@@ -5,9 +5,9 @@ In this chapter, we present two different marketing real-world example-dependent
 cost-sensitive problems, namely, churn modeling and direct marketing. Both problems deal 
 with identifying those customers with certain characteristic with the objective to maximize the 
 results of the different CRM strategies.
-First, we introduce the churn modeling problem and present the propose financial evaluation 
+First, we introduce the churn modeling problem and present the proposed financial evaluation 
 measure for a churn campaign in Section \ref{sec:5:churn}. Lastly in Section 
-\ref{sec:5:directmarketing}, the direct marketing problem is presented including the propose 
+\ref{sec:5:directmarketing}, the direct marketing problem is presented including the proposed 
 example-dependent cost-sensitive cost matrix for evaluating this problem.
 \end{remark}
 
@@ -355,20 +355,16 @@ Portuguese central bank. Given that, the $Int_i$ is equal to $\left( balance * 2
 
 \section{Summary of the datasets}
 
+In this section we present the different marketing datasets. 
 For each dataset we used a pre-define cost matrix as shown in Section~\ref{sec:5:churn} and 
-Section~\ref{sec:5:directmarketing}. Additionally,  for each database, 3 different 
-datasets are extracted: training, validation and testing. Each one containing 50\%, 25\% and 25\% 
-of the examples, respectively. Afterwards, because classification algorithms suffer when the label 
-distribution is skewed towards one of the classes \citep{Hastie2009}, an under-sampling of the 
-positive examples is made, in order to have a balanced class distribution. Moreover, we perform the 
-cost-proportionate rejection-sampling and cost proportionate over-sampling procedures, that we 
-previously described in Section~\ref{sec:3:costsampling}. \tablename{~\ref{tab:5:databases}}, 
-summarizes the different datasets. It is important to note that the sampling procedures were only 
-applied to the training dataset since the validation and test datasets must reflect the real 
-distribution.
-\newpage
+Section~\ref{sec:5:directmarketing}. Moreover,  the datasets are split in training, validation 
+and testing, each one containing 50\%, 25\% and 25\% of the examples, respectively. Afterwards, 
+an under-sampling of the positive examples is made, and we perform the 
+cost-proportionate rejection-sampling and cost proportionate over-sampling procedures, as described 
+in Section~\ref{sec:3:costsampling}. \tablename{~\ref{tab:5:databases}}, 
+summarizes the different datasets. 
 
-\begin{table}[ht!]
+\begin{table}%[ht!]
   \centering
   \footnotesize
   \begin{tabular}{l l c c c } %sum 7.7
@@ -392,11 +388,11 @@ distribution.
     &Testing&11,231&13.04&19,048\\
     \hline
   \end{tabular}
-  \caption{Summary of the datasets. Where $N$ is the number of examples and $\pi_1$ is the 
-  percentage of positives examples.}
+  \caption{Summary of the marketing datasets, where $N$ is the number of examples and $\pi_1$ is 
+  the percentage of positive examples.}
   \label{tab:5:databases}
 \end{table}
  
- \makeatletter
-\setlength{\@fptop}{0pt}
-\makeatother
+%  \makeatletter
+% \setlength{\@fptop}{0pt}
+% \makeatother
