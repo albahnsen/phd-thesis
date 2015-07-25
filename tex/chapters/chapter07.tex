@@ -1,18 +1,14 @@
 \chapter{Cost-sensitive logistic regression}\label{ch:7}
 
 \begin{remark}{Outline}
-In this chapter, we propose the cost-sensitive logistic regression algorithm. The model consists in 
+In this chapter, we propose a cost-sensitive logistic regression algorithm. The model consists in 
 a new logistic regression cost function, one that takes into account the real costs due to 
 misclassification and correct classification. First, in Section \ref{sec:7:logistic}, we give the 
 background behind logistic regression. Then, in Section \ref{sec:7:cslr}, we describe the 
 cost-sensitive logistic regression. For this, we carry a deep analysis of the 
 logistic regression implicit misclassification costs in Section \ref{sec:7:log_cost_analysis}. Then 
-in Section \ref{sec:7:cscostfunction}, we shown a new version of the logistic regression cost 
-function. 
-%Afterwards, in Section \ref{sec:7:ga}, we give a brief introduction to genetic 
-%algorithms, since is the model used to estimate the parameters of our proposed cost-sensitive 
-%logistic regression. 
-Finally, in Section \ref{sec:7:results}, we compare the results of the proposed 
+in Section \ref{sec:7:cscostfunction}, we give a new version of the logistic regression cost 
+function. Finally, in Section \ref{sec:7:results}, we compare the results of the proposed 
 algorithm against state-of-the-art methods, using the five real-world cost-sensitive databases 
 presented in \partname{~\textsc{\ref{part:2}}}.
 \end{remark}
@@ -53,17 +49,15 @@ where
 \begin{align}\label{eq:7:lrcost}
   J_i(\theta) =  -y_i\log(h_\theta(\mathbf{x}_i)) -(1-y_i)\log(1-h_\theta(\mathbf{x}_i)).
 \end{align}
-Therefore, the parameters are estimated using the following equation
-\begin{align}
+Therefore, the parameters are estimated by minimizing (\ref{eq:7:lrcost})
+$
   \hat \theta = \argmin_\theta J(\theta).
-\end{align}
+$
 
-%Logistic regression estimation
 There are several methods used to estimate the logistic regression, in particular, maximum 
 likelihood \citep{Hastie2009}, Newton, coordinate descent \citep{Murphy2012} and dual coordinate 
 descent \citep{Yu2011}. Nevertheless, all these methods rely on the assumption of convexity of the 
-logistic regression cost function $J(\theta)$. In the next Appendix~\ref{ch:B} we analyze 
-the convexity of the logistic regression.
+logistic regression cost function $J(\theta)$. 
 
 
 \section{Cost-sensitive logistic regression}
@@ -168,13 +162,6 @@ Since this  new cost function is not convex, we estimate the parameters $\theta$
 algorithms, as this optimization heuristic does not require the underlying function to be 
 differentiable or convex \citep{Haupt2004}. 
 
-  Genetic algorithms, is an optimization technique that attempts to replicate natural evolution 
-processes in which the individuals with the considered best characteristics to adapt to the 
-environment are more likely to reproduce and survive. These advantageous individuals mate between 
-them, producing descendants similarly characterized, so favorable characteristics are preserved and 
-unfavorable ones destroyed, leading to the progressive evolution of the species. The model aims 
-to improve the solution to a problem by keeping the best combination of input variables 
-\citep{Haupt2004}. 
 
 \section{Experiments}
 \label{sec:7:results}
