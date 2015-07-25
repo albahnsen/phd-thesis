@@ -1,6 +1,6 @@
 \chapter{Conclusions}\label{ch:10}
 
-This thesis deals with the problem of example-dependent cost-sensitive classification.
+This thesis deal with the problem of example-dependent cost-sensitive classification.
 Several real-world business applications of classification models are example-dependent 
 cost-sensitive, in the sense that the objective of using an algorithm is related to maximizing the 
 profit of the company. Moreover, the different costs due to misclassification vary among examples. 
@@ -13,27 +13,28 @@ example-dependent cost-sensitive methods.
 
 First in \partname{~\textsc{\ref{part:1}}}, we laid out the background for general classification 
 methods, and their respective evaluation measures. Moreover, we introduced the problem of 
-cost-sensitive learning. In particular, we define the differences between class-dependent and 
-example-dependent problems. In addition, we present an evaluation measure that takes into account 
+cost-sensitive learning. In particular, we defined the differences between class-dependent and 
+example-dependent problems. In addition, we presented an evaluation measure that takes into account 
 the real financial gains and losses of practical applications.
 
 Then in \partname{~\textsc{\ref{part:2}}}, we analyzed and discussed four real-world 
-classification problems, that are the focus of this thesis, in particular, credit card fraud 
+classification problems, that where the focus of this thesis, in particular, credit card fraud 
 detection, credit scoring, churn modeling and direct marketing. In general, we showed why each of 
 the applications is example-dependent cost-sensitive, and we elaborated a framework for the 
-analysis of each problem. The part is organized in two chapters.
+analysis of each problem. 
 
 Finally in \partname{~\textsc{\ref{part:3}}}, we introduced our proposed example-dependent 
-cost-sensitive methods. First, we presented our Bayes minimum risk method. This method worked by 
-including comparing the expected financial losses of different outcomes when classifying the 
-examples in the different classes. Then, we focused on introducing the costs to the algorithms 
-during the training phase. In particular, we presented the cost-sensitive logistic regression and  
-cost-sensitive decision trees algorithms. The cost-sensitive decision tree algorithm proved to be 
-highly effective while maintaining the simplicity and interpretability of decision trees. However, 
-this method suffered from high variance. To overcome this limitation, we proposed framework for 
-ensembles of cost-sensitive decision trees. We have shown theoretically and experimentally
-that the method of ensembles of cost-sensitive decision trees ranks the best and outperforms 
-state-of-the-art example-dependent cost-sensitive methodologies, when measured by financial savings.
+cost-sensitive methods. First, we presented the cost-sensitive Bayes minimum risk classifier. This 
+method worked by including comparing the expected financial losses of different outcomes when 
+classifying the examples in the different classes. Then, we focused on introducing the costs to the 
+algorithms during the training phase. In particular, we presented the cost-sensitive logistic 
+regression and cost-sensitive decision trees algorithms. The cost-sensitive decision tree algorithm 
+proved to be highly effective while maintaining the simplicity and interpretability of decision 
+trees. However, this method suffered from high variance. To overcome this limitation, we proposed 
+a framework for ensembles of cost-sensitive decision trees. We have shown theoretically and 
+experimentally that the method of ensembles of cost-sensitive decision trees ranks the best and 
+outperforms state-of-the-art example-dependent cost-sensitive methodologies, when measured by 
+financial savings.
 
 This thesis showed the importance of using the real example-dependent financial costs 
 associated with real-world applications. In particular, we found significant differences in the 
