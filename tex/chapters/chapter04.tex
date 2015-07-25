@@ -5,11 +5,11 @@ In this chapter, we present two different real-world example-dependent
 cost-sensitive problems related to financial risk modeling, namely, credit card fraud detection and 
 credit scoring. Both problems are example-dependent cost-sensitive, as failing to identify a 
 fraudulent transaction may have a financial impact ranging from tens to thousands of Euros. 
-Similarly in credit scoring, approving a customer that later does not pay his debt has a 
+Similarly, in credit scoring, approving a customer that later does not pay his debt has a 
 significant impact on a bank profit. First, in Section~\ref{sec:4:fraud},  we introduce the credit 
-card fraud detection problem and present our propose periodic features.  Lastly in 
-Section~\ref{sec:4:creditscoring}, the credit scoring problem is presented and we propose a new 
-financial evaluation measure for credit scoring.
+card fraud detection problem and propose new periodic features.  Lastly, in 
+Section~\ref{sec:4:creditscoring}, we present the credit scoring problem and propose a new 
+financial evaluation measure for this problem.
 \end{remark}
 
 \section{Credit card fraud detection}
@@ -45,7 +45,7 @@ financial evaluation measure for credit scoring.
   
   When constructing a credit card fraud detection model, it is very important to use those features 
   that will help the algorithm make the best decision. Typical models only use raw transactional 
-  features, such as time, amount, place of the transaction. However, these approaches does not take 
+  features, such as time, amount, place of the transaction. However, these approaches do not take 
   into account the spending behavior of the customer, which is expected to help discover fraud 
   patterns \citep{Gadi2008}. A standard way to include these behavioral spending patters was 
   proposed in \citep{Whitrow2008}, where Whitrow et al. proposed a transaction aggregation strategy 
@@ -582,11 +582,11 @@ since the
   keep the money of the declined customer idle. It will instead give a loan to an alternative 
   customer \citep{Nayak1997}. Since no further information is known about the alternative customer, 
   it is assumed to have an average credit line $\overline{Cl}$ and an average profit $\overline{r}$.
-  Given that, the false positive cost for an alternative customer becomes 
+  The false positive cost for an alternative customer becomes 
   \begin{equation}
-    C^a_{FP}=- \overline{r} \cdot \pi_0+\overline{Cl}\cdot L_{gd} \cdot \pi_1,
+    C^a_{FP}=- \overline{r} \cdot \pi_0+\overline{Cl}\cdot L_{gd} \cdot \pi_1
   \end{equation}
-  in other words minus the profit of an average alternative customer plus the expected loss, 
+  In other words, it is minus the profit of an average alternative customer plus the expected loss, 
   taking into account that the alternative customer will pay his debt with a probability equal to 
   the prior negative rate, and similarly will default with probability equal to the prior positive 
   rate.
@@ -676,10 +676,10 @@ since the
     
 \section{Summary of the datasets}
 
-For each dataset we used a pre-define cost matrix as shown in Section~\ref{sec:4:fraud} and 
-Section~\ref{sec:4:creditscoring}. Additionally,  for each database, 3 different 
-datasets are extracted: training, validation and testing. Each one containing 50\%, 25\% and 25\% of 
-the examples, respectively. Afterwards, because classification algorithms suffer when the label 
+For each dataset we used a pre-defined cost matrix as shown in Section~\ref{sec:4:fraud} and 
+Section~\ref{sec:4:creditscoring}. Additionally,  for each database, three different 
+datasets are extracted: training, validation and testing, each one containing 50\%, 25\% and 25\% 
+of the examples, respectively. Afterwards, because classification algorithms suffer when the label 
 distribution is skewed towards one of the classes \citep{Hastie2009}, an under-sampling of the 
 positive examples is made, in order to have a balanced class distribution. Moreover, we perform the 
 cost-proportionate rejection-sampling and cost proportionate over-sampling procedures, that we 
@@ -720,8 +720,8 @@ distribution.
     &Testing&11,783&19.30&904,991\\
     \hline
   \end{tabular}
-  \caption{Summary of the datasets. Where $N$ is the number of examples and $\pi_1$ is the 
-  percentage of positives examples.}
+  \caption{Summary of the financial datasets, where $N$ is the number of examples and $\pi_1$ is 
+  the percentage of positive examples.}
   \label{tab:4:databases}
 \end{table}
 
