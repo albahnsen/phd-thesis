@@ -1,6 +1,6 @@
 \chapter{Introduction}\label{ch:1}
 
-\section{Motivation and context}
+\section{Motivation and scope}
 
   Classification, in the context of machine learning, deals with the problem of 
   predicting the class of a set of examples given their features. Traditionally, classification 
@@ -46,8 +46,8 @@
   the different algorithms, and only rely on modifying the prior distribution of the training data.
 
   The focus of this thesis is to investigate and define different example-dependent cost-sensitive
-  classification algorithms, that not only focus on modifying the underling training 
-  distribution but also introduce the different real financial costs during the training of the 
+  classification algorithms, that not only focus on modifying the distribution of the training data
+  but also introduce the different real financial costs during the training of the 
   algorithms. We summarize the contributions of this thesis in the following section.
   
   \begin{figure}
@@ -60,10 +60,10 @@
   
 \section{Contributions}
 
-This dissertation summarizes several contributions to the field of example-dependent 
+This dissertation foresees several contributions to the field of example-dependent 
 cost-sensitive machine learning.
   
-\begin{itemize}
+\begin{enumerate}
 
 \item \textbf{Cost-sensitive financial evaluation measure} \\
   Binary classification algorithms are normally evaluated using cost-insensitive 
@@ -71,33 +71,34 @@ cost-sensitive machine learning.
   measures may not be the most appropriate evaluation criteria when  evaluating  
   real-world cost-sensitive problems, because they tacitly assume that 
   misclassification errors carry the same cost. In this thesis, we propose a new   savings 
-  example-dependent cost-sensitive evaluation measure. The savings takes into   account the actual 
+  example-dependent cost-sensitive evaluation measure. The savings take into   account the actual 
   financial impact of the different misclassification errors. This work was published in 
   \citep{CorreaBahnsen2013}.
   
-\item \textbf{Credit card fraud detection} \\
-  Preventing credit card fraud is a classical example of a cost-sensitive problem, as 
+\item \textbf{Cost-sensitive credit card fraud detection} \\
+  Preventing credit card fraud is a classical example of a cost-sensitive problems, as 
   the cost of a false negative is significantly different than the cost of a false positive. We 
   discuss the particularities of credit card   fraud detection and propose a financial evaluation 
   measure that takes into account the   economical costs associated with credit card fraud. 
-  Moreover, we propose to create a new set of features based in analyzing the periodic behavior of 
-  the time of a transaction using the von Mises distribution.  This work was published in 
-\citep{CorreaBahnsen2013,CorreaBahnsen2014,CorreaBahnsen2015c,CorreaBahnsen2015d}.
+  Moreover, we propose to create a new set of features based on analyzing the periodic behavior of 
+  the time of a transaction using a modelling with a von Mises distribution.  This work was published in 
+\citep{CorreaBahnsen2013,CorreaBahnsen2014} and is under review in
+\cite{CorreaBahnsen2015c,CorreaBahnsen2015d}.
   
 \item \textbf{Example-dependent cost-sensitive real-world problems} \\
   We analyze and propose financial evaluation measures for other real-world applications, 
   namely, credit card fraud detection , churn modeling and direct marketing.
-  The different analysis were presented in 
+  The different analyses were presented in 
 \citep{CorreaBahnsen2014,CorreaBahnsen2014b,CorreaBahnsen2015a}.
 
 \item \textbf{Cost-sensitive Bayes minimum risk} \\
   In this thesis we propose a direct cost approach to make the classification decision based on 
-  the expected costs.   This method is called Bayes minimum risk, and consists in quantifying 
+  the expected costs.   This method is an extension of Bayes minimum risk, and consists in quantifying 
   tradeoffs between various   decisions using   probabilities and the costs that accompany such 
   decisions. This model was published in \citep{CorreaBahnsen2013,CorreaBahnsen2014}.
   
 \item \textbf{Cost-sensitive logistic regression and decision trees} \\
-  The Bayes minimum risk method only introduce the costs after the training of an algorithm leaving
+  The Bayes minimum risk method only introduces the costs after the training of an algorithm, leaving
   opportunities to investigate the potential impact of algorithms that take into account the real 
   financial example-dependent costs during the training of an algorithm. We propose a new 
   cost-sensitive logistic regression. The   method consists in introducing example-dependent costs 
@@ -108,17 +109,17 @@ cost-sensitive machine learning.
   These methods were published in \citep{CorreaBahnsen2014b,CorreaBahnsen2015}.
   
 \item \textbf{Ensembles of cost-sensitive decision trees} \\
-  Based on the cost-sensitive decision tree algorithm, we expand the model by creating a framework 
-  for an ensemble of cost-sensitive decision trees . This new 
-  method, leverage on the advantages of ensemble learning in order to create a more robust model.
-  This work was published in \citep{CorreaBahnsen2015b}.
+  Based on the cost-sensitive decision tree algorithm, we expand the cost-sensitive decision trees
+   by creating a framework for an ensemble of cost-sensitive decision trees. This new 
+  method, step on the advantages of ensemble learning in order to create a more robust model.
+  This work was submitted for review \citep{CorreaBahnsen2015b}.
   
 \item \textbf{CostCla: A cost-sensitive classification library} \\
   The algorithms developed as part of this thesis are publicly available as part of the open-source 
   \textit{CostSensitiveClassification}\footnote{
   \url{https://github.com/albahnsen/CostSensitiveClassification}} library.
   
-\end{itemize}
+\end{enumerate}
 
 \newpage
 
@@ -130,7 +131,7 @@ give a background on classification. Then, in \chaptername{~\ref{ch:3}}, we pres
 the cost-sensitive problem and define the difference between 
 cost-insensitive, class-dependent cost-sensitive and example-dependent cost-sensitive 
 classification problems. Lastly, we give an introduction of the different evaluation measures 
-that are used throughout this thesis.
+used throughout this thesis.
 
 \partname{~\textsc{\ref{part:2}}} is dedicated to explaining the particularities of the four 
 real-world classification problems that are the focus of this thesis, in particular, credit card 
@@ -157,7 +158,7 @@ algorithms covered in this manuscript.
 Publications from this work are:
 \bigskip
 
-\begin{itemize}
+\begin{enumerate}
 \item \citep{CorreaBahnsen2013} \textit{Cost Sensitive Credit Card Fraud Detection Using Bayes 
 Minimum Risk}, Alejandro Correa Bahnsen,  Aleksandar Stojanovic, Djamila Aouada and Bj\"orn 
 Ottersten. In Proceedings of IEEE International Conference on Machine Learning and Applications, 
@@ -192,5 +193,5 @@ Alejandro Correa Bahnsen, Djamila Aouada and Bj\"orn Ottersten.
 Submitted to the IEEE International Conference on Machine Learning and Applications, 2015.
 
 
-\end{itemize}
+\end{enumerate}
 
