@@ -50,3 +50,4 @@ phd-thesis-gloupe/
 tex/figures/src/test_tikz*
 Dimitrios_Thesis.tex
 Shree_PhDthesis.pdf
+*.DS_Store

@@ -1,0 +1,3 @@
+#!/bin/bash
+make -C /Users/alejandro/DriveAl/Publications/2015/phd-thesis/tex/ ${1-rebuild}
+# if modify copy to bin: sudo cp makefile_thesis /usr/local/bin
