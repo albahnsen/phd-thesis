@@ -81,6 +81,7 @@ then the percentage of positives is calculates as
  \pi_1=\vert \mathcal{S}_1 \vert / \vert \mathcal{S} \vert.
 \end{equation}
 
+\newpage
 Then, the impurity of each leaf is calculated using either a misclassification error, 
 entropy or Gini measures:
 \begin{itemize}
@@ -426,6 +427,18 @@ are trained using the training ($t$), under-sampling ($u$), cost-proportionate r
 implementation of \textit{Scikit-learn} \citep{Pedregosa2011}, and the \textit{CostCla} library, 
 see Appendix~\ref{ch:A}, for the cost-sensitive algorithms.
 
+For the experiments we use three datasets from three different real world example-dependent 
+cost-sensitive problems: Credit card fraud detection (see Section~\ref{sec:4:fraud}), credit 
+scoring (see Section~\ref{sec:4:creditscoring}) and direct marketing (see 
+Section~\ref{sec:5:directmarketing}). The different datasets are summarized 
+in \tablename{~\ref{tab:4:databases}} and \tablename{~\ref{tab:5:databases}}.
+
+We evaluate a decision tree constructed using the Gini impurity measure, with and without the 
+pruning defined in (\ref{eq:8:pruning}). We also apply    the cost-based pruning procedure given 
+in (\ref{eq:8:cost_pruning}). Lastly, we compared against     the proposed $CSDT$ constructed 
+using the cost-based impurity measure defined in (\ref{eq:8:cost_impurity}), using the two 
+pruning procedures.
+
 \begin{figure}[t]
   \centering
   \includegraphics[scale=0.8]{ch8_fig2}
@@ -441,18 +454,6 @@ see Appendix~\ref{ch:A}, for the cost-sensitive algorithms.
   cost-proportionate rejection-sampling  and cost-proportionate over-sampling.}
   \label{fig:8:3}
 \end{figure}
-
-For the experiments we use three datasets from three different real world example-dependent 
-cost-sensitive problems: Credit card fraud detection (see Section~\ref{sec:4:fraud}), credit 
-scoring (see Section~\ref{sec:4:creditscoring}) and direct marketing (see 
-Section~\ref{sec:5:directmarketing}). The different datasets are summarized 
-in \tablename{~\ref{tab:4:databases}} and \tablename{~\ref{tab:5:databases}}.
-
-We evaluate a decision tree constructed using the Gini impurity measure, with and without the 
-pruning defined in (\ref{eq:8:pruning}). We also apply    the cost-based pruning procedure given 
-in (\ref{eq:8:cost_pruning}). Lastly, we compared against     the proposed $CSDT$ constructed 
-using the cost-based impurity measure defined in (\ref{eq:8:cost_impurity}), using the two 
-pruning procedures.
 
 In \figurename{~\ref{fig:8:2}}, the results using the three databases are shown. In particular we 
 first evaluate the impact of the algorithms when trained using the training set. There is a clear 
