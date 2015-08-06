@@ -162,59 +162,8 @@ Since this  new cost function is not convex, we estimate the parameters $\theta$
 algorithms, as this optimization heuristic does not require the underlying function to be 
 differentiable or convex \citep{Haupt2004}. 
 
-
 \section{Experiments}
 \label{sec:7:results}
-
-\begin{table}[t]
-    \centering
-    \footnotesize
-    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 
-    0in}c@{\hskip 0in}l  } %sum 7.7
-    \hline
-    \bf{Family} & \bf{Algorithm} & \multicolumn{3}{c}{\bf{Fraud}} & 
-    \multicolumn{3}{c}{\bf{Churn}} & \multicolumn{3}{c}{\bf{Credit 1}} \\ 
-    \hline
-CI&LR-t & 0.0092 &$\pm$& 0.0002 & -0.0001 &$\pm$& 0.0002 & 0.0177 &$\pm$& 0.0126\\ 
-&LR-u & 0.1243 &$\pm$& 0.0387 & 0.0039 &$\pm$& 0.0492 & 0.4118 &$\pm$& 0.0313\\ 
-\hline 
-CPS&LR-r & 0.3077 &$\pm$& 0.0301 & 0.0484 &$\pm$& 0.0375 & 0.3965 &$\pm$& 0.0263\\ 
-&LR-o & 0.2793 &$\pm$& 0.0185 & 0.0316 &$\pm$& 0.0228 & 0.3301 &$\pm$& 0.0109\\ 
-\hline 
-BMR&LR-t-BMR & 0.4552 &$\pm$& 0.0203 & 0.1082 &$\pm$& 0.0316 & 0.2189 &$\pm$& 0.0541\\ 
-\hline 
-CST&CSLR-t & \bf{0.6113} &\bf{$\pm$}& \bf{0.0262} & \bf{0.1118} &\bf{$\pm$}& \bf{0.0484} & 
-\bf{0.4554} &\bf{$\pm$}& \bf{0.1039}\\ 
-\hline
-  \multicolumn{11}{c}{(Models with the highest savings are marked in bold)}
-  \end{tabular}
-    \caption{Results of the algorithms measured by savings}
-    \label{tab:7:results_savings}
-  \end{table}
-  
-\begin{table}[t]
-    \centering
-    \footnotesize
-    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l  } %sum 7.7
-    \hline
-    \bf{Family} & \bf{Algorithm} &  \multicolumn{3}{c}{\bf{Credit 2}} 
-& \multicolumn{3}{c}{\bf{Marketing}} \\ 
-    \hline
-CI&LR-t & 0.0039 &$\pm$& 0.0012 & -0.2931 &$\pm$& 0.0602\\ 
-&LR-u & 0.1850 &$\pm$& 0.0231 & 0.2200 &$\pm$& 0.0376\\ 
-\hline 
-CPS&LR-r & 0.2650 &$\pm$& 0.0115 & 0.4210 &$\pm$& 0.0267\\ 
-&LR-o & 0.2554 &$\pm$& 0.0090 & 0.3129 &$\pm$& 0.0277\\ 
-\hline 
-BMR&LR-t-BMR & \bf{0.3148} &\bf{$\pm$}& \bf{0.0094} & \bf{0.4973} &\bf{$\pm$}& \bf{0.0084}\\ 
-\hline 
-CST&CSLR-t & 0.2748 &$\pm$& 0.0069 & 0.4484 &$\pm$& 0.0072\\ 
-\hline 
-  \multicolumn{8}{c}{(Models with the highest savings are marked in bold)}
-  \end{tabular}
-    \caption{Continuation of \tablename{~\ref{tab:7:results_savings}}.}
-    \label{tab:7:results_savings2}
-  \end{table}
 
 For the experiments we use five datasets from four different real world example-dependent 
 cost-sensitive problems: Credit card fraud detection (see Section~\ref{sec:4:fraud}), credit 
@@ -242,56 +191,6 @@ regression are. Moreover, we also calculate the results of the $F_1Score$ for ea
 shown in \tablename{~\ref{tab:7:results_fscore}}. It is observed that the $CSLR$ algorithm is not 
 the one that gives the best results measured by $F_1Score$. In fact, there is not a clear relation 
 between the results measured by savings or  $F_1Score$.
-
-\begin{table}
-    \centering
-    \footnotesize
-    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 
-    0in}c@{\hskip 0in}l  } %sum 7.7
-    \hline
-    \bf{Family} & \bf{Algorithm} & \multicolumn{3}{c}{\bf{Fraud}} & 
-    \multicolumn{3}{c}{\bf{Churn}} & \multicolumn{3}{c}{\bf{Credit 1}} \\ 
-    \hline
-CI&LR-t & 0.1531 &$\pm$& 0.0045 & 0.0000 &$\pm$& 0.0000 & 0.0494 &$\pm$& 0.0277\\ 
-&LR-u & 0.0241 &$\pm$& 0.0163 & 0.1222 &$\pm$& 0.0098 & 0.3160 &$\pm$& 0.0314\\ 
-\hline 
-CPS&LR-r & 0.1846 &$\pm$& 0.0123 & 0.1258 &$\pm$& 0.0111 & 0.3597 &$\pm$& 0.0156\\ 
-&LR-o & 0.1776 &$\pm$& 0.0117 & 0.1085 &$\pm$& 0.0203 & \bf{0.3769} &\bf{$\pm$}& \bf{0.0067}\\ 
-\hline 
-BMR&LR-t-BMR & 0.1384 &$\pm$& 0.0044 & \bf{0.1370} &\bf{$\pm$}& \bf{0.0150} & 0.1915 &$\pm$& 
-0.0340\\ 
-\hline 
-CST&CSLR-t & \bf{0.2031} &\bf{$\pm$}& \bf{0.0065} & 0.1134 &$\pm$& 0.0151 & 0.1454 &$\pm$& 0.0517\\ 
-\hline
-  \multicolumn{11}{c}{(Models with the highest $F_1Score$ are marked in bold)}
-  \end{tabular}
-    \caption{Results of the algorithms measured by $F_1Score$}
-    \label{tab:7:results_fscore}
-  \end{table}
-  
-\begin{table}
-    \centering
-    \footnotesize
-    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l  } %sum 7.7
-    \hline
-    \bf{Family} & \bf{Algorithm} &  \multicolumn{3}{c}{\bf{Credit 2}} 
-& \multicolumn{3}{c}{\bf{Marketing}} \\ 
-    \hline
-CI&LR-t & 0.0155 &$\pm$& 0.0037 & 0.2702 &$\pm$& 0.0125\\ 
-&LR-u & \bf{0.3890} &\bf{$\pm$}& \bf{0.0053} & 0.3440 &$\pm$& 0.0083\\ 
-\hline 
-CPS&LR-r & 0.3793 &$\pm$& 0.0049 & 0.3374 &$\pm$& 0.0101\\ 
-&LR-o & 0.3804 &$\pm$& 0.0044 & \bf{0.3568} &\bf{$\pm$}& \bf{0.0102}\\ 
-\hline 
-BMR&LR-t-BMR & 0.3572 &$\pm$& 0.0045 & 0.2954 &$\pm$& 0.0079\\ 
-\hline 
-CST&CSLR-t & 0.3363 &$\pm$& 0.0045 & 0.2339 &$\pm$& 0.0051\\ 
-\hline 
-  \multicolumn{8}{c}{(Models with the highest $F_1Score$ are marked in bold)}
-  \end{tabular}
-    \caption{Continuation of \tablename{~\ref{tab:7:results_fscore}}.}
-    \label{tab:7:results_fscore2}
-  \end{table}
   
 Finally, we compute the perBest statistic  for the savings and the $F_1Score$. This statistic is 
 calculated as the average result of each algorithm compared with the best in each set. The results 
@@ -315,3 +214,57 @@ the model that performs the worst measured by both savings and $F_1Score$. This 
 to the cost-sensitivity of the problems, but also to the highly unbalanced distribution of positive 
 and negatives presented in all the databases. This is the reason why by using an under-sampling 
 procedure, the results are improved by both measures.
+
+\begin{sidewaystable}
+
+    \centering
+    \footnotesize
+    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 
+    0in}c@{\hskip 0in}l  r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l} %sum 7.7
+    \hline
+    \bf{Family} & \bf{Algorithm} & \multicolumn{3}{c}{\bf{Fraud}} & 
+    \multicolumn{3}{c}{\bf{Churn}} & \multicolumn{3}{c}{\bf{Credit 1}}
+    &  \multicolumn{3}{c}{\bf{Credit 2}} & \multicolumn{3}{c}{\bf{Marketing}} \\ 
+    \hline
+CI&LR-t & 0.0092 &$\pm$& 0.0002 & -0.0001 &$\pm$& 0.0002 & 0.0177 &$\pm$& 0.0126& 0.0039 &$\pm$& 0.0012 & -0.2931 &$\pm$& 0.0602\\ 
+&LR-u & 0.1243 &$\pm$& 0.0387 & 0.0039 &$\pm$& 0.0492 & 0.4118 &$\pm$& 0.0313& 0.1850 &$\pm$& 0.0231 & 0.2200 &$\pm$& 0.0376\\ 
+\hline 
+CPS&LR-r & 0.3077 &$\pm$& 0.0301 & 0.0484 &$\pm$& 0.0375 & 0.3965 &$\pm$& 0.0263& 0.2650 &$\pm$& 0.0115 & 0.4210 &$\pm$& 0.0267\\ 
+&LR-o & 0.2793 &$\pm$& 0.0185 & 0.0316 &$\pm$& 0.0228 & 0.3301 &$\pm$& 0.0109& 0.2554 &$\pm$& 0.0090 & 0.3129 &$\pm$& 0.0277\\ 
+\hline 
+BMR&LR-t-BMR & 0.4552 &$\pm$& 0.0203 & 0.1082 &$\pm$& 0.0316 & 0.2189 &$\pm$& 0.0541& \bf{0.3148} &\bf{$\pm$}& \bf{0.0094} & \bf{0.4973} &\bf{$\pm$}& \bf{0.0084}\\ 
+\hline 
+CST&CSLR-t & \bf{0.6113} &\bf{$\pm$}& \bf{0.0262} & \bf{0.1118} &\bf{$\pm$}& \bf{0.0484} & 
+\bf{0.4554} &\bf{$\pm$}& \bf{0.1039}& 0.2748 &$\pm$& 0.0069 & 0.4484 &$\pm$& 0.0072\\ 
+\hline
+  \multicolumn{17}{c}{(Models with the highest savings are marked in bold)}
+  \end{tabular}
+    \caption{Results of the algorithms measured by savings}
+    \label{tab:7:results_savings}
+
+\bigskip\bigskip\bigskip  % provide some separation between the two tables
+
+    \begin{tabular}{l l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 
+    0in}c@{\hskip 0in}l  r@{\hskip 0in}c@{\hskip 0in}l r@{\hskip 0in}c@{\hskip 0in}l} %sum 7.7
+    \hline
+    \bf{Family} & \bf{Algorithm} & \multicolumn{3}{c}{\bf{Fraud}} & 
+    \multicolumn{3}{c}{\bf{Churn}} & \multicolumn{3}{c}{\bf{Credit 1}}
+    &  \multicolumn{3}{c}{\bf{Credit 2}} & \multicolumn{3}{c}{\bf{Marketing}} \\ 
+    \hline
+CI&LR-t & 0.1531 &$\pm$& 0.0045 & 0.0000 &$\pm$& 0.0000 & 0.0494 &$\pm$& 0.0277& 0.0155 &$\pm$& 0.0037 & 0.2702 &$\pm$& 0.0125\\ 
+&LR-u & 0.0241 &$\pm$& 0.0163 & 0.1222 &$\pm$& 0.0098 & 0.3160 &$\pm$& 0.0314& \bf{0.3890} &\bf{$\pm$}& \bf{0.0053} & 0.3440 &$\pm$& 0.0083\\ 
+\hline 
+CPS&LR-r & 0.1846 &$\pm$& 0.0123 & 0.1258 &$\pm$& 0.0111 & 0.3597 &$\pm$& 0.0156& 0.3793 &$\pm$& 0.0049 & 0.3374 &$\pm$& 0.0101\\ 
+&LR-o & 0.1776 &$\pm$& 0.0117 & 0.1085 &$\pm$& 0.0203 & \bf{0.3769} &\bf{$\pm$}& \bf{0.0067} & 0.3804 &$\pm$& 0.0044 & \bf{0.3568} &\bf{$\pm$}& \bf{0.0102}\\ 
+\hline 
+BMR&LR-t-BMR & 0.1384 &$\pm$& 0.0044 & \bf{0.1370} &\bf{$\pm$}& \bf{0.0150} & 0.1915 &$\pm$& 
+0.0340& 0.3572 &$\pm$& 0.0045 & 0.2954 &$\pm$& 0.0079\\ 
+\hline 
+CST&CSLR-t & \bf{0.2031} &\bf{$\pm$}& \bf{0.0065} & 0.1134 &$\pm$& 0.0151 & 0.1454 &$\pm$& 0.0517& 0.3363 &$\pm$& 0.0045 & 0.2339 &$\pm$& 0.0051\\ 
+\hline
+  \multicolumn{17}{c}{(Models with the highest $F_1Score$ are marked in bold)}
+  \end{tabular}
+    \caption{Results of the algorithms measured by $F_1Score$}
+    \label{tab:7:results_fscore}
+    
+\end{sidewaystable}
