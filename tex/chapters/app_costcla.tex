@@ -13,38 +13,19 @@ Source code, binaries and documentation are distributed under 3-Clause BSD licen
 \url{http://albahnsen.com/CostSensitiveClassification/}.
 \end{remark}
   
-\section{Introduction}
-\label{sec:9:intro}
+\section{Library overview}
 
-Classification, in the context of machine learning, deals with the problem of predicting the class 
-of a set of examples given their features. Traditionally, classification methods aim at minimizing 
-the misclassification of examples, in which an example is misclassified if the predicted class is 
-different from the true class. 
+\textit{CostCla} is a easy to use \textbf{Python} library for example-dependent cost-sensitive 
+classification problems. It includes many example-dependent cost-sensitive algorithms. Since 
+it is part of the scientific \textbf{Python} ecosystem, it can be easily integrated with other 
+machine learning libraries.
+
 \textbf{Python} offers several machine learning packages, some including classification algorithms 
 like \textit{Scikit-learn} \citep{Pedregosa2011}, \textit{PyBrain} \citep{Schaul2010}, 
 \textit{PyMC} \citep{Patil2010}, \textit{mlpy} \citep{Albanese2012} and \textit{Orange} 
-\citep{Demsar2013}.
-
-Nevertheless, all this packages are based on a cost-insensitive framework, in which all 
-misclassification errors carry the same cost. This is not the case in many real-world applications. 
-For example in credit card fraud detection, failing to detect a fraudulent transaction may have 
-an economical impact from a few to thousands of Euros, depending on the particular transaction 
-and card holder \citep{Ngai2011a}. In churn modeling, a model is used for predicting which
-customers are more likely to abandon a service provider. In this context, failing to identify a 
-profitable or unprofitable churner has a significant different economic 
-result~\citep{Verbraken2013}. Similarly, in direct marketing, wrongly predicting that a customer 
-will not accept an offer when in fact he will, may have different financial impact, as not all 
-customers generate the same profit \citep{Zadrozny2003}. Lastly, in credit scoring, accepting 
-loans from bad customers does not have the same economical loss, since customers have different 
-credit lines, therefore, different profit \citep{Verbraken2014}.
-
-
-In this chapter, we present \textit{CostCla} a cost-sensitive classification library in 
-\textbf{Python}. The library incorporates several cost-sensitive algorithms. Moreover, we show 
-the huge differences in profit when using traditional machine learning algorithms versus 
-cost-sensitive algorithms, on several real-world databases.
-
-\section{Library overview}
+\citep{Demsar2013}. Nevertheless, all these packages are based on a cost-insensitive classification
+ framework, in which all misclassification errors carry the same cost. As has been highlighted 
+ throughout this thesis, this is not the case in many real-world applications. 
 
 The core of the library consists of a number of state-of-the-art example-dependent cost-sensitive 
 classification algorithms, such as cost-proportionate rejection-sampling \citep{Zadrozny2003}, 
@@ -54,7 +35,8 @@ Chapter~\ref{ch:8}), and the cost-sensitive ensemble methods: cost-sensitive bag
 pasting, cost-sensitive random forest and cost-sensitive random patches (see Chapter~\ref{ch:9}).
 
 Moreover, the library also includes three different example-dependent cost-sensitive databases. In 
-particular two credit scoring databases, and one direct marketing database.
+particular two credit scoring databases (see Section~\ref{sec:4:creditscoring}), and one direct marketing
+ database (see Section~\ref{sec:5:directmarketing}). 
 
 \section{Usage}
 
@@ -90,7 +72,7 @@ print savings_score(y_test, y_pred, cost_mat_test)
 \end{pythoncode}
 \textbf{0.042197359989}
 
-\vskip0.3cm
+\newpage
 \noindent \textbullet\ Cost-proportionate rejection sampling
 
 \vskip0.3cm
@@ -130,7 +112,6 @@ print savings_score(y_test, y_pred, cost_mat_test)
 \end{pythoncode}
 \textbf{0.289489571352}
 
-\newpage
 \vskip0.3cm
 \noindent \textbullet\ Cost-sensitive random patches
 
@@ -144,12 +125,10 @@ print savings_score(y_test, y_pred, cost_mat_test)
 \textbf{0.306607400467}
 
 \vskip0.3cm
-In the \tablename{~\ref{tab:9:1}} we summarized the results of the different 
+In \tablename{~\ref{tab:9:1}} we summarize the results of the different 
 algorithms. It is observed that the library follows the same API structure of 
 \textit{Scikit-learn}, therefore, making \textit{CostCla} highly compatible with the most widely 
-used machine learning library in 
-\textbf{Python}\footnote{\url{
-http://machinelearningmastery.com/best-programming-language-for-machine-learning/}}. 
+used machine learning library in \textbf{Python}.
 
 \begin{table}[htbp]
     \centering
@@ -167,6 +146,7 @@ http://machinelearningmastery.com/best-programming-language-for-machine-learning
     \label{tab:9:1}
   \end{table}  
 
+\newpage
 \section{Installation}
 
 \textit{CostCla} requires some prerequisite packages to be previously installed. Nevertheless, all 
@@ -185,9 +165,4 @@ are cross-platform an freely available online:
 pip install costcla
 \end{pythoncode}
 
-\section{Conclusion}
-\textit{CostCla} is a easy to use \textbf{Python} library for example-dependent cost-sensitive 
-classification problems. It includes many example-dependent cost-sensitive algorithms. Since 
-it is part of the scientific \textbf{Python} ecosystem, it can be easily integrated with other 
-machine learning libraries. Future work includes adding more cost-sensitive databases and 
-algorithms, and support for \textbf{Python} $\ge$ 3.4. 
+
