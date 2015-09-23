@@ -7,7 +7,11 @@ PhD dissertation, Alejandro Correa Bahnsen, September 2015.
 
 _Permanent URL (PDF):_ TBD (orbilu link)
 
-_Mirror (PDF):_ albahnsen.com/something
+_Mirror (PDF):_ <https://github.com/albahnsen/phd-thesis/raw/master/Thesis_ExampleDependentCostSensitiveClassification.pdf>
+
+_Source code:_ <https://github.com/albahnsen/CostSensitiveClassification>
+
+_Slides:_ <https://github.com/albahnsen/phd-thesis/raw/master/slides/Thesis_ExampleDependentCostSensitiveClassification_slides.pdf>
 
 _License:_ BSD 3 clause
 
