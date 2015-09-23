@@ -98,8 +98,8 @@ representable functions.
 %   Moreover, i
 \subsection{Theoretical performance of an ensemble}
   If we assume that each one of the $T$ base classifiers has a probability $\rho$ of 
-  being correct, the probability of an ensemble making the correct decision, denoted by $P_c$,
-  can be calculated using the binomial \mbox{distribution \citep{Hansen1990}}
+  being correct, the probability of an ensemble making the correct decision, assuming independence, 
+  denoted by $P_c$, can be calculated using the binomial \mbox{distribution \citep{Hansen1990}}
   \begin{equation}\label{eq:9:prob}
     P_c = \sum_{j>T/2}^{T} {{T}\choose{j}} \rho^j(1-\rho)^{T-j}.
   \end{equation}
@@ -396,7 +396,7 @@ $combinator$.
   to:
   \begin{align}\label{eq:26}
     \overline{Cost} (\mathcal{M}(\mathcal{S}_0)) =& \sum_{i=1}^{N_0}  
-    \rho \cdot C_{TN_i} + (1-\rho) \cdot C_{FP_i} .
+    \bigg( \rho \cdot C_{TN_i} + (1-\rho) \cdot C_{FP_i} \bigg).
   \end{align}
 
   \textbullet\ $a=1:$
@@ -407,7 +407,7 @@ $combinator$.
   \noindent Therefore,
   \begin{align}\label{eq:27}
     \overline{Cost} (\mathcal{M}(\mathcal{S}_1)) =& \sum_{i=1}^{N_1}  
-    \rho \cdot C_{TP_i} + (1-\rho) \cdot C_{FN_i} .
+    \bigg( \rho \cdot C_{TP_i} + (1-\rho) \cdot C_{FN_i}\bigg) .
   \end{align}
  
 	\noindent Finally, by replacing in (\ref{eq:9:lemma}) the expected savings of an  ensemble with 
@@ -416,13 +416,13 @@ $combinator$.
   
   \noindent for $a=0$:
   \begin{align}\label{eq:9:lemma1}
-    \sum_{i=1}^{N_0} P_c C_{TN_i} +(1-P_c)C_{FP_i} \le 
-    \sum_{i=1}^{N_0} \rho \cdot C_{TN_i} + (1-\rho) \cdot C_{FP_i},
+    \sum_{i=1}^{N_0} \bigg(P_c C_{TN_i} +(1-P_c)C_{FP_i}\bigg) \le 
+    \sum_{i=1}^{N_0} \bigg(\rho \cdot C_{TN_i} + (1-\rho) \cdot C_{FP_i}\bigg),
   \end{align}
   for $a=1$:
   \begin{align}\label{eq:9:lemma2}
-    \sum_{i=1}^{N_1} P_c C_{TP_i} + (1-P_c)C_{FN_i} \le 
-    \sum_{i=1}^{N_1}  \rho \cdot C_{TP_i} + (1-\rho) \cdot C_{FN_i}.
+    \sum_{i=1}^{N_1} \bigg(P_c C_{TP_i} + (1-P_c)C_{FN_i} \bigg)\le 
+    \sum_{i=1}^{N_1}  \bigg(\rho \cdot C_{TP_i} + (1-\rho) \cdot C_{FN_i}\bigg).
   \end{align}
  
   \noindent Since $\rho \ge \frac{1}{2}$ , then $P_c\ge\rho$ from (\ref{eq:9:Pc2}), and using the 
@@ -680,17 +680,6 @@ each set (perBest), as a  measure of how close are the savings of an algorithm t
   \label{fig:9:comparison_family}
 \end{figure}
 
-  Moreover, when analyzing the perBest statistic, it is observed that it follows almost the same 
-  order as the F-Rank. Notwithstanding, there are cases in which algorithms ranks are different in 
-  the two statistics, for example the $CSDT-t$ algorithm has a lower F-Rank than the $RF-BMR$, 
-  but the perBest if better. This happens because, the F-Rank does not take into account the 
-  difference in savings within algorithms. This can be further investigated in \figurename{ 
-  \ref{fig:9:comparison_best}}. Even that ranks of the $BMR$ models are better than the $CSDT$, the 
-  latter is on average closer to the best performance method in each set. Moreover, it is confirmed 
-  that the $CSRP-wt$ is very close to the best result in all cases. Lastly, it is shown why the 
-  F-Rank of the $LR-BMR$ is high, given the fact that is the best model in two databases. The 
-  reason  for that, is because the performance on the other sets is very poor.
-
    \begin{figure}[!t]
   \centering
   \subfloat[Comparison by inducer methodology.]{\includegraphics{ch9_fig6}%
@@ -703,6 +692,17 @@ each set (perBest), as a  measure of how close are the savings of an algorithm t
   combination method compared by Friedman ranking is the cost-sensitive weighted voting.}
   \label{fig:9:rank_ecsdt}
 \end{figure}
+
+  Moreover, when analyzing the perBest statistic, it is observed that it follows almost the same 
+  order as the F-Rank. Notwithstanding, there are cases in which algorithms ranks are different in 
+  the two statistics, for example the $CSDT-t$ algorithm has a lower F-Rank than the $RF-BMR$, 
+  but the perBest if better. This happens because, the F-Rank does not take into account the 
+  difference in savings within algorithms. This can be further investigated in \figurename{ 
+  \ref{fig:9:comparison_best}}. Even that ranks of the $BMR$ models are better than the $CSDT$, the 
+  latter is on average closer to the best performance method in each set. Moreover, it is confirmed 
+  that the $CSRP-wt$ is very close to the best result in all cases. Lastly, it is shown why the 
+  F-Rank of the $LR-BMR$ is high, given the fact that is the best model in two databases. The 
+  reason  for that, is because the performance on the other sets is very poor.
 
   Furthermore \figurename{~\ref{fig:9:family_rank}}, shows the Friedman ranking of each family of 
   classifiers. The $ECSDT$ methods are overall better, followed by the $BMR$ and the $CST$ methods. 
