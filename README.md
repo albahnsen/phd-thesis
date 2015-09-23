@@ -11,7 +11,7 @@ _Mirror (PDF):_ [Thesis](https://github.com/albahnsen/phd-thesis/raw/master/Thes
 
 _Source code:_ [costcla](https://github.com/albahnsen/CostSensitiveClassification)
 
-_Slides:_ [Slides](https://github.com/albahnsen/phd-thesis/raw/master/slides/Thesis_ExampleDependentCostSensitiveClassification_slides.pdf)
+_Slides:_ [Slides](http://www.slideshare.net/albahnsen/phd-defense-exampledependent-costsensitive-classification)
 
 _License:_ BSD 3 clause
 
