@@ -5,7 +5,7 @@ Example-Dependent Cost-Sensitive Classification
 
 PhD dissertation, Alejandro Correa Bahnsen, September 2015.
 
-_Permanent URL (PDF):_ TBD (orbilu link)
+_Permanent URL (PDF):_ [Thesis](http://hdl.handle.net/10993/22367)
 
 _Mirror (PDF):_ [Thesis](https://github.com/albahnsen/phd-thesis/raw/master/Thesis_ExampleDependentCostSensitiveClassification.pdf)
 
